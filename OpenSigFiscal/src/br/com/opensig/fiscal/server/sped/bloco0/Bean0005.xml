@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beanio xmlns="http://www.beanio.org/2011/01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.beanio.org/2011/01 http://www.beanio.org/2011/01/mapping.xsd">
+	<stream name="EFD" format="delimited">
+		<writer>
+			<property name="delimiter" value="|" />
+		</writer>
+		<record name="Dados" minOccurs="1" maxOccurs="1" class="br.com.opensig.fiscal.server.sped.bloco0.Dados0005">
+			<field name="padrao" type="string" length="1" default=""/>
+			<field name="reg" type="string" length="4" trim="true"/>
+			<field name="fantasia" type="string" length="60" trim="true" />
+			<field name="cep" type="int" length="8" justify="right" padding="0"/>
+			<field name="end" type="string" length="60" trim="true"/>
+			<field name="num" type="string" length="10" trim="true"/>
+			<field name="compl" type="string" length="60" trim="true"/>
+			<field name="bairro" type="string" length="60" trim="true"/>
+			<field name="fone" type="string" length="11" trim="true"/>
+			<field name="fax" type="string" length="11" trim="true"/>
+			<field name="email" type="string" length="255" trim="true"/>
+			<field name="padrao" type="string" length="1" default=""/>
+		</record>
+	</stream>
+</beanio>

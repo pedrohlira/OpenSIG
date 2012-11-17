@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beanio xmlns="http://www.beanio.org/2011/01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.beanio.org/2011/01 http://www.beanio.org/2011/01/mapping.xsd">
+	<stream name="EFD" format="delimited">
+		<writer>
+			<property name="delimiter" value="|" />
+		</writer>
+		<record name="Dados" minOccurs="1" maxOccurs="1" class="br.com.opensig.fiscal.server.sped.blocoC.DadosC190">
+			<field name="padrao" type="string" length="1" default="" />
+			<field name="reg" type="string" length="4" trim="true" />
+			<field name="cst_icms" type="string" length="3" trim="true" />
+			<field name="cfop" type="int" length="4" />
+			<field name="aliq_icms" type="double" format="##0.00" />
+			<field name="vl_opr" type="double" format="##0.00" />
+			<field name="vl_bc_icms" type="double" format="##0.00" />
+			<field name="vl_icms" type="double" length="6" format="##0.00" />
+			<field name="vl_bc_icms_st" type="double" format="##0.00" />
+			<field name="vl_icms_st" type="double" format="##0.00" />
+			<field name="vl_red_bc" type="double" format="##0.00" />
+			<field name="vl_ipi" type="double" format="##0.00" />
+			<field name="cod_obs" type="string" length="6" trim="true" />
+			<field name="padrao" type="string" length="1" default="" />
+		</record>
+	</stream>
+</beanio>

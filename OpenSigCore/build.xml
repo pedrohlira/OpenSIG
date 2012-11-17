@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="OpenSigCore" basedir="." default="publicar">
+
+	<property name="gwt" location="/Volumes/Macintosh HD 2/Users/pedrohenriquelira/Documents/Java/gwt-2.4.0" />
+	<property name="pacote" value="br.com.opensig.core.client" />
+	<property name="versao" value="1.08" />
+	<property name="empresa" value="PhD - Systems Solutions" />
+	<property name="autor" value="Pedro H. Lira" />
+	<property name="url" value="http://phdss.com.br" />
+	<property name="email" value="opensig@phdss.com.br" />
+
+	<target name="limpar">
+		<delete file="src/META-INF/${ant.project.name}.MF" />
+		<delete dir="dist" />
+	</target>
+
+	<target name="manifesto">
+		<buildnumber file="compilacao" />
+		<tstamp>
+			<format property="hoje" pattern="dd-MM-yyyy HH:mm:ss" />
+		</tstamp>
+
+		<manifest file="src/META-INF/${ant.project.name}.MF">
+			<attribute name="Implementation-Title" value="${ant.project.name}" />
+			<attribute name="Implementation-Version" value="${versao}-b${build.number}" />
+			<attribute name="Implementation-Vendor" value="${empresa}" />
+			<attribute name="Implementation-Url" value="${url}" />
+			<attribute name="Built-By" value="${autor} - ${email}" />
+			<attribute name="Built-Date" value="${hoje}" />
+			<attribute name="Main-Class" value="${pacote}.${ant.project.name}" />
+		</manifest>
+	</target>
+
+	<target name="i18n">
+		<java failonerror="true" fork="true" classname="com.google.gwt.i18n.tools.I18NSync">
+			<classpath>
+				<fileset dir="${gwt}" includes="gwt-*.jar" />
+				<path path="src" />
+			</classpath>
+			<arg value="-createMessages" />
+			<arg value="${pacote}.I18N" />
+		</java>
+	</target>
+
+	<target name="publicar" depends="limpar, i18n, manifesto">
+		<mkdir dir="dist" />
+		<jar destfile="dist/${ant.project.name}.jar" basedir="src" manifest="src/META-INF/${ant.project.name}.MF" />
+	</target>
+
+</project>

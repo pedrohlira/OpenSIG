@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.2
+Created-By: 1.6.0_29-b11-402-11D50 (Apple Inc.)
+Implementation-Title: OpenSigPlugin
+Implementation-Version: 1.00-b0
+Implementation-Vendor: PhD - Systems Solutions
+Implementation-Url: http://phdss.com.br
+Built-By: Pedro H. Lira - opensig@phdss.com.br
+Built-Date: 23-03-2012 11:29:00
+Main-Class: br.com.opensig.plugin.client.OpenSigPlugin
+

@@ -1,0 +1,18 @@
+package br.com.opensig.core.server;
+
+import org.jasypt.util.text.BasicTextEncryptor;
+
+/**
+ * Classe que contem a chave privada. Altere a extensao para .java e compile
+ *
+ * @author Pedro H. Lira
+ */
+class ChavePrivada {
+
+    private ChavePrivada() {
+    }
+    /**
+     * Chave de 1024 bits RSA em base64.
+     */
+    static String VALOR = "COLOQUE AQUI SUA CHAVE PRIVADA USADA COM O SISTEMA OPENPDV.";
+}

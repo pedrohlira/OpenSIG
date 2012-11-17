@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beanio xmlns="http://www.beanio.org/2011/01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.beanio.org/2011/01 http://www.beanio.org/2011/01/mapping.xsd">
+	<stream name="EFD" format="delimited">
+		<writer>
+			<property name="delimiter" value="|" />
+		</writer>
+		<record name="Dados" minOccurs="1" maxOccurs="1" class="br.com.opensig.fiscal.server.sped.bloco0.Dados0000">
+			<field name="padrao" type="string" length="1" default=""/>
+			<field name="reg" type="string" length="4" trim="true"/>
+			<field name="cod_ver" type="int" length="3" justify="right" padding="0" />
+			<field name="cod_fin" type="int" length="1"/>
+			<field name="dt_ini" type="date" length="8" format="ddMMyyyy"/>
+			<field name="dt_fin" type="date" length="8" format="ddMMyyyy"/>
+			<field name="nome" type="string" length="100" trim="true"/>
+			<field name="cnpj" type="string" length="14" trim="true"/>
+			<field name="cpf" type="string" length="11" trim="true"/>
+			<field name="uf" type="string" length="2" trim="true"/>
+			<field name="ie" type="string" length="14" trim="true"/>
+			<field name="cod_mun" type="int" length="7" justify="right" padding="0"/>
+			<field name="im" type="string" length="255" trim="true"/>
+			<field name="suframa" type="string" length="9" trim="true"/>
+			<field name="ind_perfil" type="string" length="1" trim="true" regex="[A-C]"/>
+			<field name="ind_ativ" type="int" length="1"/>
+			<field name="padrao" type="string" length="1" default=""/>
+		</record>
+	</stream>
+</beanio>

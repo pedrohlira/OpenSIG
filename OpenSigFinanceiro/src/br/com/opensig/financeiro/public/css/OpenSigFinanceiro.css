@@ -1,0 +1,53 @@
+@CHARSET "UTF-8";
+
+.icon-financeiro {
+	background: url(../img/financeiro.png) no-repeat center left !important;
+}
+
+.icon-receber {
+	background: url(../img/receber.png) no-repeat center left !important;
+}
+
+.icon-pagar {
+	background: url(../img/pagar.png) no-repeat center left !important;
+}
+
+.icon-remessa {
+	background: url(../img/remessa.png) no-repeat center left !important;
+}
+
+.icon-retorno {
+	background: url(../img/retorno.png) no-repeat center left !important;
+}
+
+.icon-analisar {
+	background: url(../img/analisar.png) no-repeat center left !important;
+}
+
+.icon-cartao {
+	background: url(../img/cartao.png) no-repeat center left !important;
+}
+
+.icon-cheque {
+	background: url(../img/cheque.png) no-repeat center left !important;
+}
+
+.icon-boleto {
+	background: url(../img/boleto.png) no-repeat center left !important;
+}
+
+.icon-bancario{
+	background: url(../img/bancario.png) no-repeat center left !important;
+}
+
+.icon-quitar {
+	background: url(../img/quitar.png) no-repeat center left !important;
+}
+
+.icon-estornar {
+	background: url(../img/estornar.png) no-repeat center left !important;
+}
+
+.icon-conciliar {
+	background: url(../img/conciliar.png) no-repeat center left !important;
+}

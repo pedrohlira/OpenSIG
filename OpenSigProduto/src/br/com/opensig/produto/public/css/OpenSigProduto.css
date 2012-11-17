@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+
+.icon-produto {
+    background: url(../img/produto.png) no-repeat center left !important;
+}
+
+.icon-tributacao {
+    background: url(../img/tributacao.png) no-repeat center left !important;
+}
+
+.icon-ipi {
+    background: url(../img/ipi.png) no-repeat center left !important;
+}
+
+.icon-categoria {
+    background: url(../img/categoria.png) no-repeat center left !important;
+}
+
+.icon-preco {
+    background: url(../img/preco.png) no-repeat center left !important;
+}
+
+.icon-pesquisa {
+    background: url(../img/pesquisa.png) no-repeat center left !important;
+}
+
+.icon-embalagem {
+    background: url(../img/embalagem.png) no-repeat center left !important;
+}

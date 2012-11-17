@@ -1,0 +1,5 @@
+@CHARSET "UTF-8";
+
+.icon-plugin {
+    background: url(../img/plugin.png) no-repeat center left !important;
+}

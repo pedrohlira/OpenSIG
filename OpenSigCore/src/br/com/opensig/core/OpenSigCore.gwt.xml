@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.4.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.4.0/distro-source/core/src/gwt-module.dtd">
+<module>
+	<!-- Js do Módulo -->
+	<script src="js/OpenSigCore_mini.js" />
+
+	<!-- Css do Módulo -->
+	<stylesheet src="css/OpenSigCore.css" />
+
+	<!-- Utilizando o GWT -->
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.i18n.I18N" />
+	<inherits name="com.google.gwt.http.HTTP" />
+	<inherits name="com.google.gwt.json.JSON" />
+	<inherits name="com.google.gwt.xml.XML" />
+
+	<!-- Utilizando o EXT Plugin -->
+	<inherits name="com.gwtext.GwtExt" />
+	<inherits name="com.gwtextux.GwtExtUx" />
+	<inherits name="com.gwtextux.ToastWindow" />
+	<inherits name="com.gwtextux.GridFilterPlugin" />
+	<inherits name="com.gwtextux.GridSummaryPlugin" />
+	<inherits name="com.gwtextux.GridCellActionsPlugin" />
+	<inherits name="com.gwtextux.UploadDialog" />
+
+	<!-- Plugins de terceiros -->
+	<inherits name='com.rednels.ofcgwt.OFCGWT' />
+	
+	<!-- Classe principal para iniciar -->
+	<entry-point class='br.com.opensig.core.client.OpenSigCore' />
+
+	<!-- Realizando a compilação com a classe implementada em outro módulo -->
+	<replace-with
+		class="br.com.opensig.permissao.client.visao.PermitirSistemaImpl">
+		<when-type-is class="br.com.opensig.core.client.visao.PermitirSistema" />
+	</replace-with>
+
+	<replace-with
+		class="br.com.opensig.permissao.client.controlador.comando.ComandoFavoritoImpl">
+		<when-type-is class="br.com.opensig.core.client.controlador.comando.lista.ComandoFavorito" />
+	</replace-with>
+	
+	<!-- Fontes java -->
+	<source path="client" />
+	<source path="shared" />
+</module>

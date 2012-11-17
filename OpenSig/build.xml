@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="OpenSig" basedir="." default="debugar">
+
+	<property name="mf" location="war/manifesto" />
+	<property name="lib" location="war/WEB-INF/lib" />
+	<property name="classes" location="war/WEB-INF/classes" />
+	<property name="pacote" value="br.com.opensig.client" />
+	<property name="versao" value="1.08" />
+	<property name="empresa" value="PhD - Systems Solutions" />
+	<property name="autor" value="Pedro H. Lira" />
+	<property name="url" value="http://phdss.com.br" />
+	<property name="email" value="opensig@phdss.com.br" />
+
+	<target name="manifesto">
+		<buildnumber file="compilacao" />
+		<tstamp>
+			<format property="hoje" pattern="dd-MM-yyyy HH:mm:ss" />
+		</tstamp>
+
+		<manifest file="${mf}/${ant.project.name}.MF">
+			<attribute name="Implementation-Title" value="${ant.project.name}" />
+			<attribute name="Implementation-Version" value="${versao}-b${build.number}" />
+			<attribute name="Implementation-Vendor" value="${empresa}" />
+			<attribute name="Implementation-Url" value="${url}" />
+			<attribute name="Built-By" value="${autor} - ${email}" />
+			<attribute name="Built-Date" value="${hoje}" />
+			<attribute name="Main-Class" value="${pacote}.${ant.project.name}" />
+		</manifest>
+	</target>
+
+	<target name="limparLibs">
+		<delete>
+			<fileset dir="${lib}" excludes="**/OpenSig*.jar, **/gwt-servlet.jar, **/beanio.jar" />
+		</delete>
+	</target>
+				
+	<target name="limpar">
+		<delete dir="dist" />
+		<delete dir="${mf}" />
+		<delete dir="${lib}" />
+		<delete dir="${classes}" failonerror="false" />
+		<delete dir="war/opensig" failonerror="false" />
+	</target>
+
+	<target name="copiar">
+		<mkdir dir="${mf}" />
+		<mkdir dir="${classes}" />
+		<mkdir dir="${lib}" />
+
+		<copy todir="${mf}">
+			<fileset file="../OpenSigCore/src/META-INF/OpenSigCore.MF" />
+			<fileset file="../OpenSigEmpresa/src/META-INF/OpenSigEmpresa.MF" />
+			<fileset file="../OpenSigPermissao/src/META-INF/OpenSigPermissao.MF" />
+			<fileset file="../OpenSigFinanceiro/src/META-INF/OpenSigFinanceiro.MF" />
+			<fileset file="../OpenSigFiscal/src/META-INF/OpenSigFiscal.MF" />
+			<fileset file="../OpenSigComercial/src/META-INF/OpenSigComercial.MF" />
+			<fileset file="../OpenSigProduto/src/META-INF/OpenSigProduto.MF" />
+		</copy>
+
+		<copy todir="${lib}" flatten="true">
+			<fileset dir="jars" includes="*.jar,*/*" />
+			<fileset dir="../OpenSigCore/dist/" />
+			<fileset dir="../OpenSigEmpresa/dist/" />
+			<fileset dir="../OpenSigPermissao/dist/" />
+			<fileset dir="../OpenSigFinanceiro/dist/" />
+			<fileset dir="../OpenSigFiscal/dist/" />
+			<fileset dir="../OpenSigComercial/dist/" />
+			<fileset dir="../OpenSigProduto/dist/" />
+		</copy>
+
+		<copy todir="war/lang">
+			<fileset file="../OpenSigCore/src/br/com/opensig/core/client/*.properties" />
+		</copy>
+
+	</target>
+
+	<target name="javac" depends="limpar, copiar">
+
+		<javac srcdir="src" includes="**" encoding="utf-8" destdir="${classes}" source="1.6" target="1.6" nowarn="true" debug="true" debuglevel="lines,vars,source">
+			<classpath>
+				<fileset dir="${lib}" includes="*.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="gwtc" depends="javac">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+			<classpath>
+				<pathelement location="src" />
+				<fileset dir="${lib}" includes="*.jar" />
+			</classpath>
+			<jvmarg value="-Xmx1024M" />
+			<arg value="br.com.opensig.OpenSig" />
+		</java>
+	</target>
+
+	<target name="war" depends="manifesto">
+		<mkdir dir="dist" />
+		<war destfile="dist/${ant.project.name}.war" basedir="war" webxml="war/WEB-INF/web.xml" />
+	</target>
+
+	<target name="gwtDebugar">
+		<delete file="src/br/com/opensig/OpenSig.gwt.xml" />
+		<copy file="OpenSig.debugar" tofile="src/br/com/opensig/OpenSig.gwt.xml" />
+	</target>
+	
+	<target name="gwtPublicar">
+		<delete file="src/br/com/opensig/OpenSig.gwt.xml" />
+		<copy file="OpenSig.publicar" tofile="src/br/com/opensig/OpenSig.gwt.xml" />
+	</target>
+
+	<target name="debugar" depends="gwtDebugar, gwtc, war" />
+
+	<target name="publicar" depends="gwtPublicar, gwtc, limparLibs, war" />
+
+</project>

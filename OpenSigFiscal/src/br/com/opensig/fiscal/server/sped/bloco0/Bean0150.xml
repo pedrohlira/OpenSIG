@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beanio xmlns="http://www.beanio.org/2011/01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.beanio.org/2011/01 http://www.beanio.org/2011/01/mapping.xsd">
+	<stream name="EFD" format="delimited">
+		<writer>
+			<property name="delimiter" value="|" />
+		</writer>
+		<record name="Dados" class="br.com.opensig.fiscal.server.sped.bloco0.Dados0150">
+			<field name="padrao" type="string" length="1" default="" />
+			<field name="reg" type="string" length="4" trim="true" />
+			<field name="cod_part" type="string" length="60" trim="true" />
+			<field name="nome" type="string" length="100" trim="true" />
+			<field name="cod_pais" type="int" length="5" justify="right" padding="0" />
+			<field name="cnpj" type="string" length="14" trim="true" />
+			<field name="cpf" type="string" length="11" trim="true" />
+			<field name="ie" type="string" length="14" trim="true" />
+			<field name="cod_mun" type="int" length="7" justify="right" padding="0" />
+			<field name="suframa" type="string" length="9" trim="true" />
+			<field name="end" type="string" length="60" trim="true" />
+			<field name="num" type="string" length="10" trim="true" />
+			<field name="compl" type="string" length="60" trim="true" />
+			<field name="bairro" type="string" length="60" trim="true" />
+			<field name="padrao" type="string" length="1" default="" />
+		</record>
+	</stream>
+</beanio>

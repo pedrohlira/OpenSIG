@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<!-- Defina a PU que será usada por seu plugin -->
+	<persistence-unit name="pu_comercial"
+		transaction-type="RESOURCE_LOCAL">
+		<class>br.com.opensig.comercial.shared.modelo.ComValorProduto</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComValorArredonda</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComCompraProduto</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComCompra</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComVendaProduto</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComVenda</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComFrete</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComNatureza</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComEcf</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComEcfZ</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComEcfZTotais</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComEcfVenda</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComEcfVendaProduto</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComEcfNota</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComEcfNotaProduto</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComEcfDocumento</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdProduto</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdEstoque</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdTributacao</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdIpi</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdTipo</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdCategoria</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdPreco</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdComposicao</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdOrigem</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdEmbalagem</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpContato</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpContatoTipo</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpEndereco</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpEnderecoTipo</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpFuncionario</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpCliente</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpFornecedor</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpEntidade</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpEmpresa</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpPlano</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpTransportadora</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpPais</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpEstado</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpMunicipio</class>
+		<class>br.com.opensig.permissao.shared.modelo.SisUsuario</class>
+		<class>br.com.opensig.permissao.shared.modelo.SisGrupo</class>
+		<class>br.com.opensig.permissao.shared.modelo.SisPermissao</class>
+		<class>br.com.opensig.financeiro.shared.modelo.FinRecebimento</class>
+		<class>br.com.opensig.financeiro.shared.modelo.FinReceber</class>
+		<class>br.com.opensig.financeiro.shared.modelo.FinPagar</class>
+		<class>br.com.opensig.financeiro.shared.modelo.FinPagamento</class>
+		<class>br.com.opensig.financeiro.shared.modelo.FinForma</class>
+		<class>br.com.opensig.financeiro.shared.modelo.FinConta</class>
+		<class>br.com.opensig.financeiro.shared.modelo.FinCategoria</class>
+		<class>br.com.opensig.financeiro.shared.modelo.FinBanco</class>
+		<class>br.com.opensig.fiscal.shared.modelo.FisNotaEntrada</class>
+		<class>br.com.opensig.fiscal.shared.modelo.FisNotaSaida</class>
+		<class>br.com.opensig.fiscal.shared.modelo.FisNotaStatus</class>
+	</persistence-unit>
+</persistence>

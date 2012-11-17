@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OpenSigComercial"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OpenSigCore"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OpenSigEmpresa"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OpenSigFinanceiro"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OpenSigFiscal"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OpenSigPermissao"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OpenSigProduto"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GWT-EXT"/>
+	<classpathentry kind="lib" path="jars/simplecaptcha.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

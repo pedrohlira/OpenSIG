@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="pu_empresa" transaction-type="RESOURCE_LOCAL">
+		<class>br.com.opensig.empresa.shared.modelo.EmpContato</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpContatoTipo</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpEndereco</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpEnderecoTipo</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpFuncionario</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpCliente</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpFornecedor</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpEntidade</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpEmpresa</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpTransportadora</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpMunicipio</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpEstado</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpPais</class>
+		<class>br.com.opensig.empresa.shared.modelo.EmpPlano</class>
+	</persistence-unit>
+</persistence>

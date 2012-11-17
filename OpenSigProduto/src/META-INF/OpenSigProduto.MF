@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.2
+Created-By: 1.7.0_07-b10 (Oracle Corporation)
+Implementation-Title: OpenSigProduto
+Implementation-Version: 1.07-b46
+Implementation-Vendor: PhD - Systems Solutions
+Implementation-Url: http://phdss.com.br
+Built-By: Pedro H. Lira - opensig@phdss.com.br
+Built-Date: 13-11-2012 06:03:14
+Main-Class: br.com.opensig.produto.client.OpenSigProduto
+
