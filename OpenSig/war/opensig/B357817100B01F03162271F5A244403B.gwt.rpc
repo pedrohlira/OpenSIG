@@ -1,0 +1,384 @@
+br.com.opensig.comercial.client.servico.ComercialException, true, true, false, false, br.com.opensig.comercial.client.servico.ComercialException/309064956, 309064956
+br.com.opensig.comercial.shared.modelo.Cat52, true, true, true, true, br.com.opensig.comercial.shared.modelo.Cat52/466853198, 466853198
+[Lbr.com.opensig.comercial.shared.modelo.Cat52;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.Cat52;/617564855, 617564855
+br.com.opensig.comercial.shared.modelo.ComCompra, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComCompra/3525514247, 3525514247
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComCompra,comCompraId,comCompraEmissao,comCompraIcmsBase,comCompraIcmsValor,comCompraIcmssubBase,comCompraIcmssubValor,comCompraNumero,comCompraObservacao,comCompraRecebimento,comCompraSerie,comCompraValorDesconto,comCompraValorFrete,comCompraValorIpi,comCompraValorNota,comCompraValorOutros,comCompraValorProduto,comCompraFechada,comCompraPaga,comCompraNfe,comCompraValorSeguro,empFornecedor,empEmpresa,comNatureza,empEstado,finPagar,fisNotaEntrada,comCompraProdutos
+br.com.opensig.comercial.shared.modelo.ComCompraProduto, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComCompraProduto/2999916473, 2999916473
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComCompraProduto,comCompraProdutoId,comCompraProdutoCfop,comCompraProdutoIcms,comCompraProdutoIpi,comCompraProdutoPreco,comCompraProdutoQuantidade,comCompraProdutoTotal,comCompraProdutoValor,comCompraProdutoOrdem,prodProduto,prodEmbalagem,comCompra
+[Lbr.com.opensig.comercial.shared.modelo.ComCompraProduto;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComCompraProduto;/554102762, 554102762
+[Lbr.com.opensig.comercial.shared.modelo.ComCompra;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComCompra;/2407875963, 2407875963
+br.com.opensig.comercial.shared.modelo.ComEcf, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComEcf/3966982641, 3966982641
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComEcf,comEcfId,comEcfCaixa,comEcfCodigo,comEcfMfAdicional,comEcfIdentificacao,comEcfTipo,comEcfMarca,comEcfModelo,comEcfSerie,comEcfAtivo,empEmpresa
+br.com.opensig.comercial.shared.modelo.ComEcfDocumento, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComEcfDocumento/2246953242, 2246953242
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComEcfDocumento,comEcfDocumentoId,comEcfDocumentoUsuario,comEcfDocumentoCoo,comEcfDocumentoGnf,comEcfDocumentoGrg,comEcfDocumentoCdc,comEcfDocumentoTipo,comEcfDocumentoData,comEcf
+[Lbr.com.opensig.comercial.shared.modelo.ComEcfDocumento;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComEcfDocumento;/3306178916, 3306178916
+br.com.opensig.comercial.shared.modelo.ComEcfNota, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComEcfNota/2018260878, 2018260878
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComEcfNota,comEcfNotaId,comEcfNotaSerie,comEcfNotaSubserie,comEcfNotaNumero,comEcfNotaData,comEcfNotaBruto,comEcfNotaDesconto,comEcfNotaLiquido,comEcfNotaPis,comEcfNotaCofins,comEcfNotaCancelada,empCliente,sisCliente,empEmpresa,comEcfNotaProdutos
+br.com.opensig.comercial.shared.modelo.ComEcfNotaProduto, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComEcfNotaProduto/206449054, 206449054
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComEcfNotaProduto,comEcfNotaProdutoId,comEcfNotaProdutoQuantidade,comEcfNotaProdutoBruto,comEcfNotaProdutoDesconto,comEcfNotaProdutoLiquido,comEcfNotaProdutoIcms,comEcfNotaProdutoIpi,comEcfNotaProdutoOrdem,prodProduto,prodEmbalagem,comEcfNota
+[Lbr.com.opensig.comercial.shared.modelo.ComEcfNotaProduto;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComEcfNotaProduto;/4198573910, 4198573910
+[Lbr.com.opensig.comercial.shared.modelo.ComEcfNota;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComEcfNota;/3400376649, 3400376649
+br.com.opensig.comercial.shared.modelo.ComEcfVenda, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComEcfVenda/1329330926, 1329330926
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComEcfVenda,comEcfVendaId,comEcfVendaBruto,comEcfVendaFechada,comEcfVendaCancelada,comEcfVendaCcf,comEcfVendaCoo,comEcfVendaData,comEcfVendaDesconto,comEcfVendaAcrescimo,comEcfVendaLiquido,sisUsuario,sisVendedor,empCliente,sisCliente,finReceber,comEcf,comEcfZ,comEcfVendaProdutos,ecfPagamentos
+br.com.opensig.comercial.shared.modelo.ComEcfVendaProduto, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComEcfVendaProduto/2943945303, 2943945303
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComEcfVendaProduto,comEcfVendaProdutoId,comEcfVendaProdutoCodigo,comEcfVendaProdutoDescricao,comEcfVendaProdutoQuantidade,comEcfVendaProdutoBruto,comEcfVendaProdutoDesconto,comEcfVendaProdutoAcrescimo,comEcfVendaProdutoLiquido,comEcfVendaProdutoTotal,comEcfVendaProdutoCancelado,comEcfVendaProdutoOrdem,prodProduto,prodEmbalagem,comEcfVenda
+[Lbr.com.opensig.comercial.shared.modelo.ComEcfVendaProduto;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComEcfVendaProduto;/2283234164, 2283234164
+[Lbr.com.opensig.comercial.shared.modelo.ComEcfVenda;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComEcfVenda;/1857739843, 1857739843
+br.com.opensig.comercial.shared.modelo.ComEcfZ, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComEcfZ/2169291502, 2169291502
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComEcfZ,comEcfZId,comEcfZUsuario,comEcfZCooIni,comEcfZCooFin,comEcfZCro,comEcfZCrz,comEcfZMovimento,comEcfZEmissao,comEcfZBruto,comEcfZGt,comEcfZIssqn,comEcf,comEcfZTotais,comEcfVendas,comEcfDocumentos,issqn
+br.com.opensig.comercial.shared.modelo.ComEcfZTotais, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComEcfZTotais/2833670841, 2833670841
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComEcfZTotais,comEcfZTotaisId,comEcfZTotaisCodigo,comEcfZTotaisValor,comEcfZ
+[Lbr.com.opensig.comercial.shared.modelo.ComEcfZTotais;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComEcfZTotais;/1146473176, 1146473176
+[Lbr.com.opensig.comercial.shared.modelo.ComEcfZ;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComEcfZ;/4041752027, 4041752027
+[Lbr.com.opensig.comercial.shared.modelo.ComEcf;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComEcf;/3754204676, 3754204676
+br.com.opensig.comercial.shared.modelo.ComFrete, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComFrete/4037949371, 4037949371
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComFrete,comFreteId,comFreteAliquota,comFreteBase,comFreteCfop,comFreteCtrc,comFreteNota,comFreteCubagem,comFreteEmissao,comFreteEspecie,comFreteIcms,comFreteObservacao,comFretePeso,comFreteRecebimento,comFreteSerie,comFreteValor,comFreteValorProduto,comFreteVolume,comFreteFechada,comFretePaga,empTransportadora,empEmpresa,empFornecedor,finPagar
+[Lbr.com.opensig.comercial.shared.modelo.ComFrete;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComFrete;/223039527, 223039527
+br.com.opensig.comercial.shared.modelo.ComNatureza, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComNatureza/2306278227, 2306278227
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComNatureza,comNaturezaId,comNaturezaCfopTrib,comNaturezaCfopSub,comNaturezaDescricao,comNaturezaNome,comNaturezaIcms,comNaturezaIpi,comNaturezaPis,comNaturezaCofins,empEmpresa
+[Lbr.com.opensig.comercial.shared.modelo.ComNatureza;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComNatureza;/3953754592, 3953754592
+br.com.opensig.comercial.shared.modelo.ComValorArredonda, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComValorArredonda/470776272, 470776272
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComValorArredonda,comValorArredondaId,comValorArredondaFixo,comValorArredondaMax,comValorArredondaMin,comValorProduto
+[Lbr.com.opensig.comercial.shared.modelo.ComValorArredonda;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComValorArredonda;/592275398, 592275398
+br.com.opensig.comercial.shared.modelo.ComValorProduto, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComValorProduto/4166271368, 4166271368
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComValorProduto,comValorProdutoId,comValorProdutoDespesa,comValorProdutoFormula,comValorProdutoMarkup,empEmpresa,empFornecedor,prodProduto,comValorArredondas
+[Lbr.com.opensig.comercial.shared.modelo.ComValorProduto;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComValorProduto;/4083577928, 4083577928
+br.com.opensig.comercial.shared.modelo.ComVenda, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComVenda/2148066341, 2148066341
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComVenda,comVendaId,comVendaValorBruto,comVendaValorLiquido,comVendaData,comVendaFechada,comVendaRecebida,comVendaNfe,comVendaCancelada,comVendaObservacao,sisUsuario,empCliente,empEmpresa,comNatureza,finReceber,fisNotaSaida,comVendaProdutos
+br.com.opensig.comercial.shared.modelo.ComVendaProduto, true, true, true, true, br.com.opensig.comercial.shared.modelo.ComVendaProduto/2011707472, 2011707472
+@ClientFields,br.com.opensig.comercial.shared.modelo.ComVendaProduto,comVendaProdutoId,comVendaProdutoQuantidade,comVendaProdutoBruto,comVendaProdutoDesconto,comVendaProdutoLiquido,comVendaProdutoTotalBruto,comVendaProdutoTotalLiquido,comVendaProdutoIcms,comVendaProdutoIpi,comVendaProdutoOrdem,prodProduto,prodEmbalagem,comVenda
+[Lbr.com.opensig.comercial.shared.modelo.ComVendaProduto;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComVendaProduto;/3388488036, 3388488036
+[Lbr.com.opensig.comercial.shared.modelo.ComVenda;, true, true, true, true, [Lbr.com.opensig.comercial.shared.modelo.ComVenda;/411091337, 411091337
+br.com.opensig.comercial.shared.rest.SisCliente, true, true, true, true, br.com.opensig.comercial.shared.rest.SisCliente/1894706471, 1894706471
+[Lbr.com.opensig.comercial.shared.rest.SisCliente;, true, true, true, true, [Lbr.com.opensig.comercial.shared.rest.SisCliente;/2675097842, 2675097842
+br.com.opensig.core.client.controlador.comando.EModo, false, false, true, true, br.com.opensig.core.client.controlador.comando.EModo/2726144090, 2726144090
+br.com.opensig.core.client.controlador.filtro.AFiltro, false, false, true, false, br.com.opensig.core.client.controlador.filtro.AFiltro/2996953494, 2996953494
+[Lbr.com.opensig.core.client.controlador.filtro.AFiltro;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.filtro.AFiltro;/3025209697, 3025209697
+br.com.opensig.core.client.controlador.filtro.ECompara, false, false, true, true, br.com.opensig.core.client.controlador.filtro.ECompara/2034442107, 2034442107
+br.com.opensig.core.client.controlador.filtro.EJuncao, false, false, true, true, br.com.opensig.core.client.controlador.filtro.EJuncao/1315504761, 1315504761
+br.com.opensig.core.client.controlador.filtro.FiltroBinario, false, false, true, true, br.com.opensig.core.client.controlador.filtro.FiltroBinario/4194506614, 4194506614
+[Lbr.com.opensig.core.client.controlador.filtro.FiltroBinario;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.filtro.FiltroBinario;/3440809859, 3440809859
+br.com.opensig.core.client.controlador.filtro.FiltroCampo, false, false, true, true, br.com.opensig.core.client.controlador.filtro.FiltroCampo/562356276, 562356276
+[Lbr.com.opensig.core.client.controlador.filtro.FiltroCampo;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.filtro.FiltroCampo;/3257049870, 3257049870
+br.com.opensig.core.client.controlador.filtro.FiltroData, false, false, true, true, br.com.opensig.core.client.controlador.filtro.FiltroData/1596747410, 1596747410
+[Lbr.com.opensig.core.client.controlador.filtro.FiltroData;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.filtro.FiltroData;/2583611179, 2583611179
+br.com.opensig.core.client.controlador.filtro.FiltroEnum, false, false, true, true, br.com.opensig.core.client.controlador.filtro.FiltroEnum/2214348104, 2214348104
+[Lbr.com.opensig.core.client.controlador.filtro.FiltroEnum;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.filtro.FiltroEnum;/1528916968, 1528916968
+br.com.opensig.core.client.controlador.filtro.FiltroNumero, false, false, true, true, br.com.opensig.core.client.controlador.filtro.FiltroNumero/3936560719, 3936560719
+[Lbr.com.opensig.core.client.controlador.filtro.FiltroNumero;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.filtro.FiltroNumero;/1113627707, 1113627707
+br.com.opensig.core.client.controlador.filtro.FiltroObjeto, false, false, true, true, br.com.opensig.core.client.controlador.filtro.FiltroObjeto/3106867133, 3106867133
+[Lbr.com.opensig.core.client.controlador.filtro.FiltroObjeto;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.filtro.FiltroObjeto;/673158753, 673158753
+br.com.opensig.core.client.controlador.filtro.FiltroTexto, false, false, true, true, br.com.opensig.core.client.controlador.filtro.FiltroTexto/2037144532, 2037144532
+[Lbr.com.opensig.core.client.controlador.filtro.FiltroTexto;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.filtro.FiltroTexto;/433783476, 433783476
+br.com.opensig.core.client.controlador.filtro.GrupoFiltro, false, false, true, true, br.com.opensig.core.client.controlador.filtro.GrupoFiltro/1076577501, 1076577501
+[Lbr.com.opensig.core.client.controlador.filtro.GrupoFiltro;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.filtro.GrupoFiltro;/1510285903, 1510285903
+[Lbr.com.opensig.core.client.controlador.filtro.IFiltro;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.filtro.IFiltro;/85280672, 85280672
+br.com.opensig.core.client.controlador.parametro.AParametro, false, false, true, false, br.com.opensig.core.client.controlador.parametro.AParametro/969184748, 969184748
+[Lbr.com.opensig.core.client.controlador.parametro.AParametro;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.parametro.AParametro;/4166036832, 4166036832
+br.com.opensig.core.client.controlador.parametro.GrupoParametro, false, false, true, true, br.com.opensig.core.client.controlador.parametro.GrupoParametro/3514779557, 3514779557
+[Lbr.com.opensig.core.client.controlador.parametro.GrupoParametro;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.parametro.GrupoParametro;/3041323110, 3041323110
+[Lbr.com.opensig.core.client.controlador.parametro.IParametro;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.parametro.IParametro;/2033595352, 2033595352
+br.com.opensig.core.client.controlador.parametro.ParametroBinario, false, false, true, true, br.com.opensig.core.client.controlador.parametro.ParametroBinario/2288324513, 2288324513
+[Lbr.com.opensig.core.client.controlador.parametro.ParametroBinario;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.parametro.ParametroBinario;/1884668342, 1884668342
+br.com.opensig.core.client.controlador.parametro.ParametroData, false, false, true, true, br.com.opensig.core.client.controlador.parametro.ParametroData/3873491998, 3873491998
+[Lbr.com.opensig.core.client.controlador.parametro.ParametroData;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.parametro.ParametroData;/2934698631, 2934698631
+br.com.opensig.core.client.controlador.parametro.ParametroEnum, false, false, true, true, br.com.opensig.core.client.controlador.parametro.ParametroEnum/1764275644, 1764275644
+[Lbr.com.opensig.core.client.controlador.parametro.ParametroEnum;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.parametro.ParametroEnum;/63608822, 63608822
+br.com.opensig.core.client.controlador.parametro.ParametroException, true, true, false, false, br.com.opensig.core.client.controlador.parametro.ParametroException/1063484808, 1063484808
+br.com.opensig.core.client.controlador.parametro.ParametroFormula, false, false, true, true, br.com.opensig.core.client.controlador.parametro.ParametroFormula/3996487088, 3996487088
+[Lbr.com.opensig.core.client.controlador.parametro.ParametroFormula;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.parametro.ParametroFormula;/373328188, 373328188
+br.com.opensig.core.client.controlador.parametro.ParametroNumero, false, false, true, true, br.com.opensig.core.client.controlador.parametro.ParametroNumero/3040483484, 3040483484
+[Lbr.com.opensig.core.client.controlador.parametro.ParametroNumero;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.parametro.ParametroNumero;/1755378554, 1755378554
+br.com.opensig.core.client.controlador.parametro.ParametroObjeto, false, false, true, true, br.com.opensig.core.client.controlador.parametro.ParametroObjeto/1283773056, 1283773056
+[Lbr.com.opensig.core.client.controlador.parametro.ParametroObjeto;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.parametro.ParametroObjeto;/3378286022, 3378286022
+br.com.opensig.core.client.controlador.parametro.ParametroTexto, false, false, true, true, br.com.opensig.core.client.controlador.parametro.ParametroTexto/2877772659, 2877772659
+[Lbr.com.opensig.core.client.controlador.parametro.ParametroTexto;, false, false, true, true, [Lbr.com.opensig.core.client.controlador.parametro.ParametroTexto;/3623814344, 3623814344
+br.com.opensig.core.client.servico.CoreException, true, true, false, false, br.com.opensig.core.client.servico.CoreException/2011242083, 2011242083
+br.com.opensig.core.client.servico.CoreService, false, false, false, false, _, 2724046881
+br.com.opensig.core.client.servico.ExportacaoException, true, true, false, false, br.com.opensig.core.client.servico.ExportacaoException/1261724812, 1261724812
+br.com.opensig.core.client.servico.ImportacaoException, true, true, false, false, br.com.opensig.core.client.servico.ImportacaoException/3800355648, 3800355648
+br.com.opensig.core.client.servico.MailException, true, true, false, false, br.com.opensig.core.client.servico.MailException/852257184, 852257184
+br.com.opensig.core.client.servico.OpenSigException, true, false, false, false, br.com.opensig.core.client.servico.OpenSigException/2304574132, 2304574132
+br.com.opensig.core.shared.modelo.Autenticacao, true, true, false, false, br.com.opensig.core.shared.modelo.Autenticacao/116616390, 116616390
+br.com.opensig.core.shared.modelo.Colecao, true, true, true, true, br.com.opensig.core.shared.modelo.Colecao/3919608416, 3919608416
+[Lbr.com.opensig.core.shared.modelo.Colecao;, true, true, true, true, [Lbr.com.opensig.core.shared.modelo.Colecao;/3664233591, 3664233591
+br.com.opensig.core.shared.modelo.Dados, true, false, true, false, br.com.opensig.core.shared.modelo.Dados/2994513803, 2994513803
+[Lbr.com.opensig.core.shared.modelo.Dados;, true, true, true, true, [Lbr.com.opensig.core.shared.modelo.Dados;/290701098, 290701098
+br.com.opensig.core.shared.modelo.EBusca, false, false, true, true, br.com.opensig.core.shared.modelo.EBusca/4147078726, 4147078726
+br.com.opensig.core.shared.modelo.EComando, false, false, true, true, br.com.opensig.core.shared.modelo.EComando/2138420573, 2138420573
+br.com.opensig.core.shared.modelo.EData, false, false, true, true, br.com.opensig.core.shared.modelo.EData/2280180685, 2280180685
+br.com.opensig.core.shared.modelo.EDirecao, true, true, true, true, br.com.opensig.core.shared.modelo.EDirecao/2549459509, 2549459509
+br.com.opensig.core.shared.modelo.EGrafico, false, false, true, true, br.com.opensig.core.shared.modelo.EGrafico/2835290619, 2835290619
+br.com.opensig.core.shared.modelo.ELetra, true, true, true, true, br.com.opensig.core.shared.modelo.ELetra/3092593929, 3092593929
+br.com.opensig.core.shared.modelo.Lista, true, true, false, false, br.com.opensig.core.shared.modelo.Lista/614013100, 614013100
+br.com.opensig.core.shared.modelo.Sql, false, false, true, true, br.com.opensig.core.shared.modelo.Sql/2054045143, 2054045143
+[Lbr.com.opensig.core.shared.modelo.Sql;, false, false, true, true, [Lbr.com.opensig.core.shared.modelo.Sql;/725139766, 725139766
+br.com.opensig.core.shared.modelo.sistema.SisAcao, true, true, true, true, br.com.opensig.core.shared.modelo.sistema.SisAcao/2032317776, 2032317776
+@ClientFields,br.com.opensig.core.shared.modelo.sistema.SisAcao,sisAcaoId,sisAcaoAtivo,sisAcaoClasse,sisAcaoOrdem,sisAcaoSubOrdem,sisAcaoVisivel,executar,sisFuncao
+[Lbr.com.opensig.core.shared.modelo.sistema.SisAcao;, true, true, true, true, [Lbr.com.opensig.core.shared.modelo.sistema.SisAcao;/3814002344, 3814002344
+br.com.opensig.core.shared.modelo.sistema.SisExpImp, true, true, true, true, br.com.opensig.core.shared.modelo.sistema.SisExpImp/753300129, 753300129
+@ClientFields,br.com.opensig.core.shared.modelo.sistema.SisExpImp,sisExpImpId,sisExpImpClasse,sisExpImpDescricao,sisExpImpExtensoes,sisExpImpFuncao,sisExpImpImagem,sisExpImpModelo,sisExpImpNome,sisExpImpTipo,inicio,limite,outros
+[Lbr.com.opensig.core.shared.modelo.sistema.SisExpImp;, true, true, true, true, [Lbr.com.opensig.core.shared.modelo.sistema.SisExpImp;/4291851703, 4291851703
+br.com.opensig.core.shared.modelo.sistema.SisFuncao, true, true, true, true, br.com.opensig.core.shared.modelo.sistema.SisFuncao/1928507826, 1928507826
+@ClientFields,br.com.opensig.core.shared.modelo.sistema.SisFuncao,sisFuncaoId,sisFuncaoAtivo,sisFuncaoClasse,sisFuncaoOrdem,sisFuncaoSubOrdem,sisAcoes,sisModulo
+[Lbr.com.opensig.core.shared.modelo.sistema.SisFuncao;, true, true, true, true, [Lbr.com.opensig.core.shared.modelo.sistema.SisFuncao;/3580702498, 3580702498
+br.com.opensig.core.shared.modelo.sistema.SisModulo, true, true, true, true, br.com.opensig.core.shared.modelo.sistema.SisModulo/581587477, 581587477
+@ClientFields,br.com.opensig.core.shared.modelo.sistema.SisModulo,sisModuloId,sisModuloAtivo,sisModuloClasse,sisModuloOrdem,sisFuncoes
+[Lbr.com.opensig.core.shared.modelo.sistema.SisModulo;, true, true, true, true, [Lbr.com.opensig.core.shared.modelo.sistema.SisModulo;/1664412678, 1664412678
+br.com.opensig.empresa.client.servico.EmpresaException, true, true, false, false, br.com.opensig.empresa.client.servico.EmpresaException/2309695091, 2309695091
+br.com.opensig.empresa.shared.modelo.EmpCliente, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpCliente/1570850220, 1570850220
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpCliente,empClienteId,empEntidade
+[Lbr.com.opensig.empresa.shared.modelo.EmpCliente;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpCliente;/502896356, 502896356
+br.com.opensig.empresa.shared.modelo.EmpContato, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpContato/2847555802, 2847555802
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpContato,empContatoId,empContatoDescricao,empContatoPessoa,empEntidade,empContatoTipo
+br.com.opensig.empresa.shared.modelo.EmpContatoTipo, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpContatoTipo/4123768290, 4123768290
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpContatoTipo,empContatoTipoId,empContatoTipoDescricao
+[Lbr.com.opensig.empresa.shared.modelo.EmpContatoTipo;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpContatoTipo;/2253946879, 2253946879
+[Lbr.com.opensig.empresa.shared.modelo.EmpContato;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpContato;/2956181068, 2956181068
+br.com.opensig.empresa.shared.modelo.EmpEmpresa, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpEmpresa/616325253, 616325253
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpEmpresa,empEmpresaId,empEntidade,empPlanos
+[Lbr.com.opensig.empresa.shared.modelo.EmpEmpresa;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpEmpresa;/306592774, 306592774
+br.com.opensig.empresa.shared.modelo.EmpEndereco, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpEndereco/4148926849, 4148926849
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpEndereco,empEnderecoId,empEnderecoBairro,empEnderecoCep,empEnderecoComplemento,empEnderecoLogradouro,empEnderecoNumero,empEntidade,empEnderecoTipo,empMunicipio
+br.com.opensig.empresa.shared.modelo.EmpEnderecoTipo, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpEnderecoTipo/3201337829, 3201337829
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpEnderecoTipo,empEnderecoTipoId,empEnderecoTipoDescricao
+[Lbr.com.opensig.empresa.shared.modelo.EmpEnderecoTipo;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpEnderecoTipo;/3398455916, 3398455916
+[Lbr.com.opensig.empresa.shared.modelo.EmpEndereco;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpEndereco;/1392662428, 1392662428
+br.com.opensig.empresa.shared.modelo.EmpEntidade, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpEntidade/650799426, 650799426
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpEntidade,empEntidadeId,empEntidadeAtivo,empEntidadeDocumento1,empEntidadeDocumento2,empEntidadeNome1,empEntidadeNome2,empEntidadeObservacao,empEntidadePessoa,empContatos,empEnderecos
+[Lbr.com.opensig.empresa.shared.modelo.EmpEntidade;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpEntidade;/1396734515, 1396734515
+br.com.opensig.empresa.shared.modelo.EmpEstado, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpEstado/1489955509, 1489955509
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpEstado,empEstadoId,empEstadoIbge,empEstadoDescricao,empEstadoSigla,empPais,empMunicipios
+[Lbr.com.opensig.empresa.shared.modelo.EmpEstado;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpEstado;/693424745, 693424745
+br.com.opensig.empresa.shared.modelo.EmpFornecedor, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpFornecedor/2982869631, 2982869631
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpFornecedor,empFornecedorId,empEntidade
+[Lbr.com.opensig.empresa.shared.modelo.EmpFornecedor;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpFornecedor;/3534434301, 3534434301
+br.com.opensig.empresa.shared.modelo.EmpFuncionario, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpFuncionario/2047789579, 2047789579
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpFuncionario,empFuncionarioId,empEntidade,empEmpresa
+[Lbr.com.opensig.empresa.shared.modelo.EmpFuncionario;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpFuncionario;/1310678000, 1310678000
+br.com.opensig.empresa.shared.modelo.EmpMunicipio, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpMunicipio/3971690782, 3971690782
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpMunicipio,empMunicipioId,empMunicipioIbge,empMunicipioDescricao,empEstado
+[Lbr.com.opensig.empresa.shared.modelo.EmpMunicipio;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpMunicipio;/1313781902, 1313781902
+br.com.opensig.empresa.shared.modelo.EmpPais, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpPais/3648320144, 3648320144
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpPais,empPaisId,empPaisIbge,empPaisDescricao,empPaisSigla,empEstados
+[Lbr.com.opensig.empresa.shared.modelo.EmpPais;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpPais;/317369398, 317369398
+br.com.opensig.empresa.shared.modelo.EmpPlano, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpPlano/2604256469, 2604256469
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpPlano,empPlanoId,empPlanoFim,empPlanoInicio,empPlanoLimite,empPlanoExcedente,empEmpresa
+[Lbr.com.opensig.empresa.shared.modelo.EmpPlano;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpPlano;/1340058504, 1340058504
+br.com.opensig.empresa.shared.modelo.EmpTransportadora, true, true, true, true, br.com.opensig.empresa.shared.modelo.EmpTransportadora/714986691, 714986691
+@ClientFields,br.com.opensig.empresa.shared.modelo.EmpTransportadora,empTransportadoraId,empEntidade
+[Lbr.com.opensig.empresa.shared.modelo.EmpTransportadora;, true, true, true, true, [Lbr.com.opensig.empresa.shared.modelo.EmpTransportadora;/3411373883, 3411373883
+br.com.opensig.financeiro.client.servico.FinanceiroException, true, true, false, false, br.com.opensig.financeiro.client.servico.FinanceiroException/3544838332, 3544838332
+br.com.opensig.financeiro.shared.modelo.EAcao, false, false, true, true, br.com.opensig.financeiro.shared.modelo.EAcao/464601444, 464601444
+br.com.opensig.financeiro.shared.modelo.EOperacao, false, false, true, true, br.com.opensig.financeiro.shared.modelo.EOperacao/1694946815, 1694946815
+br.com.opensig.financeiro.shared.modelo.FinBanco, true, true, true, true, br.com.opensig.financeiro.shared.modelo.FinBanco/1584742835, 1584742835
+@ClientFields,br.com.opensig.financeiro.shared.modelo.FinBanco,finBancoId,finBancoNumero,finBancoDescricao
+[Lbr.com.opensig.financeiro.shared.modelo.FinBanco;, true, true, true, true, [Lbr.com.opensig.financeiro.shared.modelo.FinBanco;/2031704540, 2031704540
+br.com.opensig.financeiro.shared.modelo.FinCategoria, true, true, true, true, br.com.opensig.financeiro.shared.modelo.FinCategoria/1609396704, 1609396704
+@ClientFields,br.com.opensig.financeiro.shared.modelo.FinCategoria,finCategoriaId,finCategoriaDescricao
+[Lbr.com.opensig.financeiro.shared.modelo.FinCategoria;, true, true, true, true, [Lbr.com.opensig.financeiro.shared.modelo.FinCategoria;/2096153282, 2096153282
+br.com.opensig.financeiro.shared.modelo.FinConta, true, true, true, true, br.com.opensig.financeiro.shared.modelo.FinConta/762790780, 762790780
+@ClientFields,br.com.opensig.financeiro.shared.modelo.FinConta,finContaId,finContaNome,finContaNumero,finContaAgencia,finContaSaldo,finContaCarteira,finContaConvenio,finBanco,empEmpresa
+[Lbr.com.opensig.financeiro.shared.modelo.FinConta;, true, true, true, true, [Lbr.com.opensig.financeiro.shared.modelo.FinConta;/3646099766, 3646099766
+br.com.opensig.financeiro.shared.modelo.FinForma, true, true, true, true, br.com.opensig.financeiro.shared.modelo.FinForma/1676341030, 1676341030
+@ClientFields,br.com.opensig.financeiro.shared.modelo.FinForma,finFormaId,finFormaDescricao,finFormaCodigo,finFormaTef,finFormaVinculado,finFormaDebito,finFormaRede,finFormaPagar,finFormaReceber
+[Lbr.com.opensig.financeiro.shared.modelo.FinForma;, true, true, true, true, [Lbr.com.opensig.financeiro.shared.modelo.FinForma;/3449112332, 3449112332
+br.com.opensig.financeiro.shared.modelo.FinPagamento, true, true, true, true, br.com.opensig.financeiro.shared.modelo.FinPagamento/988620014, 988620014
+@ClientFields,br.com.opensig.financeiro.shared.modelo.FinPagamento,finPagamentoId,finPagamentoDocumento,finPagamentoObservacao,finPagamentoParcela,finPagamentoStatus,finPagamentoCadastro,finPagamentoRealizado,finPagamentoValor,finPagamentoVencimento,finPagamentoConciliado,finPagar,finForma
+[Lbr.com.opensig.financeiro.shared.modelo.FinPagamento;, true, true, true, true, [Lbr.com.opensig.financeiro.shared.modelo.FinPagamento;/716539492, 716539492
+br.com.opensig.financeiro.shared.modelo.FinPagar, true, true, true, true, br.com.opensig.financeiro.shared.modelo.FinPagar/547972341, 547972341
+@ClientFields,br.com.opensig.financeiro.shared.modelo.FinPagar,finPagarId,finPagarValor,finPagarCategoria,finPagarCadastro,finPagarNfe,finPagarObservacao,empEmpresa,empEntidade,finConta,finPagamentos
+[Lbr.com.opensig.financeiro.shared.modelo.FinPagar;, true, true, true, true, [Lbr.com.opensig.financeiro.shared.modelo.FinPagar;/3445972053, 3445972053
+br.com.opensig.financeiro.shared.modelo.FinReceber, true, true, true, true, br.com.opensig.financeiro.shared.modelo.FinReceber/1473670679, 1473670679
+@ClientFields,br.com.opensig.financeiro.shared.modelo.FinReceber,finReceberId,finReceberValor,finReceberCategoria,finReceberNfe,finReceberCadastro,finReceberObservacao,empEmpresa,empEntidade,finConta,finRecebimentos,finForma
+[Lbr.com.opensig.financeiro.shared.modelo.FinReceber;, true, true, true, true, [Lbr.com.opensig.financeiro.shared.modelo.FinReceber;/1116828261, 1116828261
+br.com.opensig.financeiro.shared.modelo.FinRecebimento, true, true, true, true, br.com.opensig.financeiro.shared.modelo.FinRecebimento/999098238, 999098238
+@ClientFields,br.com.opensig.financeiro.shared.modelo.FinRecebimento,finRecebimentoId,finRecebimentoDocumento,finRecebimentoObservacao,finRecebimentoParcela,finRecebimentoStatus,finRecebimentoCadastro,finRecebimentoRealizado,finRecebimentoValor,finRecebimentoVencimento,finRecebimentoConciliado,finReceber,finForma
+[Lbr.com.opensig.financeiro.shared.modelo.FinRecebimento;, true, true, true, true, [Lbr.com.opensig.financeiro.shared.modelo.FinRecebimento;/3829584312, 3829584312
+br.com.opensig.financeiro.shared.modelo.FinRemessa, true, true, true, true, br.com.opensig.financeiro.shared.modelo.FinRemessa/1499539395, 1499539395
+@ClientFields,br.com.opensig.financeiro.shared.modelo.FinRemessa,finRemessaId,finRemessaArquivo,finRemessaCadastro,finRemessaDataate,finRemessaDatade,finRemessaQuantidade,finRemessaValor,empEmpresa,finConta
+[Lbr.com.opensig.financeiro.shared.modelo.FinRemessa;, true, true, true, true, [Lbr.com.opensig.financeiro.shared.modelo.FinRemessa;/3220628013, 3220628013
+br.com.opensig.financeiro.shared.modelo.FinRetorno, true, true, true, true, br.com.opensig.financeiro.shared.modelo.FinRetorno/735630419, 735630419
+@ClientFields,br.com.opensig.financeiro.shared.modelo.FinRetorno,finRetornoId,finRetornoBoletos,finRetornoArquivo,finRetornoCadastro,finRetornoQuantidade,finRetornoValor,empEmpresa,finConta
+[Lbr.com.opensig.financeiro.shared.modelo.FinRetorno;, true, true, true, true, [Lbr.com.opensig.financeiro.shared.modelo.FinRetorno;/1326459557, 1326459557
+br.com.opensig.fiscal.client.servico.FiscalException, true, true, false, false, br.com.opensig.fiscal.client.servico.FiscalException/3924458002, 3924458002
+br.com.opensig.fiscal.shared.modelo.ENotaOriem, false, false, true, true, br.com.opensig.fiscal.shared.modelo.ENotaOriem/1208680199, 1208680199
+br.com.opensig.fiscal.shared.modelo.ENotaStatus, false, false, true, true, br.com.opensig.fiscal.shared.modelo.ENotaStatus/704581051, 704581051
+br.com.opensig.fiscal.shared.modelo.FisCertificado, true, true, true, true, br.com.opensig.fiscal.shared.modelo.FisCertificado/572330632, 572330632
+@ClientFields,br.com.opensig.fiscal.shared.modelo.FisCertificado,fisCertificadoId,fisCertificadoSenha,fisCertificadoInicio,fisCertificadoFim,empEmpresa
+[Lbr.com.opensig.fiscal.shared.modelo.FisCertificado;, true, true, true, true, [Lbr.com.opensig.fiscal.shared.modelo.FisCertificado;/2161035375, 2161035375
+br.com.opensig.fiscal.shared.modelo.FisIncentivoEstado, true, true, true, true, br.com.opensig.fiscal.shared.modelo.FisIncentivoEstado/1742490762, 1742490762
+@ClientFields,br.com.opensig.fiscal.shared.modelo.FisIncentivoEstado,fisIncentivoEstadoId,fisIncentivoEstadoIcms1,fisIncentivoEstadoIcms2,empEstado,empEmpresa
+[Lbr.com.opensig.fiscal.shared.modelo.FisIncentivoEstado;, true, true, true, true, [Lbr.com.opensig.fiscal.shared.modelo.FisIncentivoEstado;/3308697688, 3308697688
+br.com.opensig.fiscal.shared.modelo.FisNotaEntrada, true, true, true, true, br.com.opensig.fiscal.shared.modelo.FisNotaEntrada/3979681703, 3979681703
+@ClientFields,br.com.opensig.fiscal.shared.modelo.FisNotaEntrada,fisNotaEntradaId,fisNotaEntradaChave,fisNotaEntradaCadastro,fisNotaEntradaData,fisNotaEntradaNumero,fisNotaEntradaProtocolo,fisNotaEntradaProtocoloCancelado,fisNotaEntradaRecibo,fisNotaEntradaValor,fisNotaEntradaIcms,fisNotaEntradaIpi,fisNotaEntradaPis,fisNotaEntradaCofins,fisNotaEntradaXml,fisNotaEntradaXmlCancelado,fisNotaEntradaErro,fisNotaStatus,empEmpresa
+[Lbr.com.opensig.fiscal.shared.modelo.FisNotaEntrada;, true, true, true, true, [Lbr.com.opensig.fiscal.shared.modelo.FisNotaEntrada;/1013159790, 1013159790
+br.com.opensig.fiscal.shared.modelo.FisNotaSaida, true, true, true, true, br.com.opensig.fiscal.shared.modelo.FisNotaSaida/1992345370, 1992345370
+@ClientFields,br.com.opensig.fiscal.shared.modelo.FisNotaSaida,fisNotaSaidaId,fisNotaSaidaChave,fisNotaSaidaCadastro,fisNotaSaidaData,fisNotaSaidaNumero,fisNotaSaidaProtocolo,fisNotaSaidaRecibo,fisNotaSaidaProtocoloCancelado,fisNotaSaidaValor,fisNotaSaidaIcms,fisNotaSaidaIpi,fisNotaSaidaPis,fisNotaSaidaCofins,fisNotaSaidaXml,fisNotaSaidaXmlCancelado,fisNotaSaidaErro,fisNotaStatus,empEmpresa,ecfNotaEletronicaStatus
+[Lbr.com.opensig.fiscal.shared.modelo.FisNotaSaida;, true, true, true, true, [Lbr.com.opensig.fiscal.shared.modelo.FisNotaSaida;/941151053, 941151053
+br.com.opensig.fiscal.shared.modelo.FisNotaStatus, true, true, true, true, br.com.opensig.fiscal.shared.modelo.FisNotaStatus/2348535859, 2348535859
+@ClientFields,br.com.opensig.fiscal.shared.modelo.FisNotaStatus,fisNotaStatusId,fisNotaStatusDescricao
+[Lbr.com.opensig.fiscal.shared.modelo.FisNotaStatus;, true, true, true, true, [Lbr.com.opensig.fiscal.shared.modelo.FisNotaStatus;/2568800687, 2568800687
+br.com.opensig.fiscal.shared.modelo.FisSpedBloco, true, true, true, true, br.com.opensig.fiscal.shared.modelo.FisSpedBloco/506335105, 506335105
+@ClientFields,br.com.opensig.fiscal.shared.modelo.FisSpedBloco,fisSpedBlocoId,fisSpedBlocoClasse,fisSpedBlocoDescricao,fisSpedBlocoIcmsIpi,fisSpedBlocoLetra,fisSpedBlocoObrigatorio,fisSpedBlocoOrdem,fisSpedBlocoNivel,fisSpedBlocoPisCofins,fisSpedBlocoRegistro
+[Lbr.com.opensig.fiscal.shared.modelo.FisSpedBloco;, true, true, true, true, [Lbr.com.opensig.fiscal.shared.modelo.FisSpedBloco;/1048641961, 1048641961
+br.com.opensig.fiscal.shared.modelo.FisSpedFiscal, true, true, true, true, br.com.opensig.fiscal.shared.modelo.FisSpedFiscal/1574015262, 1574015262
+@ClientFields,br.com.opensig.fiscal.shared.modelo.FisSpedFiscal,fisSpedFiscalId,fisSpedFiscalAno,fisSpedFiscalProtocolo,fisSpedFiscalData,fisSpedFiscalMes,fisSpedFiscalTipo,fisSpedFiscalAtivo,empEmpresa,finalidade
+[Lbr.com.opensig.fiscal.shared.modelo.FisSpedFiscal;, true, true, true, true, [Lbr.com.opensig.fiscal.shared.modelo.FisSpedFiscal;/4261947774, 4261947774
+br.com.opensig.permissao.client.servico.PermissaoException, true, true, false, false, br.com.opensig.permissao.client.servico.PermissaoException/2832463499, 2832463499
+br.com.opensig.permissao.shared.modelo.SisConfiguracao, true, true, true, true, br.com.opensig.permissao.shared.modelo.SisConfiguracao/1103815951, 1103815951
+@ClientFields,br.com.opensig.permissao.shared.modelo.SisConfiguracao,sisConfiguracaoId,sisConfiguracaoChave,sisConfiguracaoDescricao,sisConfiguracaoValor,sisConfiguracaoAtivo,sisConfiguracaoSistema,empEmpresa
+[Lbr.com.opensig.permissao.shared.modelo.SisConfiguracao;, true, true, true, true, [Lbr.com.opensig.permissao.shared.modelo.SisConfiguracao;/1974519197, 1974519197
+br.com.opensig.permissao.shared.modelo.SisFavorito, true, true, true, true, br.com.opensig.permissao.shared.modelo.SisFavorito/858990499, 858990499
+@ClientFields,br.com.opensig.permissao.shared.modelo.SisFavorito,sisFavoritoId,sisFavoritoBusca,sisFavoritoDescricao,sisFavoritoNome,sisFavoritoOrdem,sisFavoritoOrdemDirecao,sisFavoritoPaginacao,sisUsuarios,sisGrupos,sisFavoritoCampos,sisFavoritoGrafico,sisUsuario,sisFuncao
+br.com.opensig.permissao.shared.modelo.SisFavoritoCampo, true, true, true, true, br.com.opensig.permissao.shared.modelo.SisFavoritoCampo/3102850193, 3102850193
+@ClientFields,br.com.opensig.permissao.shared.modelo.SisFavoritoCampo,sisFavoritoCampoId,sisFavoritoCampoFiltro1Compara,sisFavoritoCampoFiltro1Valor,sisFavoritoCampoFiltro2Compara,sisFavoritoCampoFiltro2Valor,sisFavoritoCampoNome,sisFavoritoCampoTipo,sisFavoritoCampoVisivel,sisFavorito
+[Lbr.com.opensig.permissao.shared.modelo.SisFavoritoCampo;, true, true, true, true, [Lbr.com.opensig.permissao.shared.modelo.SisFavoritoCampo;/3201936940, 3201936940
+br.com.opensig.permissao.shared.modelo.SisFavoritoGrafico, true, true, true, true, br.com.opensig.permissao.shared.modelo.SisFavoritoGrafico/1188192755, 1188192755
+@ClientFields,br.com.opensig.permissao.shared.modelo.SisFavoritoGrafico,sisFavoritoGraficoId,sisFavoritoGraficoTipo,sisFavoritoGraficoBusca,sisFavoritoGraficoData,sisFavoritoGraficoOrdem,sisFavoritoGraficoSubx,sisFavoritoGraficoX,sisFavoritoGraficoY,sisFavoritoGraficoLimite,sisFavorito
+[Lbr.com.opensig.permissao.shared.modelo.SisFavoritoGrafico;, true, true, true, true, [Lbr.com.opensig.permissao.shared.modelo.SisFavoritoGrafico;/449372741, 449372741
+br.com.opensig.permissao.shared.modelo.SisFavoritoPortal, true, true, true, true, br.com.opensig.permissao.shared.modelo.SisFavoritoPortal/3453538469, 3453538469
+@ClientFields,br.com.opensig.permissao.shared.modelo.SisFavoritoPortal,sisFavoritoPortalId,sisFavoritoPortalColuna,sisFavoritoPortalOrdem,sisUsuario,sisFavorito
+[Lbr.com.opensig.permissao.shared.modelo.SisFavoritoPortal;, true, true, true, true, [Lbr.com.opensig.permissao.shared.modelo.SisFavoritoPortal;/3850220367, 3850220367
+[Lbr.com.opensig.permissao.shared.modelo.SisFavorito;, true, true, true, true, [Lbr.com.opensig.permissao.shared.modelo.SisFavorito;/1183777009, 1183777009
+br.com.opensig.permissao.shared.modelo.SisGrupo, true, true, true, true, br.com.opensig.permissao.shared.modelo.SisGrupo/1966629097, 1966629097
+@ClientFields,br.com.opensig.permissao.shared.modelo.SisGrupo,sisGrupoId,sisGrupoAtivo,sisGrupoDescricao,sisGrupoNome,sisGrupoSistema,sisGrupoDesconto,empEmpresa,sisUsuarios,sisPermissoes
+[Lbr.com.opensig.permissao.shared.modelo.SisGrupo;, true, true, true, true, [Lbr.com.opensig.permissao.shared.modelo.SisGrupo;/4267507388, 4267507388
+br.com.opensig.permissao.shared.modelo.SisPermissao, true, true, true, true, br.com.opensig.permissao.shared.modelo.SisPermissao/3032099618, 3032099618
+@ClientFields,br.com.opensig.permissao.shared.modelo.SisPermissao,sisPermissaoId,sisAcaoId,sisExecutar,sisFuncaoId,sisModuloId,sisUsuario,sisGrupo
+[Lbr.com.opensig.permissao.shared.modelo.SisPermissao;, true, true, true, true, [Lbr.com.opensig.permissao.shared.modelo.SisPermissao;/3141223424, 3141223424
+br.com.opensig.permissao.shared.modelo.SisUsuario, true, true, true, true, br.com.opensig.permissao.shared.modelo.SisUsuario/2536795988, 2536795988
+@ClientFields,br.com.opensig.permissao.shared.modelo.SisUsuario,sisUsuarioId,sisUsuarioAtivo,sisUsuarioCaixa,sisUsuarioGerente,sisUsuarioLogin,sisUsuarioSenha,sisUsuarioSistema,sisUsuarioDesconto,sisUsuarioEmail,empEmpresas,sisGrupos,sisPermissoes
+[Lbr.com.opensig.permissao.shared.modelo.SisUsuario;, true, true, true, true, [Lbr.com.opensig.permissao.shared.modelo.SisUsuario;/3181452461, 3181452461
+br.com.opensig.produto.client.servico.ProdutoException, true, true, false, false, br.com.opensig.produto.client.servico.ProdutoException/264276070, 264276070
+br.com.opensig.produto.shared.modelo.ProdCategoria, true, true, true, true, br.com.opensig.produto.shared.modelo.ProdCategoria/841086333, 841086333
+@ClientFields,br.com.opensig.produto.shared.modelo.ProdCategoria,prodCategoriaId,prodCategoriaDescricao
+[Lbr.com.opensig.produto.shared.modelo.ProdCategoria;, true, true, true, true, [Lbr.com.opensig.produto.shared.modelo.ProdCategoria;/2836636291, 2836636291
+br.com.opensig.produto.shared.modelo.ProdComposicao, true, true, true, true, br.com.opensig.produto.shared.modelo.ProdComposicao/2034542305, 2034542305
+@ClientFields,br.com.opensig.produto.shared.modelo.ProdComposicao,prodComposicaoId,prodComposicaoQuantidade,prodComposicaoValor,prodProdutoPrincipal,prodProduto,prodEmbalagem
+[Lbr.com.opensig.produto.shared.modelo.ProdComposicao;, true, true, true, true, [Lbr.com.opensig.produto.shared.modelo.ProdComposicao;/1365783044, 1365783044
+br.com.opensig.produto.shared.modelo.ProdEmbalagem, true, true, true, true, br.com.opensig.produto.shared.modelo.ProdEmbalagem/2876708224, 2876708224
+@ClientFields,br.com.opensig.produto.shared.modelo.ProdEmbalagem,prodEmbalagemId,prodEmbalagemNome,prodEmbalagemUnidade,prodEmbalagemDescricao
+[Lbr.com.opensig.produto.shared.modelo.ProdEmbalagem;, true, true, true, true, [Lbr.com.opensig.produto.shared.modelo.ProdEmbalagem;/3608119199, 3608119199
+br.com.opensig.produto.shared.modelo.ProdEstoque, true, true, true, true, br.com.opensig.produto.shared.modelo.ProdEstoque/4278831962, 4278831962
+@ClientFields,br.com.opensig.produto.shared.modelo.ProdEstoque,prodEstoqueId,prodEstoqueQuantidade,prodProduto,empEmpresa
+[Lbr.com.opensig.produto.shared.modelo.ProdEstoque;, true, true, true, true, [Lbr.com.opensig.produto.shared.modelo.ProdEstoque;/3830651973, 3830651973
+br.com.opensig.produto.shared.modelo.ProdIpi, true, true, true, true, br.com.opensig.produto.shared.modelo.ProdIpi/3491282570, 3491282570
+@ClientFields,br.com.opensig.produto.shared.modelo.ProdIpi,prodIpiId,prodIpiDecreto,prodIpiAliquota,prodIpiNome,prodIpiCstEntrada,prodIpiCstSaida,prodIpiEnq
+[Lbr.com.opensig.produto.shared.modelo.ProdIpi;, true, true, true, true, [Lbr.com.opensig.produto.shared.modelo.ProdIpi;/379622623, 379622623
+br.com.opensig.produto.shared.modelo.ProdOrigem, true, true, true, true, br.com.opensig.produto.shared.modelo.ProdOrigem/199650754, 199650754
+@ClientFields,br.com.opensig.produto.shared.modelo.ProdOrigem,prodOrigemId,prodOrigemDescricao
+[Lbr.com.opensig.produto.shared.modelo.ProdOrigem;, true, true, true, true, [Lbr.com.opensig.produto.shared.modelo.ProdOrigem;/3614877267, 3614877267
+br.com.opensig.produto.shared.modelo.ProdPreco, true, true, true, true, br.com.opensig.produto.shared.modelo.ProdPreco/4272628987, 4272628987
+@ClientFields,br.com.opensig.produto.shared.modelo.ProdPreco,prodPrecoId,prodPrecoValor,prodPrecoBarra,prodProduto,prodEmbalagem
+[Lbr.com.opensig.produto.shared.modelo.ProdPreco;, true, true, true, true, [Lbr.com.opensig.produto.shared.modelo.ProdPreco;/3749358243, 3749358243
+br.com.opensig.produto.shared.modelo.ProdProduto, true, true, true, true, br.com.opensig.produto.shared.modelo.ProdProduto/822214013, 822214013
+@ClientFields,br.com.opensig.produto.shared.modelo.ProdProduto,prodProdutoId,prodProdutoNcm,prodProdutoAlterado,prodProdutoAtivo,prodProdutoIncentivo,prodProdutoBarra,prodProdutoCadastrado,prodProdutoCategoria,prodProdutoCusto,prodProdutoDescricao,prodProdutoPreco,prodProdutoVolume,prodProdutoReferencia,prodProdutoObservacao,prodPrecos,prodComposicoes,prodEstoques,prodTributacao,prodIpi,prodTipo,empFornecedor,empFabricante,prodOrigem,prodEmbalagem,prodProdutoSinc,prodProdutoEstoque,prodProdutoCstCson,prodProdutoTributacao,prodProdutoIcms,prodProdutoIssqn,prodProdutoIat,prodProdutoIppt
+[Lbr.com.opensig.produto.shared.modelo.ProdProduto;, true, true, true, true, [Lbr.com.opensig.produto.shared.modelo.ProdProduto;/4251284311, 4251284311
+br.com.opensig.produto.shared.modelo.ProdTipo, true, true, true, true, br.com.opensig.produto.shared.modelo.ProdTipo/980080915, 980080915
+@ClientFields,br.com.opensig.produto.shared.modelo.ProdTipo,prodTipoId,prodTipoValor,prodTipoDescricao
+[Lbr.com.opensig.produto.shared.modelo.ProdTipo;, true, true, true, true, [Lbr.com.opensig.produto.shared.modelo.ProdTipo;/194132456, 194132456
+br.com.opensig.produto.shared.modelo.ProdTributacao, true, true, true, true, br.com.opensig.produto.shared.modelo.ProdTributacao/1018666863, 1018666863
+@ClientFields,br.com.opensig.produto.shared.modelo.ProdTributacao,prodTributacaoId,prodTributacaoDecreto,prodTributacaoDentro,prodTributacaoFora,prodTributacaoNome,prodTributacaoCfop,prodTributacaoCst,prodTributacaoCson,prodTributacaoEcf
+[Lbr.com.opensig.produto.shared.modelo.ProdTributacao;, true, true, true, true, [Lbr.com.opensig.produto.shared.modelo.ProdTributacao;/2924132118, 2924132118
+com.google.gwt.canvas.dom.client.Context2d$Composite, false, false, true, true, com.google.gwt.canvas.dom.client.Context2d$Composite/3412511209, 3412511209
+com.google.gwt.canvas.dom.client.Context2d$LineCap, false, false, true, true, com.google.gwt.canvas.dom.client.Context2d$LineCap/4137629416, 4137629416
+com.google.gwt.canvas.dom.client.Context2d$LineJoin, false, false, true, true, com.google.gwt.canvas.dom.client.Context2d$LineJoin/773759908, 773759908
+com.google.gwt.canvas.dom.client.Context2d$Repetition, false, false, true, true, com.google.gwt.canvas.dom.client.Context2d$Repetition/200032891, 200032891
+com.google.gwt.canvas.dom.client.Context2d$TextAlign, false, false, true, true, com.google.gwt.canvas.dom.client.Context2d$TextAlign/96304101, 96304101
+com.google.gwt.canvas.dom.client.Context2d$TextBaseline, false, false, true, true, com.google.gwt.canvas.dom.client.Context2d$TextBaseline/1387606880, 1387606880
+com.google.gwt.cell.client.ButtonCellBase$Decoration, false, false, true, true, com.google.gwt.cell.client.ButtonCellBase$Decoration/2339543658, 2339543658
+com.google.gwt.core.client.CodeDownloadException$Reason, false, false, true, true, com.google.gwt.core.client.CodeDownloadException$Reason/4099226274, 4099226274
+com.google.gwt.dom.client.Style$BorderStyle, false, false, true, true, com.google.gwt.dom.client.Style$BorderStyle/2769837833, 2769837833
+com.google.gwt.dom.client.Style$Cursor, false, false, true, true, com.google.gwt.dom.client.Style$Cursor/2666657890, 2666657890
+com.google.gwt.dom.client.Style$Display, false, false, true, true, com.google.gwt.dom.client.Style$Display/1537475515, 1537475515
+com.google.gwt.dom.client.Style$Float, false, false, true, true, com.google.gwt.dom.client.Style$Float/1495215860, 1495215860
+com.google.gwt.dom.client.Style$FontStyle, false, false, true, true, com.google.gwt.dom.client.Style$FontStyle/2182768286, 2182768286
+com.google.gwt.dom.client.Style$FontWeight, false, false, true, true, com.google.gwt.dom.client.Style$FontWeight/3557458763, 3557458763
+com.google.gwt.dom.client.Style$ListStyleType, false, false, true, true, com.google.gwt.dom.client.Style$ListStyleType/1064239610, 1064239610
+com.google.gwt.dom.client.Style$Overflow, false, false, true, true, com.google.gwt.dom.client.Style$Overflow/982122884, 982122884
+com.google.gwt.dom.client.Style$Position, false, false, true, true, com.google.gwt.dom.client.Style$Position/548017857, 548017857
+com.google.gwt.dom.client.Style$TableLayout, false, false, true, true, com.google.gwt.dom.client.Style$TableLayout/1430616401, 1430616401
+com.google.gwt.dom.client.Style$TextDecoration, false, false, true, true, com.google.gwt.dom.client.Style$TextDecoration/3846779252, 3846779252
+com.google.gwt.dom.client.Style$Unit, false, false, true, true, com.google.gwt.dom.client.Style$Unit/269426519, 269426519
+com.google.gwt.dom.client.Style$VerticalAlign, false, false, true, true, com.google.gwt.dom.client.Style$VerticalAlign/352429624, 352429624
+com.google.gwt.dom.client.Style$Visibility, false, false, true, true, com.google.gwt.dom.client.Style$Visibility/1861510052, 1861510052
+com.google.gwt.i18n.client.DateTimeFormat$PredefinedFormat, false, false, true, true, com.google.gwt.i18n.client.DateTimeFormat$PredefinedFormat/229723443, 229723443
+com.google.gwt.i18n.client.HasDirection$Direction, false, false, true, true, com.google.gwt.i18n.client.HasDirection$Direction/1284232723, 1284232723
+com.google.gwt.i18n.shared.DateTimeFormat$PredefinedFormat, false, false, true, true, com.google.gwt.i18n.shared.DateTimeFormat$PredefinedFormat/649735428, 649735428
+com.google.gwt.i18n.shared.impl.DateRecord, true, true, true, true, com.google.gwt.i18n.shared.impl.DateRecord/3375188634, 3375188634
+com.google.gwt.layout.client.Layout$Alignment, false, false, true, true, com.google.gwt.layout.client.Layout$Alignment/1758648740, 1758648740
+com.google.gwt.resources.client.ImageResource$RepeatStyle, false, false, true, true, com.google.gwt.resources.client.ImageResource$RepeatStyle/2798118115, 2798118115
+com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy$KeyboardPagingPolicy, false, false, true, true, com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy$KeyboardPagingPolicy/3115114274, 3115114274
+com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy$KeyboardSelectionPolicy, false, false, true, true, com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy$KeyboardSelectionPolicy/2212535585, 2212535585
+com.google.gwt.user.cellview.client.SimplePager$TextLocation, false, false, true, true, com.google.gwt.user.cellview.client.SimplePager$TextLocation/844327705, 844327705
+com.google.gwt.user.client.DocumentModeAsserter$Severity, false, false, true, true, com.google.gwt.user.client.DocumentModeAsserter$Severity/1368792051, 1368792051
+com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException, true, true, true, true, com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException/3936916533, 3936916533
+com.google.gwt.user.client.rpc.RpcTokenException, true, true, false, false, com.google.gwt.user.client.rpc.RpcTokenException/2345075298, 2345075298
+com.google.gwt.user.client.rpc.XsrfToken, false, false, true, true, com.google.gwt.user.client.rpc.XsrfToken/4254043109, 4254043109
+com.google.gwt.user.client.rpc.impl.RequestCallbackAdapter$ResponseReader, false, false, true, true, com.google.gwt.user.client.rpc.impl.RequestCallbackAdapter$ResponseReader/3885798731, 3885798731
+com.google.gwt.user.client.ui.ChangeListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.ChangeListenerCollection/287642957, 287642957
+com.google.gwt.user.client.ui.ClickListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.ClickListenerCollection/2152455986, 2152455986
+com.google.gwt.user.client.ui.DockLayoutPanel$Direction, false, false, true, true, com.google.gwt.user.client.ui.DockLayoutPanel$Direction/1124902987, 1124902987
+com.google.gwt.user.client.ui.FocusListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.FocusListenerCollection/119490835, 119490835
+com.google.gwt.user.client.ui.FormHandlerCollection, true, true, true, true, com.google.gwt.user.client.ui.FormHandlerCollection/3088681894, 3088681894
+com.google.gwt.user.client.ui.KeyboardListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.KeyboardListenerCollection/1040442242, 1040442242
+com.google.gwt.user.client.ui.LoadListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.LoadListenerCollection/3174178888, 3174178888
+com.google.gwt.user.client.ui.MouseListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.MouseListenerCollection/465158911, 465158911
+com.google.gwt.user.client.ui.MouseWheelListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.MouseWheelListenerCollection/370304552, 370304552
+com.google.gwt.user.client.ui.PopupListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.PopupListenerCollection/1920131050, 1920131050
+com.google.gwt.user.client.ui.PopupPanel$AnimationType, false, false, true, true, com.google.gwt.user.client.ui.PopupPanel$AnimationType/2686977168, 2686977168
+com.google.gwt.user.client.ui.ScrollListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.ScrollListenerCollection/210686268, 210686268
+com.google.gwt.user.client.ui.TabListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.TabListenerCollection/3768293299, 3768293299
+com.google.gwt.user.client.ui.TableListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.TableListenerCollection/2254740473, 2254740473
+com.google.gwt.user.client.ui.TreeListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.TreeListenerCollection/3716243734, 3716243734
+com.google.gwt.user.client.ui.ValueBoxBase$TextAlignment, false, false, true, true, com.google.gwt.user.client.ui.ValueBoxBase$TextAlignment/3036099298, 3036099298
+com.google.gwt.view.client.DefaultSelectionEventManager$SelectAction, false, false, true, true, com.google.gwt.view.client.DefaultSelectionEventManager$SelectAction/3096171525, 3096171525
+com.rednels.ofcgwt.client.model.Legend$Position, false, false, true, true, com.rednels.ofcgwt.client.model.Legend$Position/3243550952, 3243550952
+com.rednels.ofcgwt.client.model.ToolTip$MouseStyle, false, false, true, true, com.rednels.ofcgwt.client.model.ToolTip$MouseStyle/1189927580, 1189927580
+com.rednels.ofcgwt.client.model.axis.Rotation, false, false, true, true, com.rednels.ofcgwt.client.model.axis.Rotation/153228167, 153228167
+com.rednels.ofcgwt.client.model.elements.BarChart$BarStyle, false, false, true, true, com.rednels.ofcgwt.client.model.elements.BarChart$BarStyle/783976900, 783976900
+com.rednels.ofcgwt.client.model.elements.CylinderBarChart$CylinderStyle, false, false, true, true, com.rednels.ofcgwt.client.model.elements.CylinderBarChart$CylinderStyle/3704260988, 3704260988
+com.rednels.ofcgwt.client.model.elements.ScatterChart$ScatterStyle, false, false, true, true, com.rednels.ofcgwt.client.model.elements.ScatterChart$ScatterStyle/3230396034, 3230396034
+java.lang.Boolean, true, true, true, true, java.lang.Boolean/476441737, 476441737
+java.lang.Byte, true, true, true, true, java.lang.Byte/1571082439, 1571082439
+java.lang.Double, true, true, true, true, java.lang.Double/858496421, 858496421
+java.lang.Exception, true, false, true, false, java.lang.Exception/1920171873, 1920171873
+java.lang.Float, true, true, true, true, java.lang.Float/1718559123, 1718559123
+java.lang.Integer, true, true, true, true, java.lang.Integer/3438268394, 3438268394
+[Ljava.lang.Integer;, true, true, false, false, [Ljava.lang.Integer;/1574882222, 1574882222
+java.lang.Long, true, true, true, true, java.lang.Long/4227064769, 4227064769
+java.lang.Number, true, false, true, false, java.lang.Number/300033342, 300033342
+java.lang.RuntimeException, true, false, true, false, java.lang.RuntimeException/515124647, 515124647
+java.lang.Short, true, true, true, true, java.lang.Short/551743396, 551743396
+java.lang.String, true, true, true, true, java.lang.String/2004016611, 2004016611
+[Ljava.lang.String;, true, true, true, true, [Ljava.lang.String;/2600011424, 2600011424
+[[Ljava.lang.String;, true, true, false, false, [[Ljava.lang.String;/4182515373, 4182515373
+java.lang.Throwable, true, false, true, false, java.lang.Throwable/2953622131, 2953622131
+java.lang.annotation.ElementType, false, false, true, true, java.lang.annotation.ElementType/15413163, 15413163
+java.lang.annotation.RetentionPolicy, false, false, true, true, java.lang.annotation.RetentionPolicy/1244130522, 1244130522
+java.math.BigDecimal, true, true, true, true, java.math.BigDecimal/8151472, 8151472
+java.math.BigInteger, true, true, true, true, java.math.BigInteger/927293797, 927293797
+java.math.RoundingMode, false, false, true, true, java.math.RoundingMode/2365096428, 2365096428
+java.sql.Date, true, true, true, true, java.sql.Date/730999118, 730999118
+java.sql.Time, true, true, true, true, java.sql.Time/1816797103, 1816797103
+java.sql.Timestamp, true, true, true, true, java.sql.Timestamp/3040052672, 3040052672
+java.util.ArrayList, true, true, true, true, java.util.ArrayList/4159755760, 4159755760
+java.util.Arrays$ArrayList, true, true, true, true, java.util.Arrays$ArrayList/2507071751, 2507071751
+java.util.Collections$EmptyList, true, true, true, true, java.util.Collections$EmptyList/4157118744, 4157118744
+java.util.Collections$EmptyMap, true, true, true, true, java.util.Collections$EmptyMap/4174664486, 4174664486
+java.util.Collections$EmptySet, true, true, true, true, java.util.Collections$EmptySet/3523698179, 3523698179
+java.util.Collections$SingletonList, true, true, true, true, java.util.Collections$SingletonList/1586180994, 1586180994
+java.util.Date, true, true, true, true, java.util.Date/3385151746, 3385151746
+java.util.HashMap, true, true, true, true, java.util.HashMap/1797211028, 1797211028
+java.util.HashSet, true, true, true, true, java.util.HashSet/3273092938, 3273092938
+java.util.IdentityHashMap, true, true, true, true, java.util.IdentityHashMap/1839153020, 1839153020
+java.util.LinkedHashMap, true, true, true, true, java.util.LinkedHashMap/3008245022, 3008245022
+java.util.LinkedHashSet, true, true, true, true, java.util.LinkedHashSet/1826081506, 1826081506
+java.util.LinkedList, true, true, true, true, java.util.LinkedList/3953877921, 3953877921
+java.util.Stack, true, true, true, true, java.util.Stack/1346942793, 1346942793
+java.util.TreeMap, true, true, true, true, java.util.TreeMap/1493889780, 1493889780
+java.util.TreeSet, true, true, true, true, java.util.TreeSet/4043497002, 4043497002
+java.util.Vector, true, true, true, true, java.util.Vector/3057315478, 3057315478
+javax.validation.constraints.Pattern$Flag, false, false, true, true, javax.validation.constraints.Pattern$Flag/3133410044, 3133410044
+javax.validation.metadata.Scope, false, false, true, true, javax.validation.metadata.Scope/4054088630, 4054088630

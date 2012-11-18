@@ -1,0 +1,58 @@
+@CHARSET "UTF-8";
+
+.icon-acesso {
+	background: url(../img/acesso.png) no-repeat center left !important;
+}
+
+.icon-entrar {
+	background: url(../img/entrar.png) no-repeat center left !important;
+}
+
+.icon-esqueceu {
+	background: url(../img/esqueceu.png) no-repeat center left !important;
+}
+
+.icon-grupo {
+	background: url(../img/grupo.png) no-repeat center left !important;
+}
+
+.icon-configuracao {
+	background: url(../img/configuracao.png) no-repeat center left
+		!important;
+}
+
+.icon-permissao {
+	background: url(../img/permissao.png) no-repeat center left !important;
+}
+
+.icon-sair {
+	background: url(../img/sair.png) no-repeat center left !important;
+}
+
+.icon-usuario {
+	background: url(../img/usuario.png) no-repeat center left !important;
+}
+
+/*  RESULT STYLE  */
+.testresult {
+	font-weight: bold;
+	font-size: 14px;
+	font-family: arial, helvetica, san-serif;
+	color: #666;
+	padding: 10px 10px 0px 30px;
+	display: block;
+	height: 30px;
+	float: left;
+}
+
+.badPass span {
+	background: url(../img/senha_vermelho.png) no-repeat 0 0 !important;
+}
+
+.goodPass span {
+	background: url(../img/senha_amarelo.png) no-repeat 0 0 !important;
+}
+
+.strongPass span {
+	background: url(../img/senha_verde.png) no-repeat 0 0 !important;
+}

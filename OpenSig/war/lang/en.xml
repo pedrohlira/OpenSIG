@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Language English USA -->
+<!-- Autor: Pedro Henrique de Lira -->
+<opensig>
+	<!-- Módulos -->
+	<modulo>
+		<classe>br.com.opensig.core.client.OpenSigCore</classe>
+		<nome>System</nome>
+		<descricao>Module that allows you to manage configs, exports e
+			plugins.</descricao>
+		<imagem>icon-core</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.permissao.client.OpenSigPermissao</classe>
+		<nome>Permissions</nome>
+		<descricao>Module that allows you to manage users, groups and
+			permissions for them.</descricao>
+		<imagem>icon-permissao</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.empresa.client.OpenSigEmpresa</classe>
+		<nome>Company</nome>
+		<descricao>Module that allows you to manage customers, suppliers and
+			all entries for the company.</descricao>
+		<imagem>icon-empresa</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.produto.client.OpenSigProduto</classe>
+		<nome>Product</nome>
+		<descricao>Module that allows you to manage the products and all
+			entries relating to the product.</descricao>
+		<imagem>icon-produto</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.comercial.client.OpenSigComercial</classe>
+		<nome>Business</nome>
+		<descricao>Module that allows you to manage business operations
+			performed in the company.</descricao>
+		<imagem>icon-comercial</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.fiscal.client.OpenSigFiscal</classe>
+		<nome>Fiscal</nome>
+		<descricao>Module that allows you to manage the fiscal operations
+			performed in company.</descricao>
+		<imagem>icon-fiscal</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.financeiro.client.OpenSigFinanceiro</classe>
+		<nome>Financial</nome>
+		<descricao>Module that allows you to manage the financial operations
+			performed in the company.</descricao>
+		<imagem>icon-financeiro</imagem>
+	</modulo>
+	<!-- Funções -->
+	<funcao>
+		<classe>br.com.opensig.core.client.controlador.comando.ComandoExpImp
+		</classe>
+		<nome>Exp / Imp</nome>
+		<descricao>Administer exports and imports types of the system.
+		</descricao>
+		<imagem>icon-expimp</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoUsuario
+		</classe>
+		<nome>Users</nome>
+		<descricao>Administer users of the system.</descricao>
+		<imagem>icon-usuario</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoGrupo
+		</classe>
+		<nome>Groups</nome>
+		<descricao>Administer groups of the system.</descricao>
+		<imagem>icon-grupo</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoAcesso
+		</classe>
+		<nome>Access</nome>
+		<descricao>Administer the access rights of groups and users.
+		</descricao>
+		<imagem>icon-acesso</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoConfiguracao
+		</classe>
+		<nome>Settings</nome>
+		<descricao>Administer the system settings.
+		</descricao>
+		<imagem>icon-configuracao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoPais
+		</classe>
+		<nome>Countries</nome>
+		<descricao>Administers the country's system.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoEstado
+		</classe>
+		<nome>States</nome>
+		<descricao>Administers the system states.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoMunicipio
+		</classe>
+		<nome>Citys</nome>
+		<descricao>Administers the city system.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoCliente
+		</classe>
+		<nome>Customers</nome>
+		<descricao>Administers system customers.</descricao>
+		<imagem>icon-cliente</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoFornecedor
+		</classe>
+		<nome>Suppliers</nome>
+		<descricao>Administers system suppliers.</descricao>
+		<imagem>icon-fornecedor</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoEmpresa
+		</classe>
+		<nome>Companys</nome>
+		<descricao>Administers the company system.</descricao>
+		<imagem>icon-empresa</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoFuncionario
+		</classe>
+		<nome>Staffs</nome>
+		<descricao>Administers the staff of the system.</descricao>
+		<imagem>icon-funcionario</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoTransportadora
+		</classe>
+		<nome>Air</nome>
+		<descricao>Administers the company's air.</descricao>
+		<imagem>icon-transportadora</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoContatoTipo
+		</classe>
+		<nome>Types of Contacts</nome>
+		<descricao>Administers the types of contacts of the system.
+		</descricao>
+		<imagem>icon-contato</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoEnderecoTipo
+		</classe>
+		<nome>Types of Addess</nome>
+		<descricao>Administers the types of system addresses.</descricao>
+		<imagem>icon-endereco</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoProduto
+		</classe>
+		<nome>Products</nome>
+		<descricao>Administers the products of system.</descricao>
+		<imagem>icon-produto</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoTributacao
+		</classe>
+		<nome>Taxation</nome>
+		<descricao>Administers the taxation of products.</descricao>
+		<imagem>icon-tributacao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoIpi
+		</classe>
+		<nome>IPI</nome>
+		<descricao>Administers the IPIs of products.</descricao>
+		<imagem>icon-ipi</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoPesquisa
+		</classe>
+		<nome>Search</nome>
+		<descricao>Perform a quick search by product.</descricao>
+		<imagem>icon-pesquisa</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoEmbalagem
+		</classe>
+		<nome>Package</nome>
+		<descricao>Administers the packaging.</descricao>
+		<imagem>icon-embalagem</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoTipo
+		</classe>
+		<nome>Type</nome>
+		<descricao>Administer the types of products.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoCompra
+		</classe>
+		<nome>Purchase</nome>
+		<descricao>Administer the company purchases.</descricao>
+		<imagem>icon-compra</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoVenda
+		</classe>
+		<nome>Sale</nome>
+		<descricao>Administer sales at the company.</descricao>
+		<imagem>icon-venda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoCompraProduto
+		</classe>
+		<nome>Purchase Products</nome>
+		<descricao>Administer the products marketed by buying the company.
+		</descricao>
+		<imagem>icon-produtocompra</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoVendaProduto
+		</classe>
+		<nome>Sale Products</nome>
+		<descricao>Administer the products marketed by the company in sales.
+		</descricao>
+		<imagem>icon-produtovenda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcf
+		</classe>
+		<nome>POS</nome>
+		<descricao>POS printers used in business.</descricao>
+		<imagem>icon-ecf</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfZ
+		</classe>
+		<nome>Reading Z</nome>
+		<descricao>Reading Z of POS.</descricao>
+		<imagem>icon-ecfz</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfVenda
+		</classe>
+		<nome>POS - Sale</nome>
+		<descricao>Sales in the POS.</descricao>
+		<imagem>icon-venda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfVendaProduto
+		</classe>
+		<nome>POS - Sale Products</nome>
+		<descricao>Sales of products made in the POS.</descricao>
+		<imagem>icon-produtovenda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfDocumento
+		</classe>
+		<nome>Documents</nome>
+		<descricao>Documents issued by POS.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfNota
+		</classe>
+		<nome>POS - Invoice</nome>
+		<descricao>Invoice consumer.</descricao>
+		<imagem>icon-venda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfNotaProduto
+		</classe>
+		<nome>POS - Invoice Products</nome>
+		<descricao>Products Invoices consumer held in POS.</descricao>
+		<imagem>icon-produtovenda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoFrete
+		</classe>
+		<nome>Shipping</nome>
+		<descricao>Recognition Shipping.</descricao>
+		<imagem>icon-frete</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoValorProduto
+		</classe>
+		<nome>Value Products</nome>
+		<descricao>Administer the rules of value of products.</descricao>
+		<imagem>icon-valor</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoNatureza
+		</classe>
+		<nome>Operation Nature</nome>
+		<descricao>Administer the natures of sales operations.
+		</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoReceber
+		</classe>
+		<nome>Receive</nome>
+		<descricao>Administer the receipt of values.</descricao>
+		<imagem>icon-receber</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoRecebimento
+		</classe>
+		<nome>Receipts</nome>
+		<descricao>Administer receipts.</descricao>
+		<imagem>icon-preco</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoPagar
+		</classe>
+		<nome>Pay</nome>
+		<descricao>Administer the payments of values.</descricao>
+		<imagem>icon-pagar</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoPagamento
+		</classe>
+		<nome>Payments</nome>
+		<descricao>Administer payments.</descricao>
+		<imagem>icon-preco</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoRemessa
+		</classe>
+		<nome>Send File</nome>
+		<descricao>Administer remittances generated for the bank.</descricao>
+		<imagem>icon-remessa</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoRetorno
+		</classe>
+		<nome>Return File</nome>
+		<descricao>Administer the returns generated by the bank.</descricao>
+		<imagem>icon-retorno</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoBanco
+		</classe>
+		<nome>Bank</nome>
+		<descricao>Administer the banks in the system.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoConta
+		</classe>
+		<nome>Account</nome>
+		<descricao>Administer the accounts in the system.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoForma
+		</classe>
+		<nome>Types of Payments</nome>
+		<descricao>Administer payment types in the system.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSaida
+		</classe>
+		<nome>NFe Output</nome>
+		<descricao>Administer NFe output.</descricao>
+		<imagem>icon-saida</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoEntrada
+		</classe>
+		<nome>NFe Input</nome>
+		<descricao>Administer NFe input.</descricao>
+		<imagem>icon-entrada</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoCertificado
+		</classe>
+		<nome>Certificate</nome>
+		<descricao>Administer the issuance of certificates for NFe.
+		</descricao>
+		<imagem>icon-chave</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSefaz
+		</classe>
+		<nome>Sefaz</nome>
+		<descricao>Administer the system queries the Sefaz.</descricao>
+		<imagem>icon-sefaz</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoStatus
+		</classe>
+		<nome>Status do Serviço</nome>
+		<descricao>Checks the status of the server Sefaz.</descricao>
+		<imagem>icon-status</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSituacao
+		</classe>
+		<nome>Situação da NFe</nome>
+		<descricao>Check the situation with the NFe Sefaz.</descricao>
+		<imagem>icon-situacao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoCadastro
+		</classe>
+		<nome>Consulta Empresa</nome>
+		<descricao>Check the status of the Company with the Sefaz.</descricao>
+		<imagem>icon-cadastro</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoIncentivo
+		</classe>
+		<nome>Incentive</nome>
+		<descricao>>Administer the incentives.</descricao>
+		<imagem>icon-incentivo</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSpedFiscal
+		</classe>
+		<nome>SPED Tax</nome>
+		<descricao>Public System of Digital Bookkeeping Tax</descricao>
+		<imagem>icon-sped</imagem>
+	</funcao>
+	<!-- Ações -->
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoVisualizar
+		</classe>
+		<nome>View</nome>
+		<descricao>views records.</descricao>
+		<imagem>icon-visualizar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoNovo
+		</classe>
+		<nome>New</nome>
+		<descricao>New record.</descricao>
+		<imagem>icon-novo</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoNovoDuplicar
+		</classe>
+		<nome>Duplicate Selected</nome>
+		<descricao>Duplicate selected record.</descricao>
+		<imagem>icon-novo</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoEditar
+		</classe>
+		<nome>Edit</nome>
+		<descricao>Edit the record.</descricao>
+		<imagem>icon-editar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoEditarFiltrados
+		</classe>
+		<nome>Edit Filtered</nome>
+		<descricao>Edit the filtered records.</descricao>
+		<imagem>icon-editar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoExcluir
+		</classe>
+		<nome>Delete</nome>
+		<descricao>Delete the record.</descricao>
+		<imagem>icon-excluir</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoExcluirFiltrados
+		</classe>
+		<nome>Delete Filtered</nome>
+		<descricao>Delete the filtered records.</descricao>
+		<imagem>icon-excluir</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoImprimir
+		</classe>
+		<nome>Print</nome>
+		<descricao>Print the List.</descricao>
+		<imagem>icon-imprimir</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoExportar
+		</classe>
+		<nome>Export</nome>
+		<descricao>Export data of list.</descricao>
+		<imagem>icon-exportar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoImportar
+		</classe>
+		<nome>Importar</nome>
+		<descricao>Import data for list.</descricao>
+		<imagem>icon-importar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.importar.ComandoImportarXls
+		</classe>
+		<nome>XLS</nome>
+		<descricao>Import data for list of format Excel.</descricao>
+		<imagem>icon-xls</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoPermiteWS
+		</classe>
+		<nome>Allows WebService</nome>
+		<descricao>Allows the user can login through the Web Service.
+		</descricao>
+		<imagem></imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoPermiteUsuario
+		</classe>
+		<nome>Allows User</nome>
+		<descricao>Allows you can view the data of other users.
+		</descricao>
+		<imagem></imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoPermiteEmpresa
+		</classe>
+		<nome>Allows Company</nome>
+		<descricao>Allows you can view the data of other companys.
+		</descricao>
+		<imagem></imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoReceber
+		</classe>
+		<nome>Receive</nome>
+		<descricao>Performs the process of receiving the securities on the
+			sale.</descricao>
+		<imagem>icon-receber</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagar
+		</classe>
+		<nome>Pay</nome>
+		<descricao>Performs the process of payment of the amounts on the
+			purchase.</descricao>
+		<imagem>icon-pagar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagarFrete
+		</classe>
+		<nome>Pay</nome>
+		<descricao>Performs the process of payment of the amounts on the
+			shipping.</descricao>
+		<imagem>icon-pagar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerar
+		</classe>
+		<nome>Generate</nome>
+		<descricao>Raises the bill payment.</descricao>
+		<imagem>icon-boleto</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerarImprimir
+		</classe>
+		<nome>Print</nome>
+		<descricao>Raises the bill payment and print.</descricao>
+		<imagem>icon-imprimir</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerarPdf
+		</classe>
+		<nome>PDF</nome>
+		<descricao>Raises the bill payment in PDF.</descricao>
+		<imagem>icon-pdf</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerarHtml
+		</classe>
+		<nome>HTML</nome>
+		<descricao>Raises the bill payment in HTML.</descricao>
+		<imagem>icon-html</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoRecibo
+		</classe>
+		<nome>Receipt</nome>
+		<descricao>Raises the receipt of the payment slip.</descricao>
+		<imagem>icon-txt</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoReciboImprimir
+		</classe>
+		<nome>Imprimir</nome>
+		<descricao>Raises the receipt of the payment slip and print.
+		</descricao>
+		<imagem>icon-imprimir</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoReciboPdf
+		</classe>
+		<nome>PDF</nome>
+		<descricao>Raises the receipt of the payment slip in PDF.</descricao>
+		<imagem>icon-pdf</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoReciboHtml
+		</classe>
+		<nome>HTML</nome>
+		<descricao>Raises the receipt of the payment slip in HTML.</descricao>
+		<imagem>icon-html</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoQuitarPagamento
+		</classe>
+		<nome>Discharge</nome>
+		<descricao>Performs discharge pay.</descricao>
+		<imagem>icon-quitar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoEstornarPagamento
+		</classe>
+		<nome>Reverse</nome>
+		<descricao>Performs the reverse pay.</descricao>
+		<imagem>icon-estornar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoConciliarPagamento
+		</classe>
+		<nome>Reconciling</nome>
+		<descricao>Performs reconciliation of payment with the bank.</descricao>
+		<imagem>icon-conciliar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoQuitarRecebimento
+		</classe>
+		<nome>Discharge</nome>
+		<descricao>Performs discharge receive.</descricao>
+		<imagem>icon-quitar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoEstornarRecebimento
+		</classe>
+		<nome>Reverse</nome>
+		<descricao>Performs the reverse receive.</descricao>
+		<imagem>icon-estornar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoConciliarRecebimento
+		</classe>
+		<nome>Reconciling</nome>
+		<descricao>Performs reconciliation of receive with the bank.</descricao>
+		<imagem>icon-conciliar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharCompra
+		</classe>
+		<nome>Close</nome>
+		<descricao>Close purchase.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharVenda
+		</classe>
+		<nome>Close</nome>
+		<descricao>Close sale.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharEcfVenda
+		</classe>
+		<nome>Close</nome>
+		<descricao>Close sale.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharFrete
+		</classe>
+		<nome>Close</nome>
+		<descricao>Close shipping.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarNfeSaida
+		</classe>
+		<nome>NFe</nome>
+		<descricao>Make NFe Out.</descricao>
+		<imagem>icon-nfe</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarNfeEntrada
+		</classe>
+		<nome>NFe</nome>
+		<descricao>Make NFe In.</descricao>
+		<imagem>icon-nfe</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoBackupSaida
+		</classe>
+		<nome>Backup</nome>
+		<descricao>Backup NFe.</descricao>
+		<imagem>icon-zip</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoBackupEntrada
+		</classe>
+		<nome>Backup</nome>
+		<descricao>Backup NFe.</descricao>
+		<imagem>icon-zip</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoValidar
+		</classe>
+		<nome>Validate</nome>
+		<descricao>Validate NFe.</descricao>
+		<imagem>icon-salvar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoInutilizarSaida
+		</classe>
+		<nome>Discard</nome>
+		<descricao>Discard NFe Out.</descricao>
+		<imagem>icon-inutilizar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoInutilizarEntrada
+		</classe>
+		<nome>Discard</nome>
+		<descricao>Discard NFe In.</descricao>
+		<imagem>icon-inutilizar</imagem>
+	</acao>
+</opensig>

@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<display-name>OpenSIG - Sistemas Integrados Gerenciáveis Open Source</display-name>
+	<description>Plataforma modular, expansível e acessível.</description>
+	<!-- Listener -->
+	<listener>
+		<display-name>Gerencia as Sessoes</display-name>
+		<listener-class>br.com.opensig.core.server.SessionManager</listener-class>
+	</listener>
+	<!-- Servlets -->
+	<servlet>
+		<description>Realiza a conexao persistente com o banco de dados</description>
+		<servlet-name>Conexao</servlet-name>
+		<servlet-class>br.com.opensig.core.server.Conexao</servlet-class>
+		<!-- Dados de conexao -->
+		<init-param>
+			<description>url</description>
+			<param-name>eclipselink.jdbc.url</param-name>
+			<param-value>jdbc:mysql://127.0.0.1:3306/opensig</param-value>
+		</init-param>
+		<init-param>
+			<description>driver</description>
+			<param-name>eclipselink.jdbc.driver</param-name>
+			<param-value>com.mysql.jdbc.Driver</param-value>
+		</init-param>
+		<init-param>
+			<description>usuario</description>
+			<param-name>eclipselink.jdbc.user</param-name>
+			<param-value>opensig</param-value>
+		</init-param>
+		<init-param>
+			<description>senha</description>
+			<param-name>eclipselink.jdbc.password</param-name>
+			<param-value>opensig</param-value>
+		</init-param>
+		<!-- Dados do pool -->
+		<init-param>
+			<description>minimo de leitura</description>
+			<param-name>eclipselink.jdbc.read-connections.min</param-name>
+			<param-value>2</param-value>
+		</init-param>
+		<init-param>
+			<description>maximo de leitura</description>
+			<param-name>eclipselink.jdbc.read-connections.max</param-name>
+			<param-value>2</param-value>
+		</init-param>
+		<init-param>
+			<description>minimo de escrita</description>
+			<param-name>eclipselink.jdbc.write-connections.min</param-name>
+			<param-value>2</param-value>
+		</init-param>
+		<init-param>
+			<description>maximo de escrita</description>
+			<param-name>eclipselink.jdbc.write-connections.max</param-name>
+			<param-value>2</param-value>
+		</init-param>
+		<!-- Dados de cahce -->
+		<init-param>
+			<description>habilita o segundo cache</description>
+			<param-name>eclipselink.cache.shared.default</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<description>log [OFF, SEVERE, WARNING, INFO, FINE]</description>
+			<param-name>eclipselink.logging.level</param-name>
+			<param-value>SEVERE</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>Utilitario que inicializa as funcoes no servidor</description>
+		<servlet-name>UtilServer</servlet-name>
+		<servlet-class>br.com.opensig.core.server.UtilServer</servlet-class>
+		<init-param>
+			<description>Categoria e appender ativo</description>
+			<param-name>log4j.rootCategory</param-name>
+			<param-value>DEBUG, S</param-value>
+		</init-param>
+		<init-param>
+			<description>tipo de appender</description>
+			<param-name>log4j.appender.R</param-name>
+			<param-value>org.apache.log4j.DailyRollingFileAppender</param-value>
+		</init-param>
+		<init-param>
+			<description>path local completo do arquivo</description>
+			<param-name>log4j.appender.R.File</param-name>
+			<param-value>opensig</param-value>
+		</init-param>
+		<init-param>
+			<description>adiciona ao final</description>
+			<param-name>log4j.appender.R.Append</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<description>padrao da data</description>
+			<param-name>log4j.appender.R.DatePattern</param-name>
+			<param-value>'_'yyyy-MM-dd'.log'</param-value>
+		</init-param>
+		<init-param>
+			<description>formato do texto</description>
+			<param-name>log4j.appender.R.layout</param-name>
+			<param-value>org.apache.log4j.PatternLayout</param-value>
+		</init-param>
+		<init-param>
+			<description>dados salvos</description>
+			<param-name>log4j.appender.R.layout.ConversionPattern</param-name>
+			<param-value>%d{yyyy-MM-dd HH:mm:ss} %c{1} [%p] %m%n</param-value>
+		</init-param>
+		<init-param>
+			<description>tipo de appender</description>
+			<param-name>log4j.appender.S</param-name>
+			<param-value>org.apache.log4j.ConsoleAppender</param-value>
+		</init-param>
+		<init-param>
+			<description>formato do texto</description>
+			<param-name>log4j.appender.S.layout</param-name>
+			<param-value>org.apache.log4j.PatternLayout</param-value>
+		</init-param>
+		<init-param>
+			<description>dados salvos</description>
+			<param-name>log4j.appender.S.layout.ConversionPattern</param-name>
+			<param-value>%d{yyyy-MM-dd HH:mm:ss} %c{1} [%p] %m%n</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>Servico de email</description>
+		<servlet-name>MailService</servlet-name>
+		<servlet-class>br.com.opensig.core.server.MailServiceImpl</servlet-class>
+		<init-param>
+			<description>host</description>
+			<param-name>mail.smtp.host</param-name>
+			<param-value>smtp.gmail.com</param-value>
+		</init-param>
+		<init-param>
+			<description>autenticacao</description>
+			<param-name>mail.smtp.auth</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<description>usuario</description>
+			<param-name>mail.user</param-name>
+			<param-value></param-value>
+		</init-param>
+		<init-param>
+			<description>senha</description>
+			<param-name>mail.pwd</param-name>
+			<param-value></param-value>
+		</init-param>
+		<init-param>
+			<description>debug</description>
+			<param-name>mail.debug</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<description>debug</description>
+			<param-name>false</param-name>
+			<param-value></param-value>
+		</init-param>
+		<init-param>
+			<description>caracteres</description>
+			<param-name>mail.mime.charset</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<description>porta</description>
+			<param-name>mail.smtp.port</param-name>
+			<param-value>465</param-value>
+		</init-param>
+		<init-param>
+			<description>SSL</description>
+			<param-name>mail.smtp.starttls.enable</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<description>Socket porta</description>
+			<param-name>mail.smtp.socketFactory.port</param-name>
+			<param-value>465</param-value>
+		</init-param>
+		<init-param>
+			<description>Socket fallback</description>
+			<param-name>mail.smtp.socketFactory.fallback</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<description>Socket class</description>
+			<param-name>mail.smtp.socketFactory.class</param-name>
+			<param-value>javax.net.ssl.SSLSocketFactory</param-value>
+		</init-param>
+		<load-on-startup>4</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>OpenPDV - RESTful</description>
+		<servlet-name>OpenPDV</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>br.com.opensig.comercial.server.rest</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+			<param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+			<param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
+		</init-param>
+		<load-on-startup>5</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>OpeNFE - RESTful</description>
+		<servlet-name>OpeNFE</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>br.com.opensig.fiscal.server.rest</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+			<param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+			<param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
+		</init-param>
+		<load-on-startup>6</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>Servico base da aplicacao</description>
+		<servlet-name>CoreService</servlet-name>
+		<servlet-class>br.com.opensig.core.server.CoreServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Servico de upload de arquivos</description>
+		<servlet-name>UploadService</servlet-name>
+		<servlet-class>br.com.opensig.core.server.UploadServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Servico de exportacao de arquivos</description>
+		<servlet-name>ExportacaoService</servlet-name>
+		<servlet-class>br.com.opensig.core.server.ExportacaoServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Servico de importacao de arquivos</description>
+		<servlet-name>ImportacaoService</servlet-name>
+		<servlet-class>br.com.opensig.core.server.ImportacaoServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Servico de permissao</description>
+		<servlet-name>PermissaoService</servlet-name>
+		<servlet-class>br.com.opensig.permissao.server.PermissaoServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Servico para acoes do modulo Empresa</description>
+		<servlet-name>EmpresaService</servlet-name>
+		<servlet-class>br.com.opensig.empresa.server.EmpresaServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Servico para acoes do modulo Comercial</description>
+		<servlet-name>ComercialService</servlet-name>
+		<servlet-class>br.com.opensig.comercial.server.ComercialServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Servico para acoes do modulo Financeiro</description>
+		<servlet-name>FinanceiroService</servlet-name>
+		<servlet-class>br.com.opensig.financeiro.server.FinanceiroServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Servico para acoes do modulo Fiscal</description>
+		<servlet-name>FiscalService</servlet-name>
+		<servlet-class>br.com.opensig.fiscal.server.FiscalServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>Servico para acoes do modulo Produto</description>
+		<servlet-name>ProdutoService</servlet-name>
+		<servlet-class>br.com.opensig.produto.server.ProdutoServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OpenPDV</servlet-name>
+		<url-pattern>/openpdv/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>OpeNFE</servlet-name>
+		<url-pattern>/openfe/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CoreService</servlet-name>
+		<url-pattern>/CoreService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>UploadService</servlet-name>
+		<url-pattern>/UploadService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExportacaoService</servlet-name>
+		<url-pattern>/ExportacaoService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ImportacaoService</servlet-name>
+		<url-pattern>/ImportacaoService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>MailService</servlet-name>
+		<url-pattern>/MailService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PermissaoService</servlet-name>
+		<url-pattern>/PermissaoService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EmpresaService</servlet-name>
+		<url-pattern>/EmpresaService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ComercialService</servlet-name>
+		<url-pattern>/ComercialService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FinanceiroService</servlet-name>
+		<url-pattern>/FinanceiroService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FiscalService</servlet-name>
+		<url-pattern>/FiscalService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ProdutoService</servlet-name>
+		<url-pattern>/ProdutoService</url-pattern>
+	</servlet-mapping>
+	<!-- Config Login -->
+	<context-param>
+		<description>Idioma padrão - ver /lang/</description>
+		<param-name>login.idioma</param-name>
+		<param-value>pt_BR</param-value>
+	</context-param>
+	<context-param>
+		<description>Tema padrão - ver /tema/ deixar vazio para padrao</description>
+		<param-name>login.tema</param-name>
+		<param-value></param-value>
+	</context-param>
+	<context-param>
+		<description>Segurança no login</description>
+		<param-name>login.captcha</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<description>Esqueceu a senha</description>
+		<param-name>login.esqueceu</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<description>Layout dos módulos [menu | lateral]</description>
+		<param-name>login.modulos</param-name>
+		<param-value>menu</param-value>
+	</context-param>
+	<context-param>
+		<description>Chave mestre usada para criptografar outras senhas.</description>
+		<param-name>sistema.chave</param-name>
+		<param-value>opensig</param-value>
+	</context-param>
+	<context-param>
+		<description>Path padrao das empresas e suas configuracoes e arquivos.</description>
+		<param-name>sistema.empresas</param-name>
+		<param-value>/Volumes/Macintosh HD 2/Users/pedrohenriquelira/Documents/Projetos/Git/OpenSIG/OpenSig/empresas/</param-value>
+	</context-param>
+	<!-- Config Server -->
+	<session-config>
+		<session-timeout>10</session-timeout>
+	</session-config>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/erro.html</location>
+	</error-page>
+	<error-page>
+		<error-code>415</error-code>
+		<location>/erro.html</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/erro.html</location>
+	</error-page>
+</web-app>

@@ -1,0 +1,35 @@
+<retConsCad xmlns="http://www.portalfiscal.inf.br/nfe"
+	versao="2.00">
+	<infCons>
+		<verAplic>SP_NFE_PL_006e</verAplic>
+		<cStat>111</cStat>
+		<xMotivo>Consulta cadastro com uma ocorrencia</xMotivo>
+		<UF>SP</UF>
+		<CNPJ>04062314000170</CNPJ>
+		<dhCons>2011-08-11T19:28:18</dhCons>
+		<cUF>35</cUF>
+		<infCad>
+			<IE>412068211110</IE>
+			<CNPJ>04062314000170</CNPJ>
+			<UF>SP</UF>
+			<cSit>1</cSit>
+			<indCredNFe>1</indCredNFe>
+			<indCredCTe>4</indCredCTe>
+			<xNome>USUAL PLASTIC - INDSTRIA E COMERCIO DE ARTEFATOS PLASTICOS
+				LTDA-EPP</xNome>
+			<xRegApur>NORMAL - REGIME PERIODICO DE APURACAO</xRegApur>
+			<CNAE>3240099</CNAE>
+			<dIniAtiv>2000-10-06</dIniAtiv>
+			<dUltSit>2000-10-06</dUltSit>
+			<ender>
+				<xLgr>MARECHAL RONDON</xLgr>
+				<nro>SN</nro>
+				<xCpl>KM 176 SN</xCpl>
+				<xBairro>SAO ROQUE</xBairro>
+				<cMun>3526407</cMun>
+				<xMun>LARANJAL PAULISTA</xMun>
+				<CEP>18500000</CEP>
+			</ender>
+		</infCad>
+	</infCons>
+</retConsCad>

@@ -1,0 +1,10 @@
+<retConsStatServ xmlns="http://www.portalfiscal.inf.br/nfe"
+	versao="2.00">
+	<tpAmb>2</tpAmb>
+	<verAplic>SVRS20110111103240</verAplic>
+	<cStat>107</cStat>
+	<xMotivo>Servico em Operacao</xMotivo>
+	<cUF>27</cUF>
+	<dhRecbto>2011-08-11T17:43:15</dhRecbto>
+	<tMed>1</tMed>
+</retConsStatServ>

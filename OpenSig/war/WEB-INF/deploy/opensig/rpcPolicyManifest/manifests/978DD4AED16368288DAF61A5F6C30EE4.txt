@@ -1,0 +1,2 @@
+serviceClass: br.com.opensig.core.client.servico.CoreService
+path: B357817100B01F03162271F5A244403B.gwt.rpc

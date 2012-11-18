@@ -18,6 +18,7 @@ import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroBinario;
 import br.com.opensig.core.client.controlador.filtro.FiltroData;
+import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
 import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
@@ -174,8 +175,8 @@ public class RestCliente extends ARest {
 	/**
 	 * Metodo que retorna a lista de novos produtos cadastrados no sistema.
 	 * 
-	 * @param data
-	 *            data usada como corte para considerar novo produto.
+	 * @param id
+	 *            o ultimo id cadastro no banco do pdv.
 	 * @param pagina
 	 *            numero da pagina de retorno dos dados comecando pelo ZERO.
 	 * @param limite
@@ -187,18 +188,13 @@ public class RestCliente extends ARest {
 	@Path("/produtoNovo")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProdProduto> getProdutoNovo(@QueryParam("data") String data, @QueryParam("pagina") int pagina, @QueryParam("limite") int limite) throws RestException {
+	public List<ProdProduto> getProdutoNovo(@QueryParam("id") int id, @QueryParam("pagina") int pagina, @QueryParam("limite") int limite) throws RestException {
 		autorizar();
 		try {
-			Date cadastro = UtilServer.formataData(data, "dd/MM/yyyy HH:mm:ss");
-			IFiltro filtro = null;
-			if (cadastro != null) {
-				filtro = new FiltroData("prodProdutoCadastrado", ECompara.MAIOR, cadastro);
-			}
+			FiltroNumero fn = new FiltroNumero("prodProdutoId", ECompara.MAIOR, id);
 			ProdProduto prod = new ProdProduto();
-			prod.setCampoOrdem("prodProdutoCadastrado");
-
-			List<ProdProduto> produtos = service.selecionar(prod, pagina * limite, limite, filtro, false).getLista();
+			prod.setCampoOrdem("prodProdutoId");
+			List<ProdProduto> produtos = service.selecionar(prod, pagina * limite, limite, fn, false).getLista();
 			setValoresProduto(produtos);
 			return produtos;
 		} catch (Exception ex) {

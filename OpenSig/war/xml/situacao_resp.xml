@@ -1,0 +1,21 @@
+<retConsSitNFe xmlns="http://www.portalfiscal.inf.br/nfe"
+	versao="2.00">
+	<tpAmb>1</tpAmb>
+	<verAplic>SVRS20110429163610</verAplic>
+	<cStat>100</cStat>
+	<xMotivo>Autorizado o uso da NF-e</xMotivo>
+	<cUF>27</cUF>
+	<chNFe>27110812062505000160550010000017961131300654</chNFe>
+	<protNFe versao="2.00">
+		<infProt Id="ID327110006163959">
+			<tpAmb>1</tpAmb>
+			<verAplic>SVRS20110801092042</verAplic>
+			<chNFe>27110812062505000160550010000017961131300654</chNFe>
+			<dhRecbto>2011-08-10T17:03:03</dhRecbto>
+			<nProt>327110006163959</nProt>
+			<digVal>pvJ4ch22pV3vmmfIaVohR6zRAeE=</digVal>
+			<cStat>100</cStat>
+			<xMotivo>Autorizado o uso da NF-e</xMotivo>
+		</infProt>
+	</protNFe>
+</retConsSitNFe>

@@ -1,0 +1,53 @@
+@CHARSET "UTF-8";
+
+.icon-fiscal {
+	background: url(../img/fiscal.png) no-repeat center left !important;
+}
+
+.icon-saida {
+	background: url(../img/saida.png) no-repeat center left !important;
+}
+
+.icon-entrada {
+	background: url(../img/entrada.png) no-repeat center left !important;
+}
+
+.icon-incentivo {
+	background: url(../img/incentivo.png) no-repeat center left !important;
+}
+
+.icon-analisar {
+	background: url(../img/analisar.png) no-repeat center left !important;
+}
+
+.icon-zip {
+	background: url(../img/zip.png) no-repeat center left !important;
+}
+
+.icon-chave {
+	background: url(../img/chave.png) no-repeat center left !important;
+}
+
+.icon-inutilizar {
+	background: url(../img/inutilizar.png) no-repeat center left !important;
+}
+
+.icon-sefaz {
+	background: url(../img/sefaz.png) no-repeat center left !important;
+}
+
+.icon-cadastro {
+	background: url(../img/cadastro.png) no-repeat center left !important;
+}
+
+.icon-situacao {
+	background: url(../img/situacao.png) no-repeat center left !important;
+}
+
+.icon-status {
+	background: url(../img/status.png) no-repeat center left !important;
+}
+
+.icon-sped {
+	background: url(../img/sped.png) no-repeat center left !important;
+}

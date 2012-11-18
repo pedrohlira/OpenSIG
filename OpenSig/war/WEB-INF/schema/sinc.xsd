@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://openfe.com.br/sinc"
+	targetNamespace="http://openfe.com.br/sinc" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<xs:element name="openfe" type="Tsinc" />
+
+	<xs:complexType name="Tsinc">
+		<xs:annotation>
+			<xs:documentation>Dados de solicitacao de status das NFe para sincronizar com ERP.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tipo" type="Ttipo" minOccurs="1"
+				maxOccurs="1"></xs:element>
+			<xs:element name="chave" type="Tchave" minOccurs="0"
+				maxOccurs="1"></xs:element>
+			<xs:element name="inut" type="Tnumero" minOccurs="0"
+				maxOccurs="1"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="Ttipo">
+		<xs:annotation>
+			<xs:documentation>O tipo de Nfe [0 - ENTRADA ou 1 - SAIDA].
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:whiteSpace value="collapse" />
+			<xs:enumeration value="0" />
+			<xs:enumeration value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="Tchave">
+		<xs:annotation>
+			<xs:documentation>A chave da NFe em caso de Autorizaco ou cancelamento
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="44"></xs:minLength>
+			<xs:maxLength value="44"></xs:maxLength>
+			<xs:pattern value="\d{44}"></xs:pattern>
+			<xs:whiteSpace value="collapse"></xs:whiteSpace>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="Tnumero">
+		<xs:annotation>
+			<xs:documentation>Numero da nota fiscal.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:whiteSpace value="collapse"></xs:whiteSpace>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

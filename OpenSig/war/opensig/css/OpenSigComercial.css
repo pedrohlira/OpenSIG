@@ -1,0 +1,52 @@
+@CHARSET "UTF-8";
+.icon-comercial {
+    background: url(../img/comercial.png) no-repeat center left !important;
+}
+
+.icon-compra {
+    background: url(../img/compra.png) no-repeat center left !important;
+}
+
+.icon-venda {
+    background: url(../img/venda.png) no-repeat center left !important;
+}
+
+.icon-frete {
+    background: url(../img/frete.png) no-repeat center left !important;
+}
+
+.icon-valor {
+    background: url(../img/valor.png) no-repeat center left !important;
+}
+
+.icon-fechar {
+    background: url(../img/fechar.png) no-repeat center left !important;
+}
+
+.icon-receber {
+    background: url(../img/receber.png) no-repeat center left !important;
+}
+
+.icon-pagar {
+    background: url(../img/pagar.png) no-repeat center left !important;
+}
+
+.icon-nfe {
+    background: url(../img/nfe.png) no-repeat center left !important;
+}
+
+.icon-produtocompra {
+    background: url(../img/produtocompra.png) no-repeat center left !important;
+}
+
+.icon-produtovenda {
+    background: url(../img/produtovenda.png) no-repeat center left !important;
+}
+
+.icon-ecf {
+    background: url(../img/ecf.png) no-repeat center left !important;
+}
+
+.icon-ecfz {
+    background: url(../img/ecfz.png) no-repeat center left !important;
+}

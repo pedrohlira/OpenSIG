@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Idoma Portugues Brasil -->
+<!-- Autor: Pedro Henrique de Lira -->
+<opensig>
+	<!-- Módulos -->
+	<modulo>
+		<classe>br.com.opensig.core.client.OpenSigCore</classe>
+		<nome>Sistema</nome>
+		<descricao>Módulo que permite gerenciar configuracoes, exportacoes e
+			plugins.</descricao>
+		<imagem>icon-core</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.permissao.client.OpenSigPermissao</classe>
+		<nome>Permissões</nome>
+		<descricao>Módulo que permite gerenciar usuários, grupos e permissões
+			para os mesmos.</descricao>
+		<imagem>icon-permissao</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.empresa.client.OpenSigEmpresa</classe>
+		<nome>Empresa</nome>
+		<descricao>Módulo que permite gerenciar clientes, fornecedores e todos
+			cadastros referentes a empresa.</descricao>
+		<imagem>icon-empresa</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.produto.client.OpenSigProduto</classe>
+		<nome>Produto</nome>
+		<descricao>Módulo que permite gerenciar os produtos e todos cadastros
+			referentes ao produto.</descricao>
+		<imagem>icon-produto</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.comercial.client.OpenSigComercial</classe>
+		<nome>Comercial</nome>
+		<descricao>Módulo que permite gerenciar as operações comerciais
+			realizadas na empresa.</descricao>
+		<imagem>icon-comercial</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.fiscal.client.OpenSigFiscal</classe>
+		<nome>Fiscal</nome>
+		<descricao>Módulo que permite gerenciar as operações fiscais
+			realizadas na empresa.</descricao>
+		<imagem>icon-fiscal</imagem>
+	</modulo>
+	<modulo>
+		<classe>br.com.opensig.financeiro.client.OpenSigFinanceiro</classe>
+		<nome>Financeiro</nome>
+		<descricao>Módulo que permite gerenciar as operações financeiras
+			realizadas na empresa.
+		</descricao>
+		<imagem>icon-financeiro</imagem>
+	</modulo>
+	<!-- Funções -->
+	<funcao>
+		<classe>br.com.opensig.core.client.controlador.comando.ComandoExpImp
+		</classe>
+		<nome>Exp / Imp</nome>
+		<descricao>Administrar os tipos de exportações e importações do
+			sistema.
+		</descricao>
+		<imagem>icon-expimp</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoUsuario
+		</classe>
+		<nome>Usuários</nome>
+		<descricao>Administrar os usuários do sistema.</descricao>
+		<imagem>icon-usuario</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoGrupo
+		</classe>
+		<nome>Grupos</nome>
+		<descricao>Administrar os grupos do sistema.</descricao>
+		<imagem>icon-grupo</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoAcesso
+		</classe>
+		<nome>Acesso</nome>
+		<descricao>Administrar os direitos de acesso dos grupos e usuários.
+		</descricao>
+		<imagem>icon-acesso</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoConfiguracao
+		</classe>
+		<nome>Configuração</nome>
+		<descricao>Administrar as configurações do sistema.
+		</descricao>
+		<imagem>icon-configuracao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoPais
+		</classe>
+		<nome>Países</nome>
+		<descricao>Administrar os países do sistema.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoEstado
+		</classe>
+		<nome>Estados</nome>
+		<descricao>Administrar os estados do sistema.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoMunicipio
+		</classe>
+		<nome>Municípios</nome>
+		<descricao>Administrar os municípios do sistema.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoCliente
+		</classe>
+		<nome>Clientes</nome>
+		<descricao>Administrar os clientes do sistema.</descricao>
+		<imagem>icon-cliente</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoFornecedor
+		</classe>
+		<nome>Fornecedores</nome>
+		<descricao>Administrar os fornecedores do sistema.</descricao>
+		<imagem>icon-fornecedor</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoEmpresa
+		</classe>
+		<nome>Empresas</nome>
+		<descricao>Administrar os empresas do sistema.</descricao>
+		<imagem>icon-empresa</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoFuncionario
+		</classe>
+		<nome>Funcionários</nome>
+		<descricao>Administrar os funcionários do sistema.</descricao>
+		<imagem>icon-funcionario</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoTransportadora
+		</classe>
+		<nome>Transportadora</nome>
+		<descricao>Administrar as transportadoras da empresa.</descricao>
+		<imagem>icon-transportadora</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoContatoTipo
+		</classe>
+		<nome>Tipos de Contato</nome>
+		<descricao>Administrar os tipos de contatos do sistema.</descricao>
+		<imagem>icon-contato</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.empresa.client.controlador.comando.ComandoEnderecoTipo
+		</classe>
+		<nome>Tipos de Endereço</nome>
+		<descricao>Administrar os tipos de endereços do sistema.</descricao>
+		<imagem>icon-endereco</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoProduto
+		</classe>
+		<nome>Produtos</nome>
+		<descricao>Administrar os produtos do sistema.</descricao>
+		<imagem>icon-produto</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoTributacao
+		</classe>
+		<nome>Tributação</nome>
+		<descricao>Administrar as tributações dos produtos.</descricao>
+		<imagem>icon-tributacao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoIpi
+		</classe>
+		<nome>IPI</nome>
+		<descricao>Administrar os IPIs dos produtos.</descricao>
+		<imagem>icon-ipi</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoPesquisa
+		</classe>
+		<nome>Pesquisa</nome>
+		<descricao>Realiza uma busca rápida pelo produto.</descricao>
+		<imagem>icon-pesquisa</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoEmbalagem
+		</classe>
+		<nome>Embalagens</nome>
+		<descricao>Administrar as embalagens.</descricao>
+		<imagem>icon-embalagem</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoTipo
+		</classe>
+		<nome>Tipo</nome>
+		<descricao>Administrar os tipos de produtos.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoCompra
+		</classe>
+		<nome>Compra</nome>
+		<descricao>Administrar as compras na empresa.</descricao>
+		<imagem>icon-compra</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoVenda
+		</classe>
+		<nome>Venda</nome>
+		<descricao>Administrar as vendas na empresa.</descricao>
+		<imagem>icon-venda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoCompraProduto
+		</classe>
+		<nome>Compra Produtos</nome>
+		<descricao>Administrar os produtos comercializados pelas compras na
+			empresa.</descricao>
+		<imagem>icon-produtocompra</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoVendaProduto
+		</classe>
+		<nome>Venda Produtos</nome>
+		<descricao>Administrar os produtos comercializados pelas vendas na
+			empresa.</descricao>
+		<imagem>icon-produtovenda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcf
+		</classe>
+		<nome>ECF</nome>
+		<descricao>Impressoras ECF usadas na empresa.</descricao>
+		<imagem>icon-ecf</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfZ
+		</classe>
+		<nome>Leitura Z</nome>
+		<descricao>Leitura Z do ECF.</descricao>
+		<imagem>icon-ecfz</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfVenda
+		</classe>
+		<nome>ECF - Venda</nome>
+		<descricao>Vendas realizadas no ECF.</descricao>
+		<imagem>icon-venda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfVendaProduto
+		</classe>
+		<nome>ECF - Venda Produtos</nome>
+		<descricao>Produtos das Vendas realizadas no ECF.</descricao>
+		<imagem>icon-produtovenda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfDocumento
+		</classe>
+		<nome>Documentos</nome>
+		<descricao>Documentos emitidos pelo ECF.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfNota
+		</classe>
+		<nome>ECF - Nota</nome>
+		<descricao>Nota do consumidor.</descricao>
+		<imagem>icon-venda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfNotaProduto
+		</classe>
+		<nome>ECF - Nota Produtos</nome>
+		<descricao>Produtos das Notas de consumidor realizadas no ECF.</descricao>
+		<imagem>icon-produtovenda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoFrete
+		</classe>
+		<nome>Frete</nome>
+		<descricao>Reconhecimento de frete.</descricao>
+		<imagem>icon-frete</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoValorProduto
+		</classe>
+		<nome>Valor Produto</nome>
+		<descricao>Administrar as regras de valor dos produtos.</descricao>
+		<imagem>icon-valor</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoNatureza
+		</classe>
+		<nome>Natureza Operação</nome>
+		<descricao>Administrar as naturezas das operações de vendas.
+		</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoReceber
+		</classe>
+		<nome>Receber</nome>
+		<descricao>Administrar os recebimentos de valores.</descricao>
+		<imagem>icon-receber</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoRecebimento
+		</classe>
+		<nome>Recebimentos</nome>
+		<descricao>Administrar os recebimentos.</descricao>
+		<imagem>icon-preco</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoPagar
+		</classe>
+		<nome>Pagar</nome>
+		<descricao>Administrar os pagamentos de valores.</descricao>
+		<imagem>icon-pagar</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoPagamento
+		</classe>
+		<nome>Pagamentos</nome>
+		<descricao>Administrar os pagamentos.</descricao>
+		<imagem>icon-preco</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoRemessa
+		</classe>
+		<nome>Remessa</nome>
+		<descricao>Administrar as remessas geradas para o banco.</descricao>
+		<imagem>icon-remessa</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoRetorno
+		</classe>
+		<nome>Retorno</nome>
+		<descricao>Administrar os retornos gerados pelo banco.</descricao>
+		<imagem>icon-retorno</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoBanco
+		</classe>
+		<nome>Banco</nome>
+		<descricao>Administrar os bancos no sistema.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoConta
+		</classe>
+		<nome>Conta</nome>
+		<descricao>Administrar as contas no sistema.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoForma
+		</classe>
+		<nome>Tipos de Pagamentos</nome>
+		<descricao>Administrar os tipos de pagamentos no sistema.
+		</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSaida
+		</classe>
+		<nome>NFe Saida</nome>
+		<descricao>Administrar as NFe de saída.</descricao>
+		<imagem>icon-saida</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoEntrada
+		</classe>
+		<nome>NFe Entrada</nome>
+		<descricao>Administrar as NFe de entrada.</descricao>
+		<imagem>icon-entrada</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoCertificado
+		</classe>
+		<nome>Certificado</nome>
+		<descricao>Administrar os certificados para emissão de NFe.
+		</descricao>
+		<imagem>icon-chave</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSefaz
+		</classe>
+		<nome>Sefaz</nome>
+		<descricao>Administrar as consultas no sistema da Sefaz.</descricao>
+		<imagem>icon-sefaz</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoStatus
+		</classe>
+		<nome>Status do Serviço</nome>
+		<descricao>Verifica o status do servidor da sefaz.</descricao>
+		<imagem>icon-status</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSituacao
+		</classe>
+		<nome>Situação da NFe</nome>
+		<descricao>Verifica a situação da NFe junto à sefaz.</descricao>
+		<imagem>icon-situacao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoCadastro
+		</classe>
+		<nome>Consulta Empresa</nome>
+		<descricao>Verifica a situação da Empresa junto à sefaz.</descricao>
+		<imagem>icon-cadastro</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoIncentivo
+		</classe>
+		<nome>Incentivo</nome>
+		<descricao>Administrar os incentivos.</descricao>
+		<imagem>icon-incentivo</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSpedFiscal
+		</classe>
+		<nome>SPED Fiscal</nome>
+		<descricao>Sistema Público de Escrituração Digital Fiscal</descricao>
+		<imagem>icon-sped</imagem>
+	</funcao>
+	<!-- Ações -->
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoVisualizar
+		</classe>
+		<nome>Visualizar</nome>
+		<descricao>Visualizar registros.</descricao>
+		<imagem>icon-visualizar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoNovo
+		</classe>
+		<nome>Novo</nome>
+		<descricao>Novo registro.</descricao>
+		<imagem>icon-novo</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoNovoDuplicar
+		</classe>
+		<nome>Duplicar Selecionado</nome>
+		<descricao>Duplicar o registro selecionado.</descricao>
+		<imagem>icon-novo</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoEditar
+		</classe>
+		<nome>Editar</nome>
+		<descricao>Editar o registro selecionado.</descricao>
+		<imagem>icon-editar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoEditarFiltrados
+		</classe>
+		<nome>Editar Filtrados</nome>
+		<descricao>Editar os registros filtrados.</descricao>
+		<imagem>icon-editar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoExcluir
+		</classe>
+		<nome>Excluir</nome>
+		<descricao>Excluir o registro selecionado.</descricao>
+		<imagem>icon-excluir</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoExcluirFiltrados
+		</classe>
+		<nome>Excluir Filtrados</nome>
+		<descricao>Excluir os registros filtrados.</descricao>
+		<imagem>icon-excluir</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoImprimir
+		</classe>
+		<nome>Imprimir</nome>
+		<descricao>Imprimir a listagem.</descricao>
+		<imagem>icon-imprimir</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoExportar
+		</classe>
+		<nome>Exportar</nome>
+		<descricao>Exportar dados da listagem.</descricao>
+		<imagem>icon-exportar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoImportar
+		</classe>
+		<nome>Importar</nome>
+		<descricao>Importar dados para a listagem.</descricao>
+		<imagem>icon-importar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoFavoritoImpl
+		</classe>
+		<nome>Favorito</nome>
+		<descricao>Adicionar a listagem atual aos favoritos no sistema.
+		</descricao>
+		<imagem>icon-favorito</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.permissao.client.controlador.comando.ComandoPermiteWS
+		</classe>
+		<nome>Permite WebService</nome>
+		<descricao>Permite que o usuário possa logar pelo Web Service.
+		</descricao>
+		<imagem></imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoPermiteUsuario
+		</classe>
+		<nome>Permite Usuario</nome>
+		<descricao>Permite que possa ver os dados de outros usuários.
+		</descricao>
+		<imagem></imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoPermiteEmpresa
+		</classe>
+		<nome>Permite Empresa</nome>
+		<descricao>Permite que possa ver os dados de outras empresas.
+		</descricao>
+		<imagem></imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoReceber
+		</classe>
+		<nome>Receber</nome>
+		<descricao>Realiza o processo de recebimento dos valores referente a
+			venda.</descricao>
+		<imagem>icon-receber</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagar
+		</classe>
+		<nome>Pagar</nome>
+		<descricao>Realiza o processo de pagamento dos valores referente a
+			compra.</descricao>
+		<imagem>icon-pagar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagarFrete
+		</classe>
+		<nome>Pagar</nome>
+		<descricao>Realiza o processo de pagamento dos valores referente ao
+			frete.</descricao>
+		<imagem>icon-pagar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerar
+		</classe>
+		<nome>Gerar</nome>
+		<descricao>Gera o boleto de pagamento.</descricao>
+		<imagem>icon-boleto</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerarImprimir
+		</classe>
+		<nome>Imprimir</nome>
+		<descricao>Gera o boleto de pagamento e imprime.</descricao>
+		<imagem>icon-imprimir</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerarPdf
+		</classe>
+		<nome>PDF</nome>
+		<descricao>Gera o boleto de pagamento em PDF.</descricao>
+		<imagem>icon-pdf</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerarHtml
+		</classe>
+		<nome>HTML</nome>
+		<descricao>Gera o boleto de pagamento em HTML.</descricao>
+		<imagem>icon-html</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoRecibo
+		</classe>
+		<nome>Recibo</nome>
+		<descricao>Gera o recibo do boleto de pagamento.</descricao>
+		<imagem>icon-txt</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoReciboImprimir
+		</classe>
+		<nome>Imprimir</nome>
+		<descricao>Gera o recibo do boleto de pagamento e imprime.</descricao>
+		<imagem>icon-imprimir</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoReciboPdf
+		</classe>
+		<nome>PDF</nome>
+		<descricao>Gera o recibo do boleto de pagamento em PDF.</descricao>
+		<imagem>icon-pdf</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoReciboHtml
+		</classe>
+		<nome>HTML</nome>
+		<descricao>Gera o recibo do boleto de pagamento em HTML.</descricao>
+		<imagem>icon-html</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoQuitarPagamento
+		</classe>
+		<nome>Quitar</nome>
+		<descricao>Realiza a quitação do pagamento.</descricao>
+		<imagem>icon-quitar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoEstornarPagamento
+		</classe>
+		<nome>Estornar</nome>
+		<descricao>Realiza o estorno do pagamento.</descricao>
+		<imagem>icon-estornar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoConciliarPagamento
+		</classe>
+		<nome>Conciliar</nome>
+		<descricao>Realiza a conciliação do pagamento com o banco.</descricao>
+		<imagem>icon-conciliar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoQuitarRecebimento
+		</classe>
+		<nome>Quitar</nome>
+		<descricao>Realiza a quitação do recebimento.</descricao>
+		<imagem>icon-quitar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoEstornarRecebimento
+		</classe>
+		<nome>Estornar</nome>
+		<descricao>Realiza o estorno do recebimento.</descricao>
+		<imagem>icon-estornar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoConciliarRecebimento
+		</classe>
+		<nome>Conciliar</nome>
+		<descricao>Realiza a conciliação do recebimento com o banco.</descricao>
+		<imagem>icon-conciliar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharCompra
+		</classe>
+		<nome>Fechar</nome>
+		<descricao>Fechar a compra.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharVenda
+		</classe>
+		<nome>Fechar</nome>
+		<descricao>Fechar a venda.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharEcfVenda
+		</classe>
+		<nome>Fechar</nome>
+		<descricao>Fechar a venda.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharFrete
+		</classe>
+		<nome>Fechar</nome>
+		<descricao>Fechar o frete.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarNfeSaida
+		</classe>
+		<nome>NFe</nome>
+		<descricao>Gerar NFe Saida.</descricao>
+		<imagem>icon-nfe</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarNfeEntrada
+		</classe>
+		<nome>NFe</nome>
+		<descricao>Gerar NFe Entrada.</descricao>
+		<imagem>icon-nfe</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoBackupSaida
+		</classe>
+		<nome>Backup</nome>
+		<descricao>Backup NFe.</descricao>
+		<imagem>icon-zip</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoBackupEntrada
+		</classe>
+		<nome>Backup</nome>
+		<descricao>Backup NFe.</descricao>
+		<imagem>icon-zip</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoValidar
+		</classe>
+		<nome>Validar</nome>
+		<descricao>Validar NFe.</descricao>
+		<imagem>icon-salvar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoInutilizarSaida
+		</classe>
+		<nome>Inutilizar</nome>
+		<descricao>Inutilizar NFe de Saida.</descricao>
+		<imagem>icon-inutilizar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoInutilizarEntrada
+		</classe>
+		<nome>Inutilizar</nome>
+		<descricao>Inutilizar NFe de Entrada.</descricao>
+		<imagem>icon-inutilizar</imagem>
+	</acao>
+</opensig>

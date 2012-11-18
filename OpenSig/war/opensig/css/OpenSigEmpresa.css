@@ -1,0 +1,34 @@
+@CHARSET "UTF-8";
+
+.icon-empresa {
+    background: url(../img/empresa.png) no-repeat center left !important;
+}
+
+.icon-funcionario {
+    background: url(../img/funcionario.png) no-repeat center left !important;
+}
+
+.icon-cliente {
+    background: url(../img/cliente.png) no-repeat center left !important;
+}
+
+.icon-fornecedor {
+    background: url(../img/fornecedor.png) no-repeat center left !important;
+}
+
+.icon-contato {
+    background: url(../img/contato.png) no-repeat center left !important;
+}
+
+.icon-endereco {
+    background: url(../img/endereco.png) no-repeat center left !important;
+}
+
+.icon-transportadora {
+    background: url(../img/transportadora.png) no-repeat center left !important;
+}
+
+.style-erro {
+    font-size:smaller;
+    color:red;
+}

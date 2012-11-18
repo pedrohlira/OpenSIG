@@ -1,0 +1,43 @@
+/** vim: ts=4:sw=4:nu:fdc=4:nospell 
+ *
+ * Ext.ux.grid.CellActions.css 
+ *
+ * Style sheets for Grid CellActions Plugin
+ *
+ * @author   Ing. Jozef Sakáloš
+ * @date     27. March 2008
+ * @version  $Id: Ext.ux.grid.CellActions.css 105 2008-03-27 19:57:00Z jozo $
+ *
+ * @license Ext.ux.grid.CellActions.css is licensed under the terms of
+ * the Open Source LGPL 3.0 license.  Commercial use is permitted to the extent
+ * that the code/component(s) do NOT become part of another Open Source or Commercially
+ * licensed development library or toolkit without explicit permission.
+ * 
+ * License details: http://www.gnu.org/licenses/lgpl.html
+ */
+
+.ux-cell-value {
+	position:relative;
+	zoom:1;
+}
+.ux-cell-actions {
+	position:absolute;
+	right:0;
+	top:-2px;
+}
+.ux-cell-actions-left {
+	left:0;
+	top:-2px;
+}
+.ux-cell-action {
+	width:16px;
+	height:16px;
+	float:left;
+	cursor:pointer;
+	margin: 0 0 0 4px;
+}
+.ux-cell-actions-left .ux-cell-action {
+	margin: 0 4px 0 0;
+}
+
+/* eof */

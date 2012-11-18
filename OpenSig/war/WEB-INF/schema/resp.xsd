@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://openfe.com.br/resp"
+	targetNamespace="http://openfe.com.br/resp" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:element name="openfe" type="TResp" />
+
+	<xs:complexType name="TResp">
+		<xs:annotation>
+			<xs:documentation>Dados da resposta do sistema.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="status" type="Tstatus" minOccurs="1"
+				maxOccurs="1"></xs:element>
+			<xs:element name="msg" type="Tmsg" minOccurs="1"
+				maxOccurs="1"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="Tstatus">
+		<xs:annotation>
+			<xs:documentation>
+				Status apos achamada do metodo.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="OK"/>
+			<xs:enumeration value="ERRO"/>
+			<xs:enumeration value="AUTORIZANDO"/>
+			<xs:enumeration value="AUTORIZADO"/>
+			<xs:enumeration value="CANCELANDO"/>
+			<xs:enumeration value="CANCELADO"/>
+			<xs:enumeration value="INUTILIZANDO"/>
+			<xs:enumeration value="INUTILIZADO"/>
+			<xs:enumeration value="PROCESSANDO"/>
+			<xs:enumeration value="FS-DA"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="Tmsg">
+		<xs:annotation>
+			<xs:documentation>Mensagem retornada do metodo.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"></xs:whiteSpace>
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

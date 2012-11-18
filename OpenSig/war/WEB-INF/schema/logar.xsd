@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://openfe.com.br/login"
+	targetNamespace="http://openfe.com.br/login" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<xs:element name="openfe" type="Tlogin" />
+
+	<xs:complexType name="Tlogin">
+		<xs:annotation>
+			<xs:documentation>Dados do login do sistema.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="usuario" type="Tusuario" minOccurs="1"
+				maxOccurs="1"></xs:element>
+			<xs:element name="senha" type="Tsenha" minOccurs="1"
+				maxOccurs="1"></xs:element>
+			<xs:element name="cnpj" type="Tcnpj" minOccurs="1"
+				maxOccurs="1"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="Tusuario">
+		<xs:annotation>
+			<xs:documentation>Nome do usuario do sistema.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="4"></xs:minLength>
+			<xs:whiteSpace value="collapse"></xs:whiteSpace>
+			<xs:maxLength value="40"></xs:maxLength>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="Tsenha">
+		<xs:annotation>
+			<xs:documentation>Senha do usuario no sistema usando SHA-1.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="40"></xs:minLength>
+			<xs:maxLength value="40"></xs:maxLength>
+			<xs:whiteSpace value="collapse"></xs:whiteSpace>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="Tcnpj">
+		<xs:annotation>
+			<xs:documentation>O CNPJ da empresa, contendo 14 digitos.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"></xs:whiteSpace>
+			<xs:length value="14"></xs:length>
+			<xs:pattern value="\d{14}"></xs:pattern>
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

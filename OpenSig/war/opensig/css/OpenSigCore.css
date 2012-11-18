@@ -1,0 +1,153 @@
+@CHARSET "UTF-8";
+
+.icon-core {
+	background: url(../img/core.png) no-repeat center left !important;
+}
+
+.icon-padrao {
+	background: url(../img/padrao.png) no-repeat center left !important;
+}
+
+.icon-visualizar {
+	background: url(../img/visualizar.png) no-repeat center left !important;
+}
+
+.icon-novo {
+	background: url(../img/novo.png) no-repeat center left !important;
+}
+
+.icon-editar {
+	background: url(../img/editar.png) no-repeat center left !important;
+}
+
+.icon-excluir {
+	background: url(../img/excluir.png) no-repeat center left !important;
+}
+
+.icon-salvar {
+	background: url(../img/salvar.png) no-repeat center left !important;
+}
+
+.icon-selecionar {
+	background: url(../img/selecionar.png) no-repeat center left !important;
+}
+
+.icon-cancelar {
+	background: url(../img/cancelar.png) no-repeat center left !important;
+}
+
+.icon-imprimir {
+	background: url(../img/imprimir.png) no-repeat center left !important;
+}
+
+.icon-configurar {
+	background: url(../img/configurar.png) no-repeat center left !important;
+}
+
+.icon-exportar {
+	background: url(../img/exportar.png) no-repeat center left !important;
+}
+
+.icon-importar {
+	background: url(../img/importar.png) no-repeat center left !important;
+}
+
+.icon-pdf {
+	background: url(../img/pdf.png) no-repeat center left !important;
+}
+
+.icon-html {
+	background: url(../img/html.png) no-repeat center left !important;
+}
+
+.icon-xml {
+	background: url(../img/xml.png) no-repeat center left !important;
+}
+
+.icon-txt {
+	background: url(../img/txt.png) no-repeat center left !important;
+}
+
+.icon-listagem {
+	background: url(../img/listagem.png) no-repeat center left !important;
+}
+
+.icon-formulario {
+	background: url(../img/formulario.png) no-repeat center left !important;
+}
+
+.icon-grafico {
+	background: url(../img/grafico.png) no-repeat center left !important;
+}
+
+.icon-filtroMais {
+	background: url(../img/filtroMais.png) no-repeat center left !important;
+}
+
+.icon-filtroMenos {
+	background: url(../img/filtroMenos.png) no-repeat center left !important;
+}
+
+.icon-expandir {
+	background: url(../img/expandir.png) no-repeat center left !important;
+}
+
+.icon-recolher {
+	background: url(../img/recolher.png) no-repeat center left !important;
+}
+
+.icon-auto {
+	background: url(../img/auto.png) no-repeat center left !important;
+}
+
+.colDireita {
+	text-align: right;
+}
+
+.colCentro {
+	text-align: center;
+}
+
+.destaque {
+	font-weight: bold;
+}
+
+.icon-voltar {
+	background: url(../img/voltar.png) no-repeat center left !important;
+}
+
+.icon-avancar {
+	background: url(../img/avancar.png) no-repeat center left !important;
+}
+
+.icon-finalizar {
+	background: url(../img/finalizar.png) no-repeat center left !important;
+}
+
+.icon-carregar {
+	background: url(../img/carregar.png) no-repeat center left !important;
+}
+
+.icon-ordem {
+	background: url(../img/ordem.png) no-repeat center left !important;
+}
+
+.icon-data {
+	background: url(../img/data.png) no-repeat center left !important;
+}
+
+.icon-agrupamento {
+	background: url(../img/agrupamento.png) no-repeat center left !important;
+}
+
+.icon-imagem {
+	background: url(../img/imagem.png) no-repeat center left !important;
+}
+
+.icon-destravar {
+	background: url(../img/destravar.png) no-repeat center left !important;
+}
+
+.icon-expimp {
+	background: url(../img/expimp.png) no-repeat center left !important;
+}
