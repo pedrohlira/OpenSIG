@@ -15,7 +15,6 @@ public class FormularioForma extends AFormulario<FinForma> {
 
 	private Hidden hdnCod;
 	private TextField txtDescricao;
-	private TextField txtCodigo;
 	private Checkbox chkTef;
 	private Checkbox chkVinculado;
 	private Checkbox chkDebito;
@@ -38,10 +37,6 @@ public class FormularioForma extends AFormulario<FinForma> {
 		txtDescricao.setAllowBlank(false);
 		txtDescricao.setMaxLength(20);
 
-		txtCodigo = new TextField(OpenSigCore.i18n.txtCodigo(), "finFormaCodigo", 50);
-		txtCodigo.setAllowBlank(false);
-		txtCodigo.setMaxLength(2);
-
 		chkTef = new Checkbox(OpenSigCore.i18n.txtTef(), "finFormaTef");
 		chkVinculado = new Checkbox(OpenSigCore.i18n.txtVinculado(), "finFormaVinculado");
 		chkDebito = new Checkbox(OpenSigCore.i18n.txtDebito(), "finFormaDebito");
@@ -56,7 +51,6 @@ public class FormularioForma extends AFormulario<FinForma> {
 		MultiFieldPanel linha1 = new MultiFieldPanel();
 		linha1.setBorder(false);
 		linha1.addToRow(txtDescricao, 220);
-		linha1.addToRow(txtCodigo, 70);
 		linha1.addToRow(chkTef, 70);
 		linha1.addToRow(chkVinculado, 100);
 		linha1.addToRow(chkDebito, 70);
@@ -69,7 +63,6 @@ public class FormularioForma extends AFormulario<FinForma> {
 	public boolean setDados() {
 		classe.setFinFormaId(Integer.valueOf(hdnCod.getValueAsString()));
 		classe.setFinFormaDescricao(txtDescricao.getValueAsString());
-		classe.setFinFormaCodigo(txtCodigo.getValueAsString());
 		classe.setFinFormaTef(chkTef.getValue());
 		classe.setFinFormaVinculado(chkVinculado.getValue());
 		classe.setFinFormaDebito(chkDebito.getValue());
@@ -89,7 +82,7 @@ public class FormularioForma extends AFormulario<FinForma> {
 		if (rec != null) {
 			getForm().loadRecord(rec);
 		}
-		txtCodigo.focus(true);
+		txtDescricao.focus(true);
 
 		if (duplicar) {
 			hdnCod.setValue("0");
@@ -114,14 +107,6 @@ public class FormularioForma extends AFormulario<FinForma> {
 
 	public void setTxtDescricao(TextField txtDescricao) {
 		this.txtDescricao = txtDescricao;
-	}
-
-	public TextField getTxtCodigo() {
-		return txtCodigo;
-	}
-
-	public void setTxtCodigo(TextField txtCodigo) {
-		this.txtCodigo = txtCodigo;
 	}
 
 	public Checkbox getChkTef() {

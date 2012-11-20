@@ -28,8 +28,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEntidade;
  * Classe que representa um a pagar no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 18/11/2009
  */
 @Entity
 @Table(name = "fin_pagar")

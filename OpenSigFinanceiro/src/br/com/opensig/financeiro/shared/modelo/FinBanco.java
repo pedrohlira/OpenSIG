@@ -15,8 +15,6 @@ import br.com.opensig.core.shared.modelo.Dados;
  * Classe que representa um banco no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 18/11/2009
  */
 @Entity
 @Table(name = "fin_banco")

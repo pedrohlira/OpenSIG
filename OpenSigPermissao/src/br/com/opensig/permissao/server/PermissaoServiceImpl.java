@@ -113,7 +113,7 @@ public class PermissaoServiceImpl extends CoreServiceImpl implements PermissaoSe
 				if (sisUsuario == null) {
 					throw new PermissaoException("Usuario ou Senha ou Empresa invalidos!");
 				}
-
+				
 				for (SisGrupo grupo : sisUsuario.getSisGrupos()) {
 					if (grupo.getEmpEmpresa().getEmpEmpresaId() == empresa && grupo.getSisGrupoDesconto() > sisUsuario.getSisUsuarioDesconto()) {
 						sisUsuario.setSisUsuarioDesconto(grupo.getSisGrupoDesconto());

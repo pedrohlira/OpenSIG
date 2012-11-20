@@ -23,10 +23,10 @@ import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
 import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
-import br.com.opensig.core.client.controlador.parametro.ParametroException;
 import br.com.opensig.core.client.servico.CoreException;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.EBusca;
+import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.financeiro.shared.modelo.FinForma;
 import br.com.opensig.fiscal.shared.modelo.FisNotaSaida;
 import br.com.opensig.permissao.shared.modelo.SisConfiguracao;
@@ -110,7 +110,9 @@ public class RestCliente extends ARest {
 			List<SisUsuario> usuarios = service.selecionar(new SisUsuario(), 0, 0, ft, false).getLista();
 			List<SisUsuario> escolhidos = new ArrayList<SisUsuario>();
 
+			// identifica os usuarios
 			for (SisUsuario usuario : usuarios) {
+				// verifica se esta no grupo de caixa ou nao
 				for (SisGrupo grupo : usuario.getSisGrupos()) {
 					if (grupo.getSisGrupoNome().equalsIgnoreCase("caixa")) {
 						usuario.setSisUsuarioCaixa(true);
@@ -120,7 +122,14 @@ public class RestCliente extends ARest {
 						break;
 					}
 				}
-				escolhidos.add(usuario);
+				// so adiciona os da empresa do ECF
+				for (EmpEmpresa emp : usuario.getEmpEmpresas()) {
+					if (emp.getId() == ecf.getEmpEmpresa().getId()) {
+						escolhidos.add(usuario);
+						break;
+					}
+				}
+
 			}
 			return escolhidos;
 		} catch (Exception ex) {
@@ -142,10 +151,8 @@ public class RestCliente extends ARest {
 	public List<FinForma> getPagamentoTipo() throws RestException {
 		autorizar();
 		try {
-			FiltroTexto ft = new FiltroTexto("finFormaCodigo", ECompara.DIFERENTE, "00");
 			FiltroBinario fb = new FiltroBinario("finFormaReceber", ECompara.IGUAL, 1);
-			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { ft, fb });
-			return service.selecionar(new FinForma(), 0, 0, gf, false).getLista();
+			return service.selecionar(new FinForma(), 0, 0, fb, false).getLista();
 		} catch (Exception ex) {
 			log.error(ex);
 			throw new RestException(ex);
@@ -262,7 +269,6 @@ public class RestCliente extends ARest {
 	 * @param produtos
 	 *            uma lista de produtos.
 	 * @throws CoreException
-	 * @throws ParametroException
 	 */
 	private void setValoresProduto(List<ProdProduto> produtos) throws CoreException {
 		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, ecf.getEmpEmpresa());
@@ -296,7 +302,7 @@ public class RestCliente extends ARest {
 			}
 			// estoque do produto nesta empresa
 			for (ProdEstoque est : produto.getProdEstoques()) {
-				if (cnpj.equals(est.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("[^0-9]", ""))) {
+				if (ecf.getEmpEmpresa().getEmpEmpresaId() == est.getEmpEmpresa().getEmpEmpresaId()) {
 					produto.setProdProdutoEstoque(est.getProdEstoqueQuantidade());
 					break;
 				}

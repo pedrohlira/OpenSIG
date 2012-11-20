@@ -8,3 +8,11 @@ ALTER TABLE `com_ecf_venda` ADD COLUMN `sis_vendedor_id` INT NULL DEFAULT NULL  
   ON DELETE NO ACTION
   ON UPDATE NO ACTION
 , ADD INDEX `FK_com_ecf_venda_6_idx` (`sis_usuario_id` ASC) ;
+
+# remove o campo do server, sera identificado no ECF
+ALTER TABLE `fin_forma` DROP COLUMN `fin_forma_codigo` ;
+
+
+
+
+

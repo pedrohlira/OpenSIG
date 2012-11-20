@@ -1,2 +1,0 @@
-serviceClass: br.com.opensig.core.client.servico.ImportacaoService
-path: 41FE101125AB01ABB7087F726A5A2B49.gwt.rpc

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -34,10 +35,6 @@ public class FinForma extends Dados implements Serializable {
 	@XmlElement(name = "ecfPagamentoTipoDescricao")
 	private String finFormaDescricao;
 
-	@Column(name = "fin_forma_codigo")
-	@XmlElement(name = "ecfPagamentoTipoCodigo")
-	private String finFormaCodigo;
-
 	@Column(name = "fin_forma_tef")
 	@XmlElement(name = "ecfPagamentoTipoTef", type = Boolean.class)
 	private int finFormaTef;
@@ -61,6 +58,9 @@ public class FinForma extends Dados implements Serializable {
 	@Column(name = "fin_forma_receber")
 	@XmlTransient
 	private int finFormaReceber;
+
+	@Transient
+	private String ecfPagamentoTipoCodigo;
 
 	public FinForma() {
 		this(0);
@@ -95,12 +95,12 @@ public class FinForma extends Dados implements Serializable {
 		finFormaId = id.intValue();
 	}
 
-	public String getFinFormaCodigo() {
-		return finFormaCodigo;
+	public String getEcfPagamentoTipoCodigo() {
+		return ecfPagamentoTipoCodigo;
 	}
 
-	public void setFinFormaCodigo(String finFormaCodigo) {
-		this.finFormaCodigo = finFormaCodigo;
+	public void setEcfPagamentoTipoCodigo(String ecfPagamentoTipoCodigo) {
+		this.ecfPagamentoTipoCodigo = ecfPagamentoTipoCodigo;
 	}
 
 	public boolean getFinFormaTef() {
@@ -152,7 +152,7 @@ public class FinForma extends Dados implements Serializable {
 	}
 
 	public String[] toArray() {
-		return new String[] { finFormaId + "", finFormaDescricao, finFormaCodigo, getFinFormaTef() + "", getFinFormaVinculado() + "", getFinFormaDebito() + "", finFormaRede, getFinFormaPagar() + "",
+		return new String[] { finFormaId + "", finFormaDescricao, getFinFormaTef() + "", getFinFormaVinculado() + "", getFinFormaDebito() + "", finFormaRede, getFinFormaPagar() + "",
 				getFinFormaReceber() + "" };
 	}
 }

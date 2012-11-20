@@ -25,8 +25,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
  * Classe que representa uma remessa no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 31/10/2010
  */
 @Entity
 @Table(name = "fin_remessa")

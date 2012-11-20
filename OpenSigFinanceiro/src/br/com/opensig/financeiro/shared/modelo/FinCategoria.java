@@ -15,8 +15,6 @@ import br.com.opensig.core.shared.modelo.Dados;
  * Classe que representa uma categoria do financeiro no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 16/07/2009
  */
 @Entity
 @Table(name = "fin_categoria")

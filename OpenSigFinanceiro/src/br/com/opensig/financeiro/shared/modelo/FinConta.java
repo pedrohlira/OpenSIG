@@ -19,8 +19,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
  * Classe que representa uma conta no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 18/11/2009
  */
 @Entity
 @Table(name = "fin_conta")
