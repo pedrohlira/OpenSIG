@@ -19,8 +19,6 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
  * sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 15/10/2008
  */
 public class PermissaoProxy extends CoreProxy implements PermissaoServiceAsync, ILogin {
 
@@ -148,6 +146,10 @@ public class PermissaoProxy extends CoreProxy implements PermissaoServiceAsync, 
 		async.bloquear(bloqueio, asyncCallback);
 	}
 
+	public void validar(int idEmpresa, AsyncCallback<String> asyncCallback){
+		async.validar(idEmpresa, asyncCallback);
+	}
+	
 	public void recuperarSenha(String email, AsyncCallback asyncCallback) {
 		async.recuperarSenha(email, asyncCallback);
 	}

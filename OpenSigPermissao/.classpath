@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="/OpenSig/jars/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="/OpenSig/jars/simplecaptcha.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GWT-EXT"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/REST"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

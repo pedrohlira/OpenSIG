@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -23,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.MediaType;
 
 import nl.captcha.Captcha;
 import nl.captcha.backgrounds.GradiatedBackgroundProducer;
@@ -35,6 +37,7 @@ import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
 import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
+import br.com.opensig.core.client.servico.CoreException;
 import br.com.opensig.core.client.servico.MailException;
 import br.com.opensig.core.client.servico.OpenSigException;
 import br.com.opensig.core.server.CoreServiceImpl;
@@ -54,12 +57,17 @@ import br.com.opensig.permissao.shared.modelo.SisGrupo;
 import br.com.opensig.permissao.shared.modelo.SisPermissao;
 import br.com.opensig.permissao.shared.modelo.SisUsuario;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.client.filter.GZIPContentEncodingFilter;
+
 /**
- * Classe que implementa a chamada no servidor da função de entrar no sistema, acessando os dados para autenticar o usuário junto ao servidor.
+ * Classe que implementa a chamada no servidor da função de entrar no sistema,
+ * acessando os dados para autenticar o usuário junto ao servidor.
  * 
  * @author Pedro H. Lira
- * @since 14/04/2009
- * @version 1.0
  */
 
 public class PermissaoServiceImpl extends CoreServiceImpl implements PermissaoService {
@@ -113,7 +121,7 @@ public class PermissaoServiceImpl extends CoreServiceImpl implements PermissaoSe
 				if (sisUsuario == null) {
 					throw new PermissaoException("Usuario ou Senha ou Empresa invalidos!");
 				}
-				
+
 				for (SisGrupo grupo : sisUsuario.getSisGrupos()) {
 					if (grupo.getEmpEmpresa().getEmpEmpresaId() == empresa && grupo.getSisGrupoDesconto() > sisUsuario.getSisUsuarioDesconto()) {
 						sisUsuario.setSisUsuarioDesconto(grupo.getSisGrupoDesconto());
@@ -123,19 +131,38 @@ public class PermissaoServiceImpl extends CoreServiceImpl implements PermissaoSe
 					}
 				}
 
+				// seta os dados
 				auth = new Autenticacao();
 				auth.setUsuario(sisUsuario.toArray());
 				auth.setConf(getConfig(empresa));
 				auth.setModulos(gerarPermissoes(sisUsuario));
+				
+				// seta a empresa e verifica a validade
+				Date validade = null;
 				for (EmpEmpresa emp : sisUsuario.getEmpEmpresas()) {
 					if (emp.getEmpEmpresaId() == empresa) {
 						auth.setEmpresa(emp.toArray());
+						Calendar cal = Calendar.getInstance();
+						cal.setTime(emp.getEmPlanos().get(0).getEmpPlanoFim());
+						cal.set(Calendar.HOUR, 23);
+						cal.set(Calendar.MINUTE, 59);
+						cal.set(Calendar.SECOND, 59);
+						validade = cal.getTime();
 						break;
 					}
 				}
-
+				
 				// valida login se nao for somente para permissao
 				if (!permissao) {
+					Date atual = new Date();
+					if (validade == null || validade.compareTo(atual) < 0) {
+						StringBuilder sb = new StringBuilder();
+						sb.append("<b>ATENCÃO:</b> O OpenSIG está com a data de validade vencida!<br><br>");
+						sb.append("Favor entre no menu Sobre e valide o sistema novamente.<br>");
+						sb.append("Caso não consiga re-validar pela internet, entre em contato.");
+						throw new PermissaoException(sb.toString());
+					}
+
 					if (!sisUsuario.getSistema()) {
 						for (Entry<HttpSession, Autenticacao> entry : SessionManager.LOGIN.entrySet()) {
 							if (auth.equals(entry.getValue())) {
@@ -181,6 +208,49 @@ public class PermissaoServiceImpl extends CoreServiceImpl implements PermissaoSe
 		} else {
 			throw new PermissaoException("Sessao expirou!");
 		}
+	}
+
+	@Override
+	public String validar(int idEmpresa) throws PermissaoException {
+		// recupera a empresa
+		FiltroNumero fn = new FiltroNumero("empEmpresaId", ECompara.IGUAL, idEmpresa);
+		EmpEmpresa emp;
+		try {
+			emp = (EmpEmpresa) selecionar(new EmpEmpresa(), fn, true);
+		} catch (CoreException ex) {
+			throw new PermissaoException(ex);
+		}
+
+		// gera o texto para envio ao servidor de utilizacao
+		StringBuilder sb = new StringBuilder();
+		sb.append("cli.cnpj").append("=").append(emp.getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("[^0-9]", "")).append("\n");
+		sb.append("out.validade").append("=").append("null");
+		String local = UtilServer.encriptar(sb.toString());
+
+		// enviando o auxiliar local e recebendo o novo do servidor
+		// seta o cliente
+		ClientConfig cc = new DefaultClientConfig();
+		Client c = Client.create(cc);
+		c.setFollowRedirects(true);
+		c.setConnectTimeout(60000);
+		c.setReadTimeout(60000);
+		c.addFilter(new GZIPContentEncodingFilter(true));
+
+		// recupera a data de validade
+		WebResource wr = c.resource(UtilServer.getConf().get("sistema.validar"));
+		String remoto = wr.type(MediaType.TEXT_PLAIN).accept(MediaType.TEXT_PLAIN).put(String.class, local);
+
+		// devolve a data
+		remoto = UtilServer.descriptar(remoto);
+		String valido = "";
+		for (String linha : remoto.split("\n")) {
+			if (linha.startsWith("out.validade")) {
+				valido = linha.split("=")[1];
+				break;
+			}
+		}
+
+		return valido;
 	}
 
 	@Override

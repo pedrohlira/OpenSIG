@@ -74,10 +74,11 @@ public class AreaTrabalho extends Panel implements Observer, Visitable {
 			}
 
 			public void onSuccess(Object result) {
-				EntrarSistema es = new EntrarSistema();
+				final EntrarSistema es = new EntrarSistema();
 				es.getBtnSobre().addListener(new ButtonListenerAdapter() {
 					public void onClick(Button button, EventObject e) {
-						new Sobre();
+						int idEmpresa = Integer.valueOf(es.getCmbEmpresa().getValue());
+						new Sobre(idEmpresa);
 					}
 				});
 			}

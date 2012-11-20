@@ -16,9 +16,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/OpenSigFinanceiro/dist/OpenSigFinanceiro.jar"/>
-	<classpathentry kind="lib" path="/OpenSigProduto/dist/OpenSigProduto.jar"/>
-	<classpathentry kind="lib" path="/OpenSigComercial/dist/OpenSigComercial.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GWT-EXT"/>
 	<classpathentry kind="lib" path="/OpenSig/jars/beanio.jar"/>
 	<classpathentry kind="lib" path="/OpenSig/jars/jasypt-1.9.0.jar"/>
@@ -27,5 +24,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/NFE"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JAXB"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/REST"/>
+	<classpathentry kind="lib" path="/OpenSigComercial/dist/OpenSigComercial.jar"/>
+	<classpathentry kind="lib" path="/OpenSigFinanceiro/dist/OpenSigFinanceiro.jar"/>
+	<classpathentry kind="lib" path="/OpenSigProduto/dist/OpenSigProduto.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

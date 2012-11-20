@@ -1,7 +1,12 @@
 package br.com.opensig.client.visao.layout;
 
 import br.com.opensig.core.client.OpenSigCore;
+import br.com.opensig.core.client.controlador.filtro.ECompara;
+import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.visao.abstrato.ANavegacao;
+import br.com.opensig.empresa.client.servico.EmpresaProxy;
+import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
+import br.com.opensig.empresa.shared.modelo.EmpPlano;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
@@ -9,6 +14,9 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtext.client.core.Position;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.widgets.Panel;
@@ -27,20 +35,23 @@ import com.gwtext.client.widgets.layout.VerticalLayout;
  * Classe do componente visual que tem os dados de contato da empresa.
  * 
  * @author Pedro H. Lira
- * @version 1.0
  */
 public class Sobre {
+
+	private int idEmpresa;
+	private Window wndSobre;
 
 	/**
 	 * Construtor padrao.
 	 */
-	public Sobre() {
+	public Sobre(int idEmpresa) {
+		this.idEmpresa = idEmpresa;
 		inicializar();
 	}
 
 	// inicializa os componentes visuais
 	private void inicializar() {
-		Window wndSobre = new Window(OpenSigCore.i18n.txtSobre(), 500, 280, true, false);
+		wndSobre = new Window(OpenSigCore.i18n.txtSobre(), 500, 280, true, false);
 		wndSobre.setButtonAlign(Position.CENTER);
 		wndSobre.setIconCls("icon-sobre");
 		wndSobre.setLayout(new FitLayout());
@@ -158,18 +169,19 @@ public class Sobre {
 		final Label lblVersao1 = new Label();
 		lblVersao1.setStyle("font-weight: bold");
 
-		Label lblData = new Label(OpenSigCore.i18n.txtData() + ":");
-		final Label lblData1 = new Label();
-		lblData1.setStyle("font-weight: bold");
+		Label lblValidade = new Label(OpenSigCore.i18n.txtVencimento() + ":");
+		final Label lblValidade1 = new Label();
+		lblValidade1.setStyle("font-weight: bold");
 
 		MultiFieldPanel linha1 = new MultiFieldPanel();
 		linha1.setBorder(false);
 		linha1.addToRow(lblVersao, 50);
 		linha1.addToRow(lblVersao1, 250);
-		linha1.addToRow(lblData, 40);
-		linha1.addToRow(lblData1, 120);
+		linha1.addToRow(lblValidade, 80);
+		linha1.addToRow(lblValidade1, 80);
 		panVersao.add(linha1);
 
+		// recupera a versao e data de compilcacao do manifesto
 		RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, GWT.getHostPageBaseURL() + "manifesto/OpenSig.MF");
 		try {
 			requestBuilder.sendRequest(null, new RequestCallback() {
@@ -182,14 +194,29 @@ public class Sobre {
 					for (String linha : linhas) {
 						if (linha.startsWith("Implementation-Version")) {
 							lblVersao1.setText(linha.split(":")[1]);
-						} else if (linha.startsWith("Built-Date")) {
-							lblData1.setText(linha.split(": ")[1]);
 						}
 					}
 				}
 			});
 		} catch (RequestException ex) {
+			lblVersao1.setText(OpenSigCore.i18n.txtAcessoNegado());
 		}
+
+		// recupera a data de validade do plano da empresa
+		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(idEmpresa));
+		EmpresaProxy<EmpPlano> proxy = new EmpresaProxy<EmpPlano>();
+		proxy.selecionar(new EmpPlano(), fo, true, new AsyncCallback<EmpPlano>() {
+
+			@Override
+			public void onSuccess(EmpPlano result) {
+				lblValidade1.setText(DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM).format(result.getEmpPlanoFim()));
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				lblValidade1.setText(OpenSigCore.i18n.txtAcessoNegado());
+			}
+		});
 
 		return panVersao;
 	}

@@ -65,7 +65,7 @@ public class Usuario extends ToolbarMenuButton implements Observer {
 		itemSobre.setIconCls("icon-sobre");
 		itemSobre.addListener(new BaseItemListenerAdapter() {
 			public void onClick(BaseItem item, EventObject e) {
-				new Sobre();
+				new Sobre(Ponte.getLogin().getEmpresaId());
 			}
 		});
 

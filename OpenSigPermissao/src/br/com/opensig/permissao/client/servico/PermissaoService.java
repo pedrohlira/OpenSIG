@@ -8,8 +8,6 @@ import br.com.opensig.core.shared.modelo.Autenticacao;
  * Interface que define o login no sistema.
  * 
  * @author Pedro H. Lira
- * @since 14/04/2009
- * @version 1.0
  */
 public interface PermissaoService extends CoreService {
 
@@ -51,8 +49,22 @@ public interface PermissaoService extends CoreService {
 	 * 
 	 * @param bloqueio
 	 *            verdadeiro para bloquear, falso para desbloquear.
+	 * @throws PermissaoException
+	 *             dispara uma excecao caso o nao consiga validar.
 	 */
 	public void bloquear(boolean bloqueio) throws PermissaoException;
+
+	/**
+	 * Metodo que valida se a empresa esta dentro do prazo de utilizacao do
+	 * sistema.
+	 * 
+	 * @param idEmpresa
+	 *            a empresa selecionada.
+	 * @return A data de validade no formato dd/MM/yyyy
+	 * @throws PermissaoException
+	 *             dispara uma excecao caso o nao consiga validar.
+	 */
+	public String validar(int idEmpresa) throws PermissaoException;
 
 	/**
 	 * Metodo que envia um email para recuperação de senha

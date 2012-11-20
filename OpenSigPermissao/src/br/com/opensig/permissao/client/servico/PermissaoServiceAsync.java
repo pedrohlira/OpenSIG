@@ -9,8 +9,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * Interface que define o login no sistema de forma assincrona.
  * 
  * @author Pedro H. Lira
- * @since 14/04/2009
- * @version 1.0
  */
 public interface PermissaoServiceAsync extends CoreServiceAsync {
 
@@ -41,6 +39,13 @@ public interface PermissaoServiceAsync extends CoreServiceAsync {
 	 * @see PermissaoService#bloquear(boolean)
 	 */
 	public abstract void bloquear(boolean bloqueio, AsyncCallback asyncCallback);
+
+	/**
+	 * @param asyncCallback
+	 *            um objeto assincrono String.
+	 * @see PermissaoService#validar(String)
+	 */
+	public abstract void validar(int idEmpresa, AsyncCallback<String> asyncCallback);
 
 	/**
 	 * @param asyncCallback

@@ -142,6 +142,8 @@ public class UtilServer extends HttpServlet {
 				}
 			}
 		}
+
+		CONF.put("sistema.validar", getServletContext().getInitParameter("sistema.validar"));
 	}
 
 	/**
@@ -212,15 +214,14 @@ public class UtilServer extends HttpServlet {
 
 		// gera o pdf usando o wkhtmltopdf
 		try {
-			ProcessBuilder pb = new ProcessBuilder(comando, formato, nome); 
-			pb.redirectErrorStream(true); 
-			Process process = pb.start(); 
+			ProcessBuilder pb = new ProcessBuilder(comando, formato, nome);
+			pb.redirectErrorStream(true);
+			Process process = pb.start();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line;
-			while((line = reader.readLine()) != null) 
-			{ 
-			    System.out.println(line); 
-			} 
+			while ((line = reader.readLine()) != null) {
+				System.out.println(line);
+			}
 		} catch (Exception ex) {
 			UtilServer.LOG.error("Erro na geracao do pdf.", ex);
 			obj = null;
@@ -413,9 +414,11 @@ public class UtilServer extends HttpServlet {
 	 * @param valor
 	 *            o valor a ser formatado
 	 * @param inteiros
-	 *            o minimo de inteiros, que serao completados com ZEROS se preciso
+	 *            o minimo de inteiros, que serao completados com ZEROS se
+	 *            preciso
 	 * @param decimal
-	 *            o minimo de decimais, que serao completados com ZEROS se preciso
+	 *            o minimo de decimais, que serao completados com ZEROS se
+	 *            preciso
 	 * @param grupo
 	 *            se sera colocado separador de grupo de milhar
 	 * @return uma String com o numero formatado
@@ -562,7 +565,8 @@ public class UtilServer extends HttpServlet {
 	 * @param tag
 	 *            nome da tag que deseja recuperar o valor.
 	 * @param excecao
-	 *            se passado true dispara a exception se ocorrer erro, se false retorna null
+	 *            se passado true dispara a exception se ocorrer erro, se false
+	 *            retorna null
 	 * @return valor da tag encontrada ou NULL se nao achada.
 	 * @exception NullPointerException
 	 *                exceção disparada em caso de erro.

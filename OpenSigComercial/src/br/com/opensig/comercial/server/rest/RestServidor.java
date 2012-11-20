@@ -373,11 +373,11 @@ public class RestServidor extends ARest {
 		}
 	}
 
-	@Path("/validarPDV")
+	@Path("/validar")
 	@PUT
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String validarPDV(String aux) throws RestException {
+	public String validar(String aux) throws RestException {
 		try {
 			// recuperando os valores
 			Properties mapa = new Properties();

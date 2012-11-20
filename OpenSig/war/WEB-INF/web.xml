@@ -16,7 +16,7 @@
 		<init-param>
 			<description>url</description>
 			<param-name>eclipselink.jdbc.url</param-name>
-			<param-value>jdbc:mysql://127.0.0.1:3306/opensig</param-value>
+			<param-value>jdbc:mysql://ph.opensig.com.br:3306/opensig_ph</param-value>
 		</init-param>
 		<init-param>
 			<description>driver</description>
@@ -26,12 +26,12 @@
 		<init-param>
 			<description>usuario</description>
 			<param-name>eclipselink.jdbc.user</param-name>
-			<param-value>opensig</param-value>
+			<param-value>opensig_ph</param-value>
 		</init-param>
 		<init-param>
 			<description>senha</description>
 			<param-name>eclipselink.jdbc.password</param-name>
-			<param-value>opensig</param-value>
+			<param-value>ph1981$$</param-value>
 		</init-param>
 		<!-- Dados do pool -->
 		<init-param>
@@ -362,6 +362,11 @@
 		<description>Path padrao das empresas e suas configuracoes e arquivos.</description>
 		<param-name>sistema.empresas</param-name>
 		<param-value>/Volumes/Macintosh HD 2/Users/pedrohenriquelira/Documents/Projetos/Git/OpenSIG/OpenSig/empresas/</param-value>
+	</context-param>
+	<context-param>
+		<description>Url para validar a validade do sistema</description>
+		<param-name>sistema.validar</param-name>
+		<param-value>http://phd.opensig.com.br/openpdv/server/validar</param-value>
 	</context-param>
 	<!-- Config Server -->
 	<session-config>
