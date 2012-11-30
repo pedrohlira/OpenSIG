@@ -16,7 +16,7 @@
 		<init-param>
 			<description>url</description>
 			<param-name>eclipselink.jdbc.url</param-name>
-			<param-value>jdbc:mysql://ph.opensig.com.br:3306/opensig_ph</param-value>
+			<param-value>jdbc:mysql://127.0.0.1:3306/opensig</param-value>
 		</init-param>
 		<init-param>
 			<description>driver</description>
@@ -26,12 +26,12 @@
 		<init-param>
 			<description>usuario</description>
 			<param-name>eclipselink.jdbc.user</param-name>
-			<param-value>opensig_ph</param-value>
+			<param-value>opensig</param-value>
 		</init-param>
 		<init-param>
 			<description>senha</description>
 			<param-name>eclipselink.jdbc.password</param-name>
-			<param-value>ph1981$$</param-value>
+			<param-value>opensig</param-value>
 		</init-param>
 		<!-- Dados do pool -->
 		<init-param>

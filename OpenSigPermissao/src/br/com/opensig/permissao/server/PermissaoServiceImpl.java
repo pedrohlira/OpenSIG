@@ -136,7 +136,7 @@ public class PermissaoServiceImpl extends CoreServiceImpl implements PermissaoSe
 				auth.setUsuario(sisUsuario.toArray());
 				auth.setConf(getConfig(empresa));
 				auth.setModulos(gerarPermissoes(sisUsuario));
-				
+
 				// seta a empresa e verifica a validade
 				Date validade = null;
 				for (EmpEmpresa emp : sisUsuario.getEmpEmpresas()) {
@@ -151,7 +151,7 @@ public class PermissaoServiceImpl extends CoreServiceImpl implements PermissaoSe
 						break;
 					}
 				}
-				
+
 				// valida login se nao for somente para permissao
 				if (!permissao) {
 					Date atual = new Date();
@@ -159,7 +159,7 @@ public class PermissaoServiceImpl extends CoreServiceImpl implements PermissaoSe
 						StringBuilder sb = new StringBuilder();
 						sb.append("<b>ATENCÃO:</b> O OpenSIG está com a data de validade vencida!<br><br>");
 						sb.append("Favor entre no menu Sobre e valide o sistema novamente.<br>");
-						sb.append("Caso não consiga re-validar pela internet, entre em contato.");
+						sb.append("Caso não consiga re-validar entre em contato.");
 						throw new PermissaoException(sb.toString());
 					}
 

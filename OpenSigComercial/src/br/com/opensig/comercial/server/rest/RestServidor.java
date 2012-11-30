@@ -72,6 +72,7 @@ public class RestServidor extends ARest {
 
 	private Map<String, String> conf;
 	private EmpCliente clientePadrao;
+	private double conciliado;
 
 	/**
 	 * Construtor padrao.
@@ -106,9 +107,13 @@ public class RestServidor extends ARest {
 			// identifica o cliente
 			EmpCliente cliente = getCliente(ecfNota.getSisCliente());
 
+			// transforma os descontos em porcentagens
+			double desc = ecfNota.getComEcfNotaDesconto() > 0 ? ecfNota.getComEcfNotaDesconto() / ecfNota.getComEcfNotaBruto() * 100 : 0.00;
+
 			// salva a nota
 			List<ComEcfNotaProduto> nps = ecfNota.getComEcfNotaProdutos();
 			ecfNota.setId(0);
+			ecfNota.setComEcfNotaDesconto(desc);
 			ecfNota.setEmpEmpresa(ecf.getEmpEmpresa());
 			ecfNota.setEmpCliente(cliente);
 			ecfNota.setComEcfNotaProdutos(null);
@@ -118,6 +123,7 @@ public class RestServidor extends ARest {
 			List<Sql> sqls = new ArrayList<Sql>();
 			for (ComEcfNotaProduto np : nps) {
 				np.setId(0);
+				np.setComEcfNotaProdutoDesconto(desc);
 				np.setComEcfNota(ecfNota);
 				Sql sql = getEstoque(np.getComEcfNotaProdutoQuantidade(), np.getProdEmbalagem(), np.getProdProduto());
 				sqls.add(sql);
@@ -155,6 +161,9 @@ public class RestServidor extends ARest {
 				recebimento.setFinRecebimentoValor(ecfNota.getComEcfNotaLiquido());
 				recebimento.setFinRecebimentoVencimento(ecfNota.getComEcfNotaData());
 				service.salvar(recebimento);
+
+				// adiciona ao conciliado
+				conciliado += ecfNota.getComEcfNotaLiquido();
 			}
 		} catch (Exception ex) {
 			log.error("Erro ao salvar a nota.", ex);
@@ -238,6 +247,9 @@ public class RestServidor extends ARest {
 					recebimento.setFinRecebimentoValor(ecfNfe.getFisNotaSaidaValor());
 					recebimento.setFinRecebimentoVencimento(ecfNfe.getFisNotaSaidaCadastro());
 					service.salvar(recebimento);
+
+					// adiciona ao conciliado
+					conciliado += ecfNfe.getFisNotaSaidaValor();
 				}
 
 				// identifica a natureza de venda
@@ -330,43 +342,53 @@ public class RestServidor extends ARest {
 	public void setReducaoZ(ComEcfZ ecfZ) throws RestException {
 		autorizar();
 		try {
-			conf = getConfig();
-			FiltroNumero fn = new FiltroNumero("empClienteId", ECompara.IGUAL, conf.get("cliente.padrao"));
-			clientePadrao = (EmpCliente) service.selecionar(new EmpCliente(), fn, false);
+			// valida se ja existe
+			FiltroObjeto fo = new FiltroObjeto("comEcf", ECompara.IGUAL, ecf);
+			FiltroNumero fn = new FiltroNumero("comEcfZCrz", ECompara.IGUAL, ecfZ.getComEcfZCrz());
+			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fn });
+			ComEcfZ aux = (ComEcfZ) service.selecionar(ecfZ, gf, false);
 
-			// guarda os totais e vendas e docs
-			List<ComEcfZTotais> totais = ecfZ.getComEcfZTotais();
-			List<ComEcfVenda> vendas = ecfZ.getComEcfVendas();
-			List<ComEcfDocumento> docs = ecfZ.getComEcfDocumentos();
+			if (aux == null) {
+				conf = getConfig();
+				FiltroNumero fn1 = new FiltroNumero("empClienteId", ECompara.IGUAL, conf.get("cliente.padrao"));
+				clientePadrao = (EmpCliente) service.selecionar(new EmpCliente(), fn1, false);
 
-			// salva a reduzaoZ
-			ecfZ.setId(0);
-			ecfZ.setComEcf(ecf);
-			ecfZ.setComEcfZTotais(null);
-			ecfZ.setComEcfVendas(null);
-			ecfZ.setComEcfDocumentos(null);
-			ecfZ = (ComEcfZ) service.salvar(ecfZ);
+				// guarda os totais e vendas e docs
+				List<ComEcfZTotais> totais = ecfZ.getComEcfZTotais();
+				List<ComEcfVenda> vendas = ecfZ.getComEcfVendas();
+				List<ComEcfDocumento> docs = ecfZ.getComEcfDocumentos();
 
-			// salva os totais
-			for (ComEcfZTotais tot : totais) {
-				tot.setId(0);
-				tot.setComEcfZ(ecfZ);
+				// salva a reduzaoZ
+				ecfZ.setId(0);
+				ecfZ.setComEcf(ecf);
+				ecfZ.setComEcfZTotais(null);
+				ecfZ.setComEcfVendas(null);
+				ecfZ.setComEcfDocumentos(null);
+				ecfZ = (ComEcfZ) service.salvar(ecfZ);
+
+				// salva os totais
+				for (ComEcfZTotais tot : totais) {
+					tot.setId(0);
+					tot.setComEcfZ(ecfZ);
+				}
+				service.salvar(totais);
+
+				// salva as vendas
+				for (ComEcfVenda venda : vendas) {
+					venda.setComEcfZ(ecfZ);
+					venda.setComEcf(ecf);
+					salvarVenda(venda);
+				}
+
+				// salva os documentos
+				for (ComEcfDocumento doc : docs) {
+					doc.setId(0);
+					doc.setComEcf(ecf);
+				}
+				service.salvar(docs);
+			} else {
+				log.debug("reduzao Z ja existente.");
 			}
-			service.salvar(totais);
-
-			// salva as vendas
-			for (ComEcfVenda venda : vendas) {
-				venda.setComEcfZ(ecfZ);
-				venda.setComEcf(ecf);
-				salvarVenda(venda);
-			}
-
-			// salva os documentos
-			for (ComEcfDocumento doc : docs) {
-				doc.setId(0);
-				doc.setComEcf(ecf);
-			}
-			service.salvar(docs);
 		} catch (Exception ex) {
 			log.error("Erro ao salvar reduzao Z.", ex);
 			throw new RestException(ex.getMessage());
@@ -394,7 +416,7 @@ public class RestServidor extends ARest {
 			FiltroTexto ft1 = new FiltroTexto("finRecebimentoStatus", ECompara.DIFERENTE, "ABERTO");
 			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { ft, ft1 });
 			Lista<FinRecebimento> lista = service.selecionar(recebimento, 0, 1, gf, false);
-			
+
 			if (lista.getLista().size() == 1) {
 				recebimento = lista.getLista().get(0);
 
@@ -402,6 +424,7 @@ public class RestServidor extends ARest {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(recebimento.getFinRecebimentoVencimento());
 				cal.add(Calendar.MONTH, 1);
+				cal.add(Calendar.DAY_OF_MONTH, 5);
 				mapa.setProperty("out.validade", UtilServer.formataData(cal.getTime(), "dd/MM/yyyy"));
 
 				// gerando o arquivo de retorno
@@ -438,8 +461,14 @@ public class RestServidor extends ARest {
 		List<ComEcfVendaProduto> vps = venda.getComEcfVendaProdutos();
 		List<FinReceber> recebiveis = venda.getEcfPagamentos();
 
+		// transforma os acrescimos e descontos em porcentagens
+		double acres = venda.getComEcfVendaBruto() > 0 ? venda.getComEcfVendaAcrescimo() / venda.getComEcfVendaBruto() * 100 : 0.00;
+		double desc = venda.getComEcfVendaBruto() > 0 ? venda.getComEcfVendaDesconto() / venda.getComEcfVendaBruto() * 100 : 0.00;
+
 		// salva a venda
 		venda.setId(0);
+		venda.setComEcfVendaAcrescimo(acres);
+		venda.setComEcfVendaDesconto(desc);
 		venda.setComEcfVendaProdutos(null);
 		venda.setEcfPagamentos(null);
 		venda = (ComEcfVenda) service.salvar(venda, false);
@@ -448,6 +477,8 @@ public class RestServidor extends ARest {
 		List<Sql> sqls = new ArrayList<Sql>();
 		for (ComEcfVendaProduto vp : vps) {
 			vp.setId(0);
+			vp.setComEcfVendaProdutoAcrescimo(acres);
+			vp.setComEcfVendaProdutoDesconto(desc);
 			vp.setComEcfVenda(venda);
 			if (!vp.getComEcfVendaProdutoCancelado()) {
 				Sql sql = getEstoque(vp.getComEcfVendaProdutoQuantidade(), vp.getProdEmbalagem(), vp.getProdProduto());
@@ -463,6 +494,12 @@ public class RestServidor extends ARest {
 
 		// salva os recebimento
 		salvarRecebimento(recebiveis, venda);
+
+		// atualiza o saldo
+		FiltroNumero fn = new FiltroNumero("finContaId", ECompara.IGUAL, conf.get("conta.padrao"));
+		ParametroFormula pf = new ParametroFormula("finContaSaldo", conciliado);
+		Sql sql = new Sql(new FinConta(), EComando.ATUALIZAR, fn, pf);
+		service.executar(new Sql[] { sql });
 	}
 
 	/**
@@ -512,6 +549,9 @@ public class RestServidor extends ARest {
 					recebimento.setFinRecebimentoDocumento("CCF: " + venda.getComEcfVendaCcf());
 					recebimento.setFinRecebimentoConciliado(rec.getFinReceberCadastro());
 					recebimento.setFinRecebimentoStatus("CONCILIADO");
+
+					// adiciona ao conciliado
+					conciliado += recebimento.getFinRecebimentoValor();
 				} else {
 					recebimento.setFinRecebimentoStatus("REALIZADO");
 				}

@@ -5,7 +5,7 @@
 	<property name="lib" location="war/WEB-INF/lib" />
 	<property name="classes" location="war/WEB-INF/classes" />
 	<property name="pacote" value="br.com.opensig.client" />
-	<property name="versao" value="1.08" />
+	<property name="versao" value="1.11" />
 	<property name="empresa" value="PhD - Systems Solutions" />
 	<property name="autor" value="Pedro H. Lira" />
 	<property name="url" value="http://phdss.com.br" />

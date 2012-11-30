@@ -10,6 +10,7 @@ import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.UtilClient;
 import br.com.opensig.core.client.controlador.comando.ComandoAcao;
 import br.com.opensig.core.client.visao.ComboEntidade;
+import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.empresa.shared.modelo.EmpCliente;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.empresa.shared.modelo.EmpTransportadora;
@@ -61,7 +62,7 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 			public void onSuccess(Object result) {
 				Record rec = LISTA.getPanel().getSelectionModel().getSelected();
 
-				if (rec != null && rec.getAsBoolean("comVendaFechada") && !rec.getAsBoolean("comVendaNfe") && !rec.getAsBoolean("comVendaCancelada")) {
+				if (rec != null && rec.getAsBoolean("comVendaFechada") && !rec.getAsBoolean("comVendaNfe") && !rec.getAsBoolean("comVendaCancelada") && rec.getAsInteger("empEmpresa.empEmpresaId") == Ponte.getLogin().getEmpresaId()) {
 					venda = new ComVenda();
 					venda.setEmpEmpresa(new EmpEmpresa(rec.getAsInteger("empEmpresa.empEmpresaId")));
 					venda.setEmpCliente(new EmpCliente(rec.getAsInteger("empCliente.empClienteId")));

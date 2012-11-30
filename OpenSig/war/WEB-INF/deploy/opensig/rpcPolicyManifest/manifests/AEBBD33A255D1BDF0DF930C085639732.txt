@@ -1,2 +1,0 @@
-serviceClass: br.com.opensig.comercial.client.servico.ComercialService
-path: E1B8BA894F8233A775FF0155EE79FDBA.gwt.rpc

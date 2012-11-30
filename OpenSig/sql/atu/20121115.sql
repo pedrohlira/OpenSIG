@@ -11,8 +11,3 @@ ALTER TABLE `com_ecf_venda` ADD COLUMN `sis_vendedor_id` INT NULL DEFAULT NULL  
 
 # remove o campo do server, sera identificado no ECF
 ALTER TABLE `fin_forma` DROP COLUMN `fin_forma_codigo` ;
-
-
-
-
-

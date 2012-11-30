@@ -2095,6 +2095,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtFuncao();
 
   /**
+   * Translated "Gerente".
+   * 
+   * @return translated "Gerente"
+   */
+  @DefaultMessage("Gerente")
+  @Key("txtGerente")
+  String txtGerente();
+
+  /**
    * Translated "GNF".
    * 
    * @return translated "GNF"

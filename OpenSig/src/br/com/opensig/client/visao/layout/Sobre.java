@@ -1,12 +1,18 @@
 package br.com.opensig.client.visao.layout;
 
+import java.util.Date;
+
 import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
+import br.com.opensig.core.client.controlador.parametro.ParametroData;
 import br.com.opensig.core.client.visao.abstrato.ANavegacao;
+import br.com.opensig.core.shared.modelo.EComando;
+import br.com.opensig.core.shared.modelo.Sql;
 import br.com.opensig.empresa.client.servico.EmpresaProxy;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.empresa.shared.modelo.EmpPlano;
+import br.com.opensig.permissao.client.servico.PermissaoProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
@@ -17,11 +23,16 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwtext.client.core.EventObject;
 import com.gwtext.client.core.Position;
 import com.gwtext.client.data.Record;
+import com.gwtext.client.util.DateUtil;
+import com.gwtext.client.widgets.Button;
+import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.TabPanel;
 import com.gwtext.client.widgets.Window;
+import com.gwtext.client.widgets.event.ButtonListenerAdapter;
 import com.gwtext.client.widgets.form.Label;
 import com.gwtext.client.widgets.form.MultiFieldPanel;
 import com.gwtext.client.widgets.form.TextArea;
@@ -63,6 +74,7 @@ public class Sobre {
 		tab.setActiveTab(0);
 
 		wndSobre.add(tab);
+		wndSobre.addButton(getBotao());
 		wndSobre.show();
 	}
 
@@ -219,6 +231,60 @@ public class Sobre {
 		});
 
 		return panVersao;
+	}
+
+	// botao de validar
+	private Button getBotao() {
+		final Button btnValidar = new Button(OpenSigCore.i18n.txtValidar());
+		btnValidar.setIconCls("icon-entrar");
+		btnValidar.addListener(new ButtonListenerAdapter() {
+			public void onClick(Button button, EventObject e) {
+				MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtValidar());
+				final PermissaoProxy proxy = new PermissaoProxy();
+				proxy.validar(idEmpresa, new AsyncCallback<String>() {
+
+					public void onSuccess(String result) {
+						if (result == null || result.equals("")) {
+							MessageBox.hide();
+							MessageBox.alert(OpenSigCore.i18n.txtValidar(), OpenSigCore.i18n.msgRegistro());
+						} else {
+							atualizar(result);
+							MessageBox.hide();
+							MessageBox.alert(OpenSigCore.i18n.txtValidar(), OpenSigCore.i18n.msgSaudacao());
+						}
+						wndSobre.close();
+					}
+
+					public void onFailure(Throwable caught) {
+						MessageBox.hide();
+						MessageBox.alert(OpenSigCore.i18n.txtValidar(), caught.getMessage());
+						wndSobre.close();
+					}
+				});
+			}
+		});
+
+		return btnValidar;
+	}
+
+	// atualiza a validade
+	private void atualizar(String data) {
+		Date fim = DateUtil.parseDate(data, "d/m/Y");
+		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(idEmpresa));
+		ParametroData pd = new ParametroData("empPlanoFim", fim);
+		Sql sql = new Sql(new EmpPlano(), EComando.ATUALIZAR, fo, pd);
+
+		EmpresaProxy<EmpPlano> proxy = new EmpresaProxy<EmpPlano>();
+		proxy.executar(new Sql[] { sql }, new AsyncCallback<Integer[]>() {
+
+			@Override
+			public void onSuccess(Integer[] result) {
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+			}
+		});
 	}
 
 	// aba dos modulos

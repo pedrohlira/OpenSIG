@@ -74,11 +74,11 @@ public class ListagemEcfVenda extends AListagem<ComEcfVenda> {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comEcfVendaId"), new IntegerFieldDef("comEcfZ.comEcfZId"), new IntegerFieldDef("comEcf.empEmpresa.empEmpresaId"),
 				new StringFieldDef("comEcf.empEmpresa.empEntidade.empEntidadeNome1"), new IntegerFieldDef("sisUsuario.sisUsuarioId"), new StringFieldDef("sisUsuario.sisUsuarioLogin"),
-				new IntegerFieldDef("sisVendedor.sisUsuarioId"), new StringFieldDef("sisVendedor.sisUsuarioLogin"), new IntegerFieldDef("empCliente.empClienteId"),
-				new StringFieldDef("empCliente.empEntidade.empEntidadeNome1"), new IntegerFieldDef("comEcf.comEcfId"), new StringFieldDef("comEcf.comEcfSerie"), new IntegerFieldDef("comEcfVendaCcf"),
-				new IntegerFieldDef("comEcfVendaCoo"), new DateFieldDef("comEcfVendaData"), new FloatFieldDef("comEcfVendaBruto"), new FloatFieldDef("comEcfVendaDesconto"),
-				new FloatFieldDef("comEcfVendaAcrescimo"), new FloatFieldDef("comEcfVendaLiquido"), new BooleanFieldDef("comEcfVendaFechada"), new IntegerFieldDef("finReceber.finReceberId"),
-				new BooleanFieldDef("comEcfVendaCancelada") };
+				new IntegerFieldDef("sisVendedor.sisUsuarioId"), new StringFieldDef("sisVendedor.sisUsuarioLogin"), new IntegerFieldDef("sisGerente.sisUsuarioId"),
+				new StringFieldDef("sisGerente.sisUsuarioLogin"), new IntegerFieldDef("empCliente.empClienteId"), new StringFieldDef("empCliente.empEntidade.empEntidadeNome1"),
+				new IntegerFieldDef("comEcf.comEcfId"), new StringFieldDef("comEcf.comEcfSerie"), new IntegerFieldDef("comEcfVendaCcf"), new IntegerFieldDef("comEcfVendaCoo"),
+				new DateFieldDef("comEcfVendaData"), new FloatFieldDef("comEcfVendaBruto"), new FloatFieldDef("comEcfVendaDesconto"), new FloatFieldDef("comEcfVendaAcrescimo"),
+				new FloatFieldDef("comEcfVendaLiquido"), new BooleanFieldDef("comEcfVendaFechada"), new IntegerFieldDef("finReceber.finReceberId"), new BooleanFieldDef("comEcfVendaCancelada") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -96,7 +96,10 @@ public class ListagemEcfVenda extends AListagem<ComEcfVenda> {
 		ColumnConfig ccVendedorId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtVendedor(), "sisVendedor.sisUsuarioId", 100, true);
 		ccVendedorId.setHidden(true);
 		ColumnConfig ccVendedor = new ColumnConfig(OpenSigCore.i18n.txtVendedor(), "sisVendedor.sisUsuarioLogin", 100, true);
-		ColumnConfig ccClienteId = new ColumnConfig("", "empCliente.empClienteId", 10, false);
+		ColumnConfig ccGerenteId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtGerente(), "sisGerente.sisUsuarioId", 100, true);
+		ccGerenteId.setHidden(true);
+		ColumnConfig ccGerente = new ColumnConfig(OpenSigCore.i18n.txtGerente(), "sisGerente.sisUsuarioLogin", 100, true);
+		ColumnConfig ccClienteId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtCliente(), "empCliente.empClienteId", 100, false);
 		ccClienteId.setHidden(true);
 		ColumnConfig ccCliente = new ColumnConfig(OpenSigCore.i18n.txtCliente(), "empCliente.empEntidade.empEntidadeNome1", 100, true);
 		ccCliente.setHidden(true);
@@ -119,8 +122,8 @@ public class ListagemEcfVenda extends AListagem<ComEcfVenda> {
 		SummaryColumnConfig sumBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comEcfVendaBruto", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig sumLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtLiquido(), "comEcfVendaLiquido", 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccZId, ccEmpresaId, ccEmpresa, ccUsuarioId, ccLogin, ccVendedorId, ccVendedor, ccClienteId, ccCliente, ccEcfId, ccEcf, ccCcf, ccCoo,
-				ccData, sumBruto, ccDesconto, ccAcrescimo, sumLiquido, ccFechada, ccReceberId, ccCancelada };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccZId, ccEmpresaId, ccEmpresa, ccUsuarioId, ccLogin, ccVendedorId, ccVendedor, ccGerenteId, ccGerente, ccClienteId, ccCliente, ccEcfId,
+				ccEcf, ccCcf, ccCoo, ccData, sumBruto, ccDesconto, ccAcrescimo, sumLiquido, ccFechada, ccReceberId, ccCancelada };
 		modelos = new ColumnModel(bcc);
 
 		GrupoFiltro gf = new GrupoFiltro();

@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.8.3
 Created-By: 1.6.0_37-b06-434-11M3909 (Apple Inc.)
 Implementation-Title: OpenSigEmpresa
-Implementation-Version: 1.08-b15
+Implementation-Version: 1.11-b17
 Implementation-Vendor: PhD - Systems Solutions
 Implementation-Url: http://phdss.com.br
 Built-By: Pedro H. Lira - opensig@phdss.com.br
-Built-Date: 20-11-2012 08:34:33
+Built-Date: 28-11-2012 18:07:45
 Main-Class: br.com.opensig.empresa.client.OpenSigEmpresa
 

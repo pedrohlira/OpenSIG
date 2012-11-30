@@ -95,6 +95,10 @@ public class ComEcfVenda extends Dados implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private SisUsuario sisVendedor;
 
+	@JoinColumn(name = "sis_gerente_id", referencedColumnName = "sis_usuario_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private SisUsuario sisGerente;
+
 	@JoinColumn(name = "emp_cliente_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@XmlTransient
@@ -260,6 +264,14 @@ public class ComEcfVenda extends Dados implements Serializable {
 		this.sisVendedor = sisVendedor;
 	}
 
+	public SisUsuario getSisGerente() {
+		return sisGerente;
+	}
+
+	public void setSisGerente(SisUsuario sisGerente) {
+		this.sisGerente = sisGerente;
+	}
+
 	public ComEcf getComEcf() {
 		return this.comEcf;
 	}
@@ -327,19 +339,22 @@ public class ComEcfVenda extends Dados implements Serializable {
 	public String[] toArray() {
 		int vendedorId = sisVendedor == null ? 0 : sisVendedor.getSisUsuarioId();
 		String vendedorNome = sisVendedor == null ? "" : sisVendedor.getSisUsuarioLogin();
+		int gerenteId = sisGerente == null ? 0 : sisGerente.getSisUsuarioId();
+		String gerenteNome = sisGerente == null ? "" : sisGerente.getSisUsuarioLogin();
 		int clienteId = empCliente == null ? 0 : empCliente.getEmpClienteId();
 		String clienteNome = empCliente == null ? "" : empCliente.getEmpEntidade().getEmpEntidadeNome1();
 		int receberId = finReceber == null ? 0 : finReceber.getFinReceberId();
 
 		return new String[] { comEcfVendaId + "", comEcfZ.getComEcfZId() + "", comEcf.getEmpEmpresa().getEmpEmpresaId() + "", comEcf.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(),
-				sisUsuario.getSisUsuarioId() + "", sisUsuario.getSisUsuarioLogin(), vendedorId + "", vendedorNome, clienteId + "", clienteNome, comEcf.getComEcfId() + "", comEcf.getComEcfSerie(),
-				comEcfVendaCcf + "", comEcfVendaCoo + "", UtilClient.getDataGrid(comEcfVendaData), comEcfVendaBruto.toString(), comEcfVendaDesconto.toString(), comEcfVendaAcrescimo.toString(),
-				comEcfVendaLiquido.toString(), getComEcfVendaFechada() + "", receberId + "", getComEcfVendaCancelada() + "" };
+				sisUsuario.getSisUsuarioId() + "", sisUsuario.getSisUsuarioLogin(), vendedorId + "", vendedorNome, gerenteId + "", gerenteNome, clienteId + "", clienteNome, comEcf.getComEcfId() + "",
+				comEcf.getComEcfSerie(), comEcfVendaCcf + "", comEcfVendaCoo + "", UtilClient.getDataGrid(comEcfVendaData), comEcfVendaBruto.toString(), comEcfVendaDesconto.toString(),
+				comEcfVendaAcrescimo.toString(), comEcfVendaLiquido.toString(), getComEcfVendaFechada() + "", receberId + "", getComEcfVendaCancelada() + "" };
 	}
 
 	public void anularDependencia() {
 		sisUsuario = null;
 		sisVendedor = null;
+		sisGerente = null;
 		empCliente = null;
 		finReceber = null;
 		comEcf = null;
