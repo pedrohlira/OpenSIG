@@ -5,15 +5,15 @@ import br.com.opensig.fiscal.server.sped.Bean;
 public class DadosC470 extends Bean {
 
 	private String cod_item;
-	private double qtd;
-	private double qtd_canc;
+	private Double qtd;
+	private Double qtd_canc;
 	private String unid;
-	private double vl_item;
+	private Double vl_item;
 	private String cst_icms;
 	private int cfop;
-	private double aliq_icms;
-	private double vl_pis;
-	private double vl_cofins;
+	private Double aliq_icms;
+	private Double vl_pis;
+	private Double vl_cofins;
 
 	public DadosC470() {
 		reg = "C470";
@@ -27,19 +27,19 @@ public class DadosC470 extends Bean {
 		this.cod_item = cod_item;
 	}
 
-	public double getQtd() {
+	public Double getQtd() {
 		return qtd;
 	}
 
-	public void setQtd(double qtd) {
+	public void setQtd(Double qtd) {
 		this.qtd = qtd;
 	}
 
-	public double getQtd_canc() {
+	public Double getQtd_canc() {
 		return qtd_canc;
 	}
 
-	public void setQtd_canc(double qtd_canc) {
+	public void setQtd_canc(Double qtd_canc) {
 		this.qtd_canc = qtd_canc;
 	}
 
@@ -51,11 +51,11 @@ public class DadosC470 extends Bean {
 		this.unid = unid;
 	}
 
-	public double getVl_item() {
+	public Double getVl_item() {
 		return vl_item;
 	}
 
-	public void setVl_item(double vl_item) {
+	public void setVl_item(Double vl_item) {
 		this.vl_item = vl_item;
 	}
 
@@ -75,27 +75,27 @@ public class DadosC470 extends Bean {
 		this.cfop = cfop;
 	}
 
-	public double getAliq_icms() {
+	public Double getAliq_icms() {
 		return aliq_icms;
 	}
 
-	public void setAliq_icms(double aliq_icms) {
+	public void setAliq_icms(Double aliq_icms) {
 		this.aliq_icms = aliq_icms;
 	}
 
-	public double getVl_pis() {
+	public Double getVl_pis() {
 		return vl_pis;
 	}
 
-	public void setVl_pis(double vl_pis) {
+	public void setVl_pis(Double vl_pis) {
 		this.vl_pis = vl_pis;
 	}
 
-	public double getVl_cofins() {
+	public Double getVl_cofins() {
 		return vl_cofins;
 	}
 
-	public void setVl_cofins(double vl_cofins) {
+	public void setVl_cofins(Double vl_cofins) {
 		this.vl_cofins = vl_cofins;
 	}
 

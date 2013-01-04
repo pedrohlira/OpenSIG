@@ -16,6 +16,8 @@ import br.com.opensig.comercial.shared.modelo.ComVenda;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.fiscal.server.sped.ARegistro;
+import br.com.opensig.inutnfe.TRetInutNFe.InfInut;
+import br.com.opensig.inutnfe.TProcInutNFe;
 import br.com.opensig.nfe.TNFe;
 import br.com.opensig.nfe.TNFe.InfNFe.Det;
 import br.com.opensig.nfe.TNFe.InfNFe.Ide;
@@ -43,6 +45,7 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 				String texto = "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
 				nfe = UtilServer.xmlToObj(texto, "br.com.opensig.nfe");
 				DadosC100 obj = getDados(nfe, "00", compra.getComCompraRecebimento());
+
 				// seta os dados padrao
 				obj.setInd_oper("0");
 				obj.setInd_emit(compra.getEmpFornecedor().getEmpEntidade().getEmpEntidadeDocumento1() == compra.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento1() ? "0" : "1");
@@ -93,7 +96,7 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 					nfe = UtilServer.xmlToObj(texto, "br.com.opensig.nfe");
 					obj = getDados(nfe, cod_sit, venda.getComVendaData());
 				} catch (Exception e) {
-					// TODO inutilizada
+					// inutilizadas sao tratadas abaixo
 					continue;
 				}
 
@@ -131,6 +134,26 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 					// analitico da venda
 					getAnalitico();
 				}
+			}
+
+			// processas as inutilizadas
+			TProcInutNFe proc = null;
+			for (String xml : inutilizadas) {
+				proc = UtilServer.xmlToObj(xml, "br.com.opensig.inutnfe");
+				InfInut inut = proc.getRetInutNFe().getInfInut();
+				
+				DadosC100 obj = new DadosC100();
+				obj.setInd_oper(inut.getSerie().equals("0") ? "0" : "1");
+				obj.setInd_emit("0");
+				obj.setCod_sit("05");
+				obj.setSer(inut.getSerie());
+				obj.setCod_mod("55");
+				obj.setNum_doc(Integer.valueOf(inut.getNNFIni()));
+				normalizar(obj);
+				
+				out.write(obj);
+				out.flush();
+				qtdLinhas++;
 			}
 		} catch (Exception e) {
 			qtdLinhas = 0;

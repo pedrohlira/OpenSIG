@@ -6,10 +6,10 @@ public class DadosC370 extends Bean {
 
 	private int num_item;
 	private String cod_item;
-	private double qtd;
+	private Double qtd;
 	private String unid;
-	private double vl_item;
-	private double vl_desc;
+	private Double vl_item;
+	private Double vl_desc;
 
 	public DadosC370() {
 		reg = "C370";
@@ -31,11 +31,11 @@ public class DadosC370 extends Bean {
 		this.num_item = num_item;
 	}
 
-	public double getQtd() {
+	public Double getQtd() {
 		return qtd;
 	}
 
-	public void setQtd(double qtd) {
+	public void setQtd(Double qtd) {
 		this.qtd = qtd;
 	}
 
@@ -47,19 +47,19 @@ public class DadosC370 extends Bean {
 		this.unid = unid;
 	}
 
-	public double getVl_desc() {
+	public Double getVl_desc() {
 		return vl_desc;
 	}
 
-	public void setVl_desc(double vl_desc) {
+	public void setVl_desc(Double vl_desc) {
 		this.vl_desc = vl_desc;
 	}
 
-	public double getVl_item() {
+	public Double getVl_item() {
 		return vl_item;
 	}
 
-	public void setVl_item(double vl_item) {
+	public void setVl_item(Double vl_item) {
 		this.vl_item = vl_item;
 	}
 }

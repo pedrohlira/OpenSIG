@@ -29,6 +29,8 @@ public class Registro9900 extends ARegistro<Dados9900, Dados> {
 				qtd = qtd == null ? 1 : qtd + 1;
 				regs.put(chave, qtd);
 			}
+			br.close();
+			
 			// inputando os ultimos
 			regs.put("9900", regs.size() + 3);
 			regs.put("9990", 1);

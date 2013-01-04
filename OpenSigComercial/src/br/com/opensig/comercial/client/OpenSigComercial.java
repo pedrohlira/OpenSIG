@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import br.com.opensig.comercial.client.controlador.comando.ComandoCompra;
 import br.com.opensig.comercial.client.controlador.comando.ComandoCompraProduto;
+import br.com.opensig.comercial.client.controlador.comando.ComandoConsumo;
 import br.com.opensig.comercial.client.controlador.comando.ComandoEcf;
 import br.com.opensig.comercial.client.controlador.comando.ComandoEcfDocumento;
 import br.com.opensig.comercial.client.controlador.comando.ComandoEcfNota;
@@ -18,12 +19,14 @@ import br.com.opensig.comercial.client.controlador.comando.ComandoValorProduto;
 import br.com.opensig.comercial.client.controlador.comando.ComandoVenda;
 import br.com.opensig.comercial.client.controlador.comando.ComandoVendaProduto;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharCompra;
+import br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharConsumo;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharEcfVenda;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharFrete;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharVenda;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarNfeEntrada;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarNfeSaida;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagar;
+import br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagarConsumo;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagarFrete;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoReceber;
 import br.com.opensig.core.client.controlador.comando.FabricaComando;
@@ -43,7 +46,6 @@ import com.google.gwt.core.client.GWT;
  * Classe que inicializa o módulo OpenSigComercial.
  * 
  * @author Pedro H. Lira
- * @version 1.0
  */
 public class OpenSigComercial implements EntryPoint {
 
@@ -80,6 +82,11 @@ public class OpenSigComercial implements EntryPoint {
 		fc.addComando(ComandoFrete.class.getName(), (IComando) GWT.create(ComandoFrete.class));
 		fc.addComando(ComandoFecharFrete.class.getName(), (IComando) GWT.create(ComandoFecharFrete.class));
 		fc.addComando(ComandoPagarFrete.class.getName(), (IComando) GWT.create(ComandoPagarFrete.class));
+		
+		// consumo
+		fc.addComando(ComandoConsumo.class.getName(), (IComando) GWT.create(ComandoConsumo.class));
+		fc.addComando(ComandoFecharConsumo.class.getName(), (IComando) GWT.create(ComandoFecharConsumo.class));
+		fc.addComando(ComandoPagarConsumo.class.getName(), (IComando) GWT.create(ComandoPagarConsumo.class));
 
 		// natureza
 		fc.addComando(ComandoValorProduto.class.getName(), (IComando) GWT.create(ComandoValorProduto.class));

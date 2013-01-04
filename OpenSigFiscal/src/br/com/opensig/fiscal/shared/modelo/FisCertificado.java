@@ -24,8 +24,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
  * Classe que representa o certificado da NFe no sistema
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 20/07/2010
  */
 @Entity
 @Table(name = "fis_certificado")

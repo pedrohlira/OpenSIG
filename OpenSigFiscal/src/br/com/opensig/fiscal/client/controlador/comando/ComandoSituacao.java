@@ -5,7 +5,6 @@ import java.util.Map;
 import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.UtilClient;
 import br.com.opensig.core.client.controlador.comando.ComandoFuncao;
-import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.fiscal.client.servico.FiscalProxy;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -97,7 +96,7 @@ public class ComandoSituacao extends ComandoFuncao {
 			MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtSituacao());
 
 			FiscalProxy proxy = new FiscalProxy();
-			proxy.situacao(amb, chave, Integer.valueOf(Ponte.getLogin().getEmpresa()[0]), new AsyncCallback<String>() {
+			proxy.situacao(amb, chave, new AsyncCallback<String>() {
 
 				public void onSuccess(String result) {
 					MessageBox.hide();

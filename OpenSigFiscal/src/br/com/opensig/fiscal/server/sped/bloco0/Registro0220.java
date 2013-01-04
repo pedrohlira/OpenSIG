@@ -99,7 +99,7 @@ public class Registro0220 extends ARegistro<Dados0220, ProdEmbalagem> {
 	protected Dados0220 getDados(ProdEmbalagem emb) {
 		Dados0220 d = new Dados0220();
 		d.setUnid_conv(emb.getProdEmbalagemNome());
-		d.setFat_conv(emb.getProdEmbalagemUnidade());
+		d.setFat_conv((double) emb.getProdEmbalagemUnidade());
 
 		normalizar(d);
 		qtdLinhas++;

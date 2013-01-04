@@ -9,10 +9,10 @@
             <field name="reg" type="string" length="4" trim="true" />
             <field name="num_item" type="int" length="3" />
             <field name="cod_item" type="string" length="60" trim="true" />
-            <field name="qtd" type="double" format="##0.000" default="" />
+            <field name="qtd" type="double" format="##0.000" />
             <field name="unid" type="string" length="6" trim="true" />
-            <field name="vl_item" type="double" format="##0.00" default="" />
-            <field name="vl_desc" type="double" format="##0.00" default="" />
+            <field name="vl_item" type="double" format="##0.00" />
+            <field name="vl_desc" type="double" format="##0.00" />
             <field name="padrao" type="string" length="1" default="" />
 		</record>
 	</stream>

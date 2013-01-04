@@ -21,7 +21,6 @@ public class Registro0500 extends ARegistro<Dados0500, Dados> {
 		d.setNivel(1);
 		d.setCod_cta("ESTOQUE");
 		d.setNome_cta("CONTA DE CONTROLE DE ESTOQUE");
-
 		return d;
 	}
 }

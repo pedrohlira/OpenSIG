@@ -9,7 +9,7 @@
 			<field name="reg" type="string" length="4" trim="true"/>
 			<field name="ind_emit" type="string" length="1" trim="true"/>
 			<field name="ind_tit" type="string" length="1" trim="true"/>
-			<field name="desc_tit" type="string" length="255" trim="true"/>
+			<field name="desc_tit" type="string" length="255" trim="true" default=""/>
 			<field name="num_tit" type="string" length="255" trim="true"/>
 			<field name="qtd_parc" type="int" length="2" />
 			<field name="vl_tit" type="double" format="##0.00" />

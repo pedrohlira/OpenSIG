@@ -2,7 +2,7 @@
 <project name="OpenSigEmpresa" basedir="." default="publicar">
 
 	<property name="pacote" value="br.com.opensig.empresa.client" />
-	<property name="versao" value="1.11" />
+	<property name="versao" value="1.0.12" />
 	<property name="empresa" value="PhD - Systems Solutions" />
 	<property name="autor" value="Pedro H. Lira" />
 	<property name="url" value="http://phdss.com.br" />

@@ -13,13 +13,13 @@ public class RegistroC490 extends ARegistro<DadosC490, List<DadosC470>> {
 			d.setCst_icms(c470.getCst_icms());
 			d.setCfop(c470.getCfop());
 			d.setAliq_icms(c470.getAliq_icms());
-			d.setVl_opr(d.getVl_opr() + c470.getVl_item());
-			d.setCod_obs("");
+			d.setVl_opr(somarDoubles(d.getVl_opr(), c470.getVl_item()));
 		}
-		if (d.getAliq_icms() > 0) {
+		if (d.getVl_opr() != null) {
 			d.setVl_bc_icms(d.getVl_opr());
 			d.setVl_icms(d.getVl_bc_icms() * d.getAliq_icms() / 100);
 		}
+		d.setCod_obs("");
 
 		return d;
 	}

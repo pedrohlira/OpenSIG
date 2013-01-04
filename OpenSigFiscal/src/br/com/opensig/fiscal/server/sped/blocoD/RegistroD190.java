@@ -1,29 +1,25 @@
 package br.com.opensig.fiscal.server.sped.blocoD;
 
+import java.util.List;
+
 import br.com.opensig.comercial.shared.modelo.ComFrete;
 import br.com.opensig.fiscal.server.sped.ARegistro;
 
-public class RegistroD190 extends ARegistro<DadosD190, ComFrete> {
-
-	public static double ICMS_SAIDA = 0.00;
-	public static double ICMS_ENTRADA = 0.00;
+public class RegistroD190 extends ARegistro<DadosD190, List<ComFrete>> {
 
 	@Override
-	protected DadosD190 getDados(ComFrete dados) throws Exception {
+	protected DadosD190 getDados(List<ComFrete> dados) throws Exception {
 		DadosD190 d = new DadosD190();
+		for (ComFrete frete : dados) {
+			d.setCfop(frete.getComFreteCfop());
+			d.setAliq_icms(frete.getComFreteAliquota());
+			d.setVl_opr(somarDoubles(d.getVl_opr(), frete.getComFreteValor()));
+			d.setVl_bc_icms(somarDoubles(d.getVl_bc_icms(), frete.getComFreteBase()));
+			d.setVl_icms(somarDoubles(d.getVl_icms(), frete.getComFreteIcms()));
+		}
 		d.setCst_icms("000");
-		d.setCfop(dados.getComFreteCfop());
-		d.setAliq_icms(dados.getComFreteAliquota());
-		d.setVl_opr(dados.getComFreteValor());
-		d.setVl_bc_icms(dados.getComFreteBase());
-		d.setVl_icms(dados.getComFreteIcms());
 		d.setVl_red_bc(0.00);
 		d.setCod_obs("");
-
-		// TODO quando fizer CTe e frete pra saida implementar o total
-		if (d.getCfop() != 1605) {
-			ICMS_ENTRADA += d.getVl_icms();
-		}
 		return d;
 	}
 

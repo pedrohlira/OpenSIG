@@ -15,8 +15,6 @@ import br.com.opensig.core.shared.modelo.Dados;
  * Classe que representa o status da nfe no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 20/07/2010
  */
 @Entity
 @Table(name = "fis_nota_status")

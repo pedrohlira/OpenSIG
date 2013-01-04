@@ -14,7 +14,6 @@ public class RegistroC425 extends ARegistro<DadosC425, ComEcfVendaProduto> {
 		d.setVl_item(dados.getComEcfVendaProdutoTotal());
 		d.setVl_pis(dados.getComEcfVendaProdutoTotal() * pis / 100);
 		d.setVl_cofins(dados.getComEcfVendaProdutoTotal() * cofins / 100);
-
 		return d;
 	}
 }

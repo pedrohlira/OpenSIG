@@ -12,6 +12,7 @@ import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
+import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.empresa.shared.modelo.EmpEndereco;
 import br.com.opensig.empresa.shared.modelo.EmpEntidade;
@@ -53,6 +54,14 @@ public class Registro0150 extends ARegistro<Dados0150, EmpEntidade> {
 						out.flush();
 						entidades.add(venda.getEmpCliente().getEmpEntidade().getEmpEntidadeId());
 					}
+				}
+			}
+			// consumos
+			for (ComConsumo consumo : consumos) {
+				if (!entidades.contains(consumo.getEmpFornecedor().getEmpEntidade().getEmpEntidadeId())) {
+					out.write(getDados(consumo.getEmpFornecedor().getEmpEntidade()));
+					out.flush();
+					entidades.add(consumo.getEmpFornecedor().getEmpEntidade().getEmpEntidadeId());
 				}
 			}
 			// notas

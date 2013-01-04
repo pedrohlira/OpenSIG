@@ -7,38 +7,38 @@ public class DadosC170 extends Bean {
 	private int num_item;
 	private String cod_item;
 	private String descr_compl;
-	private double qtd;
+	private Double qtd;
 	private String unid;
-	private double vl_item;
-	private double vl_desc;
+	private Double vl_item;
+	private Double vl_desc;
 	private String ind_mov;
 	private String cst_icms;
 	private int cfop;
 	private String cod_nat;
-	private double vl_bc_icms;
-	private double aliq_icms;
-	private double vl_icms;
-	private double vl_bc_icms_st;
-	private double aliq_st;
-	private double vl_icms_st;
+	private Double vl_bc_icms;
+	private Double aliq_icms;
+	private Double vl_icms;
+	private Double vl_bc_icms_st;
+	private Double aliq_st;
+	private Double vl_icms_st;
 	private String ind_apur;
 	private String cst_ipi;
 	private String cod_enq;
-	private double vl_bc_ipi;
-	private double aliq_ipi;
-	private double vl_ipi;
+	private Double vl_bc_ipi;
+	private Double aliq_ipi;
+	private Double vl_ipi;
 	private String cst_pis;
-	private double vl_bc_pis;
+	private Double vl_bc_pis;
 	private Double aliq_pis;
-	private double quant_bc_pis;
+	private Double quant_bc_pis;
 	private Double aliq2_pis;
-	private double vl_pis;
+	private Double vl_pis;
 	private String cst_cofins;
-	private double vl_bc_cofins;
+	private Double vl_bc_cofins;
 	private Double aliq_cofins;
-	private double quant_bc_cofins;
+	private Double quant_bc_cofins;
 	private Double aliq2_cofins;
-	private double vl_cofins;
+	private Double vl_cofins;
 	private String cod_cta;
 	
 	public DadosC170() {
@@ -69,11 +69,11 @@ public class DadosC170 extends Bean {
 		this.descr_compl = descr_compl;
 	}
 
-	public double getQtd() {
+	public Double getQtd() {
 		return qtd;
 	}
 
-	public void setQtd(double qtd) {
+	public void setQtd(Double qtd) {
 		this.qtd = qtd;
 	}
 
@@ -85,19 +85,19 @@ public class DadosC170 extends Bean {
 		this.unid = unid;
 	}
 
-	public double getVl_item() {
+	public Double getVl_item() {
 		return vl_item;
 	}
 
-	public void setVl_item(double vl_item) {
+	public void setVl_item(Double vl_item) {
 		this.vl_item = vl_item;
 	}
 
-	public double getVl_desc() {
+	public Double getVl_desc() {
 		return vl_desc;
 	}
 
-	public void setVl_desc(double vl_desc) {
+	public void setVl_desc(Double vl_desc) {
 		this.vl_desc = vl_desc;
 	}
 
@@ -133,51 +133,51 @@ public class DadosC170 extends Bean {
 		this.cod_nat = cod_nat;
 	}
 
-	public double getVl_bc_icms() {
+	public Double getVl_bc_icms() {
 		return vl_bc_icms;
 	}
 
-	public void setVl_bc_icms(double vl_bc_icms) {
+	public void setVl_bc_icms(Double vl_bc_icms) {
 		this.vl_bc_icms = vl_bc_icms;
 	}
 
-	public double getAliq_icms() {
+	public Double getAliq_icms() {
 		return aliq_icms;
 	}
 
-	public void setAliq_icms(double aliq_icms) {
+	public void setAliq_icms(Double aliq_icms) {
 		this.aliq_icms = aliq_icms;
 	}
 
-	public double getVl_icms() {
+	public Double getVl_icms() {
 		return vl_icms;
 	}
 
-	public void setVl_icms(double vl_icms) {
+	public void setVl_icms(Double vl_icms) {
 		this.vl_icms = vl_icms;
 	}
 
-	public double getVl_bc_icms_st() {
+	public Double getVl_bc_icms_st() {
 		return vl_bc_icms_st;
 	}
 
-	public void setVl_bc_icms_st(double vl_bc_icms_st) {
+	public void setVl_bc_icms_st(Double vl_bc_icms_st) {
 		this.vl_bc_icms_st = vl_bc_icms_st;
 	}
 
-	public double getAliq_st() {
+	public Double getAliq_st() {
 		return aliq_st;
 	}
 
-	public void setAliq_st(double aliq_st) {
+	public void setAliq_st(Double aliq_st) {
 		this.aliq_st = aliq_st;
 	}
 
-	public double getVl_icms_st() {
+	public Double getVl_icms_st() {
 		return vl_icms_st;
 	}
 
-	public void setVl_icms_st(double vl_icms_st) {
+	public void setVl_icms_st(Double vl_icms_st) {
 		this.vl_icms_st = vl_icms_st;
 	}
 
@@ -205,27 +205,27 @@ public class DadosC170 extends Bean {
 		this.cod_enq = cod_enq;
 	}
 
-	public double getVl_bc_ipi() {
+	public Double getVl_bc_ipi() {
 		return vl_bc_ipi;
 	}
 
-	public void setVl_bc_ipi(double vl_bc_ipi) {
+	public void setVl_bc_ipi(Double vl_bc_ipi) {
 		this.vl_bc_ipi = vl_bc_ipi;
 	}
 
-	public double getAliq_ipi() {
+	public Double getAliq_ipi() {
 		return aliq_ipi;
 	}
 
-	public void setAliq_ipi(double aliq_ipi) {
+	public void setAliq_ipi(Double aliq_ipi) {
 		this.aliq_ipi = aliq_ipi;
 	}
 
-	public double getVl_ipi() {
+	public Double getVl_ipi() {
 		return vl_ipi;
 	}
 
-	public void setVl_ipi(double vl_ipi) {
+	public void setVl_ipi(Double vl_ipi) {
 		this.vl_ipi = vl_ipi;
 	}
 
@@ -237,11 +237,11 @@ public class DadosC170 extends Bean {
 		this.cst_pis = cst_pis;
 	}
 
-	public double getVl_bc_pis() {
+	public Double getVl_bc_pis() {
 		return vl_bc_pis;
 	}
 
-	public void setVl_bc_pis(double vl_bc_pis) {
+	public void setVl_bc_pis(Double vl_bc_pis) {
 		this.vl_bc_pis = vl_bc_pis;
 	}
 
@@ -253,11 +253,11 @@ public class DadosC170 extends Bean {
 		this.aliq_pis = aliq_pis;
 	}
 
-	public double getQuant_bc_pis() {
+	public Double getQuant_bc_pis() {
 		return quant_bc_pis;
 	}
 
-	public void setQuant_bc_pis(double quant_bc_pis) {
+	public void setQuant_bc_pis(Double quant_bc_pis) {
 		this.quant_bc_pis = quant_bc_pis;
 	}
 
@@ -269,11 +269,11 @@ public class DadosC170 extends Bean {
 		this.aliq2_pis = aliq2_pis;
 	}
 
-	public double getVl_pis() {
+	public Double getVl_pis() {
 		return vl_pis;
 	}
 
-	public void setVl_pis(double vl_pis) {
+	public void setVl_pis(Double vl_pis) {
 		this.vl_pis = vl_pis;
 	}
 
@@ -285,11 +285,11 @@ public class DadosC170 extends Bean {
 		this.cst_cofins = cst_cofins;
 	}
 
-	public double getVl_bc_cofins() {
+	public Double getVl_bc_cofins() {
 		return vl_bc_cofins;
 	}
 
-	public void setVl_bc_cofins(double vl_bc_cofins) {
+	public void setVl_bc_cofins(Double vl_bc_cofins) {
 		this.vl_bc_cofins = vl_bc_cofins;
 	}
 
@@ -301,11 +301,11 @@ public class DadosC170 extends Bean {
 		this.aliq_cofins = aliq_cofins;
 	}
 
-	public double getQuant_bc_cofins() {
+	public Double getQuant_bc_cofins() {
 		return quant_bc_cofins;
 	}
 
-	public void setQuant_bc_cofins(double quant_bc_cofins) {
+	public void setQuant_bc_cofins(Double quant_bc_cofins) {
 		this.quant_bc_cofins = quant_bc_cofins;
 	}
 
@@ -317,11 +317,11 @@ public class DadosC170 extends Bean {
 		this.aliq2_cofins = aliq2_cofins;
 	}
 
-	public double getVl_cofins() {
+	public Double getVl_cofins() {
 		return vl_cofins;
 	}
 
-	public void setVl_cofins(double vl_cofins) {
+	public void setVl_cofins(Double vl_cofins) {
 		this.vl_cofins = vl_cofins;
 	}
 

@@ -10,6 +10,7 @@ import org.beanio.BeanWriter;
 import org.beanio.StreamFactory;
 
 import br.com.opensig.comercial.shared.modelo.ComCompra;
+import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.comercial.shared.modelo.ComEcfNota;
 import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
@@ -17,26 +18,26 @@ import br.com.opensig.comercial.shared.modelo.ComVenda;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Autenticacao;
 import br.com.opensig.fiscal.client.servico.FiscalService;
-import br.com.opensig.fiscal.shared.modelo.FisSpedBloco;
-import br.com.opensig.fiscal.shared.modelo.FisSpedFiscal;
+import br.com.opensig.fiscal.shared.modelo.FisSped;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 public abstract class ARegistro<E extends Bean, T> implements IRegistro<E, T> {
 
-	protected static FisSpedFiscal sped;
+	protected static FisSped sped;
 	protected static FiscalService service;
 	protected static Autenticacao auth;
 	protected static Date inicio;
 	protected static Date fim;
 	protected static double pis;
 	protected static double cofins;
-	protected static List<FisSpedBloco> blocos;
 	protected static List<ComCompra> compras;
 	protected static List<ComFrete> fretes;
 	protected static List<ComVenda> vendas;
+	protected static List<String> inutilizadas;
 	protected static List<ComEcfZ> zs;
 	protected static List<ComEcfNota> notas;
 	protected static List<ProdProduto> estoque;
+	protected static List<ComConsumo> consumos;
 	protected File leitor;
 	protected Writer escritor;
 	protected String bean;
@@ -90,14 +91,17 @@ public abstract class ARegistro<E extends Bean, T> implements IRegistro<E, T> {
 		}
 	}
 
-	protected int getSubBlocos(String letra) {
-		int tot = 0;
-		for (FisSpedBloco bl : blocos) {
-			if (bl.getFisSpedBlocoLetra().equals(letra) && bl.getFisSpedBlocoNivel() > 1) {
-				tot++;
+	protected double somarDoubles(Double... valores) {
+		double retorno = 0.00;
+		if (valores != null) {
+			for (Double valor : valores) {
+				if (valor != null) {
+					retorno += valor.doubleValue();
+				}
 			}
 		}
-		return tot;
+
+		return retorno;
 	}
 
 	protected abstract E getDados(T dados) throws Exception;
@@ -123,12 +127,12 @@ public abstract class ARegistro<E extends Bean, T> implements IRegistro<E, T> {
 	}
 
 	@Override
-	public FisSpedFiscal getSped() {
+	public FisSped getSped() {
 		return sped;
 	}
 
 	@Override
-	public void setSped(FisSpedFiscal sped) {
+	public void setSped(FisSped sped) {
 		ARegistro.sped = sped;
 	}
 
@@ -213,16 +217,6 @@ public abstract class ARegistro<E extends Bean, T> implements IRegistro<E, T> {
 	}
 
 	@Override
-	public List<FisSpedBloco> getBlocos() {
-		return blocos;
-	}
-
-	@Override
-	public void setBlocos(List<FisSpedBloco> blocos) {
-		ARegistro.blocos = blocos;
-	}
-
-	@Override
 	public List<ComCompra> getCompras() {
 		return compras;
 	}
@@ -253,6 +247,16 @@ public abstract class ARegistro<E extends Bean, T> implements IRegistro<E, T> {
 	}
 
 	@Override
+	public List<String> getInutilizadas() {
+		return inutilizadas;
+	}
+
+	@Override
+	public void setInutilizadas(List<String> inutilizadas) {
+		ARegistro.inutilizadas = inutilizadas;
+	}
+
+	@Override
 	public List<ComEcfZ> getZs() {
 		return zs;
 	}
@@ -280,6 +284,16 @@ public abstract class ARegistro<E extends Bean, T> implements IRegistro<E, T> {
 	@Override
 	public void setEstoque(List<ProdProduto> estoque) {
 		ARegistro.estoque = estoque;
+	}
+
+	@Override
+	public List<ComConsumo> getConsumos() {
+		return consumos;
+	}
+
+	@Override
+	public void setConsumos(List<ComConsumo> consumos) {
+		ARegistro.consumos = consumos;
 	}
 
 	@Override

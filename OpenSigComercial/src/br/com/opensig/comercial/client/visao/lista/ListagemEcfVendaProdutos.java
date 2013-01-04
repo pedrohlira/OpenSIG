@@ -238,7 +238,7 @@ public class ListagemEcfVendaProdutos extends AListagemEditor<ComEcfVendaProduto
 				double liquido = rec.getAsDouble("comEcfVendaProdutoLiquido");
 				double totLiquido = rec.getAsDouble("comEcfVendaProdutoTotal");
 
-				if (prodId == 0 || quantidade < 1 || desconto >= 100.00 || liquido < 0.01) {
+				if (prodId == 0 || quantidade < 1 || desconto > 100.00) {
 					throw new Exception();
 				}
 

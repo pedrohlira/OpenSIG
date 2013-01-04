@@ -41,7 +41,7 @@ public class EnviarNfeCanceladaSaida extends Chain {
 			String xsd = UtilServer.getRealPath(auth.getConf().get("nfe.xsd_cancelando"));
 			NFe.validarXML(xml, xsd);
 			// envia para sefaz
-			String canc = servico.cancelar(xml, saida.getEmpEmpresa().getEmpEmpresaId());
+			String canc = servico.cancelar(xml);
 			// analisa o retorno e seta os status
 			TRetCancNFe ret = UtilServer.xmlToObj(canc, "br.com.opensig.retcancnfe");
 			// verifica se sucesso

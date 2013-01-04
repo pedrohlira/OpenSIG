@@ -5,7 +5,6 @@ import java.util.Map;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.servico.CoreProxy;
 import br.com.opensig.core.shared.modelo.Dados;
-import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.fiscal.shared.modelo.FisCertificado;
 import br.com.opensig.fiscal.shared.modelo.FisNotaEntrada;
 import br.com.opensig.fiscal.shared.modelo.FisNotaSaida;
@@ -50,33 +49,33 @@ public class FiscalProxy<E extends Dados> extends CoreProxy<E> implements Fiscal
 	}
 
 	@Override
-	public void status(int ambiente, int uf, int empresa, AsyncCallback<String> asyncallback) {
-		async.status(ambiente, uf, empresa, asyncallback);
+	public void status(int ambiente, int uf, AsyncCallback<String> asyncallback) {
+		async.status(ambiente, uf, asyncallback);
 	}
 
 	@Override
-	public void validar(int ambiente, IFiltro filtro, int empresa, AsyncCallback<String> asyncallback) {
-		async.validar(ambiente, filtro, empresa, asyncallback);
+	public void validar(int ambiente, IFiltro filtro, AsyncCallback<String> asyncallback) {
+		async.validar(ambiente, filtro, asyncallback);
 	}
 
 	@Override
-	public void situacao(int ambiente, String chave, int empresa, AsyncCallback<String> asyncallback) {
-		async.situacao(ambiente, chave, empresa, asyncallback);
+	public void situacao(int ambiente, String chave, AsyncCallback<String> asyncallback) {
+		async.situacao(ambiente, chave, asyncallback);
 	}
 
 	@Override
-	public void cadastro(int ambiente, int ibge, String uf, String tipo, String doc, int empresa, AsyncCallback<String> asyncallback) {
-		async.cadastro(ambiente, ibge, uf, tipo, doc, empresa, asyncallback);
+	public void cadastro(int ambiente, int ibge, String uf, String tipo, String doc, AsyncCallback<String> asyncallback) {
+		async.cadastro(ambiente, ibge, uf, tipo, doc, asyncallback);
 	}
 
 	@Override
-	public void enviarNFe(String xml, int empresa, AsyncCallback<String> asyncallback) {
-		async.enviarNFe(xml, empresa, asyncallback);
+	public void enviarNFe(String xml, AsyncCallback<String> asyncallback) {
+		async.enviarNFe(xml, asyncallback);
 	}
 
 	@Override
-	public void receberNFe(String xml, int empresa, String recibo, AsyncCallback<String> asyncallback) {
-		async.receberNFe(xml, empresa, recibo, asyncallback);
+	public void receberNFe(String xml, String recibo, AsyncCallback<String> asyncallback) {
+		async.receberNFe(xml, recibo, asyncallback);
 	}
 
 	@Override
@@ -90,13 +89,13 @@ public class FiscalProxy<E extends Dados> extends CoreProxy<E> implements Fiscal
 	};
 	
 	@Override
-	public void cancelar(String xml, int empresa, AsyncCallback<String> asyncallback) {
-		async.cancelar(xml, empresa, asyncallback);
+	public void cancelar(String xml, AsyncCallback<String> asyncallback) {
+		async.cancelar(xml, asyncallback);
 	}
 
 	@Override
-	public void inutilizar(String xml, int empresa, AsyncCallback<String> asyncallback) {
-		async.inutilizar(xml, empresa, asyncallback);
+	public void inutilizar(String xml, AsyncCallback<String> asyncallback) {
+		async.inutilizar(xml, asyncallback);
 	}
 
 	@Override
@@ -110,13 +109,13 @@ public class FiscalProxy<E extends Dados> extends CoreProxy<E> implements Fiscal
 	};
 	
 	@Override
-	public void salvarSaida(String xml, FisNotaStatus status, EmpEmpresa empresa, AsyncCallback<Map<String, String>> asyncCallback) {
-		async.salvarSaida(xml, status, empresa, asyncCallback);
+	public void salvarSaida(String xml, FisNotaStatus status, AsyncCallback<Map<String, String>> asyncCallback) {
+		async.salvarSaida(xml, status, asyncCallback);
 	}
 
 	@Override
-	public void salvarEntrada(String xml, FisNotaStatus status, EmpEmpresa empresa, AsyncCallback<Map<String, String>> asyncCallback) {
-		async.salvarEntrada(xml, status, empresa, asyncCallback);
+	public void salvarEntrada(String xml, FisNotaStatus status, AsyncCallback<Map<String, String>> asyncCallback) {
+		async.salvarEntrada(xml, status, asyncCallback);
 	}
 	
 	@Override

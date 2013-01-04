@@ -55,7 +55,7 @@ public class SalvarSaida extends Chain {
 	public void execute() throws OpenSigException {
 		// valida o plano
 		new ValidarPlano(null, servico, status, auth).execute();
-		
+
 		doc = UtilServer.getXml(xml);
 		IFiltro filtro;
 
@@ -82,12 +82,20 @@ public class SalvarSaida extends Chain {
 
 		// verifica se ja existe
 		if (nota != null) {
-			atualizar(filtro);
-		} else if (status.getFisNotaStatusId() == ENotaStatus.AUTORIZANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId()) {
+			// verifica se foi modificado para inutilizado
+			if (status.getFisNotaStatusId() == ENotaStatus.INUTILIZANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.INUTILIZADO.getId()) {
+				salvarInut();
+			} else {
+				atualizar(filtro);
+			}
+		} else if (status.getFisNotaStatusId() == ENotaStatus.AUTORIZANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId()
+				|| status.getFisNotaStatusId() == ENotaStatus.FS_DA.getId()) {
+			nota = new FisNotaSaida();
 			salvarNota();
 		} else if (status.getFisNotaStatusId() == ENotaStatus.CANCELANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.CANCELADO.getId()) {
 			throw new FiscalException("Não foi encontrado no sistema a nota fiscal de saida correspondente ao cancelamento!");
 		} else if (status.getFisNotaStatusId() == ENotaStatus.INUTILIZANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.INUTILIZADO.getId()) {
+			nota = new FisNotaSaida();
 			salvarInut();
 		}
 
@@ -169,7 +177,6 @@ public class SalvarSaida extends Chain {
 			}
 
 			// cria a saida
-			nota = new FisNotaSaida();
 			nota.setFisNotaStatus(status);
 			nota.setEmpEmpresa(empresa);
 			nota.setFisNotaSaidaNumero(Integer.valueOf(numero));
@@ -217,7 +224,6 @@ public class SalvarSaida extends Chain {
 			String numeroFim = UtilServer.getValorTag(doc.getDocumentElement(), "nNFFin", true);
 
 			// cria a saida
-			nota = new FisNotaSaida();
 			nota.setFisNotaStatus(status);
 			nota.setEmpEmpresa(empresa);
 			nota.setFisNotaSaidaNumero(Integer.valueOf(numeroIni));

@@ -8,7 +8,7 @@
             <field name="padrao" type="string" length="1" default=""/>
             <field name="reg" type="string" length="4" trim="true"/>
             <field name="cod_inf" type="string" length="6" trim="true"/>
-            <field name="txt_compl" type="string" length="255" trim="true"/>
+            <field name="txt_compl" type="string" length="255" trim="true" default=""/>
             <field name="padrao" type="string" length="1" default=""/>
 		</record>
 	</stream>

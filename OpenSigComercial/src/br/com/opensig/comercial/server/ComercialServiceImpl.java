@@ -8,10 +8,12 @@ import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.client.servico.ComercialService;
 import br.com.opensig.comercial.server.acao.CancelarVenda;
 import br.com.opensig.comercial.server.acao.ExcluirCompra;
+import br.com.opensig.comercial.server.acao.ExcluirConsumo;
 import br.com.opensig.comercial.server.acao.ExcluirEcfVenda;
 import br.com.opensig.comercial.server.acao.ExcluirFrete;
 import br.com.opensig.comercial.server.acao.ExcluirVenda;
 import br.com.opensig.comercial.server.acao.FecharCompra;
+import br.com.opensig.comercial.server.acao.FecharConsumo;
 import br.com.opensig.comercial.server.acao.FecharEcfVenda;
 import br.com.opensig.comercial.server.acao.FecharFrete;
 import br.com.opensig.comercial.server.acao.FecharVenda;
@@ -23,6 +25,7 @@ import br.com.opensig.comercial.server.acao.SalvarEcfZ;
 import br.com.opensig.comercial.server.acao.SalvarValor;
 import br.com.opensig.comercial.server.acao.SalvarVenda;
 import br.com.opensig.comercial.shared.modelo.ComCompra;
+import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
@@ -101,6 +104,16 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 			new FecharFrete(null, this, frete).execute();
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro no comando fecharFrete.", e);
+			throw new ComercialException(e.getMessage());
+		}
+	}
+	
+	@Override
+	public void fecharConsumo(ComConsumo consumo) throws ComercialException {
+		try {
+			new FecharConsumo(null, this, consumo).execute();
+		} catch (Exception e) {
+			UtilServer.LOG.error("Erro no comando fecharConsumo.", e);
 			throw new ComercialException(e.getMessage());
 		}
 	}
@@ -221,6 +234,16 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 			new ExcluirFrete(null, this, frete, getAuth()).execute();
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro no comando excluirFrete.", e);
+			throw new ComercialException(e.getMessage());
+		}
+	}
+	
+	@Override
+	public void excluirConsumo(ComConsumo consumo) throws ComercialException {
+		try {
+			new ExcluirConsumo(null, this, consumo, getAuth()).execute();
+		} catch (Exception e) {
+			UtilServer.LOG.error("Erro no comando excluirConsumo.", e);
 			throw new ComercialException(e.getMessage());
 		}
 	}

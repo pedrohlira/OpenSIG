@@ -2,6 +2,11 @@ package br.com.opensig.comercial.shared.modelo;
 
 import br.com.opensig.core.shared.modelo.Dados;
 
+/**
+ * Classe que representa um modelo de exportacao dos dados ECF no sistema.
+ * 
+ * @author Pedro H. Lira
+ */
 public class Cat52 extends Dados {
 
 	private String arquivo;

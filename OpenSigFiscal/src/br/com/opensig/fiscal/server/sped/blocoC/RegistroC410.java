@@ -21,7 +21,6 @@ public class RegistroC410 extends ARegistro<DadosC410, List<ComEcfZTotais>> {
 		DadosC410 d = new DadosC410();
 		d.setVl_pis(liquido * pis / 100);
 		d.setVl_cofins(liquido * cofins / 100);
-
 		return d;
 	}
 }

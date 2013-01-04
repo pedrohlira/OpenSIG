@@ -6,7 +6,6 @@ import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.controlador.comando.ComandoFuncao;
 import br.com.opensig.core.client.js.OpenSigCoreJS;
 import br.com.opensig.core.client.servico.CoreProxy;
-import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.empresa.client.js.OpenSigEmpresaJS;
 import br.com.opensig.empresa.shared.modelo.EmpEstado;
 import br.com.opensig.fiscal.client.servico.FiscalProxy;
@@ -222,7 +221,7 @@ public class ComandoCadastro extends ComandoFuncao {
 			MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtCadastro());
 
 			FiscalProxy proxy = new FiscalProxy();
-			proxy.cadastro(amb, ibge, uf, tipo, doc, Integer.valueOf(Ponte.getLogin().getEmpresa()[0]), new AsyncCallback<String>() {
+			proxy.cadastro(amb, ibge, uf, tipo, doc, new AsyncCallback<String>() {
 
 				public void onSuccess(String result) {
 					MessageBox.hide();

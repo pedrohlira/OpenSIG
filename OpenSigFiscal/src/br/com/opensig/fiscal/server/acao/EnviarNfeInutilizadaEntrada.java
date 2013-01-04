@@ -40,7 +40,7 @@ public class EnviarNfeInutilizadaEntrada extends Chain {
 			String xsd = UtilServer.getRealPath(auth.getConf().get("nfe.xsd_inutilizando"));
 			NFe.validarXML(xml, xsd);
 			// envia para sefaz
-			String inut = servico.inutilizar(xml, entrada.getEmpEmpresa().getEmpEmpresaId());
+			String inut = servico.inutilizar(xml);
 			// analisa o retorno e seta os status
 			TRetInutNFe ret = UtilServer.xmlToObj(inut, "br.com.opensig.retinutnfe");
 			// verifica se sucesso

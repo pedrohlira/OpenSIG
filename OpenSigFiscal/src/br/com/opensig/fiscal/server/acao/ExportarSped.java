@@ -10,21 +10,21 @@ import br.com.opensig.core.server.exportar.AExportacao;
 import br.com.opensig.core.shared.modelo.ExpListagem;
 import br.com.opensig.core.shared.modelo.ExpRegistro;
 import br.com.opensig.core.shared.modelo.sistema.SisExpImp;
-import br.com.opensig.fiscal.shared.modelo.FisSpedFiscal;
+import br.com.opensig.fiscal.shared.modelo.FisSped;
 
-public class ExportarSped extends AExportacao<FisSpedFiscal> {
+public class ExportarSped extends AExportacao<FisSped> {
 
 	@Override
-	public byte[] getArquivo(CoreService<FisSpedFiscal> service, SisExpImp modo, ExpListagem<FisSpedFiscal> exp, String[][] enderecos, String[][] contatos) {
+	public byte[] getArquivo(CoreService<FisSped> service, SisExpImp modo, ExpListagem<FisSped> exp, String[][] enderecos, String[][] contatos) {
 		return getArquivo(exp.getClasse(), exp.getNome(), modo);
 	}
 
 	@Override
-	public byte[] getArquivo(CoreService<FisSpedFiscal> service, SisExpImp modo, ExpRegistro<FisSpedFiscal> exp, String[][] enderecos, String[][] contatos) {
+	public byte[] getArquivo(CoreService<FisSped> service, SisExpImp modo, ExpRegistro<FisSped> exp, String[][] enderecos, String[][] contatos) {
 		return getArquivo(exp.getClasse(), exp.getNome(), modo);
 	}
 
-	private byte[] getArquivo(FisSpedFiscal sped, String nome, SisExpImp modo) {
+	private byte[] getArquivo(FisSped sped, String nome, SisExpImp modo) {
 		byte[] obj = null;
 
 		try {

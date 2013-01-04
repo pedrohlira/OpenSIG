@@ -76,12 +76,11 @@ import br.com.opensig.fiscal.shared.modelo.FisCertificado;
 import br.com.opensig.fiscal.shared.modelo.FisNotaEntrada;
 import br.com.opensig.fiscal.shared.modelo.FisNotaSaida;
 import br.com.opensig.fiscal.shared.modelo.FisNotaStatus;
-import br.com.opensig.fiscal.shared.modelo.FisSpedFiscal;
+import br.com.opensig.fiscal.shared.modelo.FisSped;
 import br.com.opensig.retconssitnfe.TProtNFe.InfProt;
 import br.com.opensig.retconssitnfe.TRetCancNFe.InfCanc;
 import br.com.opensig.retconssitnfe.TRetConsSitNFe;
 
-@SuppressWarnings("restriction")
 public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> implements FiscalService<E> {
 
 	public FiscalServiceImpl() {
@@ -288,17 +287,17 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public String status(int ambiente, int uf, int empresa) throws FiscalException {
+	public String status(int ambiente, int uf) throws FiscalException {
 		// gerar o objeto
 		TConsStatServ consStatServ = new TConsStatServ();
 		consStatServ.setTpAmb(ambiente + "");
 		consStatServ.setCUF(uf + "");
 		consStatServ.setVersao(getAuth().getConf().get("nfe.versao"));
 		consStatServ.setXServ("STATUS");
-		return status(consStatServ, empresa);
+		return status(consStatServ);
 	}
 
-	public String status(TConsStatServ consStatServ, int empresa) throws FiscalException {
+	public String status(TConsStatServ consStatServ) throws FiscalException {
 		// gerar o objeto
 		try {
 			JAXBElement<TConsStatServ> element = new br.com.opensig.consstatserv.ObjectFactory().createConsStatServ(consStatServ);
@@ -310,7 +309,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public String validar(int ambiente, IFiltro filtro, int empresa) throws FiscalException {
+	public String validar(int ambiente, IFiltro filtro) throws FiscalException {
 		try {
 			FiltroTexto ft = new FiltroTexto("fisNotaEntradaRecibo", ECompara.DIFERENTE, "OK");
 			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { ft, filtro });
@@ -320,7 +319,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 			int prov = 0;
 
 			for (FisNotaEntrada nota : entradas.getLista()) {
-				String resp = situacao(ambiente, nota.getFisNotaEntradaChave(), empresa);
+				String resp = situacao(ambiente, nota.getFisNotaEntradaChave());
 				TRetConsSitNFe situacao = UtilServer.xmlToObj(resp, "br.com.opensig.retconssitnfe");
 
 				// verifica se o status na sefaz é igual ao informado
@@ -362,16 +361,16 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public String situacao(int ambiente, String chave, int empresa) throws FiscalException {
+	public String situacao(int ambiente, String chave) throws FiscalException {
 		TConsSitNFe consSitNfe = new TConsSitNFe();
 		consSitNfe.setTpAmb(ambiente + "");
 		consSitNfe.setChNFe(chave);
 		consSitNfe.setVersao(getAuth().getConf().get("nfe.versao"));
 		consSitNfe.setXServ("CONSULTAR");
-		return situacao(consSitNfe, empresa);
+		return situacao(consSitNfe);
 	}
 
-	public String situacao(TConsSitNFe consSitNfe, int empresa) throws FiscalException {
+	public String situacao(TConsSitNFe consSitNfe) throws FiscalException {
 		// gerar o objeto
 		try {
 			JAXBElement<TConsSitNFe> element = new br.com.opensig.conssitnfe.ObjectFactory().createConsSitNFe(consSitNfe);
@@ -383,7 +382,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public String cadastro(int ambiente, int ibge, String uf, String tipo, String doc, int empresa) throws FiscalException {
+	public String cadastro(int ambiente, int ibge, String uf, String tipo, String doc) throws FiscalException {
 		InfCons infCons = new InfCons();
 		infCons.setUF(TUfCons.valueOf(uf));
 		infCons.setXServ("CONS-CAD");
@@ -399,10 +398,10 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		TConsCad consCad = new TConsCad();
 		consCad.setVersao(getAuth().getConf().get("nfe.versao"));
 		consCad.setInfCons(infCons);
-		return cadastro(consCad, empresa, ambiente, ibge);
+		return cadastro(consCad, ambiente, ibge);
 	}
 
-	public String cadastro(TConsCad consCad, int empresa, int ambiente, int ibge) throws FiscalException {
+	public String cadastro(TConsCad consCad, int ambiente, int ibge) throws FiscalException {
 		// gerar o objeto
 		try {
 			JAXBElement<TConsCad> element = new br.com.opensig.conscad.ObjectFactory().createConsCad(consCad);
@@ -414,7 +413,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public String enviarNFe(String xml, int empresa) throws FiscalException {
+	public String enviarNFe(String xml) throws FiscalException {
 		// gerar o objeto
 		try {
 			return Sefaz.getInstancia(getAuth()).enviarNFe(xml);
@@ -429,7 +428,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 
 		// gerar o objeto
 		try {
-			String proc = situacao(Integer.valueOf(getAuth().getConf().get("nfe.tipoamb")), saida.getFisNotaSaidaChave(), saida.getEmpEmpresa().getEmpEmpresaId());
+			String proc = situacao(Integer.valueOf(getAuth().getConf().get("nfe.tipoamb")), saida.getFisNotaSaidaChave());
 			TRetConsSitNFe sit = UtilServer.xmlToObj(proc, "br.com.opensig.retconssitnfe");
 
 			// verifica se sucesso
@@ -496,7 +495,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 
 		// gerar o objeto
 		try {
-			String proc = situacao(Integer.valueOf(getAuth().getConf().get("nfe.tipoamb")), entrada.getFisNotaEntradaChave(), entrada.getEmpEmpresa().getEmpEmpresaId());
+			String proc = situacao(Integer.valueOf(getAuth().getConf().get("nfe.tipoamb")), entrada.getFisNotaEntradaChave());
 			TRetConsSitNFe sit = UtilServer.xmlToObj(proc, "br.com.opensig.retconssitnfe");
 
 			// verifica se sucesso
@@ -547,7 +546,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		return resp;
 	}
 
-	public String receberNFe(String xml, int empresa, String recibo) throws FiscalException {
+	public String receberNFe(String xml, String recibo) throws FiscalException {
 		// gerar o objeto
 		try {
 			Document doc = UtilServer.getXml(xml);
@@ -610,7 +609,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public String cancelar(String xml, int empresa) throws FiscalException {
+	public String cancelar(String xml) throws FiscalException {
 		// gerar o objeto
 		try {
 			return Sefaz.getInstancia(getAuth()).cancelar(xml);
@@ -621,18 +620,21 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 
 	public Map<String, String> inutilizarSaida(FisNotaSaida saida, String motivo, int ini, int fim) throws FiscalException {
 		try {
+			Autenticacao auth = getAuth();
 			// pega a ultima nfe para usar dados como referencia
 			if (saida == null) {
 				saida = new FisNotaSaida();
 				FiltroObjeto fo = new FiltroObjeto("fisNotaStatus", ECompara.DIFERENTE, new FisNotaStatus(ENotaStatus.INUTILIZANDO));
 				FiltroObjeto fo1 = new FiltroObjeto("fisNotaStatus", ECompara.DIFERENTE, new FisNotaStatus(ENotaStatus.INUTILIZADO));
-				GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fo1 });
+				FiltroObjeto fo2 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Integer.valueOf(auth.getEmpresa()[0])));
+				GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fo1, fo2 });
 				Number max = buscar(saida, "fisNotaSaidaNumero", EBusca.MAXIMO, gf);
 				FiltroNumero fn = new FiltroNumero("fisNotaSaidaNumero", ECompara.IGUAL, max);
-				saida = (FisNotaSaida) selecionar(saida, fn, false);
+				gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fn, fo2 });
+				saida = (FisNotaSaida) selecionar(saida, gf, false);
 			}
 
-			GerarNfeInutilizadaSaida gerar = new GerarNfeInutilizadaSaida(null, this, saida, motivo, ini, fim, getAuth());
+			GerarNfeInutilizadaSaida gerar = new GerarNfeInutilizadaSaida(null, this, saida, motivo, ini, fim, auth);
 			gerar.execute();
 			saida = gerar.getNota();
 
@@ -652,18 +654,21 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 
 	public Map<String, String> inutilizarEntrada(FisNotaEntrada entrada, String motivo, int ini, int fim) throws FiscalException {
 		try {
+			Autenticacao auth = getAuth();
 			// pega a ultima nfe para usar dados como referencia
 			if (entrada == null) {
 				entrada = new FisNotaEntrada();
 				FiltroObjeto fo = new FiltroObjeto("fisNotaStatus", ECompara.DIFERENTE, new FisNotaStatus(ENotaStatus.INUTILIZANDO));
 				FiltroObjeto fo1 = new FiltroObjeto("fisNotaStatus", ECompara.DIFERENTE, new FisNotaStatus(ENotaStatus.INUTILIZADO));
-				GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fo1 });
+				FiltroObjeto fo2 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Integer.valueOf(auth.getEmpresa()[0])));
+				GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fo1, fo2 });
 				Number max = buscar(entrada, "fisNotaEntradaNumero", EBusca.MAXIMO, gf);
 				FiltroNumero fn = new FiltroNumero("fisNotaEntradaNumero", ECompara.IGUAL, max);
-				entrada = (FisNotaEntrada) selecionar(entrada, fn, false);
+				gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fn, fo2 });
+				entrada = (FisNotaEntrada) selecionar(entrada, gf, false);
 			}
 
-			GerarNfeInutilizadaEntrada gerar = new GerarNfeInutilizadaEntrada(null, this, entrada, motivo, ini, fim, getAuth());
+			GerarNfeInutilizadaEntrada gerar = new GerarNfeInutilizadaEntrada(null, this, entrada, motivo, ini, fim, auth);
 			gerar.execute();
 			entrada = gerar.getNota();
 
@@ -681,7 +686,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public String inutilizar(String xml, int empresa) throws FiscalException {
+	public String inutilizar(String xml) throws FiscalException {
 		// gerar o objeto
 		try {
 			return Sefaz.getInstancia(getAuth()).inutilizar(xml);
@@ -690,7 +695,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public Map<String, String> salvarSaida(String xml, FisNotaStatus status, EmpEmpresa empresa) throws FiscalException {
+	public Map<String, String> salvarSaida(String xml, FisNotaStatus status) throws FiscalException {
 		try {
 			SalvarSaida salvarSaida = new SalvarSaida(null, xml, status, getAuth());
 			salvarSaida.execute();
@@ -706,7 +711,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public Map<String, String> salvarEntrada(String xml, FisNotaStatus status, EmpEmpresa empresa) throws FiscalException {
+	public Map<String, String> salvarEntrada(String xml, FisNotaStatus status) throws FiscalException {
 		try {
 			SalvarEntrada salvarEntrada = new SalvarEntrada(null, xml, status, getAuth());
 			salvarEntrada.execute();
@@ -761,8 +766,8 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 	@Override
 	public void deletar(E unidade) throws CoreException {
 		super.deletar(unidade);
-		if (unidade instanceof FisSpedFiscal) {
-			FisSpedFiscal sped = (FisSpedFiscal) unidade;
+		if (unidade instanceof FisSped) {
+			FisSped sped = (FisSped) unidade;
 			File f = getEfd(sped);
 			f.delete();
 		}
@@ -771,9 +776,9 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 	@Override
 	public E salvar(E unidade) throws CoreException {
 		super.salvar(unidade, false);
-		if (unidade instanceof FisSpedFiscal) {
+		if (unidade instanceof FisSped) {
 			// deleta o antigo efd
-			FisSpedFiscal sped = (FisSpedFiscal) unidade;
+			FisSped sped = (FisSped) unidade;
 			sped.setId(unidade.getId());
 			File f = getEfd(sped);
 			f.delete();
@@ -793,18 +798,18 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		return unidade;
 	}
 
-	private File getEfd(FisSpedFiscal sped) {
+	private File getEfd(FisSped sped) {
 		// identifica o usuario/empresa
 		HttpSession sessao = getThreadLocalRequest().getSession();
 		Autenticacao auth = SessionManager.LOGIN.get(sessao);
 
 		// controi o path do arquivo
 		String cnpj = auth.getEmpresa()[5].replaceAll("\\D", "");
-		String nome = sped.getFisSpedFiscalTipo();
-		if (sped.getFisSpedFiscalMes() > 9) {
-			nome += sped.getFisSpedFiscalAno() + "" + sped.getFisSpedFiscalMes();
+		String nome = sped.getFisSpedTipo();
+		if (sped.getFisSpedMes() > 9) {
+			nome += sped.getFisSpedAno() + "" + sped.getFisSpedMes();
 		} else {
-			nome += sped.getFisSpedFiscalAno() + "0" + sped.getFisSpedFiscalMes();
+			nome += sped.getFisSpedAno() + "0" + sped.getFisSpedMes();
 		}
 		String path = UtilServer.PATH_EMPRESA + cnpj + "/sped/" + nome + ".ZIP";
 

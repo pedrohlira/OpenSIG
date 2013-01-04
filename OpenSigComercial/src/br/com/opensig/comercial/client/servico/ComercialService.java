@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.opensig.comercial.shared.modelo.ComCompra;
+import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
@@ -24,6 +25,8 @@ public interface ComercialService extends CoreService {
 	public String[][] fecharVenda(ComVenda venda) throws ComercialException;
 
 	public void fecharFrete(ComFrete frete) throws ComercialException;
+	
+	public void fecharConsumo(ComConsumo consumo) throws ComercialException;
 
 	public String[][] fecharEcfVenda(ComEcfVenda venda) throws ComercialException;
 	
@@ -44,6 +47,8 @@ public interface ComercialService extends CoreService {
 	public void cancelarVenda(ComVenda venda) throws ComercialException;
 
 	public void excluirFrete(ComFrete frete) throws ComercialException;
+	
+	public void excluirConsumo(ComConsumo consumo) throws ComercialException;
 
 	public void excluirEcfVenda(ComEcfVenda venda) throws ComercialException;
 	

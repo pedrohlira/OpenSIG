@@ -20,8 +20,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEstado;
  * Classe que representa o incentivo do estado no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 08/09/2010
  */
 @Entity
 @Table(name = "fis_incentivo_estado")

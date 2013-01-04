@@ -54,7 +54,7 @@ public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 					for (DadosC310 d : lc310) {
 						r310.setDados(d);
 						r310.executar();
-						qtdLinhas++;
+						qtdLinhas += r310.getQtdLinhas();
 					}
 				}
 
@@ -91,9 +91,9 @@ public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 				d.setNum_doc_fin(nota.getComEcfNotaNumero());
 			}
 			if (!nota.getComEcfNotaCancelada()) {
-				d.setVl_doc(d.getVl_doc() + nota.getComEcfNotaLiquido());
-				d.setVl_pis(d.getVl_pis() + nota.getComEcfNotaPis());
-				d.setVl_cofins(d.getVl_cofins() + nota.getComEcfNotaCofins());
+				d.setVl_doc(somarDoubles(d.getVl_doc() , nota.getComEcfNotaLiquido()));
+				d.setVl_pis(somarDoubles(d.getVl_pis() , nota.getComEcfNotaPis()));
+				d.setVl_cofins(somarDoubles(d.getVl_cofins() , nota.getComEcfNotaCofins()));
 			} else {
 				// Registro C310
 				DadosC310 c310 = new DadosC310();

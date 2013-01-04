@@ -13,14 +13,14 @@ public class RegistroC190 extends ARegistro<DadosC190, List<DadosC170>> {
 			d.setCst_icms(c170.getCst_icms());
 			d.setCfop(c170.getCfop());
 			d.setAliq_icms(c170.getAliq_icms());
-			d.setVl_opr(d.getVl_opr() + c170.getVl_item() + c170.getVl_ipi());
-			d.setVl_bc_icms(d.getVl_bc_icms() + c170.getVl_bc_icms());
-			d.setVl_icms(d.getVl_icms() + c170.getVl_icms());
-			d.setVl_bc_icms_st(d.getVl_bc_icms_st() + c170.getVl_bc_icms_st());
-			d.setVl_icms_st(d.getVl_icms_st() + c170.getVl_icms_st());
-			d.setVl_ipi(d.getVl_ipi() + c170.getVl_ipi());
-			d.setCod_obs("");
+			d.setVl_opr(somarDoubles(d.getVl_opr(), c170.getVl_item(), c170.getVl_ipi()));
+			d.setVl_bc_icms(somarDoubles(d.getVl_bc_icms(), c170.getVl_bc_icms()));
+			d.setVl_icms(somarDoubles(d.getVl_icms(), c170.getVl_icms()));
+			d.setVl_bc_icms_st(somarDoubles(d.getVl_bc_icms_st(), c170.getVl_bc_icms_st()));
+			d.setVl_icms_st(somarDoubles(d.getVl_icms_st(), c170.getVl_icms_st()));
+			d.setVl_ipi(somarDoubles(d.getVl_ipi(), c170.getVl_ipi()));
 		}
+		d.setCod_obs("");
 		return d;
 	}
 

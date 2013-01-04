@@ -291,6 +291,13 @@
 		<imagem>icon-frete</imagem>
 	</funcao>
 	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoConsumo
+		</classe>
+		<nome>Resource</nome>
+		<descricao>Use of Water, Electricity, Gas and Telecoms.</descricao>
+		<imagem>icon-consumo</imagem>
+	</funcao>
+	<funcao>
 		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoValorProduto
 		</classe>
 		<nome>Value Products</nome>
@@ -426,10 +433,10 @@
 		<imagem>icon-incentivo</imagem>
 	</funcao>
 	<funcao>
-		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSpedFiscal
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSped
 		</classe>
-		<nome>SPED Tax</nome>
-		<descricao>Public System of Digital Bookkeeping Tax</descricao>
+		<nome>SPED</nome>
+		<descricao>Public System of Digital Bookkeeping</descricao>
 		<imagem>icon-sped</imagem>
 	</funcao>
 	<!-- Ações -->
@@ -559,6 +566,14 @@
 		<imagem>icon-pagar</imagem>
 	</acao>
 	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagarConsumo
+		</classe>
+		<nome>Pay</nome>
+		<descricao>Performs the process of payment of the amounts on the
+			resource.</descricao>
+		<imagem>icon-pagar</imagem>
+	</acao>
+	<acao>
 		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerar
 		</classe>
 		<nome>Generate</nome>
@@ -683,6 +698,13 @@
 		</classe>
 		<nome>Close</nome>
 		<descricao>Close shipping.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharConsumo
+		</classe>
+		<nome>Close</nome>
+		<descricao>Close resource.</descricao>
 		<imagem>icon-fechar</imagem>
 	</acao>
 	<acao>

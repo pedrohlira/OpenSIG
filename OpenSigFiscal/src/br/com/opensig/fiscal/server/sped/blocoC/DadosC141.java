@@ -8,7 +8,7 @@ public class DadosC141 extends Bean {
 
 	private int num_parc;
 	private Date dt_vcto;
-	private double vl_parc;
+	private Double vl_parc;
 	
 	public DadosC141() {
 		reg = "C141";
@@ -30,11 +30,11 @@ public class DadosC141 extends Bean {
 		this.dt_vcto = dt_vcto;
 	}
 
-	public double getVl_parc() {
+	public Double getVl_parc() {
 		return vl_parc;
 	}
 
-	public void setVl_parc(double vl_parc) {
+	public void setVl_parc(Double vl_parc) {
 		this.vl_parc = vl_parc;
 	}
 

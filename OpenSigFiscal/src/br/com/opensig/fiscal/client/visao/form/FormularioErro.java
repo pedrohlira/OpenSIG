@@ -213,9 +213,9 @@ public class FormularioErro<E extends Dados> extends AFormulario<E> {
 
 		FiscalProxy<E> proxy = new FiscalProxy<E>();
 		if (classe instanceof FisNotaSaida) {
-			proxy.salvarSaida(txtXml.getValueAsString(), ((FisNotaSaida) classe).getFisNotaStatus(), ((FisNotaSaida) classe).getEmpEmpresa(), asinc);
+			proxy.salvarSaida(txtXml.getValueAsString(), ((FisNotaSaida) classe).getFisNotaStatus(), asinc);
 		} else {
-			proxy.salvarEntrada(txtXml.getValueAsString(), ((FisNotaEntrada) classe).getFisNotaStatus(), ((FisNotaEntrada) classe).getEmpEmpresa(), asinc);
+			proxy.salvarEntrada(txtXml.getValueAsString(), ((FisNotaEntrada) classe).getFisNotaStatus(), asinc);
 		}
 	}
 }

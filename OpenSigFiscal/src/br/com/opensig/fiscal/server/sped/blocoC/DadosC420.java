@@ -5,7 +5,7 @@ import br.com.opensig.fiscal.server.sped.Bean;
 public class DadosC420 extends Bean {
 
 	private String cod_tot_par;
-	private double vlr_acum_tot;
+	private Double vlr_acum_tot;
 	private String nr_tot;
 	private String descr_nr_tot;
 	
@@ -21,11 +21,11 @@ public class DadosC420 extends Bean {
 		this.cod_tot_par = cod_tot_par;
 	}
 
-	public double getVlr_acum_tot() {
+	public Double getVlr_acum_tot() {
 		return vlr_acum_tot;
 	}
 
-	public void setVlr_acum_tot(double vlr_acum_tot) {
+	public void setVlr_acum_tot(Double vlr_acum_tot) {
 		this.vlr_acum_tot = vlr_acum_tot;
 	}
 

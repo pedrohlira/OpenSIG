@@ -228,12 +228,6 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 			}
 		});
 
-		gridProdutos.addEditorGridListener(new EditorGridListenerAdapter() {
-			public boolean doBeforeEdit(GridPanel grid, Record record, String field, Object value, int rowIndex, int colIndex) {
-				return importada == false;
-			}
-		});
-
 		gridProdutos.getStore().addStoreListener(new StoreListenerAdapter() {
 			public void onRemove(Store store, Record record, int index) {
 				totalizar("");
@@ -251,8 +245,6 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 
 				if (importada) {
 					gridProdutos.getTopToolbar().hide();
-				} else {
-					gridProdutos.getTopToolbar().show();
 				}
 			}
 		});

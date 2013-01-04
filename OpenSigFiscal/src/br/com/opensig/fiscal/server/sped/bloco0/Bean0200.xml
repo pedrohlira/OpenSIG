@@ -9,15 +9,15 @@
 			<field name="reg" type="string" length="4" trim="true" />
 			<field name="cod_item" type="string" length="60" trim="true"/>
 			<field name="descr_item" type="string" length="255" trim="true"/>
-			<field name="cod_barra" type="string" length="14" trim="true"/>
-			<field name="cod_ant_item" type="string" length="60" trim="true"/>
+			<field name="cod_barra" type="string" length="14" trim="true" default="" />
+			<field name="cod_ant_item" type="string" length="60" trim="true" default="" />
 			<field name="unid_inv" type="string" length="6" trim="true"/>
 			<field name="tipo_item" type="int" length="2" justify="right" padding="0"/>
-			<field name="cod_ncm" type="string" length="8" trim="true"/>
-			<field name="ex_ipi" type="string" length="3" trim="true"/>
-			<field name="cod_gen" type="string" length="2" trim="true"/>
-			<field name="cod_lst" type="int" length="2"/>
-			<field name="aliq_icms" type="double" length="6" format="##0.00"/>
+			<field name="cod_ncm" type="string" length="8" trim="true" default="" />
+			<field name="ex_ipi" type="string" length="3" trim="true" default="" />
+			<field name="cod_gen" type="string" length="2" trim="true" default="" />
+			<field name="cod_lst" type="int" length="4" default="" />
+			<field name="aliq_icms" type="double" length="6" format="##0.00" default="" />
 			<field name="padrao" type="string" length="1" default="" />
 		</record>
 	</stream>

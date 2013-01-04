@@ -11,6 +11,11 @@ import javax.persistence.Table;
 
 import br.com.opensig.core.shared.modelo.Dados;
 
+/**
+ * Classe que representa os bloco usados no SPED.
+ * 
+ * @author Pedro H. Lira
+ */
 @Entity
 @Table(name = "fis_sped_bloco")
 public class FisSpedBloco extends Dados implements Serializable {

@@ -18,6 +18,11 @@ import javax.xml.bind.annotation.XmlTransient;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 
+/**
+ * Classe que representa um ECF no sistema.
+ * 
+ * @author Pedro H. Lira
+ */
 @Entity
 @Table(name = "com_ecf")
 @XmlRootElement(name = "EcfImpressora")

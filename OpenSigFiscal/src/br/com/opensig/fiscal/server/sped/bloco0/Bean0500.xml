@@ -9,7 +9,7 @@
 			<field name="reg" type="string" length="4" trim="true" />
 			<field name="dt_alt" type="date" length="8" format="ddMMyyyy" />
 			<field name="cod_nat_cc" type="string" length="2" trim="true" />
-			<field name="ind_cta" type="string" length="1" trim="true" />
+			<field name="ind_cta" type="string" length="1" trim="true" regex="[A|S]" />
 			<field name="nivel" type="int" length="5" />
 			<field name="cod_cta" type="string" length="60" trim="true" />
 			<field name="nome_cta" type="string" length="60" trim="true" />

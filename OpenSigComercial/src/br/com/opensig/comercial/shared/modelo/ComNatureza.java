@@ -17,8 +17,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
  * Classe que representa uma natureza de venda no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 06/10/2009
  */
 @Entity
 @Table(name = "com_natureza")

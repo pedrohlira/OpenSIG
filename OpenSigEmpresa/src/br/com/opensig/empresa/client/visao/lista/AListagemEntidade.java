@@ -38,6 +38,7 @@ public abstract class AListagemEntidade<E extends Dados> extends AListagem<E> {
 		listaCampos.add(new StringFieldDef("empEntidade.empEntidadePessoa"));
 		listaCampos.add(new StringFieldDef("empEntidade.empEntidadeDocumento1"));
 		listaCampos.add(new StringFieldDef("empEntidade.empEntidadeDocumento2"));
+		listaCampos.add(new StringFieldDef("empEntidade.empEntidadeDocumento3"));
 		listaCampos.add(new BooleanFieldDef("empEntidade.empEntidadeAtivo"));
 		listaCampos.add(new StringFieldDef("empEntidade.empEntidadeObservacao"));
 
@@ -55,6 +56,8 @@ public abstract class AListagemEntidade<E extends Dados> extends AListagem<E> {
 		listaColunas.add(ccDoc1);
 		ColumnConfig ccDoc2 = new ColumnConfig(OpenSigCore.i18n.txtEntidadeDoc2(), "empEntidade.empEntidadeDocumento2", 100, true);
 		listaColunas.add(ccDoc2);
+		ColumnConfig ccDoc3 = new ColumnConfig(OpenSigCore.i18n.txtEntidadeDoc3(), "empEntidade.empEntidadeDocumento3", 100, true);
+		listaColunas.add(ccDoc3);
 		ColumnConfig ccAtivo = new ColumnConfig(OpenSigCore.i18n.txtAtivo(), "empEntidade.empEntidadeAtivo", 50, true, BOLEANO);
 		listaColunas.add(ccAtivo);
 		ColumnConfig ccObservacao = new ColumnConfig(OpenSigCore.i18n.txtObservacao(), "empEntidade.empEntidadeObservacao", 200, true);

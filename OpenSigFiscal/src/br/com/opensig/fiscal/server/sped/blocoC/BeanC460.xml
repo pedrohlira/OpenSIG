@@ -7,11 +7,11 @@
 		<record name="Dados" minOccurs="1" maxOccurs="1" class="br.com.opensig.fiscal.server.sped.blocoC.DadosC460">
 			<field name="padrao" type="string" length="1" default="" />
 			<field name="reg" type="string" length="4" trim="true" />
-			<field name="cod_mod" type="string" length="6" trim="true" />
+			<field name="cod_mod" type="string" length="2" trim="true" />
 			<field name="cod_sit" type="string" length="2" trim="true" />
 			<field name="num_doc" type="int" length="6" />
-			<field name="dt_doc" type="date" format="ddMMyyyy" default="" />
-			<field name="vl_doc" type="double" format="##0.00" default="" />
+			<field name="dt_doc" type="date" format="ddMMyyyy" />
+			<field name="vl_doc" type="double" format="##0.00" />
 			<field name="vl_pis" type="double" format="##0.00" default="" />
 			<field name="vl_cofins" type="double" format="##0.00" default="" />
 			<field name="cpf_cnpj" type="string" minLength="11" maxLength="14" trim="true" default="" />

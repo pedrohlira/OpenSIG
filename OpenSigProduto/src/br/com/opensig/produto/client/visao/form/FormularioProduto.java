@@ -378,7 +378,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		if (cmbOrigem.getStore().getRecords().length == 0) {
 			cmbOrigem.getStore().load();
 		} else {
-			mostrar();
+			cmbTipo.getStore().reload();
 		}
 	}
 
@@ -409,8 +409,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 			cmbIpi.setValue("7");
 			cmbEmbalagem.setValue("1");
 			cmbTipo.setValue("1");
-			treeCategoria.limpar();
-			treeCategoria.carregar(null, null);
+			treeCategoria.selecionar(null);
 		}
 		txtNcm.focus(true);
 
@@ -611,6 +610,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		final Store storeTipo = new Store(proxy, new ArrayReader(new RecordDef(fdTipo)), false);
 		storeTipo.addStoreListener(new StoreListenerAdapter() {
 			public void onLoad(Store store, Record[] records) {
+				treeCategoria.limpar();
 				treeCategoria.carregar(null, new AsyncCallback<Lista<ProdCategoria>>() {
 
 					public void onSuccess(Lista<ProdCategoria> result) {

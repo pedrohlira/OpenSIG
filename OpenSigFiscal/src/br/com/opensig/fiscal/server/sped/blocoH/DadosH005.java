@@ -7,7 +7,7 @@ import br.com.opensig.fiscal.server.sped.Bean;
 public class DadosH005 extends Bean {
 
 	private Date dt_inv;
-	private double vl_inv;
+	private Double vl_inv;
 	private String mot_inv;
 	
 	public DadosH005() {
@@ -22,11 +22,11 @@ public class DadosH005 extends Bean {
 		this.dt_inv = dt_inv;
 	}
 
-	public double getVl_inv() {
+	public Double getVl_inv() {
 		return vl_inv;
 	}
 
-	public void setVl_inv(double vl_inv) {
+	public void setVl_inv(Double vl_inv) {
 		this.vl_inv = vl_inv;
 	}
 

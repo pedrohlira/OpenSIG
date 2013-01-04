@@ -6,9 +6,9 @@ public class DadosH010 extends Bean {
 
 	private String cod_item;
 	private String unid;
-	private double qtd;
-	private double vl_unit;
-	private double vl_item;
+	private Double qtd;
+	private Double vl_unit;
+	private Double vl_item;
 	private String ind_prop;
 	private String cod_part;
 	private String txt_compl;
@@ -34,27 +34,27 @@ public class DadosH010 extends Bean {
 		this.unid = unid;
 	}
 
-	public double getQtd() {
+	public Double getQtd() {
 		return qtd;
 	}
 
-	public void setQtd(double qtd) {
+	public void setQtd(Double qtd) {
 		this.qtd = qtd;
 	}
 
-	public double getVl_unit() {
+	public Double getVl_unit() {
 		return vl_unit;
 	}
 
-	public void setVl_unit(double vl_unit) {
+	public void setVl_unit(Double vl_unit) {
 		this.vl_unit = vl_unit;
 	}
 
-	public double getVl_item() {
+	public Double getVl_item() {
 		return vl_item;
 	}
 
-	public void setVl_item(double vl_item) {
+	public void setVl_item(Double vl_item) {
 		this.vl_item = vl_item;
 	}
 

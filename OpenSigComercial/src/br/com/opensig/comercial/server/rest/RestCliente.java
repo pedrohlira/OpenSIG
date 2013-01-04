@@ -229,12 +229,10 @@ public class RestCliente extends ARest {
 	public List<ProdProduto> getProdutoAtualizado(@QueryParam("data") String data, @QueryParam("pagina") int pagina, @QueryParam("limite") int limite) throws RestException {
 		autorizar();
 		try {
-			Date alterado = UtilServer.formataData(data, "dd/MM/yyyy HH:mm:ss");
+			Date alterado = UtilServer.formataData(data.substring(0, 10), "dd/MM/yyyy");
 			IFiltro filtro = null;
 			if (alterado != null) {
-				FiltroData fd1 = new FiltroData("prodProdutoAlterado", ECompara.MAIOR, alterado);
-				FiltroData fd2 = new FiltroData("prodProdutoCadastrado", ECompara.MENOR, alterado);
-				filtro = new GrupoFiltro(EJuncao.E, new IFiltro[] { fd1, fd2 });
+				filtro = new FiltroData("prodProdutoAlterado", ECompara.MAIOR_IGUAL, alterado);
 			}
 			ProdProduto prod = new ProdProduto();
 			prod.setCampoOrdem("prodProdutoAlterado");

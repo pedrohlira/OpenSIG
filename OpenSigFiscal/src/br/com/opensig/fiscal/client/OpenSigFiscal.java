@@ -23,7 +23,7 @@ import br.com.opensig.fiscal.client.controlador.comando.ComandoIncentivo;
 import br.com.opensig.fiscal.client.controlador.comando.ComandoSaida;
 import br.com.opensig.fiscal.client.controlador.comando.ComandoSefaz;
 import br.com.opensig.fiscal.client.controlador.comando.ComandoSituacao;
-import br.com.opensig.fiscal.client.controlador.comando.ComandoSpedFiscal;
+import br.com.opensig.fiscal.client.controlador.comando.ComandoSped;
 import br.com.opensig.fiscal.client.controlador.comando.ComandoStatus;
 import br.com.opensig.fiscal.client.controlador.comando.acao.ComandoBackupEntrada;
 import br.com.opensig.fiscal.client.controlador.comando.acao.ComandoBackupSaida;
@@ -57,7 +57,7 @@ public class OpenSigFiscal implements EntryPoint {
 		fc.addComando(ComandoSituacao.class.getName(), (IComando) GWT.create(ComandoSituacao.class));
 		fc.addComando(ComandoCadastro.class.getName(), (IComando) GWT.create(ComandoCadastro.class));
 		fc.addComando(ComandoIncentivo.class.getName(), (IComando) GWT.create(ComandoIncentivo.class));
-		fc.addComando(ComandoSpedFiscal.class.getName(), (IComando) GWT.create(ComandoSpedFiscal.class));
+		fc.addComando(ComandoSped.class.getName(), (IComando) GWT.create(ComandoSped.class));
 
 		// acoes
 		fc.addComando(ComandoBackupSaida.class.getName(), (IComando) GWT.create(ComandoBackupSaida.class));
@@ -99,7 +99,7 @@ public class OpenSigFiscal implements EntryPoint {
 
 		Ponte.setAcoesProibidas(ComandoEntrada.class.getName(), acoes2);
 		Ponte.setAcoesProibidas(ComandoSaida.class.getName(), acoes2);
-		Ponte.setAcoesProibidas(ComandoSpedFiscal.class.getName(), acoes3);
+		Ponte.setAcoesProibidas(ComandoSped.class.getName(), acoes3);
 		Ponte.setAcoesProibidas(ComandoCertificado.class.getName(), acoes);
 		Ponte.setAcoesProibidas(ComandoSefaz.class.getName(), acoes4);
 		Ponte.setAcoesProibidas(ComandoStatus.class.getName(), acoes4);

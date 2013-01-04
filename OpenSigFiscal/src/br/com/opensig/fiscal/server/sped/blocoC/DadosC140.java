@@ -9,7 +9,7 @@ public class DadosC140 extends Bean {
 	private String desc_tit;
 	private String num_tit;
 	private int qtd_parc;
-	private double vl_tit;
+	private Double vl_tit;
 
 	public DadosC140() {
 		reg = "C140";
@@ -55,11 +55,11 @@ public class DadosC140 extends Bean {
 		this.qtd_parc = qtd_parc;
 	}
 
-	public double getVl_tit() {
+	public Double getVl_tit() {
 		return vl_tit;
 	}
 
-	public void setVl_tit(double vl_tit) {
+	public void setVl_tit(Double vl_tit) {
 		this.vl_tit = vl_tit;
 	}
 

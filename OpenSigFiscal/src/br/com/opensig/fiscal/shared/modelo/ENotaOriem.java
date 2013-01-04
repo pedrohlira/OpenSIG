@@ -2,6 +2,11 @@ package br.com.opensig.fiscal.shared.modelo;
 
 import java.io.Serializable;
 
+/**
+ * Enumerador que representa o status da origem da nfe no sistema.
+ * 
+ * @author Pedro H. Lira
+ */
 public enum ENotaOriem implements Serializable {
 
 	/**

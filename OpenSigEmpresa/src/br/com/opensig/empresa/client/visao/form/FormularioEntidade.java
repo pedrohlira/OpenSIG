@@ -59,6 +59,7 @@ public abstract class FormularioEntidade<E extends Dados> extends AFormulario<E>
 	protected TextField txtCNPJ;
 	protected TextField txtCPF;
 	protected TextField txtDoc2;
+	protected TextField txtDoc3;
 	protected TextArea txtObservacao;
 	protected ComboBox cmbPessoa;
 	protected Checkbox chkAtivo;
@@ -86,7 +87,7 @@ public abstract class FormularioEntidade<E extends Dados> extends AFormulario<E>
 		hdnCod = new Hidden(prefixo + ".empEntidadeId", "0");
 		coluna1.add(hdnCod);
 
-		txtNome1 = new TextField(OpenSigCore.i18n.txtEntidadeNome1(), prefixo + ".empEntidadeNome1", 250);
+		txtNome1 = new TextField(OpenSigCore.i18n.txtEntidadeNome1(), prefixo + ".empEntidadeNome1", 300);
 		txtNome1.setAllowBlank(false);
 		txtNome1.setMaxLength(100);
 		coluna1.add(txtNome1);
@@ -136,19 +137,26 @@ public abstract class FormularioEntidade<E extends Dados> extends AFormulario<E>
 		coluna2.setBorder(false);
 		coluna2.setLayout(new FormLayout());
 
-		txtNome2 = new TextField(OpenSigCore.i18n.txtEntidadeNome2(), prefixo + ".empEntidadeNome2", 250);
+		txtNome2 = new TextField(OpenSigCore.i18n.txtEntidadeNome2(), prefixo + ".empEntidadeNome2", 300);
 		txtNome2.setMaxLength(15);
 		txtNome2.setAllowBlank(false);
 		coluna2.add(txtNome2);
 
-		txtDoc2 = new TextField(OpenSigCore.i18n.txtEntidadeDoc2(), prefixo + ".empEntidadeDocumento2", 150);
+		txtDoc2 = new TextField(OpenSigCore.i18n.txtEntidadeDoc2(), prefixo + ".empEntidadeDocumento2", 130);
 		txtDoc2.setMaxLength(20);
+		txtDoc2.setAllowBlank(false);
+		
+		txtDoc3 = new TextField(OpenSigCore.i18n.txtEntidadeDoc3(), prefixo + ".empEntidadeDocumento3", 130);
+		txtDoc3.setMaxLength(20);
+		txtDoc3.setAllowBlank(false);
+		
 		chkAtivo = new Checkbox(OpenSigCore.i18n.txtAtivo(), prefixo + ".empEntidadeAtivo");
 
 		MultiFieldPanel linha2 = new MultiFieldPanel();
 		linha2.setBorder(false);
-		linha2.addToRow(txtDoc2, 170);
-		linha2.addToRow(chkAtivo, new ColumnLayoutData(1));
+		linha2.addToRow(txtDoc2, 150);
+		linha2.addToRow(txtDoc3, 150);
+		linha2.addToRow(chkAtivo, 50);
 		coluna2.add(linha2);
 
 		Panel formColuna = new Panel();
@@ -286,7 +294,8 @@ public abstract class FormularioEntidade<E extends Dados> extends AFormulario<E>
 		entidade.setEmpEntidadeNome1(txtNome1.getValueAsString());
 		entidade.setEmpEntidadeNome2(txtNome2.getValueAsString());
 		entidade.setEmpEntidadePessoa(cmbPessoa.getValue());
-		entidade.setEmpEntidadeDocumento2(txtDoc2.getValueAsString() == null ? "" : txtDoc2.getValueAsString());
+		entidade.setEmpEntidadeDocumento2(txtDoc2.getValueAsString());
+		entidade.setEmpEntidadeDocumento3(txtDoc3.getValueAsString());
 		entidade.setEmpEntidadeAtivo(chkAtivo.getValue());
 		entidade.setEmpEntidadeObservacao(txtObservacao.getValueAsString());
 
@@ -423,6 +432,14 @@ public abstract class FormularioEntidade<E extends Dados> extends AFormulario<E>
 
 	public void setTxtDoc2(TextField txtDoc2) {
 		this.txtDoc2 = txtDoc2;
+	}
+	
+	public TextField getTxtDoc3() {
+		return txtDoc3;
+	}
+
+	public void setTxtDoc3(TextField txtDoc3) {
+		this.txtDoc3 = txtDoc3;
 	}
 
 	public TextArea getTxtObservacao() {

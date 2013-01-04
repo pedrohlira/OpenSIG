@@ -124,7 +124,7 @@ public class RestFiscal extends ARest {
 				TConsStatServ nStatus = UtilServer.xmlToObj(xml, "br.com.opensig.consstatserv");
 				// faz a chamada na sefaz
 				FiscalServiceImpl fiscal = new FiscalServiceImpl(auth);
-				xml = fiscal.status(nStatus, empresa.getEmpEmpresaId());
+				xml = fiscal.status(nStatus);
 				return xml;
 			} catch (Exception ex) {
 				log.error(ex);
@@ -179,7 +179,7 @@ public class RestFiscal extends ARest {
 				TConsCad cadastro = UtilServer.xmlToObj(xml, "br.com.opensig.conscad");
 				// faz a chamada na sefaz
 				FiscalServiceImpl fiscal = new FiscalServiceImpl(auth);
-				xml = fiscal.cadastro(cadastro, empresa.getEmpEmpresaId(), Integer.valueOf(amb), Integer.valueOf(ibge));
+				xml = fiscal.cadastro(cadastro, Integer.valueOf(amb), Integer.valueOf(ibge));
 				return xml;
 			} catch (Exception ex) {
 				log.error(ex);
@@ -224,7 +224,7 @@ public class RestFiscal extends ARest {
 				TConsSitNFe situacao = UtilServer.xmlToObj(xml, "br.com.opensig.conssitnfe");
 				// faz a chamada na sefaz
 				FiscalServiceImpl fiscal = new FiscalServiceImpl(auth);
-				xml = fiscal.situacao(situacao, empresa.getEmpEmpresaId());
+				xml = fiscal.situacao(situacao);
 				return xml;
 			} catch (Exception ex) {
 				log.error(ex);

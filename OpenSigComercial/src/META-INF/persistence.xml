@@ -13,6 +13,7 @@
 		<class>br.com.opensig.comercial.shared.modelo.ComVenda</class>
 		<class>br.com.opensig.comercial.shared.modelo.ComFrete</class>
 		<class>br.com.opensig.comercial.shared.modelo.ComNatureza</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComConsumo</class>
 		<class>br.com.opensig.comercial.shared.modelo.ComEcf</class>
 		<class>br.com.opensig.comercial.shared.modelo.ComEcfZ</class>
 		<class>br.com.opensig.comercial.shared.modelo.ComEcfZTotais</class>

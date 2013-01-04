@@ -31,8 +31,6 @@ import br.com.opensig.permissao.shared.modelo.SisUsuario;
  * Classe que representa uma venda no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 07/08/2009
  */
 @Entity
 @Table(name = "com_venda")

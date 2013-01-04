@@ -26,8 +26,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
  * Classe que representa uma nfe de entrada no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 20/07/2010
  */
 @Entity
 @Table(name = "fis_nota_entrada")

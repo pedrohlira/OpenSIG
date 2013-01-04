@@ -11,11 +11,11 @@ public class DadosC350 extends Bean {
 	private int num_doc;
 	private Date dt_doc;
 	private String cnpj_cpf;
-	private double vl_merc;
-	private double vl_doc;
-	private double vl_desc;
-	private double vl_pis;
-	private double vl_cofins;
+	private Double vl_merc;
+	private Double vl_doc;
+	private Double vl_desc;
+	private Double vl_pis;
+	private Double vl_cofins;
 	private String cod_cta;
 
 	public DadosC350() {
@@ -70,43 +70,43 @@ public class DadosC350 extends Bean {
 		this.sub = sub;
 	}
 
-	public double getVl_cofins() {
+	public Double getVl_cofins() {
 		return vl_cofins;
 	}
 
-	public void setVl_cofins(double vl_cofins) {
+	public void setVl_cofins(Double vl_cofins) {
 		this.vl_cofins = vl_cofins;
 	}
 
-	public double getVl_desc() {
+	public Double getVl_desc() {
 		return vl_desc;
 	}
 
-	public void setVl_desc(double vl_desc) {
+	public void setVl_desc(Double vl_desc) {
 		this.vl_desc = vl_desc;
 	}
 
-	public double getVl_doc() {
+	public Double getVl_doc() {
 		return vl_doc;
 	}
 
-	public void setVl_doc(double vl_doc) {
+	public void setVl_doc(Double vl_doc) {
 		this.vl_doc = vl_doc;
 	}
 
-	public double getVl_merc() {
+	public Double getVl_merc() {
 		return vl_merc;
 	}
 
-	public void setVl_merc(double vl_merc) {
+	public void setVl_merc(Double vl_merc) {
 		this.vl_merc = vl_merc;
 	}
 
-	public double getVl_pis() {
+	public Double getVl_pis() {
 		return vl_pis;
 	}
 
-	public void setVl_pis(double vl_pis) {
+	public void setVl_pis(Double vl_pis) {
 		this.vl_pis = vl_pis;
 	}
 }

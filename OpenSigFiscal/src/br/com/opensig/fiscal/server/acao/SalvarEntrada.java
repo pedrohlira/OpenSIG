@@ -88,12 +88,19 @@ public class SalvarEntrada extends Chain {
 
 		// verifica se ja existe
 		if (nota != null) {
-			atualizar(filtro);
-		} else if (status.getFisNotaStatusId() == ENotaStatus.AUTORIZANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId()) {
+			// verifica se foi modificado para inutilizado
+			if (status.getFisNotaStatusId() == ENotaStatus.INUTILIZANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.INUTILIZADO.getId()) {
+				salvarInut();
+			} else {
+				atualizar(filtro);
+			}
+		} else if (status.getFisNotaStatusId() == ENotaStatus.AUTORIZANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId() || status.getFisNotaStatusId() == ENotaStatus.FS_DA.getId()) {
+			nota = new FisNotaEntrada();
 			salvarNota();
 		} else if (status.getFisNotaStatusId() == ENotaStatus.CANCELANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.CANCELADO.getId()) {
 			throw new FiscalException("Não foi encontrado no sistema a nota fiscal de entrada correspondente ao cancelamento!");
 		} else if (status.getFisNotaStatusId() == ENotaStatus.INUTILIZANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.INUTILIZADO.getId()) {
+			nota = new FisNotaEntrada();
 			salvarInut();
 		}
 
@@ -183,7 +190,6 @@ public class SalvarEntrada extends Chain {
 				status.setFisNotaStatusId(ENotaStatus.FS_DA.getId());
 			}
 
-			nota = new FisNotaEntrada();
 			nota.setFisNotaStatus(status);
 			nota.setEmpEmpresa(empresa);
 			nota.setFisNotaEntradaNumero(Integer.valueOf(numero));
@@ -212,13 +218,14 @@ public class SalvarEntrada extends Chain {
 					if (arquivo.exists()) {
 						// valida na sefaz
 						int amb = Integer.valueOf(auth.getConf().get("nfe.tipoamb"));
-						String resp = servico.situacao(amb, chave, empresa.getEmpEmpresaId());
+						String resp = servico.situacao(amb, chave);
 						TRetConsSitNFe situacao = UtilServer.xmlToObj(resp, "br.com.opensig.retconssitnfe");
 
 						// verifica se o status na sefaz é igual ao informado
 						if (situacao.getCStat().equals("100")) {
 							if (status.getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId() && situacao.getProtNFe() != null) {
-								// valida se a data da nota ainda pode ser cancelada
+								// valida se a data da nota ainda pode ser
+								// cancelada
 								int dias = Integer.valueOf(auth.getConf().get("nfe.tempo_cancela"));
 								Calendar cal = Calendar.getInstance();
 								cal.setTime(nota.getFisNotaEntradaData());
@@ -298,7 +305,6 @@ public class SalvarEntrada extends Chain {
 			String numeroFim = UtilServer.getValorTag(doc.getDocumentElement(), "nNFFin", true);
 
 			// cria a saida
-			nota = new FisNotaEntrada();
 			nota.setFisNotaStatus(status);
 			nota.setEmpEmpresa(empresa);
 			nota.setFisNotaEntradaNumero(Integer.valueOf(numeroIni));
@@ -314,6 +320,7 @@ public class SalvarEntrada extends Chain {
 			nota.setFisNotaEntradaXml(xml);
 			nota.setFisNotaEntradaProtocoloCancelado("");
 			nota.setFisNotaEntradaXmlCancelado("");
+			nota.setFisNotaEntradaRecibo("");
 			nota.setFisNotaEntradaErro("");
 
 			// salva a entrada

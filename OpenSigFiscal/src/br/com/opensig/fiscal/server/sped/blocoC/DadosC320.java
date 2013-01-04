@@ -6,22 +6,22 @@ public class DadosC320 extends Bean {
 
 	private String cst_icms;
 	private int cfop;
-	private double aliq_icms;
-	private double vl_opr;
-	private double vl_bc_icms;
-	private double vl_icms;
-	private double vl_red_bc;
+	private Double aliq_icms;
+	private Double vl_opr;
+	private Double vl_bc_icms;
+	private Double vl_icms;
+	private Double vl_red_bc;
 	private String cod_obs;
 
 	public DadosC320() {
 		reg = "C320";
 	}
 
-	public double getAliq_icms() {
+	public Double getAliq_icms() {
 		return aliq_icms;
 	}
 
-	public void setAliq_icms(double aliq_icms) {
+	public void setAliq_icms(Double aliq_icms) {
 		this.aliq_icms = aliq_icms;
 	}
 
@@ -49,35 +49,35 @@ public class DadosC320 extends Bean {
 		this.cst_icms = cst_icms;
 	}
 
-	public double getVl_bc_icms() {
+	public Double getVl_bc_icms() {
 		return vl_bc_icms;
 	}
 
-	public void setVl_bc_icms(double vl_bc_icms) {
+	public void setVl_bc_icms(Double vl_bc_icms) {
 		this.vl_bc_icms = vl_bc_icms;
 	}
 
-	public double getVl_icms() {
+	public Double getVl_icms() {
 		return vl_icms;
 	}
 
-	public void setVl_icms(double vl_icms) {
+	public void setVl_icms(Double vl_icms) {
 		this.vl_icms = vl_icms;
 	}
 
-	public double getVl_opr() {
+	public Double getVl_opr() {
 		return vl_opr;
 	}
 
-	public void setVl_opr(double vl_opr) {
+	public void setVl_opr(Double vl_opr) {
 		this.vl_opr = vl_opr;
 	}
 
-	public double getVl_red_bc() {
+	public Double getVl_red_bc() {
 		return vl_red_bc;
 	}
 
-	public void setVl_red_bc(double vl_red_bc) {
+	public void setVl_red_bc(Double vl_red_bc) {
 		this.vl_red_bc = vl_red_bc;
 	}
 }

@@ -8,7 +8,7 @@
 			<field name="padrao" type="string" length="1" default="" />
 			<field name="reg" type="string" length="4" trim="true" />
 			<field name="unid_conv" type="string" length="6" trim="true" />
-			<field name="fat_conv" type="int" />
+			<field name="fat_conv" type="double" format="##0.000000" />
 			<field name="padrao" type="string" length="1" default="" />
 		</record>
 	</stream>

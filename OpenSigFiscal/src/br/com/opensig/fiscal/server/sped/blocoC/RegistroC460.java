@@ -58,7 +58,7 @@ public class RegistroC460 extends ARegistro<DadosC460, ComEcfVenda> {
 			d.setVl_pis(dados.getComEcfVendaLiquido() * pis / 100);
 			d.setVl_cofins(dados.getComEcfVendaLiquido() * cofins / 100);
 			if (dados.getEmpCliente() != null) {
-				d.setCpf_cnpj(dados.getEmpCliente().getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("[^0-9]", ""));
+				d.setCpf_cnpj(dados.getEmpCliente().getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("\\D", ""));
 				d.setNom_adq(dados.getEmpCliente().getEmpEntidade().getEmpEntidadeNome1());
 			}
 		} else {

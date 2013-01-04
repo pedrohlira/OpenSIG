@@ -36,30 +36,12 @@ public class RegistroC350 extends ARegistro<DadosC350, ComEcfNota> {
 				for (ComEcfNotaProduto np : nota.getComEcfNotaProdutos()) {
 					c370.setDados(np);
 					c370.executar();
-					qtdLinhas++;
-					
-					// agrupa os itens pelo cst+cfop+aliq
-					ProdTributacao pt = np.getProdProduto().getProdTributacao();
-					String cstCson = auth.getConf().get("nfe.crt").equals("1") ? pt.getProdTributacaoCson() : pt.getProdTributacaoCst();
-					String chave = cstCson + pt.getProdTributacaoCfop() + pt.getProdTributacaoDentro();
-                    List<ComEcfNotaProduto> lista = analitico.get(chave);
-                    if (lista == null) {
-                        lista = new ArrayList<ComEcfNotaProduto>();
-                        lista.add(np);
-                        analitico.put(chave, lista);
-                    } else {
-                        lista.add(np);
-                    }
+					qtdLinhas += c370.getQtdLinhas();
+					setAnalitico(np);
 				}
 				
 				// analitico
-				RegistroC390 c390 = new RegistroC390();
-				c390.setEscritor(escritor);
-				for (Entry<String, List<ComEcfNotaProduto>> entry : analitico.entrySet()) {
-					c390.setDados(entry.getValue());
-					c390.executar();
-					qtdLinhas++;
-				}
+				getAnalitico();
 			}
 		} catch (Exception e) {
 			qtdLinhas = 0;
@@ -74,7 +56,7 @@ public class RegistroC350 extends ARegistro<DadosC350, ComEcfNota> {
 		d.setSub(dados.getComEcfNotaSubserie());
 		d.setNum_doc(dados.getComEcfNotaNumero());
 		d.setDt_doc(dados.getComEcfNotaData());
-		d.setCnpj_cpf(dados.getEmpCliente() != null ? dados.getEmpCliente().getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("[^0-9]", "") : "");
+		d.setCnpj_cpf(dados.getEmpCliente() != null ? dados.getEmpCliente().getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("\\D", "") : "");
 		d.setVl_merc(dados.getComEcfNotaBruto());
 		d.setVl_doc(dados.getComEcfNotaLiquido());
 		d.setVl_desc(dados.getComEcfNotaDesconto());
@@ -84,6 +66,34 @@ public class RegistroC350 extends ARegistro<DadosC350, ComEcfNota> {
 		normalizar(d);
 		qtdLinhas++;
 		return d;
+	}
+	
+	private void setAnalitico(ComEcfNotaProduto d) {
+		ProdTributacao pt = d.getProdProduto().getProdTributacao();
+		String cstCson = auth.getConf().get("nfe.crt").equals("1") ? pt.getProdTributacaoCson() : pt.getProdTributacaoCst();
+		String chave = cstCson + pt.getProdTributacaoCfop() + pt.getProdTributacaoDentro();
+        List<ComEcfNotaProduto> lista = analitico.get(chave);
+        if (lista == null) {
+            lista = new ArrayList<ComEcfNotaProduto>();
+            lista.add(d);
+            analitico.put(chave, lista);
+        } else {
+            lista.add(d);
+        }
+	}
+
+	private void getAnalitico() {
+		if (!analitico.isEmpty()) {
+			RegistroC390 r390 = new RegistroC390();
+			r390.setEscritor(escritor);
+			r390.setAuth(auth);
+			for (Entry<String, List<ComEcfNotaProduto>> entry : analitico.entrySet()) {
+				r390.setDados(entry.getValue());
+				r390.executar();
+				qtdLinhas += r390.getQtdLinhas();
+			}
+		}
+		analitico.clear();
 	}
 
 }

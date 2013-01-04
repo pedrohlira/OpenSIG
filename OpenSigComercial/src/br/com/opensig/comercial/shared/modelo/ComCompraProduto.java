@@ -21,8 +21,6 @@ import br.com.opensig.produto.shared.modelo.ProdProduto;
  * Classe que representa um produto da compra no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 07/08/2009
  */
 @Entity
 @Table(name = "com_compra_produto")

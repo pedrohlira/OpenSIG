@@ -2,6 +2,7 @@ package br.com.opensig.comercial.server.rest;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
 import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
+import br.com.opensig.core.client.controlador.parametro.ParametroData;
 import br.com.opensig.core.client.controlador.parametro.ParametroFormula;
 import br.com.opensig.core.client.controlador.parametro.ParametroObjeto;
 import br.com.opensig.core.client.servico.CoreException;
@@ -127,6 +129,7 @@ public class RestServidor extends ARest {
 				np.setComEcfNota(ecfNota);
 				Sql sql = getEstoque(np.getComEcfNotaProdutoQuantidade(), np.getProdEmbalagem(), np.getProdProduto());
 				sqls.add(sql);
+				sqls.add(getAtualizaProduto(np.getProdProduto()));
 			}
 			service.salvar(nps);
 
@@ -294,6 +297,7 @@ public class RestServidor extends ARest {
 					// monta a atualizacao do estoque
 					double qtd = Double.valueOf(det.getProd().getQCom());
 					sqls.add(getEstoque(qtd, emb, prod));
+					sqls.add(getAtualizaProduto(prod));
 
 					// montando o produto da venda
 					ComVendaProduto vp = new ComVendaProduto();
@@ -471,6 +475,9 @@ public class RestServidor extends ARest {
 		venda.setComEcfVendaDesconto(desc);
 		venda.setComEcfVendaProdutos(null);
 		venda.setEcfPagamentos(null);
+		if (venda.getComEcfVendaCancelada()) {
+			venda.setComEcfVendaFechada(true);
+		}
 		venda = (ComEcfVenda) service.salvar(venda, false);
 
 		// salva os produtos
@@ -483,23 +490,24 @@ public class RestServidor extends ARest {
 			if (!vp.getComEcfVendaProdutoCancelado()) {
 				Sql sql = getEstoque(vp.getComEcfVendaProdutoQuantidade(), vp.getProdEmbalagem(), vp.getProdProduto());
 				sqls.add(sql);
+				sqls.add(getAtualizaProduto(vp.getProdProduto()));
 			}
 		}
 		service.salvar(vps);
 
-		// atualiza o estoque
 		if (venda.getComEcfVendaCancelada() == false) {
+			// atualiza o estoque
 			service.executar(sqls.toArray(new Sql[] {}));
+
+			// salva os recebimento
+			salvarRecebimento(recebiveis, venda);
+
+			// atualiza o saldo
+			FiltroNumero fn = new FiltroNumero("finContaId", ECompara.IGUAL, conf.get("conta.padrao"));
+			ParametroFormula pf = new ParametroFormula("finContaSaldo", conciliado);
+			Sql sql = new Sql(new FinConta(), EComando.ATUALIZAR, fn, pf);
+			service.executar(new Sql[] { sql });
 		}
-
-		// salva os recebimento
-		salvarRecebimento(recebiveis, venda);
-
-		// atualiza o saldo
-		FiltroNumero fn = new FiltroNumero("finContaId", ECompara.IGUAL, conf.get("conta.padrao"));
-		ParametroFormula pf = new ParametroFormula("finContaSaldo", conciliado);
-		Sql sql = new Sql(new FinConta(), EComando.ATUALIZAR, fn, pf);
-		service.executar(new Sql[] { sql });
 	}
 
 	/**
@@ -643,6 +651,23 @@ public class RestServidor extends ARest {
 		FiltroObjeto fo2 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, ecf.getEmpEmpresa());
 		GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
 		return new Sql(new ProdEstoque(), EComando.ATUALIZAR, gf, pf);
+	}
+
+	/**
+	 * Metodo que gera o SQL de atualizacao do produto, para as vendas
+	 * recebidas.
+	 * 
+	 * @param prod
+	 *            o produto que foi vendido.
+	 * @return uma instrucao de SQL no formato de objeto para ser executada.
+	 * @throws CoreException
+	 *             dispara caso nao consiga gerar o sql de atualizacao.
+	 */
+	private Sql getAtualizaProduto(ProdProduto prod) throws CoreException {
+		// atualiza o produto
+		ParametroData pd = new ParametroData("prodProdutoAlterado", new Date());
+		FiltroObjeto fo = new FiltroObjeto("prodProduto", ECompara.IGUAL, prod);
+		return new Sql(new ProdEstoque(), EComando.ATUALIZAR, fo, pd);
 	}
 
 	/**

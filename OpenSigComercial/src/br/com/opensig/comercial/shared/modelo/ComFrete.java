@@ -28,8 +28,6 @@ import br.com.opensig.financeiro.shared.modelo.FinPagar;
  * Classe que representa um frete no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 06/10/2009
  */
 @Entity
 @Table(name = "com_frete")

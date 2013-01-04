@@ -1,5 +1,11 @@
 package br.com.opensig.fiscal.server.sped.blocoD;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.beanio.BeanWriter;
 import org.beanio.StreamFactory;
 
@@ -9,6 +15,8 @@ import br.com.opensig.fiscal.server.sped.ARegistro;
 
 public class RegistroD100 extends ARegistro<DadosD100, ComFrete> {
 
+	private Map<String, List<ComFrete>> analitico = new HashMap<String, List<ComFrete>>();
+	
 	@Override
 	public void executar() {
 		try {
@@ -22,11 +30,11 @@ public class RegistroD100 extends ARegistro<DadosD100, ComFrete> {
 				bloco = getDados(frete);
 				out.write(bloco);
 				out.flush();
-				
-				r190.setDados(frete);
-				r190.executar();
-				qtdLinhas += r190.getQtdLinhas();
+				setAnalitico(frete);
 			}
+			
+			// analitico dos fretes
+			getAnalitico();
 		} catch (Exception e) {
 			qtdLinhas = 0;
 			UtilServer.LOG.error("Erro na geracao do Registro -> " + bean, e);
@@ -44,7 +52,6 @@ public class RegistroD100 extends ARegistro<DadosD100, ComFrete> {
 		d.setSer(dados.getComFreteSerie() + "");
 		d.setSub("");
 		d.setNum_doc(dados.getComFreteCtrc());
-		// TODO preparar Frete para CTe
 		d.setChv_cte("");
 		d.setDt_doc(dados.getComFreteEmissao());
 		d.setDt_a_p(dados.getComFreteRecebimento());
@@ -65,4 +72,29 @@ public class RegistroD100 extends ARegistro<DadosD100, ComFrete> {
 		return d;
 	}
 
+	private void setAnalitico(ComFrete d) {
+		String chave = "000" + d.getComFreteCfop() + d.getComFreteAliquota();
+		List<ComFrete> lista = analitico.get(chave);
+		if (lista == null) {
+			lista = new ArrayList<ComFrete>();
+			lista.add(d);
+			analitico.put(chave, lista);
+		} else {
+			lista.add(d);
+		}
+	}
+
+	private void getAnalitico() {
+		if (!analitico.isEmpty()) {
+			RegistroD190 r190 = new RegistroD190();
+			r190.setEscritor(escritor);
+			r190.setAuth(auth);
+			for (Entry<String, List<ComFrete>> entry : analitico.entrySet()) {
+				r190.setDados(entry.getValue());
+				r190.executar();
+				qtdLinhas += r190.getQtdLinhas();
+			}
+		}
+		analitico.clear();
+	}
 }

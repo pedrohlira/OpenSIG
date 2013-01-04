@@ -4,21 +4,7 @@ import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.fiscal.server.sped.ARegistro;
 import br.com.opensig.nfe.TNFe.InfNFe.Det;
 import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.COFINS;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMS00;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMS10;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMS20;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMS30;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMS40;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMS51;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMS60;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMS70;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMS90;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN101;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN102;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN201;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN202;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN500;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS.ICMSSN900;
+import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS;
 import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.IPI;
 import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.PIS;
 import br.com.opensig.nfe.TNFe.InfNFe.Det.Prod;
@@ -30,10 +16,6 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 	private String crt;
 	private int natId;
 	private boolean venda;
-
-	public RegistroC170() {
-		super("/br/com/opensig/fiscal/server/sped/blocoC/BeanC170.xml");
-	}
 
 	@Override
 	protected DadosC170 getDados(Det dados) throws Exception {
@@ -49,7 +31,9 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 		d.setVl_desc(prod.getVDesc() == null ? 0.00 : Double.valueOf(prod.getVDesc()));
 		d.setInd_mov("0");
 		int cfop = Integer.valueOf(prod.getCFOP());
+		// adaptacao do cfop das compras
 		if (!venda) {
+			// se o cfop faz referencia a um cupom fiscal
 			if (cfop == 5929 || cfop == 6929) {
 				cfop -= 4827;
 			} else if (cfop >= 5000) {
@@ -60,131 +44,97 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 		d.setCod_nat(natId + "");
 
 		try {
+			ICMS icms = dados.getImposto().getICMS();
 			if (crt.equals("1")) {
-				ICMSSN101 icms101 = dados.getImposto().getICMS().getICMSSN101();
-				if (icms101 != null) {
-					d.setCst_icms(icms101.getCSOSN());
+				// verifica qual icms CSON foi usado
+				if (icms.getICMSSN101() != null) {
+					d.setCst_icms(icms.getICMSSN101().getCSOSN());
 					d.setVl_bc_icms(d.getVl_item());
-					d.setAliq_icms(Double.valueOf(icms101.getPCredSN()));
-					d.setVl_icms(Double.valueOf(icms101.getVCredICMSSN()));
-				} else {
-					ICMSSN102 icms102 = dados.getImposto().getICMS().getICMSSN102();
-					if (icms102 != null) {
-						d.setCst_icms(icms102.getCSOSN());
+					d.setAliq_icms(Double.valueOf(icms.getICMSSN101().getPCredSN()));
+					d.setVl_icms(Double.valueOf(icms.getICMSSN101().getVCredICMSSN()));
+				} else if (icms.getICMSSN102() != null) {
+					d.setCst_icms(icms.getICMSSN102().getCSOSN());
+				} else if (icms.getICMSSN201() != null) {
+					d.setCst_icms(icms.getICMSSN201().getCSOSN());
+					d.setVl_bc_icms_st(Double.valueOf(icms.getICMSSN201().getVBCST()));
+					d.setAliq_st(Double.valueOf(icms.getICMSSN201().getPICMSST()));
+					d.setVl_icms_st(Double.valueOf(icms.getICMSSN201().getVICMSST()));
+				} else if (icms.getICMSSN202() != null) {
+					d.setCst_icms(icms.getICMSSN202().getCSOSN());
+					d.setVl_bc_icms_st(Double.valueOf(icms.getICMSSN202().getVBCST()));
+					d.setAliq_st(Double.valueOf(icms.getICMSSN202().getPICMSST()));
+					d.setVl_icms_st(Double.valueOf(icms.getICMSSN202().getVICMSST()));
+				} else if (icms.getICMSSN500() != null) {
+					d.setCst_icms(icms.getICMSSN500().getCSOSN());
+					d.setVl_bc_icms_st(Double.valueOf(icms.getICMSSN500().getVBCSTRet()));
+					d.setVl_icms_st(Double.valueOf(icms.getICMSSN500().getVICMSSTRet()));
+					d.setAliq_st(d.getVl_icms_st() * 100 / d.getVl_bc_icms_st());
+				} else if (icms.getICMSSN900() != null) {
+					d.setCst_icms(icms.getICMSSN900().getCSOSN());
+					if (icms.getICMSSN900().getModBC() != null) {
+						d.setVl_bc_icms(Double.valueOf(icms.getICMSSN900().getVBC()));
+						d.setAliq_icms(Double.valueOf(icms.getICMSSN900().getPICMS()));
+						d.setVl_icms(Double.valueOf(icms.getICMSSN900().getVICMS()));
 					} else {
-						ICMSSN201 icms201 = dados.getImposto().getICMS().getICMSSN201();
-						if (icms201 != null) {
-							d.setCst_icms(icms201.getCSOSN());
-							d.setVl_bc_icms_st(Double.valueOf(icms201.getVBCST()));
-							d.setAliq_st(Double.valueOf(icms201.getPICMSST()));
-							d.setVl_icms_st(Double.valueOf(icms201.getVICMSST()));
-						} else {
-							ICMSSN202 icms202 = dados.getImposto().getICMS().getICMSSN202();
-							if (icms202 != null) {
-								d.setCst_icms(icms202.getCSOSN());
-								d.setVl_bc_icms_st(Double.valueOf(icms202.getVBCST()));
-								d.setAliq_st(Double.valueOf(icms202.getPICMSST()));
-								d.setVl_icms_st(Double.valueOf(icms202.getVICMSST()));
-							} else {
-								ICMSSN500 icms500 = dados.getImposto().getICMS().getICMSSN500();
-								if (icms500 != null) {
-									d.setCst_icms(icms500.getCSOSN());
-									d.setVl_bc_icms_st(Double.valueOf(icms500.getVBCSTRet()));
-									d.setVl_icms_st(Double.valueOf(icms500.getVICMSSTRet()));
-									d.setAliq_st(d.getVl_icms_st() * 100 / d.getVl_bc_icms_st());
-								} else {
-									ICMSSN900 icms900 = dados.getImposto().getICMS().getICMSSN900();
-									d.setCst_icms(icms900.getCSOSN());
-									if (icms900.getModBC() != null) {
-										d.setVl_bc_icms(Double.valueOf(icms900.getVBC()));
-										d.setAliq_icms(Double.valueOf(icms900.getPICMS()));
-										d.setVl_icms(Double.valueOf(icms900.getVICMS()));
-									} else {
-										d.setVl_bc_icms(Double.valueOf(icms900.getVBCST()));
-										d.setAliq_icms(Double.valueOf(icms900.getPICMSST()));
-										d.setVl_icms(Double.valueOf(icms900.getVICMSST()));
-									}
-								}
-							}
-						}
+						d.setVl_bc_icms(Double.valueOf(icms.getICMSSN900().getVBCST()));
+						d.setAliq_icms(Double.valueOf(icms.getICMSSN900().getPICMSST()));
+						d.setVl_icms(Double.valueOf(icms.getICMSSN900().getVICMSST()));
 					}
 				}
 			} else {
-				ICMS00 icms00 = dados.getImposto().getICMS().getICMS00();
-				if (icms00 != null) {
-					d.setCst_icms("0" + icms00.getCST());
-					d.setVl_bc_icms(Double.valueOf(icms00.getVBC()));
-					d.setAliq_icms(Double.valueOf(icms00.getPICMS()));
-					d.setVl_icms(Double.valueOf(icms00.getVICMS()));
-				} else {
-					ICMS10 icms10 = dados.getImposto().getICMS().getICMS10();
-					if (icms10 != null) {
-						d.setCst_icms("0" + icms10.getCST());
-						d.setVl_bc_icms_st(Double.valueOf(icms10.getVBCST()));
-						d.setAliq_st(Double.valueOf(icms10.getPICMSST()));
-						d.setVl_icms_st(Double.valueOf(icms10.getVICMSST()));
+				// verifica qual icms CST foi usado
+				if (icms.getICMS00() != null) {
+					d.setCst_icms("0" + icms.getICMS00().getCST());
+					d.setVl_bc_icms(Double.valueOf(icms.getICMS00().getVBC()));
+					d.setAliq_icms(Double.valueOf(icms.getICMS00().getPICMS()));
+					d.setVl_icms(Double.valueOf(icms.getICMS00().getVICMS()));
+				} else if (icms.getICMS10() != null) {
+					d.setCst_icms("0" + icms.getICMS10().getCST());
+					d.setVl_bc_icms_st(Double.valueOf(icms.getICMS10().getVBCST()));
+					d.setAliq_st(Double.valueOf(icms.getICMS10().getPICMSST()));
+					d.setVl_icms_st(Double.valueOf(icms.getICMS10().getVICMSST()));
+				} else if (icms.getICMS20() != null) {
+					d.setCst_icms("0" + icms.getICMS20().getCST());
+					d.setVl_bc_icms(Double.valueOf(icms.getICMS20().getVBC()));
+					d.setAliq_icms(Double.valueOf(icms.getICMS20().getPICMS()));
+					d.setVl_icms(Double.valueOf(icms.getICMS20().getVICMS()));
+				} else if (icms.getICMS30() != null) {
+					d.setCst_icms("0" + icms.getICMS30().getCST());
+					d.setVl_bc_icms_st(Double.valueOf(icms.getICMS30().getVBCST()));
+					d.setAliq_st(Double.valueOf(icms.getICMS30().getPICMSST()));
+					d.setVl_icms_st(Double.valueOf(icms.getICMS30().getVICMSST()));
+				} else if (icms.getICMS40() != null) {
+					d.setCst_icms("0" + icms.getICMS40().getCST());
+				} else if (icms.getICMS51() != null) {
+					d.setCst_icms("0" + icms.getICMS51().getCST());
+					d.setVl_bc_icms(Double.valueOf(icms.getICMS51().getVBC()));
+					d.setAliq_icms(Double.valueOf(icms.getICMS51().getPICMS()));
+					d.setVl_icms(Double.valueOf(icms.getICMS51().getVICMS()));
+				} else if (icms.getICMS60() != null) {
+					d.setCst_icms("0" + icms.getICMS60().getCST());
+					d.setVl_bc_icms_st(Double.valueOf(icms.getICMS60().getVBCSTRet()));
+					d.setVl_icms_st(Double.valueOf(icms.getICMS60().getVICMSSTRet()));
+				} else if (icms.getICMS70() != null) {
+					d.setCst_icms("0" + icms.getICMS70().getCST());
+					if (icms.getICMS70().getModBC() != null) {
+						d.setVl_bc_icms(Double.valueOf(icms.getICMS70().getVBC()));
+						d.setAliq_icms(Double.valueOf(icms.getICMS70().getPICMS()));
+						d.setVl_icms(Double.valueOf(icms.getICMS70().getVICMS()));
 					} else {
-						ICMS20 icms20 = dados.getImposto().getICMS().getICMS20();
-						if (icms20 != null) {
-							d.setCst_icms("0" + icms20.getCST());
-							d.setVl_bc_icms(Double.valueOf(icms20.getVBC()));
-							d.setAliq_icms(Double.valueOf(icms20.getPICMS()));
-							d.setVl_icms(Double.valueOf(icms20.getVICMS()));
-						} else {
-							ICMS30 icms30 = dados.getImposto().getICMS().getICMS30();
-							if (icms30 != null) {
-								d.setCst_icms("0" + icms30.getCST());
-								d.setVl_bc_icms_st(Double.valueOf(icms30.getVBCST()));
-								d.setAliq_st(Double.valueOf(icms30.getPICMSST()));
-								d.setVl_icms_st(Double.valueOf(icms30.getVICMSST()));
-							} else {
-								ICMS40 icms40 = dados.getImposto().getICMS().getICMS40();
-								if (icms40 != null) {
-									d.setCst_icms("0" + icms40.getCST());
-								} else {
-									ICMS51 icms51 = dados.getImposto().getICMS().getICMS51();
-									if (icms51 != null) {
-										d.setCst_icms("0" + icms51.getCST());
-										d.setVl_bc_icms(Double.valueOf(icms51.getVBC()));
-										d.setAliq_icms(Double.valueOf(icms51.getPICMS()));
-										d.setVl_icms(Double.valueOf(icms51.getVICMS()));
-									} else {
-										ICMS60 icms60 = dados.getImposto().getICMS().getICMS60();
-										if (icms60 != null) {
-											d.setCst_icms("0" + icms60.getCST());
-											d.setVl_bc_icms_st(Double.valueOf(icms60.getVBCSTRet()));
-											d.setVl_icms_st(Double.valueOf(icms60.getVICMSSTRet()));
-										} else {
-											ICMS70 icms70 = dados.getImposto().getICMS().getICMS70();
-											if (icms70 != null) {
-												d.setCst_icms("0" + icms70.getCST());
-												if (icms70.getModBC() != null) {
-													d.setVl_bc_icms(Double.valueOf(icms70.getVBC()));
-													d.setAliq_icms(Double.valueOf(icms70.getPICMS()));
-													d.setVl_icms(Double.valueOf(icms70.getVICMS()));
-												} else {
-													d.setVl_bc_icms_st(Double.valueOf(icms70.getVBCST()));
-													d.setVl_icms_st(Double.valueOf(icms70.getVICMSST()));
-													d.setAliq_st(Double.valueOf(icms70.getPICMSST()));
-												}
-											} else {
-												ICMS90 icms90 = dados.getImposto().getICMS().getICMS90();
-												d.setCst_icms("0" + icms90.getCST());
-												if (icms90.getModBC() != null) {
-													d.setVl_bc_icms(Double.valueOf(icms90.getVBC()));
-													d.setAliq_icms(Double.valueOf(icms90.getPICMS()));
-													d.setVl_icms(Double.valueOf(icms90.getVICMS()));
-												} else {
-													d.setVl_bc_icms_st(Double.valueOf(icms90.getVBCST()));
-													d.setVl_icms_st(Double.valueOf(icms90.getVICMSST()));
-													d.setAliq_st(Double.valueOf(icms90.getPICMSST()));
-												}
-											}
-										}
-									}
-								}
-							}
-						}
+						d.setVl_bc_icms_st(Double.valueOf(icms.getICMS70().getVBCST()));
+						d.setVl_icms_st(Double.valueOf(icms.getICMS70().getVICMSST()));
+						d.setAliq_st(Double.valueOf(icms.getICMS70().getPICMSST()));
+					}
+				} else if (icms.getICMS90() != null) {
+					d.setCst_icms("0" + icms.getICMS90().getCST());
+					if (icms.getICMS90().getModBC() != null) {
+						d.setVl_bc_icms(Double.valueOf(icms.getICMS90().getVBC()));
+						d.setAliq_icms(Double.valueOf(icms.getICMS90().getPICMS()));
+						d.setVl_icms(Double.valueOf(icms.getICMS90().getVICMS()));
+					} else {
+						d.setVl_bc_icms_st(Double.valueOf(icms.getICMS90().getVBCST()));
+						d.setVl_icms_st(Double.valueOf(icms.getICMS90().getVICMSST()));
+						d.setAliq_st(Double.valueOf(icms.getICMS90().getPICMSST()));
 					}
 				}
 			}
@@ -207,8 +157,10 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 				d.setVl_ipi(Double.valueOf(ipi.getIPITrib().getVIPI()));
 			} catch (Exception e) {
 				d.setCst_ipi(ipi.getIPINT().getCST());
+				d.setVl_ipi(0.00);
 			} finally {
 				int cst_ipi = Integer.valueOf(d.getCst_ipi());
+				// adaptacao do ipi das compras
 				if (!venda && cst_ipi >= 50) {
 					cst_ipi -= 50;
 				}
@@ -216,6 +168,7 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 			}
 		} else {
 			d.setCst_ipi("");
+			d.setVl_ipi(0.00);
 		}
 
 		// pis

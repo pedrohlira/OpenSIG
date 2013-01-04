@@ -15,6 +15,10 @@
     background: url(../img/frete.png) no-repeat center left !important;
 }
 
+.icon-consumo {
+    background: url(../img/consumo.png) no-repeat center left !important;
+}
+
 .icon-valor {
     background: url(../img/valor.png) no-repeat center left !important;
 }

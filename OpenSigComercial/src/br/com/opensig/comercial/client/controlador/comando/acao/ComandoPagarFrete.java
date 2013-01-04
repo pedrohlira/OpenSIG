@@ -87,7 +87,7 @@ public class ComandoPagarFrete extends ComandoAcao<ComFrete> {
 				super.execute(contexto);
 				Record rec = LISTA.getPanel().getSelectionModel().getSelected();
 
-				if (rec.getAsBoolean("comFreteFechada") && !rec.getAsBoolean("comFretePaga") && !rec.getAsBoolean("comFreteRecebida")) {
+				if (rec.getAsBoolean("comFreteFechada") && !rec.getAsBoolean("comFretePaga")) {
 					freteId = rec.getAsInteger("comFreteId");
 					abrirFinanceiro();
 				} else {

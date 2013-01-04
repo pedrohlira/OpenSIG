@@ -12,9 +12,9 @@ public class DadosC300 extends Bean {
     private int num_doc_ini;
     private int num_doc_fin;
     private Date dt_doc;
-    private double vl_doc;
-    private double vl_pis;
-    private double vl_cofins;
+    private Double vl_doc;
+    private Double vl_pis;
+    private Double vl_cofins;
     private String cod_cta;
 
     public DadosC300() {
@@ -77,27 +77,27 @@ public class DadosC300 extends Bean {
         this.sub = sub;
     }
 
-    public double getVl_cofins() {
+    public Double getVl_cofins() {
         return vl_cofins;
     }
 
-    public void setVl_cofins(double vl_cofins) {
+    public void setVl_cofins(Double vl_cofins) {
         this.vl_cofins = vl_cofins;
     }
 
-    public double getVl_doc() {
+    public Double getVl_doc() {
         return vl_doc;
     }
 
-    public void setVl_doc(double vl_doc) {
+    public void setVl_doc(Double vl_doc) {
         this.vl_doc = vl_doc;
     }
 
-    public double getVl_pis() {
+    public Double getVl_pis() {
         return vl_pis;
     }
 
-    public void setVl_pis(double vl_pis) {
+    public void setVl_pis(Double vl_pis) {
         this.vl_pis = vl_pis;
     }
 }

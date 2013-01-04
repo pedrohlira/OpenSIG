@@ -6,14 +6,14 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.opensig.comercial.shared.modelo.ComCompra;
+import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.comercial.shared.modelo.ComEcfNota;
 import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
 import br.com.opensig.core.shared.modelo.Autenticacao;
 import br.com.opensig.fiscal.client.servico.FiscalService;
-import br.com.opensig.fiscal.shared.modelo.FisSpedBloco;
-import br.com.opensig.fiscal.shared.modelo.FisSpedFiscal;
+import br.com.opensig.fiscal.shared.modelo.FisSped;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 public interface IRegistro<E, T> {
@@ -26,9 +26,9 @@ public interface IRegistro<E, T> {
 
 	public void setEscritor(Writer escritor);
 
-	public FisSpedFiscal getSped();
+	public FisSped getSped();
 
-	public void setSped(FisSpedFiscal sped);
+	public void setSped(FisSped sped);
 
 	public FiscalService getService();
 
@@ -62,10 +62,6 @@ public interface IRegistro<E, T> {
 
 	public void setFimBloco(boolean fimBloco);
 
-	public List<FisSpedBloco> getBlocos();
-
-	public void setBlocos(List<FisSpedBloco> blocos);
-
 	public List<ComCompra> getCompras();
 
 	public void setCompras(List<ComCompra> compras);
@@ -78,6 +74,10 @@ public interface IRegistro<E, T> {
 
 	public void setVendas(List<ComVenda> vendas);
 
+	public List<String> getInutilizadas();
+	
+	public void setInutilizadas(List<String> inutilizadas);
+	
 	public List<ComEcfZ> getZs();
 
 	public void setZs(List<ComEcfZ> zs);
@@ -90,6 +90,10 @@ public interface IRegistro<E, T> {
 
 	public void setEstoque(List<ProdProduto> estoque);
 
+	public List<ComConsumo> getConsumos();
+
+	public void setConsumos(List<ComConsumo> consumos);
+	
 	public T getDados();
 
 	public void setDados(T dados);

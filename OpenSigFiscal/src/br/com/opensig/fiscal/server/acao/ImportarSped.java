@@ -27,12 +27,12 @@ import br.com.opensig.core.shared.modelo.Sql;
 import br.com.opensig.core.shared.modelo.sistema.SisExpImp;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.fiscal.server.FiscalServiceImpl;
-import br.com.opensig.fiscal.shared.modelo.FisSpedFiscal;
+import br.com.opensig.fiscal.shared.modelo.FisSped;
 
-public class ImportarSped implements IImportacao<FisSpedFiscal> {
+public class ImportarSped implements IImportacao<FisSped> {
 
 	@Override
-	public Map<String, List<FisSpedFiscal>> setArquivo(Autenticacao auth, Map<String, byte[]> arquivos, SisExpImp modo) throws OpenSigException {
+	public Map<String, List<FisSped>> setArquivo(Autenticacao auth, Map<String, byte[]> arquivos, SisExpImp modo) throws OpenSigException {
 		String nome = "";
 		byte[] obj = null;
 
@@ -68,8 +68,8 @@ public class ImportarSped implements IImportacao<FisSpedFiscal> {
 			}
 
 			// atualiza o registro
-			Sql sql = new Sql(new FisSpedFiscal(), EComando.ATUALIZAR, gf, gp);
-			FiscalServiceImpl<FisSpedFiscal> servico = new FiscalServiceImpl<FisSpedFiscal>(auth);
+			Sql sql = new Sql(new FisSped(), EComando.ATUALIZAR, gf, gp);
+			FiscalServiceImpl<FisSped> servico = new FiscalServiceImpl<FisSped>(auth);
 			Integer[] resp = servico.executar(new Sql[] { sql });
 
 			// caso exista o registro

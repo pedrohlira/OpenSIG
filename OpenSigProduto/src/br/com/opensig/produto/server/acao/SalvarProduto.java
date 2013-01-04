@@ -8,6 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
+import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
 import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.controlador.parametro.ParametroNumero;
@@ -61,6 +62,12 @@ public class SalvarProduto extends Chain {
 			produto.setProdComposicoes(null);
 			servico.salvar(em, produto);
 
+			// valida se o codigo de barras existe na tabela de precos
+			FiltroTexto ft = new FiltroTexto("prodPrecoBarra", ECompara.IGUAL, produto.getProdProdutoBarra());
+			if (produto.getProdProdutoBarra() != null && servico.selecionar(new ProdPreco(), 0, 0, ft, true).getTotal() > 0) {
+				throw new Exception("DUPLICATE preco auxiliar com o mesmo codigo de barras.");
+			}
+
 			// estoque
 			salvarEstoques(em, estoques, novo);
 			// precos
@@ -96,16 +103,22 @@ public class SalvarProduto extends Chain {
 			Sql sql = new Sql(new ProdPreco(), EComando.EXCLUIR, fo);
 			servico.executar(em, sql);
 		}
-		
+
+		// insere
 		if (precos != null && !precos.isEmpty()) {
-			// insere
 			for (ProdPreco prodPre : precos) {
-				prodPre.setProdProduto(produto);
+				// valida se o codigo de barras existe na tabela de produto
+				FiltroTexto ft = new FiltroTexto("prodProdutoBarra", ECompara.IGUAL, prodPre.getProdPrecoBarra());
+				if (prodPre.getProdPrecoBarra() != null && servico.selecionar(new ProdProduto(), 0, 0, ft, true).getTotal() > 0) {
+					throw new OpenSigException("DUPLICATE produto com o mesmo codigo de barras do preco auxiliar.");
+				} else {
+					prodPre.setProdProduto(produto);
+				}
 			}
 			servico.salvar(em, precos);
 		}
 	}
-	
+
 	private void salvarComposicoes(EntityManager em, List<ProdComposicao> composicoes) throws OpenSigException {
 		// deleta
 		if (produto.getProdProdutoId() > 0) {
@@ -113,7 +126,7 @@ public class SalvarProduto extends Chain {
 			Sql sql = new Sql(new ProdComposicao(), EComando.EXCLUIR, fo);
 			servico.executar(em, sql);
 		}
-		
+
 		if (composicoes != null && !composicoes.isEmpty()) {
 			// insere
 			for (ProdComposicao prodComp : composicoes) {

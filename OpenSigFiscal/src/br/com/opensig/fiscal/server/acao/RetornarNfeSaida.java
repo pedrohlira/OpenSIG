@@ -36,7 +36,7 @@ public class RetornarNfeSaida implements Runnable {
 			// espera o tempo de processamento na sefaz
 			Thread.sleep(espera);
 			// envia para sefaz
-			String proc = servico.receberNFe(saida.getFisNotaSaidaXml(), empresa.getEmpEmpresaId(), saida.getFisNotaSaidaRecibo());
+			String proc = servico.receberNFe(saida.getFisNotaSaidaXml(), saida.getFisNotaSaidaRecibo());
 			// analisa o retorno e seta os status
 			TRetConsReciNFe ret = UtilServer.xmlToObj(proc, "br.com.opensig.retconsrecinfe");
 			// verifica se sucesso

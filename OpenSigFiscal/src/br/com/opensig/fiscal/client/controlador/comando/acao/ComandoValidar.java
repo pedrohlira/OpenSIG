@@ -9,7 +9,6 @@ import br.com.opensig.core.client.controlador.comando.EModo;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
-import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.fiscal.client.servico.FiscalProxy;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -25,7 +24,6 @@ public class ComandoValidar extends ComandoAcao {
 	public void execute(Map contexto) {
 		super.execute(contexto);
 		int amb = Integer.valueOf(UtilClient.CONF.get("nfe.tipoamb"));
-		int empresa = Integer.valueOf(Ponte.getLogin().getEmpresa()[0]);
 		EModo modo = contexto.get("acao") != null ? (EModo) contexto.get("acao") : EModo.LISTAGEM;
 
 		FiscalProxy proxy = new FiscalProxy();
@@ -45,7 +43,7 @@ public class ComandoValidar extends ComandoAcao {
 		}
 
 		MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtValidar());
-		proxy.validar(amb, filtro, empresa, new AsyncCallback<String>() {
+		proxy.validar(amb, filtro, new AsyncCallback<String>() {
 			public void onFailure(Throwable caught) {
 				MessageBox.hide();
 				MessageBox.alert(OpenSigCore.i18n.txtValidar(), caught.getMessage());

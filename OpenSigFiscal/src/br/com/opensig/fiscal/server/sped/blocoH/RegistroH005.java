@@ -14,7 +14,7 @@ public class RegistroH005 extends ARegistro<DadosH005, Dados> {
 	@Override
 	public void executar() {
 
-		if (sped.getFisSpedFiscalMes() == 2) {
+		if (sped.getFisSpedMes() == 2) {
 			try {
 				StringWriter sw = new StringWriter(1000000);
 				RegistroH010 r010 = new RegistroH010();

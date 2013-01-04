@@ -25,7 +25,7 @@ public class Registro0000 extends ARegistro<Dados0000, Dados> {
 		d.setUf(mun.getEmpEstado().getEmpEstadoSigla());
 		d.setIe(sped.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento2());
 		d.setCod_mun(mun.getEmpMunicipioIbge());
-		//TODO im adicionar ao sistema isso
+		d.setIm(sped.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento3());
 		d.setSuframa(auth.getConf().get("sped.0000.suframa"));
 		d.setInd_perfil(auth.getConf().get("sped.0000.ind_perfil"));
 		d.setInd_ativ(Integer.valueOf(auth.getConf().get("sped.0000.ind_ativ")));

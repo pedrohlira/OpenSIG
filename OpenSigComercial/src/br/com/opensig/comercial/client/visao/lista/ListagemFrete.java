@@ -23,6 +23,7 @@ import br.com.opensig.core.client.visao.abstrato.AListagem;
 import br.com.opensig.core.client.visao.abstrato.IFormulario;
 import br.com.opensig.core.shared.modelo.IFavorito;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
+import br.com.opensig.empresa.client.controlador.comando.ComandoFornecedor;
 import br.com.opensig.empresa.client.controlador.comando.ComandoTransportadora;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.financeiro.client.controlador.comando.ComandoPagar;
@@ -204,6 +205,13 @@ public class ListagemFrete extends AListagem<ComFrete> {
 		MenuItem itemTransportadora = gerarFuncao(transportadora, "empTransportadoraId", "empTransportadora.empTransportadoraId");
 		if (itemTransportadora != null) {
 			mnuContexto.addItem(itemTransportadora);
+		}
+		
+		// fornecedor
+		SisFuncao fornecedor = UtilClient.getFuncaoPermitida(ComandoFornecedor.class);
+		MenuItem itemFornecedor = gerarFuncao(fornecedor, "empFornecedorId", "empFornecedor.empFornecedorId");
+		if (itemFornecedor != null) {
+			mnuContexto.addItem(itemFornecedor);
 		}
 		
 		// pagar

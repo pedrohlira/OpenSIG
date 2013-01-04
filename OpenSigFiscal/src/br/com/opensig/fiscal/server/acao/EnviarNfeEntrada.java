@@ -53,7 +53,7 @@ public class EnviarNfeEntrada extends Chain {
 			String xsd = UtilServer.getRealPath(auth.getConf().get("nfe.xsd_enviando"));
 			NFe.validarXML(xml, xsd);
 			// envia para sefaz
-			String recibo = servico.enviarNFe(xml, entrada.getEmpEmpresa().getEmpEmpresaId());
+			String recibo = servico.enviarNFe(xml);
 			// analisa o retorno e seta os status
 			TRetEnviNFe ret = UtilServer.xmlToObj(recibo, "br.com.opensig.retenvinfe");
 			// verifica se sucesso

@@ -19,13 +19,13 @@ public class DadosD100 extends Bean {
 	private Date dt_a_p;
 	private String tp_cte;
 	private String chv_cte_ref;
-	private double vl_doc;
-	private double vl_desc;
+	private Double vl_doc;
+	private Double vl_desc;
 	private String ind_frt;
-	private double vl_serv;
-	private double vl_bc_icms;
-	private double vl_icms;
-	private double vl_nt;
+	private Double vl_serv;
+	private Double vl_bc_icms;
+	private Double vl_icms;
+	private Double vl_nt;
 	private String cod_inf;
 	private String cod_cta; 
 	
@@ -137,19 +137,19 @@ public class DadosD100 extends Bean {
 		this.chv_cte_ref = chv_cte_ref;
 	}
 
-	public double getVl_doc() {
+	public Double getVl_doc() {
 		return vl_doc;
 	}
 
-	public void setVl_doc(double vl_doc) {
+	public void setVl_doc(Double vl_doc) {
 		this.vl_doc = vl_doc;
 	}
 
-	public double getVl_desc() {
+	public Double getVl_desc() {
 		return vl_desc;
 	}
 
-	public void setVl_desc(double vl_desc) {
+	public void setVl_desc(Double vl_desc) {
 		this.vl_desc = vl_desc;
 	}
 
@@ -161,35 +161,35 @@ public class DadosD100 extends Bean {
 		this.ind_frt = ind_frt;
 	}
 
-	public double getVl_serv() {
+	public Double getVl_serv() {
 		return vl_serv;
 	}
 
-	public void setVl_serv(double vl_serv) {
+	public void setVl_serv(Double vl_serv) {
 		this.vl_serv = vl_serv;
 	}
 
-	public double getVl_bc_icms() {
+	public Double getVl_bc_icms() {
 		return vl_bc_icms;
 	}
 
-	public void setVl_bc_icms(double vl_bc_icms) {
+	public void setVl_bc_icms(Double vl_bc_icms) {
 		this.vl_bc_icms = vl_bc_icms;
 	}
 
-	public double getVl_icms() {
+	public Double getVl_icms() {
 		return vl_icms;
 	}
 
-	public void setVl_icms(double vl_icms) {
+	public void setVl_icms(Double vl_icms) {
 		this.vl_icms = vl_icms;
 	}
 
-	public double getVl_nt() {
+	public Double getVl_nt() {
 		return vl_nt;
 	}
 
-	public void setVl_nt(double vl_nt) {
+	public void setVl_nt(Double vl_nt) {
 		this.vl_nt = vl_nt;
 	}
 

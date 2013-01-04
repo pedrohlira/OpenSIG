@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.opensig.comercial.shared.modelo.ComCompra;
+import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
@@ -27,6 +28,8 @@ public interface ComercialServiceAsync<E extends Dados> extends CoreServiceAsync
 	public abstract void fecharVenda(ComVenda venda, AsyncCallback<String[][]> asyncCallback);
 
 	public abstract void fecharFrete(ComFrete frete, AsyncCallback asyncCallback);
+	
+	public abstract void fecharConsumo(ComConsumo consumo, AsyncCallback asyncCallback);
 
 	public abstract void fecharEcfVenda(ComEcfVenda venda, AsyncCallback<String[][]> asyncCallback);
 	
@@ -47,6 +50,8 @@ public interface ComercialServiceAsync<E extends Dados> extends CoreServiceAsync
 	public abstract void cancelarVenda(ComVenda venda, AsyncCallback asyncCallback);
 
 	public abstract void excluirFrete(ComFrete frete, AsyncCallback asyncCallback);
+	
+	public abstract void excluirConsumo(ComConsumo consumo, AsyncCallback asyncCallback);
 	
 	public abstract void excluirEcfVenda(ComEcfVenda venda, AsyncCallback asyncCallback);
 

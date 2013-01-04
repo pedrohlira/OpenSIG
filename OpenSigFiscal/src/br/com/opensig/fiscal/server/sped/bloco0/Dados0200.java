@@ -14,7 +14,7 @@ public class Dados0200 extends Bean {
 	private String ex_ipi;
 	private String cod_gen;
 	private int cod_lst;
-	private double aliq_icms;
+	private Double aliq_icms;
 
 	public Dados0200() {
 		reg = "0200";
@@ -100,11 +100,11 @@ public class Dados0200 extends Bean {
 		this.cod_lst = cod_lst;
 	}
 
-	public double getAliq_icms() {
+	public Double getAliq_icms() {
 		return aliq_icms;
 	}
 
-	public void setAliq_icms(double aliq_icms) {
+	public void setAliq_icms(Double aliq_icms) {
 		this.aliq_icms = aliq_icms;
 	}
 

@@ -9,9 +9,7 @@
 			<field name="reg" type="string" length="4" trim="true"/>
 			<field name="dt_inv" type="date" format="ddMMyyyy"/>
 			<field name="vl_inv" type="double" format="##0.00"/>
-			<!-- Colocar em 01/07/2012 
 			<field name="mot_inv" type="string" length="2" trim="true"/>
-			-->
 			<field name="padrao" type="string" length="1" default=""/>
 		</record>
 	</stream>

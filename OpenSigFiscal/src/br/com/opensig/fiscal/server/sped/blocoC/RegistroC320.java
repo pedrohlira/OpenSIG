@@ -35,7 +35,7 @@ public class RegistroC320 extends ARegistro<DadosC320, List<ComEcfNotaProduto>> 
 				for (Entry<Integer, List<ComEcfNotaProduto>> entry : produtos.entrySet()) {
 					r321.setDados(entry.getValue());
 					r321.executar();
-					qtdLinhas++;
+					qtdLinhas += r321.getQtdLinhas();
 				}
 			}
 		} catch (Exception e) {
@@ -52,7 +52,7 @@ public class RegistroC320 extends ARegistro<DadosC320, List<ComEcfNotaProduto>> 
 			d.setCst_icms(auth.getConf().get("nfe.crt").equals("1") ? prod.getProdTributacao().getProdTributacaoCson() : prod.getProdTributacao().getProdTributacaoCst());
 			d.setCfop(prod.getProdTributacao().getProdTributacaoCfop());
 			d.setAliq_icms(np.getComEcfNotaProdutoIcms());
-			d.setVl_opr(d.getVl_opr() + np.getComEcfNotaProdutoLiquido());
+			d.setVl_opr(somarDoubles(d.getVl_opr() , np.getComEcfNotaProdutoLiquido()));
 			d.setCod_obs("");
 
 			// agrupando os produtos pelo id
@@ -65,7 +65,7 @@ public class RegistroC320 extends ARegistro<DadosC320, List<ComEcfNotaProduto>> 
 				lista.add(np);
 			}
 		}
-		if (d.getAliq_icms() > 0) {
+		if (d.getVl_opr() != null) {
 			d.setVl_bc_icms(d.getVl_opr());
 			d.setVl_icms(d.getVl_bc_icms() * d.getAliq_icms() / 100);
 		}

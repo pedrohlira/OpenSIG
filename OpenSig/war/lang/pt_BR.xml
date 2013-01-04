@@ -292,6 +292,13 @@
 		<imagem>icon-frete</imagem>
 	</funcao>
 	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoConsumo
+		</classe>
+		<nome>Consumo</nome>
+		<descricao>Consumo de Água, Luz, Gás e Telefonia.</descricao>
+		<imagem>icon-consumo</imagem>
+	</funcao>
+	<funcao>
 		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoValorProduto
 		</classe>
 		<nome>Valor Produto</nome>
@@ -428,10 +435,10 @@
 		<imagem>icon-incentivo</imagem>
 	</funcao>
 	<funcao>
-		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSpedFiscal
+		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSped
 		</classe>
-		<nome>SPED Fiscal</nome>
-		<descricao>Sistema Público de Escrituração Digital Fiscal</descricao>
+		<nome>SPED</nome>
+		<descricao>Sistema Público de Escrituração Digital</descricao>
 		<imagem>icon-sped</imagem>
 	</funcao>
 	<!-- Ações -->
@@ -562,6 +569,14 @@
 		<imagem>icon-pagar</imagem>
 	</acao>
 	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagarConsumo
+		</classe>
+		<nome>Pagar</nome>
+		<descricao>Realiza o processo de pagamento dos valores referente ao
+			consumo.</descricao>
+		<imagem>icon-pagar</imagem>
+	</acao>
+	<acao>
 		<classe>br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerar
 		</classe>
 		<nome>Gerar</nome>
@@ -685,6 +700,13 @@
 		</classe>
 		<nome>Fechar</nome>
 		<descricao>Fechar o frete.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharConsumo
+		</classe>
+		<nome>Fechar</nome>
+		<descricao>Fechar o consumo.</descricao>
 		<imagem>icon-fechar</imagem>
 	</acao>
 	<acao>

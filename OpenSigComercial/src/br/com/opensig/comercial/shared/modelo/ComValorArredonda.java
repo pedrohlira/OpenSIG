@@ -18,8 +18,6 @@ import br.com.opensig.core.shared.modelo.Dados;
  * Classe que representa um valor de arredondamento no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 07/08/2009
  */
 @Entity
 @Table(name = "com_valor_arredonda")

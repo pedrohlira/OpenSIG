@@ -40,6 +40,9 @@ public class EmpEntidade extends Dados implements Serializable {
 	@Column(name = "emp_entidade_documento2")
 	private String empEntidadeDocumento2;
 
+	@Column(name = "emp_entidade_documento3")
+	private String empEntidadeDocumento3;
+
 	@Column(name = "emp_entidade_nome1")
 	private String empEntidadeNome1;
 
@@ -97,6 +100,14 @@ public class EmpEntidade extends Dados implements Serializable {
 
 	public void setEmpEntidadeDocumento2(String empEntidadeDocumento2) {
 		this.empEntidadeDocumento2 = empEntidadeDocumento2;
+	}
+
+	public String getEmpEntidadeDocumento3() {
+		return empEntidadeDocumento3;
+	}
+
+	public void setEmpEntidadeDocumento3(String empEntidadeDocumento3) {
+		this.empEntidadeDocumento3 = empEntidadeDocumento3;
 	}
 
 	public String getEmpEntidadeNome1() {
@@ -160,8 +171,8 @@ public class EmpEntidade extends Dados implements Serializable {
 	}
 
 	public String[] toArray() {
-		return new String[] { empEntidadeId + "", empEntidadeNome1, empEntidadeNome2, empEntidadePessoa, empEntidadeDocumento1, empEntidadeDocumento2, getEmpEntidadeAtivo() + "",
-				empEntidadeObservacao };
+		return new String[] { empEntidadeId + "", empEntidadeNome1, empEntidadeNome2, empEntidadePessoa, empEntidadeDocumento1, empEntidadeDocumento2, empEntidadeDocumento3,
+				getEmpEntidadeAtivo() + "", empEntidadeObservacao };
 	}
 
 	public void anularDependencia() {

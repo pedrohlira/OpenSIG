@@ -10,8 +10,8 @@ public class DadosC405 extends Bean {
 	private int cro;
 	private int crz;
 	private int num_coo_fin;
-	private double gt_fin;
-	private double vl_brt;
+	private Double gt_fin;
+	private Double vl_brt;
 
 	public DadosC405() {
 		reg = "C405";
@@ -49,19 +49,19 @@ public class DadosC405 extends Bean {
 		this.num_coo_fin = num_coo_fin;
 	}
 
-	public double getGt_fin() {
+	public Double getGt_fin() {
 		return gt_fin;
 	}
 
-	public void setGt_fin(double gt_fin) {
+	public void setGt_fin(Double gt_fin) {
 		this.gt_fin = gt_fin;
 	}
 
-	public double getVl_brt() {
+	public Double getVl_brt() {
 		return vl_brt;
 	}
 
-	public void setVl_brt(double vl_brt) {
+	public void setVl_brt(Double vl_brt) {
 		this.vl_brt = vl_brt;
 	}
 

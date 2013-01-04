@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.opensig.comercial.shared.modelo.ComCompra;
+import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
@@ -56,6 +57,11 @@ public class ComercialProxy<E extends Dados> extends CoreProxy<E> implements Com
 	public void fecharFrete(ComFrete frete, AsyncCallback asyncCallback) {
 		async.fecharFrete(frete, asyncCallback);
 	}
+	
+	@Override
+	public void fecharConsumo(ComConsumo consumo, AsyncCallback asyncCallback) {
+		async.fecharConsumo(consumo, asyncCallback);
+	}
 
 	@Override
 	public void salvarCompra(ComCompra compra, AsyncCallback<ComCompra> asyncCallback) {
@@ -95,6 +101,11 @@ public class ComercialProxy<E extends Dados> extends CoreProxy<E> implements Com
 	@Override
 	public void excluirFrete(ComFrete frete, AsyncCallback asyncCallback) {
 		async.excluirFrete(frete, asyncCallback);
+	}
+	
+	@Override
+	public void excluirConsumo(ComConsumo consumo, AsyncCallback asyncCallback) {
+		async.excluirConsumo(consumo, asyncCallback);
 	}
 
 	@Override
