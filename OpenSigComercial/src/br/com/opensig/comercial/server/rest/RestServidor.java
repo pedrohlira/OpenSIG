@@ -475,6 +475,9 @@ public class RestServidor extends ARest {
 		venda.setComEcfVendaDesconto(desc);
 		venda.setComEcfVendaProdutos(null);
 		venda.setEcfPagamentos(null);
+		if (vps.isEmpty()) {
+			venda.setComEcfVendaCancelada(true);
+		}
 		if (venda.getComEcfVendaCancelada()) {
 			venda.setComEcfVendaFechada(true);
 		}
@@ -495,7 +498,7 @@ public class RestServidor extends ARest {
 		}
 		service.salvar(vps);
 
-		if (venda.getComEcfVendaCancelada() == false) {
+		if (!venda.getComEcfVendaCancelada()) {
 			// atualiza o estoque
 			service.executar(sqls.toArray(new Sql[] {}));
 

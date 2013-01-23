@@ -309,7 +309,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public String validar(int ambiente, IFiltro filtro) throws FiscalException {
+	public String validar(int ambiente, IFiltro filtro, boolean auto) throws FiscalException {
 		try {
 			FiltroTexto ft = new FiltroTexto("fisNotaEntradaRecibo", ECompara.DIFERENTE, "OK");
 			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { ft, filtro });
@@ -319,38 +319,43 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 			int prov = 0;
 
 			for (FisNotaEntrada nota : entradas.getLista()) {
-				String resp = situacao(ambiente, nota.getFisNotaEntradaChave());
-				TRetConsSitNFe situacao = UtilServer.xmlToObj(resp, "br.com.opensig.retconssitnfe");
+				if (auto == false) {
+					nota.setFisNotaEntradaRecibo("OK");
+					ok++;
+				} else {
+					String resp = situacao(ambiente, nota.getFisNotaEntradaChave());
+					TRetConsSitNFe situacao = UtilServer.xmlToObj(resp, "br.com.opensig.retconssitnfe");
 
-				// verifica se o status na sefaz é igual ao informado
-				if (situacao.getCStat().equals("100")) {
-					if (nota.getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId() && situacao.getProtNFe() != null) {
-						// valida se a data da nota ainda pode ser cancelada
-						int dias = Integer.valueOf(getAuth().getConf().get("nfe.tempo_cancela"));
-						Calendar cal = Calendar.getInstance();
-						cal.setTime(nota.getFisNotaEntradaData());
-						cal.add(Calendar.DATE, dias);
+					// verifica se o status na sefaz é igual ao informado
+					if (situacao.getCStat().equals("100")) {
+						if (nota.getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId() && situacao.getProtNFe() != null) {
+							// valida se a data da nota ainda pode ser cancelada
+							int dias = Integer.valueOf(getAuth().getConf().get("nfe.tempo_cancela"));
+							Calendar cal = Calendar.getInstance();
+							cal.setTime(nota.getFisNotaEntradaData());
+							cal.add(Calendar.DATE, dias);
 
-						Date hoje = new Date();
-						if (hoje.compareTo(cal.getTime()) > 0) {
+							Date hoje = new Date();
+							if (hoje.compareTo(cal.getTime()) > 0) {
+								nota.setFisNotaEntradaRecibo("OK");
+								ok++;
+							} else {
+								nota.setFisNotaEntradaRecibo("PROVISORIO");
+								prov++;
+							}
+						} else if (nota.getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.CANCELADO.getId() && situacao.getRetCancNFe() != null) {
 							nota.setFisNotaEntradaRecibo("OK");
 							ok++;
 						} else {
-							nota.setFisNotaEntradaRecibo("PROVISORIO");
-							prov++;
+							nota.setFisNotaStatus(new FisNotaStatus(ENotaStatus.ERRO));
+							nota.setFisNotaEntradaErro("O status da nota de entrada esta diferente da sefaz.");
+							erro++;
 						}
-					} else if (nota.getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.CANCELADO.getId() && situacao.getRetCancNFe() != null) {
-						nota.setFisNotaEntradaRecibo("OK");
-						ok++;
 					} else {
 						nota.setFisNotaStatus(new FisNotaStatus(ENotaStatus.ERRO));
-						nota.setFisNotaEntradaErro("O status da nota de entrada esta diferente da sefaz.");
+						nota.setFisNotaEntradaErro("Nao achou a nota na sefaz ou problemas na hora do acesso ao servidor.");
 						erro++;
 					}
-				} else {
-					nota.setFisNotaStatus(new FisNotaStatus(ENotaStatus.ERRO));
-					nota.setFisNotaEntradaErro("Nao achou a nota na sefaz ou problemas na hora do acesso ao servidor.");
-					erro++;
 				}
 			}
 			// salva todas

@@ -23,7 +23,7 @@ public interface FiscalService<E extends Dados> extends CoreService<E> {
 	
 	public String status(int ambiente, int uf) throws FiscalException;
 
-	public String validar(int ambiente, IFiltro filtro) throws FiscalException;
+	public String validar(int ambiente, IFiltro filtro, boolean auto) throws FiscalException;
 
 	public String situacao(int ambiente, String chave) throws FiscalException;
 

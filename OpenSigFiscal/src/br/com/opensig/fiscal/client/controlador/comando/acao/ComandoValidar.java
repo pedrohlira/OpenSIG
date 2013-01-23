@@ -14,20 +14,19 @@ import br.com.opensig.fiscal.client.servico.FiscalProxy;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.widgets.MessageBox;
+import com.gwtext.client.widgets.MessageBox.ConfirmCallback;
 import com.gwtextux.client.widgets.window.ToastWindow;
 
 public class ComandoValidar extends ComandoAcao {
+
+	private IFiltro filtro;
 
 	public ComandoValidar() {
 	}
 
 	public void execute(Map contexto) {
 		super.execute(contexto);
-		int amb = Integer.valueOf(UtilClient.CONF.get("nfe.tipoamb"));
 		EModo modo = contexto.get("acao") != null ? (EModo) contexto.get("acao") : EModo.LISTAGEM;
-
-		FiscalProxy proxy = new FiscalProxy();
-		IFiltro filtro;
 
 		if (modo == EModo.LISTAGEM) {
 			filtro = LISTA.getProxy().getFiltroAtual();
@@ -42,8 +41,19 @@ public class ComandoValidar extends ComandoAcao {
 			}
 		}
 
+		MessageBox.confirm(OpenSigCore.i18n.txtValidar(), "Deseja validar automaticamente?", new ConfirmCallback() {
+			public void execute(String btnID) {
+				validar(btnID.equalsIgnoreCase("yes"));
+			}
+		});
+	}
+
+	private void validar(boolean auto) {
+		int amb = Integer.valueOf(UtilClient.CONF.get("nfe.tipoamb"));
+		FiscalProxy proxy = new FiscalProxy();
+
 		MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtValidar());
-		proxy.validar(amb, filtro, new AsyncCallback<String>() {
+		proxy.validar(amb, filtro, auto, new AsyncCallback<String>() {
 			public void onFailure(Throwable caught) {
 				MessageBox.hide();
 				MessageBox.alert(OpenSigCore.i18n.txtValidar(), caught.getMessage());

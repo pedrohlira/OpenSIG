@@ -100,13 +100,7 @@ public class EFD implements Runnable {
 			zs = getZs();
 			estoque = getEstoque();
 			consumos = getConsumos();
-			// pis/cofins
-			FiltroNumero fn1 = new FiltroNumero("comNaturezaCfopTrib", ECompara.IGUAL, 5101);
-			FiltroNumero fn2 = new FiltroNumero("comNaturezaCfopTrib", ECompara.IGUAL, 5102);
-			GrupoFiltro gf = new GrupoFiltro(EJuncao.OU, new IFiltro[] { fn1, fn2 });
-			ComNatureza nat = (ComNatureza) service.selecionar(new ComNatureza(), gf, true);
-			pis = nat.getComNaturezaPis();
-			cofins = nat.getComNaturezaCofins();
+			setPisCofins();
 			// lendo dados do arquivo
 			escreverRegistros();
 			InputStream is = new FileInputStream(arquivo);
@@ -253,7 +247,7 @@ public class EFD implements Runnable {
 		FiltroObjeto fo = new FiltroObjeto("comEcf.empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
 		gf.add(fo, EJuncao.E);
 		FiltroBinario fb = new FiltroBinario("comEcf.comEcfAtivo", ECompara.IGUAL, 1);
-		gf.add(fb);
+		gf.add(fb, EJuncao.E);
 		FiltroData fd1 = new FiltroData("comEcfZMovimento", ECompara.MAIOR_IGUAL, inicio);
 		gf.add(fd1, EJuncao.E);
 		FiltroData fd2 = new FiltroData("comEcfZMovimento", ECompara.MENOR_IGUAL, fim);
@@ -289,7 +283,7 @@ public class EFD implements Runnable {
 		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
 		gf.add(fo, EJuncao.E);
 		FiltroBinario fb = new FiltroBinario("comConsumoFechada", ECompara.IGUAL, 1);
-		gf.add(fb);
+		gf.add(fb, EJuncao.E);
 		FiltroData fd1 = new FiltroData("comConsumoData", ECompara.MAIOR_IGUAL, inicio);
 		gf.add(fd1, EJuncao.E);
 		FiltroData fd2 = new FiltroData("comConsumoData", ECompara.MENOR_IGUAL, fim);
@@ -298,6 +292,23 @@ public class EFD implements Runnable {
 		return service.selecionar(new ComConsumo(), 0, 0, gf, false).getLista();
 	}
 
+	// metodo que recupera o pis e cofins da natureza de venda padrao
+	private void setPisCofins()throws Exception {
+		// monta o filtro
+		GrupoFiltro gf = new GrupoFiltro();
+		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
+		gf.add(fo, EJuncao.E);
+		GrupoFiltro gf1 = new GrupoFiltro();
+		FiltroNumero fn1 = new FiltroNumero("comNaturezaCfopTrib", ECompara.IGUAL, 5101);
+		gf1.add(fn1, EJuncao.OU);
+		FiltroNumero fn2 = new FiltroNumero("comNaturezaCfopTrib", ECompara.IGUAL, 5102);
+		gf1.add(fn2);
+		gf.add(gf1);
+		ComNatureza nat = (ComNatureza) service.selecionar(new ComNatureza(), gf, true);
+		pis = nat.getComNaturezaPis();
+		cofins = nat.getComNaturezaCofins();
+	}
+	
 	// Metodo que recupera os registros selecionados e executa cada um
 	private void escreverRegistros() throws Exception {
 		// contagem das linhas do bloco e do arquivo

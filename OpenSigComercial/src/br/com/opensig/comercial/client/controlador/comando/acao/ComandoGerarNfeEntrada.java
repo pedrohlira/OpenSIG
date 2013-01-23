@@ -91,6 +91,7 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 
 		public void onSuccess(FisNotaEntrada result) {
 			Record rec = LISTA.getPanel().getSelectionModel().getSelected();
+			rec.set("fisNotaEntrada.fisNotaEntradaId", result.getFisNotaEntradaId());
 			rec.set("comCompraNfe", true);
 
 			MessageBox.hide();

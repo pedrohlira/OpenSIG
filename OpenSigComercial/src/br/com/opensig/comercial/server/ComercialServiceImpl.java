@@ -9,7 +9,7 @@ import br.com.opensig.comercial.client.servico.ComercialService;
 import br.com.opensig.comercial.server.acao.CancelarVenda;
 import br.com.opensig.comercial.server.acao.ExcluirCompra;
 import br.com.opensig.comercial.server.acao.ExcluirConsumo;
-import br.com.opensig.comercial.server.acao.ExcluirEcfVenda;
+import br.com.opensig.comercial.server.acao.CancelarEcfVenda;
 import br.com.opensig.comercial.server.acao.ExcluirFrete;
 import br.com.opensig.comercial.server.acao.ExcluirVenda;
 import br.com.opensig.comercial.server.acao.FecharCompra;
@@ -278,9 +278,9 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 	}
 
 	@Override
-	public void excluirEcfVenda(ComEcfVenda venda) throws ComercialException {
+	public void cancelarEcfVenda(ComEcfVenda venda) throws ComercialException {
 		try {
-			new ExcluirEcfVenda(null, this, venda, getAuth()).execute();
+			new CancelarEcfVenda(null, this, venda, getAuth()).execute();
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro no comando excluirEcfVenda.", e);
 			throw new ComercialException(e.getMessage());

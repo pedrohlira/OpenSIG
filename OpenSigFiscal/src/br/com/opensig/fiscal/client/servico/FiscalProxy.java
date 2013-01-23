@@ -27,17 +27,17 @@ public class FiscalProxy<E extends Dados> extends CoreProxy<E> implements Fiscal
 		super.classe = classe;
 		sdf.setServiceEntryPoint(GWT.getHostPageBaseURL() + "FiscalService");
 	}
-	
+
 	@Override
 	public void analisarNFeSaida(FisNotaSaida saida, AsyncCallback<Map<String, String>> asyncCallback) {
 		async.analisarNFeSaida(saida, asyncCallback);
 	}
-	
+
 	@Override
 	public void analisarNFeEntrada(FisNotaEntrada entrada, AsyncCallback<Map<String, String>> asyncCallback) {
 		async.analisarNFeEntrada(entrada, asyncCallback);
 	}
-	
+
 	@Override
 	public void exportar(String arquivo, String nome, String tipo, AsyncCallback<String> asyncCallback) {
 		async.exportar(arquivo, nome, tipo, asyncCallback);
@@ -54,8 +54,8 @@ public class FiscalProxy<E extends Dados> extends CoreProxy<E> implements Fiscal
 	}
 
 	@Override
-	public void validar(int ambiente, IFiltro filtro, AsyncCallback<String> asyncallback) {
-		async.validar(ambiente, filtro, asyncallback);
+	public void validar(int ambiente, IFiltro filtro, boolean auto, AsyncCallback<String> asyncallback) {
+		async.validar(ambiente, filtro, auto, asyncallback);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class FiscalProxy<E extends Dados> extends CoreProxy<E> implements Fiscal
 	public void cancelarEntrada(FisNotaEntrada entrada, String motivo, AsyncCallback<Map<String, String>> asyncCallback) {
 		async.cancelarEntrada(entrada, motivo, asyncCallback);
 	};
-	
+
 	@Override
 	public void cancelar(String xml, AsyncCallback<String> asyncallback) {
 		async.cancelar(xml, asyncallback);
@@ -107,7 +107,7 @@ public class FiscalProxy<E extends Dados> extends CoreProxy<E> implements Fiscal
 	public void inutilizarEntrada(FisNotaEntrada entrada, String motivo, int ini, int fim, AsyncCallback<Map<String, String>> asyncCallback) {
 		async.inutilizarEntrada(entrada, motivo, ini, fim, asyncCallback);
 	};
-	
+
 	@Override
 	public void salvarSaida(String xml, FisNotaStatus status, AsyncCallback<Map<String, String>> asyncCallback) {
 		async.salvarSaida(xml, status, asyncCallback);
@@ -117,27 +117,27 @@ public class FiscalProxy<E extends Dados> extends CoreProxy<E> implements Fiscal
 	public void salvarEntrada(String xml, FisNotaStatus status, AsyncCallback<Map<String, String>> asyncCallback) {
 		async.salvarEntrada(xml, status, asyncCallback);
 	}
-	
+
 	@Override
 	public void salvarCertificado(FisCertificado certificado, AsyncCallback asyncCallback) {
 		async.salvarCertificado(certificado, asyncCallback);
 	}
-	
+
 	@Override
 	public void salvar(AsyncCallback<E> asyncCallback) {
 		this.salvar(classe, asyncCallback);
 	}
-	
+
 	@Override
 	public void salvar(E unidade, AsyncCallback<E> asyncCallback) {
 		async.salvar(unidade, asyncCallback);
 	}
-	
+
 	@Override
 	public void deletar(AsyncCallback<E> asyncCallback) {
 		this.deletar(classe, asyncCallback);
 	}
-	
+
 	@Override
 	public void deletar(E unidade, AsyncCallback<E> asyncCallback) {
 		async.deletar(unidade, asyncCallback);

@@ -7,13 +7,16 @@ import java.util.Map.Entry;
 
 import br.com.opensig.comercial.client.controlador.comando.ComandoEcfVendaProduto;
 import br.com.opensig.comercial.client.controlador.comando.ComandoEcfZ;
+import br.com.opensig.comercial.client.servico.ComercialProxy;
 import br.com.opensig.comercial.shared.modelo.Cat52;
 import br.com.opensig.comercial.shared.modelo.ComEcf;
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.UtilClient;
+import br.com.opensig.core.client.controlador.comando.AComando;
 import br.com.opensig.core.client.controlador.comando.IComando;
 import br.com.opensig.core.client.controlador.comando.lista.ComandoEditar;
+import br.com.opensig.core.client.controlador.comando.lista.ComandoExcluir;
 import br.com.opensig.core.client.controlador.comando.lista.ComandoPermiteEmpresa;
 import br.com.opensig.core.client.controlador.comando.lista.ComandoPermiteUsuario;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
@@ -62,6 +65,7 @@ import com.gwtextux.client.widgets.window.ToastWindow;
 
 public class ListagemEcfVenda extends AListagem<ComEcfVenda> {
 
+	protected IComando cmdCancelar;
 	protected JanelaUpload<ComEcfVenda> janela;
 
 	public ListagemEcfVenda(IFormulario<ComEcfVenda> formulario) {
@@ -126,6 +130,30 @@ public class ListagemEcfVenda extends AListagem<ComEcfVenda> {
 				ccEcf, ccCcf, ccCoo, ccData, sumBruto, ccDesconto, ccAcrescimo, sumLiquido, ccFechada, ccReceberId, ccCancelada };
 		modelos = new ColumnModel(bcc);
 
+		// cancelando
+		cmdCancelar = new AComando() {
+			public void execute(Map contexto) {
+				super.execute(contexto);
+				int id = UtilClient.getSelecionado(getPanel());
+				classe.setId(id);
+
+				ComercialProxy proxy = new ComercialProxy();
+				proxy.cancelarEcfVenda(classe, new AsyncCallback() {
+					public void onFailure(Throwable caught) {
+						getPanel().getEl().unmask();
+						MessageBox.alert(OpenSigCore.i18n.txtExcluir(), OpenSigCore.i18n.errExcluir());
+					};
+
+					public void onSuccess(Object result) {
+						getPanel().getEl().unmask();
+						Record rec = getSelectionModel().getSelected();
+						rec.set("comEcfVendaCancelada", true);
+						new ToastWindow(OpenSigCore.i18n.txtExcluir(), OpenSigCore.i18n.msgExcluirOK()).show();
+					};
+				});
+			}
+		};
+
 		GrupoFiltro gf = new GrupoFiltro();
 		if (UtilClient.getAcaoPermitida(funcao, ComandoPermiteEmpresa.class) == null) {
 			FiltroObjeto fo = new FiltroObjeto("comEcf.empEmpresa", ECompara.IGUAL, new EmpEmpresa(Ponte.getLogin().getEmpresaId()));
@@ -148,6 +176,13 @@ public class ListagemEcfVenda extends AListagem<ComEcfVenda> {
 		// valida se pode editar
 		if (comando instanceof ComandoEditar) {
 			if (rec != null && rec.getAsBoolean("comEcfVendaFechada")) {
+				MessageBox.alert(OpenSigCore.i18n.txtAcesso(), OpenSigCore.i18n.txtAcessoNegado());
+				comando = null;
+			}
+		} else if (comando instanceof ComandoExcluir) {
+			if (rec != null && !rec.getAsBoolean("comEcfVendaFechada") && !rec.getAsBoolean("comEcfVendaCancelada")) {
+				comando = cmdCancelar;
+			} else {
 				MessageBox.alert(OpenSigCore.i18n.txtAcesso(), OpenSigCore.i18n.txtAcessoNegado());
 				comando = null;
 			}

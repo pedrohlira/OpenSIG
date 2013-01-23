@@ -4,7 +4,7 @@
 		<writer>
 			<property name="delimiter" value="|" />
 		</writer>
-		<record name="Dados" minOccurs="1" maxOccurs="1" class="br.com.opensig.fiscal.server.sped.blocoC.DadosD590">
+		<record name="Dados" minOccurs="1" maxOccurs="1" class="br.com.opensig.fiscal.server.sped.blocoD.DadosD590">
 			<field name="padrao" type="string" length="1" default="" />
 			<field name="reg" type="string" length="4" trim="true" />
 			<field name="cst_icms" type="string" length="3" justify="right" padding="0" />

@@ -93,6 +93,7 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 
 		public void onSuccess(FisNotaSaida result) {
 			Record rec = LISTA.getPanel().getSelectionModel().getSelected();
+			rec.set("fisNotaSaida.fisNotaSaidaId", result.getFisNotaSaidaId());
 			rec.set("comVendaNfe", true);
 
 			MessageBox.hide();

@@ -97,15 +97,15 @@ public class OpenSigComercial implements EntryPoint {
 		acoes.add(ComandoNovo.class);
 		acoes.add(ComandoNovoDuplicar.class);
 		acoes.add(ComandoEditarFiltrados.class);
-		acoes.add(ComandoExcluir.class);
 		acoes.add(ComandoExcluirFiltrados.class);
 
 		// acoes proibidas para os produtos do comercial
 		Collection<Class> acoes2 = new ArrayList<Class>(acoes);
+		acoes2.add(ComandoExcluir.class);
 		acoes2.add(ComandoEditar.class);
 
-		Ponte.setAcoesProibidas(ComandoEcfZ.class.getName(), acoes);
 		Ponte.setAcoesProibidas(ComandoEcfVenda.class.getName(), acoes);
+		Ponte.setAcoesProibidas(ComandoEcfZ.class.getName(), acoes2);
 		Ponte.setAcoesProibidas(ComandoEcfDocumento.class.getName(), acoes2);
 		Ponte.setAcoesProibidas(ComandoEcfNota.class.getName(), acoes2);
 		Ponte.setAcoesProibidas(ComandoCompraProduto.class.getName(), acoes2);

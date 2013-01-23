@@ -16,8 +16,7 @@ import br.com.opensig.comercial.shared.modelo.ComVenda;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.fiscal.server.sped.ARegistro;
-import br.com.opensig.inutnfe.TRetInutNFe.InfInut;
-import br.com.opensig.inutnfe.TProcInutNFe;
+import br.com.opensig.inutnfe.TInutNFe;
 import br.com.opensig.nfe.TNFe;
 import br.com.opensig.nfe.TNFe.InfNFe.Det;
 import br.com.opensig.nfe.TNFe.InfNFe.Ide;
@@ -92,7 +91,6 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 					int I = xml.indexOf("<infNFe");
 					int F = xml.indexOf("</NFe>") + 6;
 					String texto = "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
-
 					nfe = UtilServer.xmlToObj(texto, "br.com.opensig.nfe");
 					obj = getDados(nfe, cod_sit, venda.getComVendaData());
 				} catch (Exception e) {
@@ -137,20 +135,23 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 			}
 
 			// processas as inutilizadas
-			TProcInutNFe proc = null;
+			TInutNFe inut = null;
 			for (String xml : inutilizadas) {
-				proc = UtilServer.xmlToObj(xml, "br.com.opensig.inutnfe");
-				InfInut inut = proc.getRetInutNFe().getInfInut();
-				
+				// pega a NFe
+				int I = xml.indexOf("<infInut");
+				int F = xml.indexOf("</inutNFe>") + 10;
+				String texto = "<inutNFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
+				inut = UtilServer.xmlToObj(texto, "br.com.opensig.inutnfe");
+
 				DadosC100 obj = new DadosC100();
-				obj.setInd_oper(inut.getSerie().equals("0") ? "0" : "1");
+				obj.setInd_oper(inut.getInfInut().getSerie().equals("0") ? "0" : "1");
 				obj.setInd_emit("0");
 				obj.setCod_sit("05");
-				obj.setSer(inut.getSerie());
+				obj.setSer(inut.getInfInut().getSerie());
 				obj.setCod_mod("55");
-				obj.setNum_doc(Integer.valueOf(inut.getNNFIni()));
+				obj.setNum_doc(Integer.valueOf(inut.getInfInut().getNNFIni()));
 				normalizar(obj);
-				
+
 				out.write(obj);
 				out.flush();
 				qtdLinhas++;

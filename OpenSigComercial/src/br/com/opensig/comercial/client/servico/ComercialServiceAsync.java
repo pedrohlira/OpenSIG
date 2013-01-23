@@ -53,7 +53,7 @@ public interface ComercialServiceAsync<E extends Dados> extends CoreServiceAsync
 	
 	public abstract void excluirConsumo(ComConsumo consumo, AsyncCallback asyncCallback);
 	
-	public abstract void excluirEcfVenda(ComEcfVenda venda, AsyncCallback asyncCallback);
+	public abstract void cancelarEcfVenda(ComEcfVenda venda, AsyncCallback asyncCallback);
 
 	public abstract void importarEcfVenda(List<String> nomesArquivos, AsyncCallback<Map<String, Integer>> asyncCallback);
 	

@@ -50,7 +50,7 @@ public interface ComercialService extends CoreService {
 	
 	public void excluirConsumo(ComConsumo consumo) throws ComercialException;
 
-	public void excluirEcfVenda(ComEcfVenda venda) throws ComercialException;
+	public void cancelarEcfVenda(ComEcfVenda venda) throws ComercialException;
 	
 	public Map<String, Integer> importarEcfVenda(List<String> nomesArquivos) throws ComercialException;
 }

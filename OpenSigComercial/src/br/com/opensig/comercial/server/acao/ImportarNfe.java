@@ -283,6 +283,7 @@ public class ImportarNfe implements IImportacao<ComCompra> {
 			enti.setEmpEntidadeNome2(fantasia);
 			enti.setEmpEntidadeDocumento1(cnpj);
 			enti.setEmpEntidadeDocumento2(emit.getIE());
+			enti.setEmpEntidadeDocumento3("ISENTO");
 			enti.setEmpEntidadeAtivo(true);
 			enti.setEmpEntidadePessoa(auth.getConf().get("txtJuridica"));
 			enti.setEmpEntidadeObservacao("");

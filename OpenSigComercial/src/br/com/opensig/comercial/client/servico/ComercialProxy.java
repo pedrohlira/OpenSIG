@@ -124,7 +124,7 @@ public class ComercialProxy<E extends Dados> extends CoreProxy<E> implements Com
 	}
 	
 	@Override
-	public void excluirEcfVenda(ComEcfVenda venda, AsyncCallback asyncCallback) {
-		async.excluirEcfVenda(venda, asyncCallback);
+	public void cancelarEcfVenda(ComEcfVenda venda, AsyncCallback asyncCallback) {
+		async.cancelarEcfVenda(venda, asyncCallback);
 	}
 }
