@@ -36,6 +36,8 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 			TNFe nfe = null;
 
 			// processa as entradas / compras
+			RegistroC110 r110 = new RegistroC110();
+			RegistroC170 r170 = new RegistroC170();
 			for (ComCompra compra : compras) {
 				// pega a NFe
 				String xml = compra.getFisNotaEntrada().getFisNotaEntradaXml();
@@ -43,7 +45,7 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 				int F = xml.indexOf("</NFe>") + 6;
 				String texto = "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
 				nfe = UtilServer.xmlToObj(texto, "br.com.opensig.nfe");
-				DadosC100 obj = getDados(nfe, "00", compra.getComCompraRecebimento());
+				DadosC100 obj = getDados(nfe, "00", compra.getFisNotaEntrada().getFisNotaEntradaCadastro());
 
 				// seta os dados padrao
 				obj.setInd_oper("0");
@@ -54,22 +56,18 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 
 				// informacoes da nota
 				if (!compra.getComCompraObservacao().equals("")) {
-					RegistroC110 r110 = new RegistroC110();
 					r110.setDados(compra.getComCompraObservacao());
-					r110.setEscritor(escritor);
 					r110.executar();
 					qtdLinhas += r110.getQtdLinhas();
 				}
 
 				// produtos
-				RegistroC170 r170 = new RegistroC170();
-				r170.setEscritor(escritor);
-				r170.setCrt(nfe.getInfNFe().getEmit().getCRT());
 				r170.setNatId(compra.getComNatureza().getComNaturezaId());
 				r170.setVenda(false);
 				int item = 0;
 				for (Det det : nfe.getInfNFe().getDet()) {
 					r170.setProduto(compra.getComCompraProdutos().get(item++).getProdProduto());
+					r170.setItem(item);
 					r170.setDados(det);
 					r170.executar();
 					setAnalitico(r170.getBloco());
@@ -92,7 +90,7 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 					int F = xml.indexOf("</NFe>") + 6;
 					String texto = "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
 					nfe = UtilServer.xmlToObj(texto, "br.com.opensig.nfe");
-					obj = getDados(nfe, cod_sit, venda.getComVendaData());
+					obj = getDados(nfe, cod_sit, venda.getFisNotaSaida().getFisNotaSaidaData());
 				} catch (Exception e) {
 					// inutilizadas sao tratadas abaixo
 					continue;
@@ -110,16 +108,12 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 				if (!venda.getComVendaCancelada()) {
 					// informacoes da nota
 					if (!venda.getComVendaObservacao().equals("")) {
-						RegistroC110 r110 = new RegistroC110();
 						r110.setDados(venda.getComVendaObservacao());
-						r110.setEscritor(escritor);
 						r110.executar();
 						qtdLinhas += r110.getQtdLinhas();
 					}
 
 					// produtos
-					RegistroC170 r170 = new RegistroC170();
-					r170.setCrt(nfe.getInfNFe().getEmit().getCRT());
 					r170.setNatId(venda.getComNatureza().getComNaturezaId());
 					r170.setVenda(true);
 					int item = 0;
@@ -227,8 +221,6 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 	private void getAnalitico() {
 		if (!analitico.isEmpty()) {
 			RegistroC190 r190 = new RegistroC190();
-			r190.setEscritor(escritor);
-			r190.setAuth(auth);
 			for (Entry<String, List<DadosC170>> entry : analitico.entrySet()) {
 				r190.setDados(entry.getValue());
 				r190.executar();

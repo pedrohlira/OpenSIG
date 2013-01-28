@@ -6,6 +6,7 @@ import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 
 import com.gwtext.client.data.Record;
+import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.form.Hidden;
 import com.gwtext.client.widgets.form.MultiFieldPanel;
 import com.gwtext.client.widgets.form.NumberField;
@@ -42,7 +43,7 @@ public class FormularioEmbalagem extends AFormulario<ProdEmbalagem> {
 		txtDescricao = new TextField(OpenSigCore.i18n.txtDescricao(), "prodEmbalagemDescricao", 400);
 		txtDescricao.setAllowBlank(false);
 		txtDescricao.setMaxLength(100);
-		
+
 		MultiFieldPanel linha1 = new MultiFieldPanel();
 		linha1.setBorder(false);
 		linha1.addToRow(txtNome, 120);
@@ -58,7 +59,13 @@ public class FormularioEmbalagem extends AFormulario<ProdEmbalagem> {
 			classe.setProdEmbalagemUnidade(txtUnidade.getValue().intValue());
 		}
 		classe.setProdEmbalagemDescricao(txtDescricao.getValueAsString());
-		return true;
+
+		if (classe.getProdEmbalagemNome().equalsIgnoreCase(classe.getProdEmbalagemDescricao())) {
+			MessageBox.alert(OpenSigCore.i18n.txtEmbalagem(), "Os campos Nome e Descrição não podem ser iguais!");
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public void limparDados() {

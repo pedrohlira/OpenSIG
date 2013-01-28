@@ -41,6 +41,7 @@ public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 				}
 			}
 
+			RegistroC310 r310 = new RegistroC310();
 			for (Entry<String, List<ComEcfNota>> entry : grupo.entrySet()) {
 				// resumo diario
 				bloco = getDados(entry.getValue());
@@ -49,8 +50,6 @@ public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 
 				// cancelados
 				if (!lc310.isEmpty()) {
-					RegistroC310 r310 = new RegistroC310();
-					r310.setEscritor(escritor);
 					for (DadosC310 d : lc310) {
 						r310.setDados(d);
 						r310.executar();
@@ -59,15 +58,7 @@ public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 				}
 
 				// analitico diario
-				if (!analitico.isEmpty()) {
-					RegistroC320 r320 = new RegistroC320();
-					r320.setEscritor(escritor);
-					for (Entry<String, List<ComEcfNotaProduto>> entry2 : analitico.entrySet()) {
-						r320.setDados(entry2.getValue());
-						r320.executar();
-						qtdLinhas += r320.getQtdLinhas();
-					}
-				}
+				getAnalitico();
 			}
 
 		} catch (Exception e) {
@@ -91,9 +82,9 @@ public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 				d.setNum_doc_fin(nota.getComEcfNotaNumero());
 			}
 			if (!nota.getComEcfNotaCancelada()) {
-				d.setVl_doc(somarDoubles(d.getVl_doc() , nota.getComEcfNotaLiquido()));
-				d.setVl_pis(somarDoubles(d.getVl_pis() , nota.getComEcfNotaPis()));
-				d.setVl_cofins(somarDoubles(d.getVl_cofins() , nota.getComEcfNotaCofins()));
+				d.setVl_doc(somarDoubles(d.getVl_doc(), nota.getComEcfNotaLiquido()));
+				d.setVl_pis(somarDoubles(d.getVl_pis(), nota.getComEcfNotaPis()));
+				d.setVl_cofins(somarDoubles(d.getVl_cofins(), nota.getComEcfNotaCofins()));
 			} else {
 				// Registro C310
 				DadosC310 c310 = new DadosC310();
@@ -103,17 +94,7 @@ public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 
 			// agrupando os itens por cst+cfop+aliq
 			for (ComEcfNotaProduto np : nota.getComEcfNotaProdutos()) {
-				ProdTributacao pt = np.getProdProduto().getProdTributacao();
-				String cstCson = auth.getConf().get("nfe.crt").equals("1") ? pt.getProdTributacaoCson() : pt.getProdTributacaoCst();
-				String chave = cstCson + pt.getProdTributacaoCfop() + pt.getProdTributacaoDentro();
-				List<ComEcfNotaProduto> lista = analitico.get(chave);
-				if (lista == null) {
-					lista = new ArrayList<ComEcfNotaProduto>();
-					lista.add(np);
-					analitico.put(chave, lista);
-				} else {
-					lista.add(np);
-				}
+				setAnalitico(np);
 			}
 		}
 
@@ -122,4 +103,29 @@ public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 		return d;
 	}
 
+	private void setAnalitico(ComEcfNotaProduto d) {
+		ProdTributacao pt = d.getProdProduto().getProdTributacao();
+		String cstCson = auth.getConf().get("nfe.crt").equals("1") ? pt.getProdTributacaoCson() : pt.getProdTributacaoCst();
+		String chave = cstCson + pt.getProdTributacaoCfop() + pt.getProdTributacaoDentro();
+		List<ComEcfNotaProduto> lista = analitico.get(chave);
+		if (lista == null) {
+			lista = new ArrayList<ComEcfNotaProduto>();
+			lista.add(d);
+			analitico.put(chave, lista);
+		} else {
+			lista.add(d);
+		}
+	}
+
+	private void getAnalitico() {
+		if (!analitico.isEmpty()) {
+			RegistroC320 r320 = new RegistroC320();
+			for (Entry<String, List<ComEcfNotaProduto>> entry2 : analitico.entrySet()) {
+				r320.setDados(entry2.getValue());
+				r320.executar();
+				qtdLinhas += r320.getQtdLinhas();
+			}
+		}
+		analitico.clear();
+	}
 }

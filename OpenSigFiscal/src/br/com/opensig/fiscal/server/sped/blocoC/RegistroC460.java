@@ -10,15 +10,19 @@ import org.beanio.StreamFactory;
 
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.comercial.shared.modelo.ComEcfVendaProduto;
+import br.com.opensig.core.client.controlador.filtro.ECompara;
+import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.fiscal.server.sped.ARegistro;
 
 public class RegistroC460 extends ARegistro<DadosC460, ComEcfVenda> {
 
 	private Map<String, List<DadosC470>> analitico = new HashMap<String, List<DadosC470>>();
-
+	private ComEcfVendaProduto vendaProd = new ComEcfVendaProduto();
+	
 	@Override
 	public void executar() {
+		qtdLinhas = 0;
 		try {
 			StreamFactory factory = StreamFactory.newInstance();
 			factory.load(getClass().getResourceAsStream(bean));
@@ -28,12 +32,12 @@ public class RegistroC460 extends ARegistro<DadosC460, ComEcfVenda> {
 			out.flush();
 
 			// itens das vendas
-			if (!dados.getComEcfVendaCancelada()) {
+			if (dados.getComEcfVendaFechada() && dados.getComEcfVendaCancelada() == false) {
 				RegistroC470 r470 = new RegistroC470();
-				r470.setEscritor(escritor);
-
-				for (ComEcfVendaProduto vp : dados.getComEcfVendaProdutos()) {
-					if (!vp.getComEcfVendaProdutoCancelado()) {
+				FiltroObjeto fo = new FiltroObjeto("comEcfVenda", ECompara.IGUAL, dados);
+				List<ComEcfVendaProduto> vps = service.selecionar(vendaProd, 0, 0, fo, false).getLista();
+				for (ComEcfVendaProduto vp : vps) {
+					if (vp.getComEcfVendaProdutoCancelado() == false) {
 						r470.setDados(vp);
 						r470.executar();
 						qtdLinhas += r470.getQtdLinhas();

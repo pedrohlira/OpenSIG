@@ -264,16 +264,12 @@ public class EFD implements Runnable {
 
 	// metodo que recupera os produtos do estoque
 	private List<ProdProduto> getEstoque() throws Exception {
-		if (sped.getFisSpedMes() == 2) {
-			// seleciona todos os produtos com estoque maior que ZERO
-			FiltroObjeto fo = new FiltroObjeto("t1.empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
-			FiltroNumero fn = new FiltroNumero("t1.prodEstoqueQuantidade", ECompara.MAIOR, 0);
-			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fn });
-			Lista<ProdProduto> lista = service.selecionar(new ProdProduto(), 0, 0, gf, false);
-			return lista.getLista();
-		} else {
-			return null;
-		}
+		// seleciona todos os produtos com estoque maior que ZERO
+		FiltroObjeto fo = new FiltroObjeto("t1.empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
+		FiltroNumero fn = new FiltroNumero("t1.prodEstoqueQuantidade", ECompara.MAIOR, 0);
+		GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fn });
+		Lista<ProdProduto> lista = service.selecionar(new ProdProduto(), 0, 0, gf, false);
+		return lista.getLista();
 	}
 
 	// metodo que recupera os consumos
@@ -293,7 +289,7 @@ public class EFD implements Runnable {
 	}
 
 	// metodo que recupera o pis e cofins da natureza de venda padrao
-	private void setPisCofins()throws Exception {
+	private void setPisCofins() throws Exception {
 		// monta o filtro
 		GrupoFiltro gf = new GrupoFiltro();
 		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
@@ -308,7 +304,7 @@ public class EFD implements Runnable {
 		pis = nat.getComNaturezaPis();
 		cofins = nat.getComNaturezaCofins();
 	}
-	
+
 	// Metodo que recupera os registros selecionados e executa cada um
 	private void escreverRegistros() throws Exception {
 		// contagem das linhas do bloco e do arquivo

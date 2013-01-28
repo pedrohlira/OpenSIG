@@ -24,7 +24,6 @@ public class RegistroC400 extends ARegistro<DadosC400, ComEcf> {
 			
 			// dados da Z
 			RegistroC405 r405 = new RegistroC405();
-			r405.setEscritor(escritor);
 			for (ComEcfZ z : zs) {
 				if (!ecfId.contains(z.getComEcf().getComEcfId())) {
 					ecfId.add(z.getComEcf().getComEcfId());

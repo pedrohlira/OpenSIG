@@ -19,6 +19,7 @@ public class RegistroC420 extends ARegistro<DadosC420, ComEcfZTotais> {
 
 	@Override
 	public void executar() {
+		qtdLinhas = 0;
 		try {
 			StreamFactory factory = StreamFactory.newInstance();
 			factory.load(getClass().getResourceAsStream(bean));
@@ -47,8 +48,6 @@ public class RegistroC420 extends ARegistro<DadosC420, ComEcfZTotais> {
 			// somente perfil B
 			if (auth.getConf().get("sped.0000.ind_perfil").equals("B")) {
 				RegistroC425 r425 = new RegistroC425();
-				r425.setEscritor(escritor);
-				r425.setAuth(auth);
 				for (Entry<Integer, ComEcfVendaProduto> vp : produtos.entrySet()) {
 					if (vp.getValue().getProdProduto().getProdTributacao().getProdTributacaoEcf().equals(dados.getComEcfZTotaisCodigo())) {
 						r425.setDados(vp.getValue());

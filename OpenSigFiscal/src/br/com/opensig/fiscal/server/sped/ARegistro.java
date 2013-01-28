@@ -38,8 +38,8 @@ public abstract class ARegistro<E extends Bean, T> implements IRegistro<E, T> {
 	protected static List<ComEcfNota> notas;
 	protected static List<ProdProduto> estoque;
 	protected static List<ComConsumo> consumos;
-	protected File leitor;
-	protected Writer escritor;
+	protected static File leitor;
+	protected static Writer escritor;
 	protected String bean;
 	protected int qtdLinhas;
 	protected boolean fimBloco;
@@ -108,12 +108,12 @@ public abstract class ARegistro<E extends Bean, T> implements IRegistro<E, T> {
 
 	@Override
 	public File getLeitor() {
-		return this.leitor;
+		return leitor;
 	}
 
 	@Override
 	public void setLeitor(File leitor) {
-		this.leitor = leitor;
+		ARegistro.leitor = leitor;
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public abstract class ARegistro<E extends Bean, T> implements IRegistro<E, T> {
 
 	@Override
 	public void setEscritor(Writer arquivo) {
-		this.escritor = arquivo;
+		ARegistro.escritor = arquivo;
 	}
 
 	@Override

@@ -1,11 +1,5 @@
 package br.com.opensig.fiscal.server.sped.blocoD;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.beanio.BeanWriter;
 import org.beanio.StreamFactory;
 
@@ -15,8 +9,6 @@ import br.com.opensig.fiscal.server.sped.ARegistro;
 
 public class RegistroD100 extends ARegistro<DadosD100, ComFrete> {
 
-	private Map<String, List<ComFrete>> analitico = new HashMap<String, List<ComFrete>>();
-	
 	@Override
 	public void executar() {
 		try {
@@ -25,16 +17,16 @@ public class RegistroD100 extends ARegistro<DadosD100, ComFrete> {
 			BeanWriter out = factory.createWriter("EFD", escritor);
 
 			RegistroD190 r190 = new RegistroD190();
-			r190.setEscritor(escritor);
 			for (ComFrete frete : fretes) {
 				bloco = getDados(frete);
 				out.write(bloco);
 				out.flush();
-				setAnalitico(frete);
+
+				// informacoes da nota
+				r190.setDados(frete);
+				r190.executar();
+				qtdLinhas += r190.getQtdLinhas();
 			}
-			
-			// analitico dos fretes
-			getAnalitico();
 		} catch (Exception e) {
 			qtdLinhas = 0;
 			UtilServer.LOG.error("Erro na geracao do Registro -> " + bean, e);
@@ -63,38 +55,12 @@ public class RegistroD100 extends ARegistro<DadosD100, ComFrete> {
 		d.setVl_serv(dados.getComFreteValor());
 		d.setVl_bc_icms(dados.getComFreteBase());
 		d.setVl_icms(dados.getComFreteIcms());
-		d.setVl_nt(dados.getComFreteValor());
+		d.setVl_nt(0.00);
 		d.setCod_inf("");
 		d.setCod_cta("");
 
 		normalizar(d);
 		qtdLinhas++;
 		return d;
-	}
-
-	private void setAnalitico(ComFrete d) {
-		String chave = "000" + d.getComFreteCfop() + d.getComFreteAliquota();
-		List<ComFrete> lista = analitico.get(chave);
-		if (lista == null) {
-			lista = new ArrayList<ComFrete>();
-			lista.add(d);
-			analitico.put(chave, lista);
-		} else {
-			lista.add(d);
-		}
-	}
-
-	private void getAnalitico() {
-		if (!analitico.isEmpty()) {
-			RegistroD190 r190 = new RegistroD190();
-			r190.setEscritor(escritor);
-			r190.setAuth(auth);
-			for (Entry<String, List<ComFrete>> entry : analitico.entrySet()) {
-				r190.setDados(entry.getValue());
-				r190.executar();
-				qtdLinhas += r190.getQtdLinhas();
-			}
-		}
-		analitico.clear();
 	}
 }

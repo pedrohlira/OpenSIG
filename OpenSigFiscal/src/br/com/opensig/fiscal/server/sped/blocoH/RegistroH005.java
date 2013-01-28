@@ -13,16 +13,16 @@ public class RegistroH005 extends ARegistro<DadosH005, Dados> {
 
 	@Override
 	public void executar() {
-
-		if (sped.getFisSpedMes() == 2) {
+		if (estoque.size() > 0) {
 			try {
 				StringWriter sw = new StringWriter(1000000);
 				RegistroH010 r010 = new RegistroH010();
-				r010.setEscritor(sw);
+				r010.setTempEscritor(sw);
 				r010.executar();
 
 				this.total = r010.getTotal();
 				super.executar();
+
 				qtdLinhas += r010.getQtdLinhas();
 				escritor.append(sw.getBuffer());
 				escritor.flush();

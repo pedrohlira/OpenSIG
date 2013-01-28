@@ -13,8 +13,8 @@ import br.com.opensig.produto.shared.modelo.ProdProduto;
 public class RegistroC170 extends ARegistro<DadosC170, Det> {
 
 	private ProdProduto produto;
-	private String crt;
 	private int natId;
+	private int item;
 	private boolean venda;
 
 	@Override
@@ -22,7 +22,7 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 		Prod prod = dados.getProd();
 
 		DadosC170 d = new DadosC170();
-		d.setNum_item(Integer.valueOf(dados.getNItem()));
+		d.setNum_item(item);
 		d.setCod_item(produto.getProdProdutoId() + "");
 		d.setDescr_compl("");
 		d.setQtd(Double.valueOf(prod.getQCom()));
@@ -38,6 +38,12 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 				cfop -= 4827;
 			} else if (cfop >= 5000) {
 				cfop -= 4000;
+				// regra para entrada
+				if (cfop > 2102) {
+					cfop = auth.getConf().get("sped.0000.ind_ativ").equals("0") ? 2101 : 2102;
+				} else {
+					cfop = auth.getConf().get("sped.0000.ind_ativ").equals("0") ? 1101 : 1102;
+				}
 			}
 		}
 		d.setCfop(cfop);
@@ -45,15 +51,18 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 
 		try {
 			ICMS icms = dados.getImposto().getICMS();
-			if (crt.equals("1")) {
+			if (auth.getConf().get("nfe.crt").equals("1")) {
 				// verifica qual icms CSON foi usado
 				if (icms.getICMSSN101() != null) {
 					d.setCst_icms(icms.getICMSSN101().getCSOSN());
-					d.setVl_bc_icms(d.getVl_item());
-					d.setAliq_icms(Double.valueOf(icms.getICMSSN101().getPCredSN()));
-					d.setVl_icms(Double.valueOf(icms.getICMSSN101().getVCredICMSSN()));
+					d.setVl_bc_icms(0.00);
+					d.setAliq_icms(0.00);
+					d.setVl_icms(0.00);
 				} else if (icms.getICMSSN102() != null) {
 					d.setCst_icms(icms.getICMSSN102().getCSOSN());
+					d.setVl_bc_icms(0.00);
+					d.setAliq_icms(0.00);
+					d.setVl_icms(0.00);
 				} else if (icms.getICMSSN201() != null) {
 					d.setCst_icms(icms.getICMSSN201().getCSOSN());
 					d.setVl_bc_icms_st(Double.valueOf(icms.getICMSSN201().getVBCST()));
@@ -105,6 +114,9 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 					d.setVl_icms_st(Double.valueOf(icms.getICMS30().getVICMSST()));
 				} else if (icms.getICMS40() != null) {
 					d.setCst_icms("0" + icms.getICMS40().getCST());
+		            d.setVl_bc_icms(0.00);
+		            d.setAliq_icms(0.00);
+		            d.setVl_icms(0.00);
 				} else if (icms.getICMS51() != null) {
 					d.setCst_icms("0" + icms.getICMS51().getCST());
 					d.setVl_bc_icms(Double.valueOf(icms.getICMS51().getVBC()));
@@ -113,6 +125,7 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 				} else if (icms.getICMS60() != null) {
 					d.setCst_icms("0" + icms.getICMS60().getCST());
 					d.setVl_bc_icms_st(Double.valueOf(icms.getICMS60().getVBCSTRet()));
+					d.setAliq_st(d.getVl_icms_st() * 100 / d.getVl_bc_icms_st());
 					d.setVl_icms_st(Double.valueOf(icms.getICMS60().getVICMSSTRet()));
 				} else if (icms.getICMS70() != null) {
 					d.setCst_icms("0" + icms.getICMS70().getCST());
@@ -151,13 +164,21 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 		IPI ipi = dados.getImposto().getIPI();
 		if (ipi != null) {
 			try {
+				// recupera o ipi tributado
 				d.setCst_ipi(ipi.getIPITrib().getCST());
 				d.setVl_bc_ipi(Double.valueOf(ipi.getIPITrib().getVBC()));
 				d.setAliq_ipi(Double.valueOf(ipi.getIPITrib().getPIPI()));
 				d.setVl_ipi(Double.valueOf(ipi.getIPITrib().getVIPI()));
 			} catch (Exception e) {
-				d.setCst_ipi(ipi.getIPINT().getCST());
-				d.setVl_ipi(0.00);
+				try {
+					// recupera o ipi nao tributado
+					d.setCst_ipi(ipi.getIPINT().getCST());
+					d.setVl_ipi(0.00);
+				} catch (Exception ex) {
+					// caso nao tenha informado
+					d.setCst_ipi(venda ? "99" : "49");
+					d.setVl_ipi(0.00);
+				}
 			} finally {
 				int cst_ipi = Integer.valueOf(d.getCst_ipi());
 				// adaptacao do ipi das compras
@@ -248,14 +269,6 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 		this.produto = produto;
 	}
 
-	public String getCrt() {
-		return crt;
-	}
-
-	public void setCrt(String crt) {
-		this.crt = crt;
-	}
-
 	public boolean getVenda() {
 		return this.venda;
 	}
@@ -272,4 +285,11 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 		this.natId = natId;
 	}
 
+	public int getItem() {
+		return item;
+	}
+
+	public void setItem(int item) {
+		this.item = item;
+	}
 }

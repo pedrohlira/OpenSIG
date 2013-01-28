@@ -7,12 +7,10 @@ import org.beanio.BeanWriter;
 import org.beanio.StreamFactory;
 
 import br.com.opensig.comercial.shared.modelo.ComCompra;
+import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.comercial.shared.modelo.ComEcfNota;
-import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
-import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
-import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.empresa.shared.modelo.EmpEndereco;
 import br.com.opensig.empresa.shared.modelo.EmpEntidade;
@@ -66,24 +64,10 @@ public class Registro0150 extends ARegistro<Dados0150, EmpEntidade> {
 			}
 			// notas
 			for (ComEcfNota nota : notas) {
-				if (nota.getEmpCliente() != null) {
-					if (!entidades.contains(nota.getEmpCliente().getEmpEntidade().getEmpEntidadeId())) {
-						out.write(getDados(nota.getEmpCliente().getEmpEntidade()));
-						out.flush();
-						entidades.add(nota.getEmpCliente().getEmpEntidade().getEmpEntidadeId());
-					}
-				}
-			}
-			// zs
-			for (ComEcfZ z : zs) {
-				for (ComEcfVenda venda : z.getComEcfVendas()) {
-					if (venda.getComEcfVendaFechada() && venda.getEmpCliente() != null) {
-						if (!entidades.contains(venda.getEmpCliente().getEmpEntidade().getEmpEntidadeId())) {
-							out.write(getDados(venda.getEmpCliente().getEmpEntidade()));
-							out.flush();
-							entidades.add(venda.getEmpCliente().getEmpEntidade().getEmpEntidadeId());
-						}
-					}
+				if (!entidades.contains(nota.getEmpCliente().getEmpEntidade().getEmpEntidadeId())) {
+					out.write(getDados(nota.getEmpCliente().getEmpEntidade()));
+					out.flush();
+					entidades.add(nota.getEmpCliente().getEmpEntidade().getEmpEntidadeId());
 				}
 			}
 		} catch (Exception e) {

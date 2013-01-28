@@ -16,14 +16,12 @@ public class RegistroC405 extends ARegistro<DadosC405, ComEcfZ> {
 
 		// impostos federais
 		RegistroC410 r410 = new RegistroC410();
-		r410.setEscritor(escritor);
 		r410.setDados(dados.getComEcfZTotais());
 		r410.executar();
 		qtdLinhas += r410.getQtdLinhas();
 
 		// sub totais da leitura Z
 		RegistroC420 r420 = new RegistroC420();
-		r420.setEscritor(escritor);
 		for (ComEcfZTotais tot : dados.getComEcfZTotais()) {
 			if (tot.getComEcfZTotaisValor() > 0) {
 				r420.setDados(tot);
@@ -34,9 +32,8 @@ public class RegistroC405 extends ARegistro<DadosC405, ComEcfZ> {
 
 		// vendas da leitura Z
 		RegistroC460 r460 = new RegistroC460();
-		r460.setEscritor(escritor);
 		for (ComEcfVenda venda : dados.getComEcfVendas()) {
-			if (venda.getComEcfVendaFechada() && venda.getComEcfVendaLiquido() > 0.00) {
+			if ((venda.getComEcfVendaFechada() && venda.getComEcfVendaLiquido() > 0.00) || venda.getComEcfVendaCancelada()) {
 				r460.setDados(venda);
 				r460.executar();
 				qtdLinhas += r460.getQtdLinhas();
@@ -46,7 +43,6 @@ public class RegistroC405 extends ARegistro<DadosC405, ComEcfZ> {
 		// analitico
 		if (!r460.getAnalitico().isEmpty()) {
 			RegistroC490 r490 = new RegistroC490();
-			r490.setEscritor(escritor);
 			for (Entry<String, List<DadosC470>> entry : r460.getAnalitico().entrySet()) {
 				r490.setDados(entry.getValue());
 				r490.executar();

@@ -48,6 +48,10 @@ import br.com.opensig.core.shared.modelo.EDirecao;
 import br.com.opensig.core.shared.modelo.Lista;
 import br.com.opensig.core.shared.modelo.Sql;
 import br.com.opensig.empresa.shared.modelo.EmpCliente;
+import br.com.opensig.empresa.shared.modelo.EmpContato;
+import br.com.opensig.empresa.shared.modelo.EmpContatoTipo;
+import br.com.opensig.empresa.shared.modelo.EmpEndereco;
+import br.com.opensig.empresa.shared.modelo.EmpEnderecoTipo;
 import br.com.opensig.empresa.shared.modelo.EmpEntidade;
 import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinForma;
@@ -371,11 +375,16 @@ public class RestServidor extends ARest {
 				ecfZ = (ComEcfZ) service.salvar(ecfZ);
 
 				// salva os totais
+				Map<String, ComEcfZTotais> zTotais = new HashMap<String, ComEcfZTotais>();
 				for (ComEcfZTotais tot : totais) {
+					if (zTotais.containsKey(tot.getComEcfZTotaisCodigo())) {
+						tot.setComEcfZTotaisValor(tot.getComEcfZTotaisValor() + zTotais.remove(tot.getComEcfZTotaisCodigo()).getComEcfZTotaisValor());
+					}
 					tot.setId(0);
 					tot.setComEcfZ(ecfZ);
+					zTotais.put(tot.getComEcfZTotaisCodigo(), tot);
 				}
-				service.salvar(totais);
+				service.salvar(zTotais.values());
 
 				// salva as vendas
 				for (ComEcfVenda venda : vendas) {
@@ -607,25 +616,44 @@ public class RestServidor extends ARest {
 		FiltroTexto ft = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.IGUAL, doc);
 		EmpCliente cli = (EmpCliente) service.selecionar(new EmpCliente(), ft, false);
 
-		// se existir retornar, senao cria um novo
-		if (cli != null) {
-			return cli;
-		} else {
+		// se nao existir cria um novo
+		if (cli == null) {
 			// entidade
 			EmpEntidade ent = new EmpEntidade();
-			ent.setEmpEntidadeNome1(sisCliente.getSisClienteNome());
-			ent.setEmpEntidadeNome2("");
+			String nome = sisCliente.getSisClienteNome().equals("") ? "CONSUMIDOR" : sisCliente.getSisClienteNome();
+			ent.setEmpEntidadeNome1(nome);
+			ent.setEmpEntidadeNome2("CONSUMIDOR");
 			ent.setEmpEntidadeDocumento1(doc);
-			ent.setEmpEntidadeDocumento2("");
+			ent.setEmpEntidadeDocumento2("ISENTO");
+			ent.setEmpEntidadeDocumento3("ISENTO");
 			ent.setEmpEntidadePessoa(pessoa);
 			ent.setEmpEntidadeAtivo(true);
-			ent.setEmpEntidadeObservacao("Importado do OpenPDV, adicionar endereço e contato");
+			ent.setEmpEntidadeObservacao("Importado do OpenPDV, adicionar endereço e contato. " + sisCliente.getSisClienteEndereco());
 			ent = (EmpEntidade) service.salvar(ent);
+			// endereco
+			EmpEndereco ende = new EmpEndereco();
+			ende.setEmpEntidade(ent);
+			ende.setEmpEnderecoTipo(new EmpEnderecoTipo(Integer.valueOf(conf.get("nfe.tipoenderes"))));
+			ende.setEmpMunicipio(ecf.getEmpEmpresa().getEmpEntidade().getEmpEnderecos().get(0).getEmpMunicipio());
+			ende.setEmpEnderecoLogradouro("NAO INFORMADO");
+			ende.setEmpEnderecoNumero(0);
+			ende.setEmpEnderecoBairro("NAO INFORMADO");
+			ende.setEmpEnderecoComplemento("");
+			ende.setEmpEnderecoCep("00000000");
+			ende = (EmpEndereco) service.salvar(ende);
+			// contato
+			EmpContato cont = new EmpContato();
+			cont.setEmpEntidade(ent);
+			cont.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipoconttel"))));
+			cont.setEmpContatoDescricao("(00) 0000-0000");
+			cont.setEmpContatoPessoa(nome);
+			cont = (EmpContato) service.salvar(cont);
 			// cliente
 			cli = new EmpCliente();
 			cli.setEmpEntidade(ent);
-			return (EmpCliente) service.salvar(cli);
+			cli = (EmpCliente) service.salvar(cli);
 		}
+		return cli;
 	}
 
 	/**

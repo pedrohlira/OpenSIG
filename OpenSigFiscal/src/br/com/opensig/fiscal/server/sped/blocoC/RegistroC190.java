@@ -20,6 +20,7 @@ public class RegistroC190 extends ARegistro<DadosC190, List<DadosC170>> {
 			d.setVl_icms_st(somarDoubles(d.getVl_icms_st(), c170.getVl_icms_st()));
 			d.setVl_ipi(somarDoubles(d.getVl_ipi(), c170.getVl_ipi()));
 		}
+		d.setVl_red_bc(0.00);
 		d.setCod_obs("");
 		return d;
 	}

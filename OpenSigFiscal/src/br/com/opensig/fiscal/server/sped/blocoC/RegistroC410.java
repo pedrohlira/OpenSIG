@@ -12,8 +12,7 @@ public class RegistroC410 extends ARegistro<DadosC410, List<ComEcfZTotais>> {
 		// recupera o valor liquido total vendido no dia
 		double liquido = 0.00;
 		for (ComEcfZTotais t : dados) {
-			if (!t.getComEcfZTotaisCodigo().equals("OPNF") && t.getComEcfZTotaisCodigo().equals("DT") && t.getComEcfZTotaisCodigo().equals("DS") && t.getComEcfZTotaisCodigo().equals("Can-T")
-					&& t.getComEcfZTotaisCodigo().equals("Can-S")) {
+			if (!t.getComEcfZTotaisCodigo().equals("OPNF") && !t.getComEcfZTotaisCodigo().startsWith("D") && !t.getComEcfZTotaisCodigo().startsWith("C")) {
 				liquido += t.getComEcfZTotaisValor();
 			}
 		}

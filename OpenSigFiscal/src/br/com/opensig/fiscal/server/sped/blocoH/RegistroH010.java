@@ -1,5 +1,7 @@
 package br.com.opensig.fiscal.server.sped.blocoH;
 
+import java.io.StringWriter;
+
 import org.beanio.BeanWriter;
 import org.beanio.StreamFactory;
 
@@ -11,24 +13,27 @@ import br.com.opensig.produto.shared.modelo.ProdProduto;
 public class RegistroH010 extends ARegistro<DadosH010, ProdProduto> {
 
 	private double total;
+	private StringWriter tempEscritor;
 
 	@Override
 	public void executar() {
-		try {
-			StreamFactory factory = StreamFactory.newInstance();
-			factory.load(getClass().getResourceAsStream(bean));
-			BeanWriter out = factory.createWriter("EFD", escritor);
+		if (estoque.size() > 0) {
+			try {
+				StreamFactory factory = StreamFactory.newInstance();
+				factory.load(getClass().getResourceAsStream(bean));
+				BeanWriter out = factory.createWriter("EFD", tempEscritor);
 
-			for (ProdProduto prod : estoque) {
-				if (prod.getProdComposicoes() == null) {
-					bloco = getDados(prod);
-					out.write(bloco);
-					out.flush();
+				for (ProdProduto prod : estoque) {
+					if (prod.getProdComposicoes().isEmpty()) {
+						bloco = getDados(prod);
+						out.write(bloco);
+						out.flush();
+					}
 				}
+			} catch (Exception e) {
+				qtdLinhas = 0;
+				UtilServer.LOG.error("Erro na geracao do Registro -> " + bean, e);
 			}
-		} catch (Exception e) {
-			qtdLinhas = 0;
-			UtilServer.LOG.error("Erro na geracao do Registro -> " + bean, e);
 		}
 	}
 
@@ -64,5 +69,13 @@ public class RegistroH010 extends ARegistro<DadosH010, ProdProduto> {
 
 	public void setTotal(double total) {
 		this.total = total;
+	}
+
+	public StringWriter getTempEscritor() {
+		return tempEscritor;
+	}
+
+	public void setTempEscritor(StringWriter tempEscritor) {
+		this.tempEscritor = tempEscritor;
 	}
 }

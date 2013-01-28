@@ -24,8 +24,6 @@ public class RegistroD500 extends ARegistro<DadosD500, ComConsumo> {
 			factory.load(getClass().getResourceAsStream(bean));
 			BeanWriter out = factory.createWriter("EFD", escritor);
 
-			RegistroD590 r590 = new RegistroD590();
-			r590.setEscritor(escritor);
 			for (ComConsumo consumo : consumos) {
 				// somente os consumos de comunicacao e telecomunicacao
 				if (consumo.getComConsumoTipo().startsWith("21") || consumo.getComConsumoTipo().startsWith("22")) {
@@ -36,7 +34,7 @@ public class RegistroD500 extends ARegistro<DadosD500, ComConsumo> {
 				}
 			}
 
-			// analitico dos consumos
+			// analitico
 			getAnalitico();
 		} catch (Exception e) {
 			qtdLinhas = 0;
@@ -91,8 +89,6 @@ public class RegistroD500 extends ARegistro<DadosD500, ComConsumo> {
 	private void getAnalitico() {
 		if (!analitico.isEmpty()) {
 			RegistroD590 r590 = new RegistroD590();
-			r590.setEscritor(escritor);
-			r590.setAuth(auth);
 			for (Entry<String, List<ComConsumo>> entry : analitico.entrySet()) {
 				r590.setDados(entry.getValue());
 				r590.executar();

@@ -43,7 +43,11 @@ public class ComandoValidar extends ComandoAcao {
 
 		MessageBox.confirm(OpenSigCore.i18n.txtValidar(), "Deseja validar automaticamente?", new ConfirmCallback() {
 			public void execute(String btnID) {
-				validar(btnID.equalsIgnoreCase("yes"));
+				if (btnID.equalsIgnoreCase("yes")) {
+					validar(true);
+				} else if (btnID.equalsIgnoreCase("no")) {
+					validar(false);
+				}
 			}
 		});
 	}

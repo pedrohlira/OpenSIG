@@ -19,7 +19,6 @@ public class RegistroC140<T extends Dados> extends ARegistro<DadosC140, T> {
 		if (dados instanceof FinReceber) {
 			FinReceber receber = (FinReceber) dados;
 			RegistroC141<FinRecebimento> r141 = new RegistroC141<FinRecebimento>();
-			r141.setEscritor(escritor);
 			Collections.sort(receber.getFinRecebimentos(), new Comparator<FinRecebimento>() {
 				public int compare(FinRecebimento o1, FinRecebimento o2) {
 					return o1.getFinRecebimentoParcela().compareTo(o2.getFinRecebimentoParcela());
@@ -33,7 +32,6 @@ public class RegistroC140<T extends Dados> extends ARegistro<DadosC140, T> {
 		} else if (dados instanceof FinPagar) {
 			FinPagar pagar = (FinPagar) dados;
 			RegistroC141<FinPagamento> r141 = new RegistroC141<FinPagamento>();
-			r141.setEscritor(escritor);
 			Collections.sort(pagar.getFinPagamentos(), new Comparator<FinPagamento>() {
 				public int compare(FinPagamento o1, FinPagamento o2) {
 					return o1.getFinPagamentoParcela().compareTo(o2.getFinPagamentoParcela());

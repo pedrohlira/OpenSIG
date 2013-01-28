@@ -18,30 +18,32 @@ import br.com.opensig.produto.shared.modelo.ProdTributacao;
 public class RegistroC350 extends ARegistro<DadosC350, ComEcfNota> {
 
 	private Map<String, List<ComEcfNotaProduto>> analitico = new HashMap<String, List<ComEcfNotaProduto>>();
-	
+
 	@Override
 	public void executar() {
 		try {
 			StreamFactory factory = StreamFactory.newInstance();
 			factory.load(getClass().getResourceAsStream(bean));
 			BeanWriter out = factory.createWriter("EFD", escritor);
+
+			RegistroC370 c370 = new RegistroC370();
 			for (ComEcfNota nota : notas) {
-				bloco = getDados(nota);
-				out.write(bloco);
-				out.flush();
-                
-				// itens da venda
-				RegistroC370 c370 = new RegistroC370();
-				c370.setEscritor(escritor);
-				for (ComEcfNotaProduto np : nota.getComEcfNotaProdutos()) {
-					c370.setDados(np);
-					c370.executar();
-					qtdLinhas += c370.getQtdLinhas();
-					setAnalitico(np);
+				if (nota.getComEcfNotaCancelada() == false) {
+					bloco = getDados(nota);
+					out.write(bloco);
+					out.flush();
+
+					// itens da venda
+					for (ComEcfNotaProduto np : nota.getComEcfNotaProdutos()) {
+						c370.setDados(np);
+						c370.executar();
+						qtdLinhas += c370.getQtdLinhas();
+						setAnalitico(np);
+					}
+
+					// analitico
+					getAnalitico();
 				}
-				
-				// analitico
-				getAnalitico();
 			}
 		} catch (Exception e) {
 			qtdLinhas = 0;
@@ -67,26 +69,24 @@ public class RegistroC350 extends ARegistro<DadosC350, ComEcfNota> {
 		qtdLinhas++;
 		return d;
 	}
-	
+
 	private void setAnalitico(ComEcfNotaProduto d) {
 		ProdTributacao pt = d.getProdProduto().getProdTributacao();
 		String cstCson = auth.getConf().get("nfe.crt").equals("1") ? pt.getProdTributacaoCson() : pt.getProdTributacaoCst();
 		String chave = cstCson + pt.getProdTributacaoCfop() + pt.getProdTributacaoDentro();
-        List<ComEcfNotaProduto> lista = analitico.get(chave);
-        if (lista == null) {
-            lista = new ArrayList<ComEcfNotaProduto>();
-            lista.add(d);
-            analitico.put(chave, lista);
-        } else {
-            lista.add(d);
-        }
+		List<ComEcfNotaProduto> lista = analitico.get(chave);
+		if (lista == null) {
+			lista = new ArrayList<ComEcfNotaProduto>();
+			lista.add(d);
+			analitico.put(chave, lista);
+		} else {
+			lista.add(d);
+		}
 	}
 
 	private void getAnalitico() {
 		if (!analitico.isEmpty()) {
 			RegistroC390 r390 = new RegistroC390();
-			r390.setEscritor(escritor);
-			r390.setAuth(auth);
 			for (Entry<String, List<ComEcfNotaProduto>> entry : analitico.entrySet()) {
 				r390.setDados(entry.getValue());
 				r390.executar();

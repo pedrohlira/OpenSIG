@@ -8,7 +8,6 @@ import org.beanio.StreamFactory;
 
 import br.com.opensig.comercial.shared.modelo.ComCompra;
 import br.com.opensig.comercial.shared.modelo.ComNatureza;
-import br.com.opensig.comercial.shared.modelo.ComVenda;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.fiscal.server.sped.ARegistro;
 
@@ -30,16 +29,6 @@ public class Registro0400 extends ARegistro<Dados0400, ComNatureza> {
 					out.write(getDados(compra.getComNatureza()));
 					out.flush();
 					naturezas.add(compra.getComNatureza().getComNaturezaId());
-				}
-			}
-			// vendas
-			for (ComVenda venda : vendas) {
-				if (!venda.getComVendaCancelada() && !venda.getComVendaNfe()) {
-					if (!naturezas.contains(venda.getComNatureza().getComNaturezaId())) {
-						out.write(getDados(venda.getComNatureza()));
-						out.flush();
-						naturezas.add(venda.getComNatureza().getComNaturezaId());
-					}
 				}
 			}
 		} catch (Exception e) {

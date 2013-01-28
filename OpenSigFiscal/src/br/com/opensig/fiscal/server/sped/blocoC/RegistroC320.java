@@ -31,7 +31,6 @@ public class RegistroC320 extends ARegistro<DadosC320, List<ComEcfNotaProduto>> 
 			// itens diarios
 			if (!produtos.isEmpty()) {
 				RegistroC321 r321 = new RegistroC321();
-				r321.setEscritor(escritor);
 				for (Entry<Integer, List<ComEcfNotaProduto>> entry : produtos.entrySet()) {
 					r321.setDados(entry.getValue());
 					r321.executar();

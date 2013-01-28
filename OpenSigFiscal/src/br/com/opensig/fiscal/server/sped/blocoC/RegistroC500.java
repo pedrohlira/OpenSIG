@@ -1,11 +1,5 @@
 package br.com.opensig.fiscal.server.sped.blocoC;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.beanio.BeanWriter;
 import org.beanio.StreamFactory;
 
@@ -15,8 +9,6 @@ import br.com.opensig.fiscal.server.sped.ARegistro;
 
 public class RegistroC500 extends ARegistro<DadosC500, ComConsumo> {
 
-	private Map<String, List<ComConsumo>> analitico = new HashMap<String, List<ComConsumo>>();
-
 	@Override
 	public void executar() {
 		try {
@@ -25,19 +17,19 @@ public class RegistroC500 extends ARegistro<DadosC500, ComConsumo> {
 			BeanWriter out = factory.createWriter("EFD", escritor);
 
 			RegistroC590 r590 = new RegistroC590();
-			r590.setEscritor(escritor);
 			for (ComConsumo consumo : consumos) {
 				// somente os consumos de luz, gas e agua
 				if (consumo.getComConsumoTipo().startsWith("06") || consumo.getComConsumoTipo().startsWith("28") || consumo.getComConsumoTipo().startsWith("29")) {
 					bloco = getDados(consumo);
 					out.write(bloco);
 					out.flush();
-					setAnalitico(consumo);
+					
+					// analitico dos consumos
+					r590.setDados(consumo);
+					r590.executar();
+					qtdLinhas += r590.getQtdLinhas();
 				}
 			}
-
-			// analitico dos consumos
-			getAnalitico();
 		} catch (Exception e) {
 			qtdLinhas = 0;
 			UtilServer.LOG.error("Erro na geracao do Registro -> " + bean, e);
@@ -98,31 +90,5 @@ public class RegistroC500 extends ARegistro<DadosC500, ComConsumo> {
 		normalizar(d);
 		qtdLinhas++;
 		return d;
-	}
-
-	private void setAnalitico(ComConsumo d) {
-		String chave = "000" + d.getComConsumoCfop() + d.getComConsumoAliquota();
-		List<ComConsumo> lista = analitico.get(chave);
-		if (lista == null) {
-			lista = new ArrayList<ComConsumo>();
-			lista.add(d);
-			analitico.put(chave, lista);
-		} else {
-			lista.add(d);
-		}
-	}
-
-	private void getAnalitico() {
-		if (!analitico.isEmpty()) {
-			RegistroC590 r590 = new RegistroC590();
-			r590.setEscritor(escritor);
-			r590.setAuth(auth);
-			for (Entry<String, List<ComConsumo>> entry : analitico.entrySet()) {
-				r590.setDados(entry.getValue());
-				r590.executar();
-				qtdLinhas += r590.getQtdLinhas();
-			}
-		}
-		analitico.clear();
 	}
 }
