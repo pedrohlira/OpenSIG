@@ -93,7 +93,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 	private ComboBox cmbOrigem;
 	private ComboBox cmbEmbalagem;
 	private Checkbox chkAtivo;
-	private Checkbox chkIncentivo;
 	private Arvore<ProdCategoria> treeCategoria;
 	private TextArea txtObservacao;
 	private Date dtCadastro;
@@ -194,7 +193,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		linha3.addToRow(getIpi(), 140);
 		coluna1.add(linha3);
 
-		txtEstoque = new NumberField(OpenSigCore.i18n.txtEstoque(), "t1.prodEstoqueQuantidade", 60);
+		txtEstoque = new NumberField(OpenSigCore.i18n.txtEstoque(), "t1.prodEstoqueQuantidade", 50);
 		txtEstoque.setAllowBlank(false);
 		txtEstoque.setAllowNegative(false);
 		txtEstoque.setMaxLength(10);
@@ -203,15 +202,12 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		chkAtivo = new Checkbox(OpenSigCore.i18n.txtAtivo(), "prodProdutoAtivo");
 		chkAtivo.setChecked(true);
 
-		chkIncentivo = new Checkbox(OpenSigCore.i18n.txtIncentivo(), "prodProdutoIncentivo");
-
 		MultiFieldPanel linha4 = new MultiFieldPanel();
 		linha4.setBorder(false);
 		linha4.addToRow(getFabricante(), 310);
-		linha4.addToRow(getTipo(), 60);
-		linha4.addToRow(txtEstoque, 80);
+		linha4.addToRow(getTipo(), 140);
+		linha4.addToRow(txtEstoque, 70);
 		linha4.addToRow(chkAtivo, 50);
-		linha4.addToRow(chkIncentivo, 70);
 		coluna1.add(linha4);
 
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), "prodProdutoObservacao");
@@ -317,7 +313,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		}
 		classe.setProdProdutoDescricao(txtDescricao.getValueAsString());
 		classe.setProdProdutoAtivo(chkAtivo.getValue());
-		classe.setProdProdutoIncentivo(chkIncentivo.getValue());
 		classe.setProdProdutoSinc(Integer.valueOf(hdnSinc.getValueAsString()));
 		if (!hdnFornecedor.getValueAsString().equals("0")) {
 			EmpFornecedor fornecedor = new EmpFornecedor(Integer.valueOf(hdnFornecedor.getValueAsString()));
@@ -461,7 +456,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 	}
 
 	private ComboBox getOrigem() {
-		FieldDef[] fdOrigem = new FieldDef[] { new IntegerFieldDef("prodOrigemId"), new StringFieldDef("prodOrigemDescricao") };
+		FieldDef[] fdOrigem = new FieldDef[] { new IntegerFieldDef("prodOrigemId"), new IntegerFieldDef("prodOrigemValor"), new StringFieldDef("prodOrigemDescricao") };
 		CoreProxy<ProdOrigem> proxy = new CoreProxy<ProdOrigem>(new ProdOrigem());
 		final Store storeOrigem = new Store(proxy, new ArrayReader(new RecordDef(fdOrigem)), true);
 		storeOrigem.addStoreListener(new StoreListenerAdapter() {
@@ -487,8 +482,9 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		cmbOrigem.setMode(ComboBox.LOCAL);
 		cmbOrigem.setDisplayField("prodOrigemDescricao");
 		cmbOrigem.setValueField("prodOrigemId");
+		cmbOrigem.setTpl("<div class=\"x-combo-list-item\"><b>{prodOrigemValor}</b> - <i>[{prodOrigemDescricao}]</i></div>");
 		cmbOrigem.setForceSelection(true);
-		cmbOrigem.setListWidth(250);
+		cmbOrigem.setListWidth(500);
 		cmbOrigem.setEditable(false);
 
 		return cmbOrigem;
@@ -559,9 +555,9 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		cmbTributacao.setDisplayField("prodTributacaoNome");
 		cmbTributacao.setValueField("prodTributacaoId");
 		cmbTributacao.setTpl("<div class=\"x-combo-list-item\"><b>{prodTributacaoNome}</b> - <i>" + OpenSigCore.i18n.txtCfop() + " [{prodTributacaoCfop}], " + OpenSigCore.i18n.txtCst()
-				+ " [{prodTributacaoCst}]</i></div>");
+				+ " [{prodTributacaoCst}], " + OpenSigCore.i18n.txtCson() + " [{prodTributacaoCson}]</i></div>");
 		cmbTributacao.setForceSelection(true);
-		cmbTributacao.setListWidth(400);
+		cmbTributacao.setListWidth(500);
 		cmbTributacao.setEditable(false);
 
 		return cmbTributacao;
@@ -588,7 +584,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 			}
 		});
 
-		cmbIpi = new ComboBox(OpenSigCore.i18n.txtIpi(), "prodIpi.prodIpiId", 110);
+		cmbIpi = new ComboBox(OpenSigCore.i18n.txtIpi(), "prodIpi.prodIpiId", 120);
 		cmbIpi.setAllowBlank(false);
 		cmbIpi.setStore(storeIpi);
 		cmbIpi.setTriggerAction(ComboBox.ALL);
@@ -634,12 +630,12 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 			}
 		});
 
-		cmbTipo = new ComboBox(OpenSigCore.i18n.txtTipo(), "prodTipo.prodTipoId", 30);
+		cmbTipo = new ComboBox(OpenSigCore.i18n.txtTipo(), "prodTipo.prodTipoId", 110);
 		cmbTipo.setAllowBlank(false);
 		cmbTipo.setStore(storeTipo);
 		cmbTipo.setTriggerAction(ComboBox.ALL);
 		cmbTipo.setMode(ComboBox.LOCAL);
-		cmbTipo.setDisplayField("prodTipoValor");
+		cmbTipo.setDisplayField("prodTipoDescricao");
 		cmbTipo.setValueField("prodTipoId");
 		cmbTipo.setTpl("<div class=\"x-combo-list-item\"><b>{prodTipoValor}</b> - <i>[{prodTipoDescricao}]</i></div>");
 		cmbTipo.setForceSelection(true);
@@ -942,14 +938,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 	public void setCmbEmbalagem(ComboBox cmbEmbalagem) {
 		this.cmbEmbalagem = cmbEmbalagem;
-	}
-
-	public Checkbox getChkIncentivo() {
-		return chkIncentivo;
-	}
-
-	public void setChkIncentivo(Checkbox chkIncentivo) {
-		this.chkIncentivo = chkIncentivo;
 	}
 
 	public List<ProdCategoria> getCategorias() {

@@ -15,8 +15,6 @@ import br.com.opensig.core.shared.modelo.Dados;
  * Classe que representa uma tributação no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 16/07/2009
  */
 @Entity
 @Table(name = "prod_tributacao")
@@ -56,7 +54,7 @@ public class ProdTributacao extends Dados implements Serializable {
 	}
 
 	public ProdTributacao(int prodTributacaoId) {
-		super("pu_produto", "ProdTributacao", "prodTributacaoId", "prodTributacaoNome");
+		super("pu_produto", "ProdTributacao", "prodTributacaoId", "prodTributacaoCst");
 		this.prodTributacaoId = prodTributacaoId;
 	}
 

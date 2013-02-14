@@ -206,6 +206,13 @@
 		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoOrigem
+		</classe>
+		<nome>Origem</nome>
+		<descricao>Administrar as origens dos produtos.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
 		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoCompra
 		</classe>
 		<nome>Compra</nome>
@@ -372,8 +379,8 @@
 	<funcao>
 		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoForma
 		</classe>
-		<nome>Tipos de Pagamentos</nome>
-		<descricao>Administrar os tipos de pagamentos no sistema.
+		<nome>Formas</nome>
+		<descricao>Administrar as formas de pagamentos no sistema.
 		</descricao>
 		<imagem>icon-padrao</imagem>
 	</funcao>
@@ -426,13 +433,6 @@
 		<nome>Consulta Empresa</nome>
 		<descricao>Verifica a situação da Empresa junto à sefaz.</descricao>
 		<imagem>icon-cadastro</imagem>
-	</funcao>
-	<funcao>
-		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoIncentivo
-		</classe>
-		<nome>Incentivo</nome>
-		<descricao>Administrar os incentivos.</descricao>
-		<imagem>icon-incentivo</imagem>
 	</funcao>
 	<funcao>
 		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSped

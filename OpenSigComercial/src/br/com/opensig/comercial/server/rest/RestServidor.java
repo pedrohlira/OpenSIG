@@ -53,6 +53,7 @@ import br.com.opensig.empresa.shared.modelo.EmpContatoTipo;
 import br.com.opensig.empresa.shared.modelo.EmpEndereco;
 import br.com.opensig.empresa.shared.modelo.EmpEnderecoTipo;
 import br.com.opensig.empresa.shared.modelo.EmpEntidade;
+import br.com.opensig.empresa.shared.modelo.EmpMunicipio;
 import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinForma;
 import br.com.opensig.financeiro.shared.modelo.FinReceber;
@@ -620,34 +621,41 @@ public class RestServidor extends ARest {
 		if (cli == null) {
 			// entidade
 			EmpEntidade ent = new EmpEntidade();
-			String nome = sisCliente.getSisClienteNome().equals("") ? "CONSUMIDOR" : sisCliente.getSisClienteNome();
-			ent.setEmpEntidadeNome1(nome);
+			ent.setEmpEntidadeNome1(sisCliente.getSisClienteNome());
 			ent.setEmpEntidadeNome2("CONSUMIDOR");
 			ent.setEmpEntidadeDocumento1(doc);
-			ent.setEmpEntidadeDocumento2("ISENTO");
+			ent.setEmpEntidadeDocumento2(sisCliente.getSisClienteDoc1());
 			ent.setEmpEntidadeDocumento3("ISENTO");
 			ent.setEmpEntidadePessoa(pessoa);
 			ent.setEmpEntidadeAtivo(true);
-			ent.setEmpEntidadeObservacao("Importado do OpenPDV, adicionar endereço e contato. " + sisCliente.getSisClienteEndereco());
+			ent.setEmpEntidadeObservacao("Importado do OpenPDV");
+			ent.setEmpEntidadeData(new Date());
 			ent = (EmpEntidade) service.salvar(ent);
 			// endereco
 			EmpEndereco ende = new EmpEndereco();
 			ende.setEmpEntidade(ent);
 			ende.setEmpEnderecoTipo(new EmpEnderecoTipo(Integer.valueOf(conf.get("nfe.tipoenderes"))));
-			ende.setEmpMunicipio(ecf.getEmpEmpresa().getEmpEntidade().getEmpEnderecos().get(0).getEmpMunicipio());
-			ende.setEmpEnderecoLogradouro("NAO INFORMADO");
-			ende.setEmpEnderecoNumero(0);
-			ende.setEmpEnderecoBairro("NAO INFORMADO");
-			ende.setEmpEnderecoComplemento("");
-			ende.setEmpEnderecoCep("00000000");
+			ende.setEmpMunicipio(new EmpMunicipio(sisCliente.getSisMunicipio().getSisMunicipioId()));
+			ende.setEmpEnderecoLogradouro(sisCliente.getSisClienteEndereco());
+			ende.setEmpEnderecoNumero(sisCliente.getSisClienteNumero());
+			ende.setEmpEnderecoBairro(sisCliente.getSisClienteBairro());
+			ende.setEmpEnderecoComplemento(sisCliente.getSisClienteComplemento());
+			ende.setEmpEnderecoCep(sisCliente.getSisClienteCep());
 			ende = (EmpEndereco) service.salvar(ende);
-			// contato
-			EmpContato cont = new EmpContato();
-			cont.setEmpEntidade(ent);
-			cont.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipoconttel"))));
-			cont.setEmpContatoDescricao("(00) 0000-0000");
-			cont.setEmpContatoPessoa(nome);
-			cont = (EmpContato) service.salvar(cont);
+			// contato 1
+			EmpContato cont1 = new EmpContato();
+			cont1.setEmpEntidade(ent);
+			cont1.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipoconttel"))));
+			cont1.setEmpContatoDescricao(sisCliente.getSisClienteTelefone());
+			cont1.setEmpContatoPessoa("");
+			cont1 = (EmpContato) service.salvar(cont1);
+			// contato 2
+			EmpContato cont2 = new EmpContato();
+			cont2.setEmpEntidade(ent);
+			cont2.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipocontemail"))));
+			cont2.setEmpContatoDescricao(sisCliente.getSisClienteEmail());
+			cont2.setEmpContatoPessoa("");
+			cont2 = (EmpContato) service.salvar(cont2);
 			// cliente
 			cli = new EmpCliente();
 			cli.setEmpEntidade(ent);

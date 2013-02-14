@@ -244,7 +244,6 @@ public class FormularioCompra extends AFormulario<ComCompra> {
 					reg.set("prodProduto.prodProdutoBarra", result.getAsString("prodProdutoBarra"));
 					reg.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
 					reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
-					reg.set("prodProduto.prodProdutoIncentivo", result.getAsBoolean("prodProdutoIncentivo"));
 					reg.set("prodTributacaoDentro", result.getAsInteger("prodTributacao.prodTributacaoDentro"));
 					reg.set("prodTributacaoCst", result.getAsString("prodTributacao.prodTributacaoCst"));
 					reg.set("comCompraProdutoQuantidade", 0);

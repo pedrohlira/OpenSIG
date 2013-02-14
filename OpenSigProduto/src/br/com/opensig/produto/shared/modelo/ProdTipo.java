@@ -15,8 +15,6 @@ import br.com.opensig.core.shared.modelo.Dados;
  * Classe que representa um tipo de produto no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 15/03/2012
  */
 @Entity
 @Table(name = "prod_tipo")
@@ -79,10 +77,5 @@ public class ProdTipo extends Dados implements Serializable {
 	}
 
 	public void anularDependencia() {
-	}
-	
-	@Override
-	public String toString() {
-		return prodTipoValor;
 	}
 }

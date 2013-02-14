@@ -1,2 +1,0 @@
-serviceClass: br.com.opensig.empresa.client.servico.EmpresaService
-path: ECBB3E082F7FEC9F4746A528810B3599.gwt.rpc

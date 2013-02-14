@@ -1,6 +1,7 @@
 package br.com.opensig.empresa.client.visao.form;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -298,6 +299,7 @@ public abstract class FormularioEntidade<E extends Dados> extends AFormulario<E>
 		entidade.setEmpEntidadeDocumento3(txtDoc3.getValueAsString());
 		entidade.setEmpEntidadeAtivo(chkAtivo.getValue());
 		entidade.setEmpEntidadeObservacao(txtObservacao.getValueAsString());
+		entidade.setEmpEntidadeData(new Date());
 
 		if (cmbPessoa.getValue().equalsIgnoreCase(fisica)) {
 			entidade.setEmpEntidadeDocumento1(txtCPF.getValueAsString());

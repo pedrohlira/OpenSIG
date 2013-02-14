@@ -1,2 +1,0 @@
-serviceClass: br.com.opensig.financeiro.client.servico.FinanceiroService
-path: 03DC3B9E3FE5361928321601E80B883E.gwt.rpc

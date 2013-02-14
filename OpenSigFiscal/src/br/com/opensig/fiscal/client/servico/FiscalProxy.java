@@ -99,13 +99,13 @@ public class FiscalProxy<E extends Dados> extends CoreProxy<E> implements Fiscal
 	}
 
 	@Override
-	public void inutilizarSaida(FisNotaSaida saida, String motivo, int ini, int fim, AsyncCallback<Map<String, String>> asyncCallback) {
-		async.inutilizarSaida(saida, motivo, ini, fim, asyncCallback);
+	public void inutilizarSaida(String motivo, int ini, int fim, AsyncCallback<Map<String, String>> asyncCallback) {
+		async.inutilizarSaida(motivo, ini, fim, asyncCallback);
 	};
 
 	@Override
-	public void inutilizarEntrada(FisNotaEntrada entrada, String motivo, int ini, int fim, AsyncCallback<Map<String, String>> asyncCallback) {
-		async.inutilizarEntrada(entrada, motivo, ini, fim, asyncCallback);
+	public void inutilizarEntrada(String motivo, int ini, int fim, AsyncCallback<Map<String, String>> asyncCallback) {
+		async.inutilizarEntrada(motivo, ini, fim, asyncCallback);
 	};
 
 	@Override

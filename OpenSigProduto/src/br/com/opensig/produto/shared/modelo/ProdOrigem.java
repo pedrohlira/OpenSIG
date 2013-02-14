@@ -15,8 +15,6 @@ import br.com.opensig.core.shared.modelo.Dados;
  * Classe que representa um origem de produtos no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 27/05/2010
  */
 @Entity
 @Table(name="prod_origem")
@@ -27,6 +25,9 @@ public class ProdOrigem extends Dados implements Serializable {
 	@Column(name="prod_origem_id")
 	private int prodOrigemId;
 
+	@Column(name="prod_origem_valor")
+	private int prodOrigemValor;
+	
 	@Column(name="prod_origem_descricao")
 	private String prodOrigemDescricao;
 
@@ -35,7 +36,7 @@ public class ProdOrigem extends Dados implements Serializable {
     }
     
 	public ProdOrigem(int prodOrigemId) {
-		super("pu_produto", "ProdOrigem", "prodOrigemId", "prodOrigemDescricao");
+		super("pu_produto", "ProdOrigem", "prodOrigemId", "prodOrigemValor");
 		this.prodOrigemId = prodOrigemId;
 	}
 
@@ -45,6 +46,14 @@ public class ProdOrigem extends Dados implements Serializable {
 
 	public void setProdOrigemId(int prodOrigemId) {
 		this.prodOrigemId = prodOrigemId;
+	}
+
+	public int getProdOrigemValor() {
+		return prodOrigemValor;
+	}
+
+	public void setProdOrigemValor(int prodOrigemValor) {
+		this.prodOrigemValor = prodOrigemValor;
 	}
 
 	public String getProdOrigemDescricao() {
@@ -64,11 +73,7 @@ public class ProdOrigem extends Dados implements Serializable {
 	}
 
 	public String[] toArray() {
-		return new String[] { prodOrigemId + "", prodOrigemDescricao };
+		return new String[] { prodOrigemId + "", prodOrigemValor + "", prodOrigemDescricao };
 	}
 	
-	@Override
-	public String toString(){
-		return (prodOrigemId - 1) + "";
-	}
 }

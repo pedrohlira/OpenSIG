@@ -41,13 +41,13 @@ public interface FiscalService<E extends Dados> extends CoreService<E> {
 	
 	public Map<String, String> cancelarSaida(FisNotaSaida saida, String motivo) throws FiscalException;
 	
-	public Map<String, String> inutilizarSaida(FisNotaSaida saida, String motivo, int ini, int fim) throws FiscalException;
+	public Map<String, String> inutilizarSaida(String motivo, int ini, int fim) throws FiscalException;
 
 	public Map<String, String> salvarEntrada(String xml, FisNotaStatus status) throws FiscalException;
 	
 	public Map<String, String> cancelarEntrada(FisNotaEntrada entrada, String motivo) throws FiscalException;
 	
-	public Map<String, String> inutilizarEntrada(FisNotaEntrada entrada, String motivo, int ini, int fim) throws FiscalException;
+	public Map<String, String> inutilizarEntrada(String motivo, int ini, int fim) throws FiscalException;
 	
 	public void salvarCertificado(FisCertificado certificado) throws FiscalException;
 }

@@ -16,7 +16,6 @@ import br.com.opensig.produto.shared.modelo.ProdTributacao;
 
 import com.gwtext.client.core.Ext;
 import com.gwtext.client.data.ArrayReader;
-import com.gwtext.client.data.BooleanFieldDef;
 import com.gwtext.client.data.DateFieldDef;
 import com.gwtext.client.data.FieldDef;
 import com.gwtext.client.data.FloatFieldDef;
@@ -60,7 +59,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 				new StringFieldDef("prodTributacaoCst"), new DateFieldDef("comCompra.comCompraRecebimento"), new FloatFieldDef("comCompraProdutoQuantidade"),
 				new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"), new FloatFieldDef("comCompraProdutoValor"),
 				new FloatFieldDef("comCompraProdutoTotal"), new IntegerFieldDef("comCompraProdutoCfop"), new FloatFieldDef("comCompraProdutoIcms"), new FloatFieldDef("comCompraProdutoIpi"),
-				new FloatFieldDef("comCompraProdutoPreco"), new BooleanFieldDef("prodProduto.prodProdutoIncentivo"), new IntegerFieldDef("comCompraProdutoOrdem") };
+				new FloatFieldDef("comCompraProdutoPreco"), new IntegerFieldDef("comCompraProdutoOrdem") };
 		campos = new RecordDef(fd);
 
 		FieldDef[] fdEmbalagem = new FieldDef[] { new IntegerFieldDef("prodEmbalagemId"), new StringFieldDef("prodEmbalagemNome"), new IntegerFieldDef("prodEmbalagemUnidade"),
@@ -189,8 +188,6 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		ColumnConfig ccPreco = new ColumnConfig(OpenSigCore.i18n.txtPreco(), "comCompraProdutoPreco", 75, true, IListagem.DINHEIRO);
 		ccPreco.setEditor(new GridEditor(txtPreco));
 
-		ColumnConfig ccIncentivo = new ColumnConfig(OpenSigCore.i18n.txtIncentivo(), "prodProduto.prodProdutoIncentivo", 75, true, IListagem.BOLEANO);
-
 		ColumnConfig ccOrdem = new ColumnConfig(OpenSigCore.i18n.txtOrdem(), "comCompraProdutoOrdem", 100, true);
 		ccOrdem.setHidden(true);
 
@@ -199,7 +196,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		SummaryColumnConfig sumTotal = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccTotal, IListagem.DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccCompraId, ccEmpresaId, ccEmpresa, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccTributacao, ccTributacaoCst,
-				ccRecebimento, ccQuantidade, ccEmbalagemId, ccEmbalagem, ccValor, sumTotal, ccCfop, ccIcms, ccIpi, ccPreco, ccIncentivo, ccOrdem };
+				ccRecebimento, ccQuantidade, ccEmbalagemId, ccEmbalagem, ccValor, sumTotal, ccCfop, ccIcms, ccIpi, ccPreco, ccOrdem };
 		modelos = new ColumnModel(bcc);
 
 		filtroPadrao = new FiltroNumero("comCompraProdutoId", ECompara.IGUAL, 0);
@@ -227,7 +224,6 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 				double dentro = rec.getAsDouble("prodTributacaoDentro");
 				String cst = rec.getAsString("prodTributacaoCst");
 				String desc = rec.getAsString("prodProduto.prodProdutoDescricao");
-				boolean incentivo = rec.getAsBoolean("prodProduto.prodProdutoIncentivo");
 
 				if (quantidade < 0.01 || valor < 0.01 || total < 0.01) {
 					throw new Exception();
@@ -242,7 +238,6 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 				prod.setProdProdutoCusto(valor);
 				prod.setProdProdutoPreco(preco);
 				prod.setProdProdutoDescricao(desc);
-				prod.setProdProdutoIncentivo(incentivo);
 
 				ComCompraProduto comProduto = new ComCompraProduto();
 				comProduto.setProdProduto(prod);

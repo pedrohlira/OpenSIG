@@ -54,10 +54,6 @@ public class ProdProduto extends Dados implements Serializable {
 	@XmlElement(type = Boolean.class)
 	private int prodProdutoAtivo;
 
-	@Column(name = "prod_produto_incentivo")
-	@XmlTransient
-	private int prodProdutoIncentivo;
-
 	@Column(name = "prod_produto_barra")
 	private String prodProdutoBarra;
 
@@ -85,14 +81,14 @@ public class ProdProduto extends Dados implements Serializable {
 
 	@Column(name = "prod_produto_referencia")
 	private String prodProdutoReferencia;
-	
+
 	@Column(name = "prod_produto_observacao")
 	@XmlTransient
 	private String prodProdutoObservacao;
 
 	@OneToMany(mappedBy = "prodProduto", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<ProdPreco> prodPrecos;
-	
+
 	@OneToMany(mappedBy = "prodProdutoPrincipal", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<ProdComposicao> prodComposicoes;
 
@@ -137,28 +133,28 @@ public class ProdProduto extends Dados implements Serializable {
 	@Column(name = "prod_produto_sinc")
 	@XmlTransient
 	private int prodProdutoSinc;
-	
+
 	@Transient
 	private Double prodProdutoEstoque;
-	
+
 	@Transient
 	private String prodProdutoCstCson;
-	
+
 	@Transient
 	private char prodProdutoTributacao;
-	
+
 	@Transient
 	private Double prodProdutoIcms;
-	
+
 	@Transient
 	private Double prodProdutoIssqn;
-	
+
 	@Transient
 	private char prodProdutoIat;
 
 	@Transient
 	private char prodProdutoIppt;
-	
+
 	public ProdProduto() {
 		this(0);
 	}
@@ -210,14 +206,6 @@ public class ProdProduto extends Dados implements Serializable {
 
 	public void setProdProdutoAtivo(boolean prodProdutoAtivo) {
 		this.prodProdutoAtivo = prodProdutoAtivo == false ? 0 : 1;
-	}
-
-	public boolean getProdProdutoIncentivo() {
-		return prodProdutoIncentivo == 0 ? false : true;
-	}
-
-	public void setProdProdutoIncentivo(boolean prodProdutoIncentivo) {
-		this.prodProdutoIncentivo = prodProdutoIncentivo == false ? 0 : 1;
 	}
 
 	public String getProdProdutoBarra() {
@@ -450,9 +438,9 @@ public class ProdProduto extends Dados implements Serializable {
 				empFornecedor.getEmpEntidade().getEmpEntidadeNome1(), empFabricante.getEmpFornecedorId() + "", empFabricante.getEmpEntidade().getEmpEntidadeNome1(),
 				prodTributacao.getProdTributacaoId() + "", prodTributacao.getProdTributacaoNome(), prodTributacao.getProdTributacaoCst(), prodTributacao.getProdTributacaoCfop() + "",
 				prodTributacao.getProdTributacaoDentro() + "", prodTributacao.getProdTributacaoFora() + "", prodTributacao.getProdTributacaoDecreto(), prodIpi.getProdIpiId() + "",
-				prodIpi.getProdIpiNome(), prodIpi.getProdIpiAliquota() + "", prodTipo.getProdTipoId() + "", prodTipo.getProdTipoValor(), prodTipo.getProdTipoDescricao(),
-				prodOrigem.getProdOrigemId() + "", prodOrigem.getProdOrigemDescricao(), UtilClient.getDataHoraGrid(prodProdutoCadastrado), UtilClient.getDataHoraGrid(prodProdutoAlterado),
-				getProdProdutoAtivo() + "", getProdProdutoIncentivo() + "", prodProdutoSinc + "", prodProdutoObservacao };
+				prodIpi.getProdIpiNome(), prodIpi.getProdIpiAliquota() + "", prodTipo.getProdTipoId() + "", prodTipo.getProdTipoDescricao(), prodOrigem.getProdOrigemId() + "",
+				prodOrigem.getProdOrigemDescricao(), UtilClient.getDataHoraGrid(prodProdutoCadastrado), UtilClient.getDataHoraGrid(prodProdutoAlterado), getProdProdutoAtivo() + "",
+				prodProdutoSinc + "", prodProdutoObservacao };
 	}
 
 	public Dados getObjeto(String campo) {

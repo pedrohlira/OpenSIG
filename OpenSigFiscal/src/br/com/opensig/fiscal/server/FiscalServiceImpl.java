@@ -363,7 +363,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		TConsSitNFe consSitNfe = new TConsSitNFe();
 		consSitNfe.setTpAmb(ambiente + "");
 		consSitNfe.setChNFe(chave);
-		consSitNfe.setVersao(getAuth().getConf().get("nfe.versao"));
+		consSitNfe.setVersao("2.01");
 		consSitNfe.setXServ("CONSULTAR");
 		return situacao(consSitNfe);
 	}
@@ -616,68 +616,74 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public Map<String, String> inutilizarSaida(FisNotaSaida saida, String motivo, int ini, int fim) throws FiscalException {
+	public Map<String, String> inutilizarSaida(String motivo, int ini, int fim) throws FiscalException {
 		try {
 			Autenticacao auth = getAuth();
 			// pega a ultima nfe para usar dados como referencia
-			if (saida == null) {
-				saida = new FisNotaSaida();
-				FiltroObjeto fo = new FiltroObjeto("fisNotaStatus", ECompara.DIFERENTE, new FisNotaStatus(ENotaStatus.INUTILIZANDO));
-				FiltroObjeto fo1 = new FiltroObjeto("fisNotaStatus", ECompara.DIFERENTE, new FisNotaStatus(ENotaStatus.INUTILIZADO));
-				FiltroObjeto fo2 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Integer.valueOf(auth.getEmpresa()[0])));
-				GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fo1, fo2 });
-				Number max = buscar(saida, "fisNotaSaidaNumero", EBusca.MAXIMO, gf);
+			FisNotaSaida saida = new FisNotaSaida();
+			FiltroObjeto fo = new FiltroObjeto("fisNotaStatus", ECompara.IGUAL, new FisNotaStatus(ENotaStatus.AUTORIZADO));
+			FiltroObjeto fo2 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Integer.valueOf(auth.getEmpresa()[0])));
+			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fo2 });
+			Number max = buscar(saida, "fisNotaSaidaNumero", EBusca.MAXIMO, gf);
+
+			// valida se pode inutilizar esta numeracao
+			if (fim >= ini && fim - ini < 1000 && ini - max.intValue() < 1000) {
 				FiltroNumero fn = new FiltroNumero("fisNotaSaidaNumero", ECompara.IGUAL, max);
 				gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fn, fo2 });
 				saida = (FisNotaSaida) selecionar(saida, gf, false);
-			}
 
-			GerarNfeInutilizadaSaida gerar = new GerarNfeInutilizadaSaida(null, this, saida, motivo, ini, fim, auth);
-			gerar.execute();
-			saida = gerar.getNota();
+				GerarNfeInutilizadaSaida gerar = new GerarNfeInutilizadaSaida(null, this, saida, motivo, ini, fim, auth);
+				gerar.execute();
+				saida = gerar.getNota();
 
-			Map<String, String> resp = new HashMap<String, String>();
-			if (saida.getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.ERRO.getId()) {
-				resp.put("status", ENotaStatus.ERRO.name());
+				Map<String, String> resp = new HashMap<String, String>();
+				if (saida.getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.ERRO.getId()) {
+					resp.put("status", ENotaStatus.ERRO.name());
+				} else {
+					resp.put("status", ENotaStatus.INUTILIZADO.name());
+				}
+				resp.put("msg", saida.getFisNotaSaidaErro());
+				return resp;
 			} else {
-				resp.put("status", ENotaStatus.INUTILIZADO.name());
+				throw new FiscalException("Parametros de inicio e fim da inutilizacao invalidos!");
 			}
-			resp.put("msg", saida.getFisNotaSaidaErro());
-			return resp;
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro ao inutilizar nfe.", e);
 			throw new FiscalException(e.getMessage());
 		}
 	}
 
-	public Map<String, String> inutilizarEntrada(FisNotaEntrada entrada, String motivo, int ini, int fim) throws FiscalException {
+	public Map<String, String> inutilizarEntrada(String motivo, int ini, int fim) throws FiscalException {
 		try {
 			Autenticacao auth = getAuth();
 			// pega a ultima nfe para usar dados como referencia
-			if (entrada == null) {
-				entrada = new FisNotaEntrada();
-				FiltroObjeto fo = new FiltroObjeto("fisNotaStatus", ECompara.DIFERENTE, new FisNotaStatus(ENotaStatus.INUTILIZANDO));
-				FiltroObjeto fo1 = new FiltroObjeto("fisNotaStatus", ECompara.DIFERENTE, new FisNotaStatus(ENotaStatus.INUTILIZADO));
-				FiltroObjeto fo2 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Integer.valueOf(auth.getEmpresa()[0])));
-				GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fo1, fo2 });
-				Number max = buscar(entrada, "fisNotaEntradaNumero", EBusca.MAXIMO, gf);
+			FisNotaEntrada entrada = new FisNotaEntrada();
+			FiltroObjeto fo = new FiltroObjeto("fisNotaStatus", ECompara.IGUAL, new FisNotaStatus(ENotaStatus.AUTORIZADO));
+			FiltroObjeto fo2 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Integer.valueOf(auth.getEmpresa()[0])));
+			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fo2 });
+			Number max = buscar(entrada, "fisNotaEntradaNumero", EBusca.MAXIMO, gf);
+
+			// valida se pode inutilizar esta numeracao
+			if (fim >= ini && fim - ini < 1000 && ini - max.intValue() < 1000) {
 				FiltroNumero fn = new FiltroNumero("fisNotaEntradaNumero", ECompara.IGUAL, max);
 				gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fn, fo2 });
 				entrada = (FisNotaEntrada) selecionar(entrada, gf, false);
-			}
 
-			GerarNfeInutilizadaEntrada gerar = new GerarNfeInutilizadaEntrada(null, this, entrada, motivo, ini, fim, auth);
-			gerar.execute();
-			entrada = gerar.getNota();
+				GerarNfeInutilizadaEntrada gerar = new GerarNfeInutilizadaEntrada(null, this, entrada, motivo, ini, fim, auth);
+				gerar.execute();
+				entrada = gerar.getNota();
 
-			Map<String, String> resp = new HashMap<String, String>();
-			if (entrada.getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.ERRO.getId()) {
-				resp.put("status", ENotaStatus.ERRO.name());
+				Map<String, String> resp = new HashMap<String, String>();
+				if (entrada.getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.ERRO.getId()) {
+					resp.put("status", ENotaStatus.ERRO.name());
+				} else {
+					resp.put("status", ENotaStatus.INUTILIZADO.name());
+				}
+				resp.put("msg", entrada.getFisNotaEntradaErro());
+				return resp;
 			} else {
-				resp.put("status", ENotaStatus.INUTILIZADO.name());
+				throw new FiscalException("Parametros de inicio e fim da inutilizacao invalidos!");
 			}
-			resp.put("msg", entrada.getFisNotaEntradaErro());
-			return resp;
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro ao inutilizar nfe.", e);
 			throw new FiscalException(e.getMessage());

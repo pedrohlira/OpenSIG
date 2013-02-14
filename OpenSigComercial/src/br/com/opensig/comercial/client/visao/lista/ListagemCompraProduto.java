@@ -25,7 +25,6 @@ import br.com.opensig.produto.client.controlador.comando.ComandoProduto;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 
 import com.gwtext.client.data.ArrayReader;
-import com.gwtext.client.data.BooleanFieldDef;
 import com.gwtext.client.data.DateFieldDef;
 import com.gwtext.client.data.FieldDef;
 import com.gwtext.client.data.FloatFieldDef;
@@ -62,7 +61,7 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 				new StringFieldDef("prodProduto.prodTributacao.prodTributacaoCst"), new DateFieldDef("comCompra.comCompraRecebimento"), new FloatFieldDef("comCompraProdutoQuantidade"),
 				new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"), new FloatFieldDef("comCompraProdutoValor"),
 				new FloatFieldDef("comCompraProdutoTotal"), new IntegerFieldDef("comCompraProdutoCfop"), new FloatFieldDef("comCompraProdutoIcms"), new FloatFieldDef("comCompraProdutoIpi"),
-				new FloatFieldDef("comCompraProdutoPreco"), new BooleanFieldDef("prodProduto.prodProdutoIncentivo"), new IntegerFieldDef("comCompraProdutoOrdem") };
+				new FloatFieldDef("comCompraProdutoPreco"), new IntegerFieldDef("comCompraProdutoOrdem") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -82,7 +81,6 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 		ColumnConfig ccTributacao = new ColumnConfig(OpenSigCore.i18n.txtDentro(), "prodProduto.prodTributacao.prodTributacaoDentro", 50, true, PORCENTAGEM);
 		ColumnConfig ccCst = new ColumnConfig(OpenSigCore.i18n.txtCst(), "prodProduto.prodTributacao.prodTributacaoCst", 50, true);
 		ColumnConfig ccRecebimento = new ColumnConfig(OpenSigCore.i18n.txtData(), "comCompra.comCompraRecebimento", 75, true, DATA);
-		ColumnConfig ccIncentivo = new ColumnConfig(OpenSigCore.i18n.txtIncentivo(), "prodProduto.prodProdutoIncentivo", 75, true, BOLEANO);
 		ColumnConfig ccEmbalagemId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemId", 100, true);
 		ccEmbalagemId.setHidden(true);
 		ccEmbalagemId.setFixed(true);
@@ -100,7 +98,7 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 		SummaryColumnConfig ccPreco = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtPreco(), "comCompraProdutoPreco", 75, true, DINHEIRO), DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccCompraId, ccEmpresaId, ccEmpresa, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccTributacao, ccCst, ccRecebimento, ccQuantidade, ccEmbalagemId, ccEmbalagem,
-				ccValor, ccTotal, ccCfop, ccIcms, ccIpi, ccPreco, ccIncentivo };
+				ccValor, ccTotal, ccCfop, ccIcms, ccIpi, ccPreco };
 		modelos = new ColumnModel(bcc);
 
 		GrupoFiltro gf = new GrupoFiltro();

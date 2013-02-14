@@ -1,2 +1,0 @@
-serviceClass: br.com.opensig.fiscal.client.servico.FiscalService
-path: 32B03104FEF6F2B9272EFDF55A71B168.gwt.rpc

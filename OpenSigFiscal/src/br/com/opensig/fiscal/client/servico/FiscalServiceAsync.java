@@ -42,9 +42,9 @@ public interface FiscalServiceAsync<E extends Dados> extends CoreServiceAsync<E>
 
 	public abstract void inutilizar(String xml, AsyncCallback<String> asyncallback);
 
-	public abstract void inutilizarSaida(FisNotaSaida saida, String motivo, int ini, int fim, AsyncCallback<Map<String, String>> asyncCallback);
+	public abstract void inutilizarSaida(String motivo, int ini, int fim, AsyncCallback<Map<String, String>> asyncCallback);
 
-	public abstract void inutilizarEntrada(FisNotaEntrada entrada, String motivo, int ini, int fim, AsyncCallback<Map<String, String>> asyncCallback);
+	public abstract void inutilizarEntrada(String motivo, int ini, int fim, AsyncCallback<Map<String, String>> asyncCallback);
 
 	public abstract void salvarSaida(String xml, FisNotaStatus status, AsyncCallback<Map<String, String>> asyncCallback);
 

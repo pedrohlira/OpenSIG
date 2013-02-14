@@ -68,7 +68,7 @@ public class FormularioInutilizar {
 		txtFim.setValidator(new Validator() {
 			public boolean validate(String value) throws ValidationException {
 				try {
-					return txtFim.getValue().intValue() >= txtIni.getValue().intValue();
+					return (txtFim.getValue().intValue() >= txtIni.getValue().intValue()) && (txtFim.getValue().intValue() - txtIni.getValue().intValue() < 1000);
 				} catch (Exception e) {
 					return false;
 				}
@@ -141,10 +141,10 @@ public class FormularioInutilizar {
 
 			if (lista.getClasse() instanceof FisNotaSaida) {
 				FiscalProxy<FisNotaSaida> proxy = new FiscalProxy<FisNotaSaida>();
-				proxy.inutilizarSaida(null, taMotivo.getValueAsString(), txtIni.getValue().intValue(), txtFim.getValue().intValue(), async);
+				proxy.inutilizarSaida(taMotivo.getValueAsString(), txtIni.getValue().intValue(), txtFim.getValue().intValue(), async);
 			} else {
 				FiscalProxy<FisNotaEntrada> proxy = new FiscalProxy<FisNotaEntrada>();
-				proxy.inutilizarEntrada(null, taMotivo.getValueAsString(), txtIni.getValue().intValue(), txtFim.getValue().intValue(), async);
+				proxy.inutilizarEntrada(taMotivo.getValueAsString(), txtIni.getValue().intValue(), txtFim.getValue().intValue(), async);
 			}
 		}
 	}

@@ -47,8 +47,6 @@ public class Sefaz {
 	private static Collection<String> SVAN = new ArrayList<String>();
 	// colecao de estados do ambiente virual do RS
 	private static Collection<String> SVRS = new ArrayList<String>();
-	// Autenticacao do usuario
-	private Autenticacao auth;
 	
 	// setando os configs da sefaz
 	static {
@@ -77,8 +75,7 @@ public class Sefaz {
 	/**
 	 * Contrutor da classe.
 	 */
-	private Sefaz(Autenticacao auth) throws Exception {
-		this.auth = auth;
+	private Sefaz() throws Exception {
 	}
 
 	/**
@@ -120,7 +117,7 @@ public class Sefaz {
 			Protocol protocol = new Protocol("https", sfd, 443);
 			Protocol.registerProtocol("https", protocol);
 
-			return new Sefaz(auth);
+			return new Sefaz();
 		} catch (Exception e) {
 			throw new FiscalException("Problemas com o certificado.");
 		}
@@ -182,6 +179,7 @@ public class Sefaz {
 			String uf = UtilServer.getValorTag(doc.getDocumentElement(), "cUF", false);
 			String ambiente = UtilServer.getValorTag(doc.getDocumentElement(), "tpAmb", false);
 			String url = identificaXml(uf, ambiente, "NfeStatusServico", false);
+			String versao = doc.getDocumentElement().getAttribute("versao");
 
 			OMElement ome = AXIOMUtil.stringToOM(xml);
 			NfeStatusServico2Stub.NfeDadosMsg dadosMsg = new NfeStatusServico2Stub.NfeDadosMsg();
@@ -189,7 +187,7 @@ public class Sefaz {
 
 			NfeStatusServico2Stub.NfeCabecMsg nfeCabecMsg = new NfeStatusServico2Stub.NfeCabecMsg();
 			nfeCabecMsg.setCUF(uf);
-			nfeCabecMsg.setVersaoDados(auth.getConf().get("nfe.versao"));
+			nfeCabecMsg.setVersaoDados(versao);
 
 			NfeStatusServico2Stub.NfeCabecMsgE nfeCabecMsgE = new NfeStatusServico2Stub.NfeCabecMsgE();
 			nfeCabecMsgE.setNfeCabecMsg(nfeCabecMsg);
@@ -219,14 +217,15 @@ public class Sefaz {
 			String uf = UtilServer.getValorTag(doc.getDocumentElement(), "chNFe", false).substring(0, 2);
 			String ambiente = UtilServer.getValorTag(doc.getDocumentElement(), "tpAmb", false);
 			String url = identificaXml(uf, ambiente, "NfeConsultaProtocolo", false);
-
+			String versao = doc.getDocumentElement().getAttribute("versao");
+			
 			OMElement ome = AXIOMUtil.stringToOM(xml);
 			NfeConsulta2Stub.NfeDadosMsg dadosMsg = new NfeConsulta2Stub.NfeDadosMsg();
 			dadosMsg.setExtraElement(ome);
 
 			NfeConsulta2Stub.NfeCabecMsg nfeCabecMsg = new NfeConsulta2Stub.NfeCabecMsg();
 			nfeCabecMsg.setCUF(uf);
-			nfeCabecMsg.setVersaoDados(auth.getConf().get("nfe.versao"));
+			nfeCabecMsg.setVersaoDados(versao);
 
 			NfeConsulta2Stub.NfeCabecMsgE nfeCabecMsgE = new NfeConsulta2Stub.NfeCabecMsgE();
 			nfeCabecMsgE.setNfeCabecMsg(nfeCabecMsg);
@@ -256,15 +255,17 @@ public class Sefaz {
 	 */
 	public String cadastro(String xml, int ibge, int ambiente) throws FiscalException {
 		try {
+			Document doc = UtilServer.getXml(xml);
 			String url = identificaXml(ibge + "", ambiente + "", "NfeConsultaCadastro", false);
-
+			String versao = doc.getDocumentElement().getAttribute("versao");
+			
 			OMElement ome = AXIOMUtil.stringToOM(xml);
 			CadConsultaCadastro2Stub.NfeDadosMsg dadosMsg = new CadConsultaCadastro2Stub.NfeDadosMsg();
 			dadosMsg.setExtraElement(ome);
 
 			CadConsultaCadastro2Stub.NfeCabecMsg cabecMsg = new CadConsultaCadastro2Stub.NfeCabecMsg();
 			cabecMsg.setCUF(ibge + "");
-			cabecMsg.setVersaoDados(auth.getConf().get("nfe.versao"));
+			cabecMsg.setVersaoDados(versao);
 
 			CadConsultaCadastro2Stub.NfeCabecMsgE cabecMsgE = new CadConsultaCadastro2Stub.NfeCabecMsgE();
 			cabecMsgE.setNfeCabecMsg(cabecMsg);
@@ -287,14 +288,15 @@ public class Sefaz {
 			String ambiente = UtilServer.getValorTag(doc.getDocumentElement(), "tpAmb", false);
 			int iserie = Integer.valueOf(serie);
 			String url = identificaXml(uf, ambiente, "NfeRecepcao", iserie >= 900);
-
+			String versao = doc.getDocumentElement().getAttribute("versao");
+			
 			OMElement ome = AXIOMUtil.stringToOM(xml);
 			NfeRecepcao2Stub.NfeDadosMsg dadosMsg = new NfeRecepcao2Stub.NfeDadosMsg();
 			dadosMsg.setExtraElement(ome);
 
 			NfeRecepcao2Stub.NfeCabecMsg nfeCabecMsg = new NfeRecepcao2Stub.NfeCabecMsg();
 			nfeCabecMsg.setCUF(uf);
-			nfeCabecMsg.setVersaoDados(auth.getConf().get("nfe.versao"));
+			nfeCabecMsg.setVersaoDados(versao);
 
 			NfeRecepcao2Stub.NfeCabecMsgE nfeCabecMsgE = new NfeRecepcao2Stub.NfeCabecMsgE();
 			nfeCabecMsgE.setNfeCabecMsg(nfeCabecMsg);
@@ -311,16 +313,18 @@ public class Sefaz {
 
 	public String retornoNFe(String xml, String uf, String ambiente, String serie) throws FiscalException {
 		try {
+			Document doc = UtilServer.getXml(xml);
 			int iserie = Integer.valueOf(serie);
 			String url = identificaXml(uf, ambiente, "NfeRetRecepcao", iserie >= 900);
-
+			String versao = doc.getDocumentElement().getAttribute("versao");
+			
 			OMElement ome = AXIOMUtil.stringToOM(xml);
 			NfeRetRecepcao2Stub.NfeDadosMsg dadosMsg = new NfeRetRecepcao2Stub.NfeDadosMsg();
 			dadosMsg.setExtraElement(ome);
 
 			NfeRetRecepcao2Stub.NfeCabecMsg nfeCabecMsg = new NfeRetRecepcao2Stub.NfeCabecMsg();
 			nfeCabecMsg.setCUF(uf);
-			nfeCabecMsg.setVersaoDados(auth.getConf().get("nfe.versao"));
+			nfeCabecMsg.setVersaoDados(versao);
 
 			NfeRetRecepcao2Stub.NfeCabecMsgE nfeCabecMsgE = new NfeRetRecepcao2Stub.NfeCabecMsgE();
 			nfeCabecMsgE.setNfeCabecMsg(nfeCabecMsg);
@@ -341,14 +345,15 @@ public class Sefaz {
 			String uf = UtilServer.getValorTag(doc.getDocumentElement(), "chNFe", false).substring(0, 2);
 			String ambiente = UtilServer.getValorTag(doc.getDocumentElement(), "tpAmb", false);
 			String url = identificaXml(uf, ambiente, "NfeCancelamento", false);
-
+			String versao = doc.getDocumentElement().getAttribute("versao");
+			
 			OMElement ome = AXIOMUtil.stringToOM(xml);
 			NfeCancelamento2Stub.NfeDadosMsg dadosMsg = new NfeCancelamento2Stub.NfeDadosMsg();
 			dadosMsg.setExtraElement(ome);
 
 			NfeCancelamento2Stub.NfeCabecMsg nfeCabecMsg = new NfeCancelamento2Stub.NfeCabecMsg();
 			nfeCabecMsg.setCUF(uf);
-			nfeCabecMsg.setVersaoDados(auth.getConf().get("nfe.versao"));
+			nfeCabecMsg.setVersaoDados(versao);
 
 			NfeCancelamento2Stub.NfeCabecMsgE nfeCabecMsgE = new NfeCancelamento2Stub.NfeCabecMsgE();
 			nfeCabecMsgE.setNfeCabecMsg(nfeCabecMsg);
@@ -369,6 +374,7 @@ public class Sefaz {
 			String uf = UtilServer.getValorTag(doc.getDocumentElement(), "cUF", false);
 			String ambiente = UtilServer.getValorTag(doc.getDocumentElement(), "tpAmb", false);
 			String url = identificaXml(uf, ambiente, "NfeInutilizacao", false);
+			String versao = doc.getDocumentElement().getAttribute("versao");
 
 			OMElement ome = AXIOMUtil.stringToOM(xml);
 			NfeInutilizacao2Stub.NfeDadosMsg dadosMsg = new NfeInutilizacao2Stub.NfeDadosMsg();
@@ -376,7 +382,7 @@ public class Sefaz {
 
 			NfeInutilizacao2Stub.NfeCabecMsg nfeCabecMsg = new NfeInutilizacao2Stub.NfeCabecMsg();
 			nfeCabecMsg.setCUF(uf);
-			nfeCabecMsg.setVersaoDados(auth.getConf().get("nfe.versao"));
+			nfeCabecMsg.setVersaoDados(versao);
 
 			NfeInutilizacao2Stub.NfeCabecMsgE nfeCabecMsgE = new NfeInutilizacao2Stub.NfeCabecMsgE();
 			nfeCabecMsgE.setNfeCabecMsg(nfeCabecMsg);

@@ -120,7 +120,6 @@ public class ListagemValidarProduto {
 				rec.set("prodProduto.prodProdutoBarra", "".equals(result.getAsString("prodProdutoBarra")) ? null : result.getAsString("prodProdutoBarra"));
 				rec.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
 				rec.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
-				rec.set("prodProduto.prodProdutoIncentivo", result.getAsBoolean("prodProdutoIncentivo"));
 				rec.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
 				rec.set("comCompraProdutoPreco", result.getAsDouble("prodProdutoPreco"));
 			}
@@ -334,7 +333,6 @@ public class ListagemValidarProduto {
 		prod.setProdProdutoBarra("".equals(rec.getAsString("prodProduto.prodProdutoBarra")) ? null : rec.getAsString("prodProduto.prodProdutoBarra"));
 		prod.setProdProdutoDescricao(rec.getAsString("prodProduto.prodProdutoDescricao"));
 		prod.setProdProdutoReferencia(rec.getAsString("prodProduto.prodProdutoReferencia"));
-		prod.setProdProdutoIncentivo(rec.getAsBoolean("prodProduto.prodProdutoIncentivo"));
 		prod.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
 
 		// seta
@@ -432,11 +430,6 @@ public class ListagemValidarProduto {
 			// preco
 			if (conf.getDataIndex().startsWith("comCompraProdutoPreco")) {
 				gridProdutos.getModelos().setEditable(conf.getId(), true);
-			}
-			// incentivo
-			if (conf.getDataIndex().equals("prodProduto.prodProdutoIncentivo")) {
-				gridProdutos.getModelos().setEditable(conf.getId(), true);
-				conf.setEditor(new GridEditor(new Checkbox()));
 			}
 
 		}

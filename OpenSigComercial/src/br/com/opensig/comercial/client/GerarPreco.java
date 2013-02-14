@@ -13,7 +13,6 @@ import br.com.opensig.core.client.UtilClient;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.servico.CoreProxy;
-import br.com.opensig.fiscal.shared.modelo.FisIncentivoEstado;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtext.client.data.ArrayReader;
@@ -35,7 +34,6 @@ public class GerarPreco {
 	// geracao de preco
 	private Store storeValor;
 	private Store storeArredonda;
-	private Store storeIncentivo;
 
 	public GerarPreco(ComCompra compra) {
 		this.compra = compra;
@@ -59,20 +57,10 @@ public class GerarPreco {
 		storeArredonda = new Store(proxy1, new ArrayReader(new RecordDef(fdArredonda)), true);
 		storeArredonda.addStoreListener(new StoreListenerAdapter() {
 			public void onLoad(Store store, Record[] records) {
-				storeIncentivo.load();
-			}
-		});
-
-		FieldDef[] fdIncentivo = new FieldDef[] { new IntegerFieldDef("fisIncentivoEstadoId"), new IntegerFieldDef("empEmpresa.empEmpresaId"),
-				new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"), new IntegerFieldDef("empEstadoId"), new StringFieldDef("empEstadoDescricao"),
-				new FloatFieldDef("fisIncentivoEstadoIcms1"), new FloatFieldDef("fisIncentivoEstadoIcms2") };
-		CoreProxy<FisIncentivoEstado> proxy2 = new CoreProxy<FisIncentivoEstado>(new FisIncentivoEstado());
-		storeIncentivo = new Store(proxy2, new ArrayReader(new RecordDef(fdIncentivo)), false);
-		storeIncentivo.addStoreListener(new StoreListenerAdapter() {
-			public void onLoad(Store store, Record[] records) {
 				gerar();
 			}
 		});
+
 	}
 
 	public void gerar(AsyncCallback asyncCallback) {
@@ -99,16 +87,15 @@ public class GerarPreco {
 		vars.put("DESCONTO", desconto < 10 ? "0" + desconto : desconto + "");
 
 		// variaveis
-		Record recProd, recInc;
+		Record recProd;
 		String valor, despesa, markup, cst;
-		double dentro, icms, ipi, icmsMaior, icmsMenor;
+		double dentro, icms, ipi;
 
 		// faz o loop em todos os registros
 		for (ComCompraProduto comProd : compra.getComCompraProdutos()) {
 			if (comProd.getComCompraProdutoPreco() == 0.00) {
 				try {
 					recProd = getValorProduto(comProd.getComCompraProdutoId(), compra.getEmpFornecedor().getEmpFornecedorId());
-					recInc = UtilClient.getRegistro(storeIncentivo, "empEstadoId", compra.getEmpEstado().getEmpEstadoId() + "");
 
 					// recupera os valores individuais de cada produto
 					valor = comProd.getComCompraProdutoValor() + "";
@@ -118,8 +105,6 @@ public class GerarPreco {
 					ipi = comProd.getComCompraProdutoIpi();
 					despesa = recProd.getAsString("comValorProdutoDespesa");
 					markup = recProd.getAsString("comValorProdutoMarkup");
-					icmsMaior = recInc != null ? recInc.getAsDouble("fisIncentivoEstadoIcms1") : 0.00;
-					icmsMenor = recInc != null ? recInc.getAsDouble("fisIncentivoEstadoIcms2") : 0.00;
 
 					vars.put("BRUTO", valor);
 					vars.put("IPI", ipi >= 10 ? String.valueOf(ipi).replace(".", "") : "0" + String.valueOf(ipi).replace(".", ""));
@@ -128,19 +113,7 @@ public class GerarPreco {
 
 					// verifica a tributacao pelo cst
 					if (cst.equals("00")) { // tributado integral
-						// caso a empresa nao tenha incentivo
-						if (icmsMaior == 0.00 || icmsMenor == 0.00) {
-							vars.put("ICMS", (dentro - icms) >= 10 ? "" + (dentro - icms) : "0" + (dentro - icms));
-						} else {
-							String icmsInc = "";
-							// tendo ver se o produto tem a menor taxa ou nao
-							if (comProd.getProdProduto().getProdProdutoIncentivo()) {
-								icmsInc = icmsMenor >= 10 ? "" + icmsMenor : "0" + icmsMenor;
-							} else {
-								icmsInc = icmsMaior >= 10 ? "" + icmsMaior : "0" + icmsMaior;
-							}
-							vars.put("ICMS", icmsInc);
-						}
+						vars.put("ICMS", (dentro - icms) >= 10 ? "" + (dentro - icms) : "0" + (dentro - icms));
 					} else if (cst.equals("10") || cst.equals("30") || cst.equals("40") || cst.equals("41") || cst.equals("60")) { // isento-substituicao
 						vars.put("ICMS", icms >= 10 ? String.valueOf(icms) : "0" + String.valueOf(icms));
 					}

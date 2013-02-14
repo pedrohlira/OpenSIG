@@ -19,7 +19,6 @@ import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.fiscal.client.controlador.comando.ComandoCadastro;
 import br.com.opensig.fiscal.client.controlador.comando.ComandoCertificado;
 import br.com.opensig.fiscal.client.controlador.comando.ComandoEntrada;
-import br.com.opensig.fiscal.client.controlador.comando.ComandoIncentivo;
 import br.com.opensig.fiscal.client.controlador.comando.ComandoSaida;
 import br.com.opensig.fiscal.client.controlador.comando.ComandoSefaz;
 import br.com.opensig.fiscal.client.controlador.comando.ComandoSituacao;
@@ -38,8 +37,6 @@ import com.google.gwt.core.client.GWT;
  * Classe que inicializa o modulo SigFiscal.
  * 
  * @author Pedro H. Lira
- * @since 20/07/2010
- * @version 1.0
  */
 public class OpenSigFiscal implements EntryPoint {
 
@@ -56,7 +53,6 @@ public class OpenSigFiscal implements EntryPoint {
 		fc.addComando(ComandoStatus.class.getName(), (IComando) GWT.create(ComandoStatus.class));
 		fc.addComando(ComandoSituacao.class.getName(), (IComando) GWT.create(ComandoSituacao.class));
 		fc.addComando(ComandoCadastro.class.getName(), (IComando) GWT.create(ComandoCadastro.class));
-		fc.addComando(ComandoIncentivo.class.getName(), (IComando) GWT.create(ComandoIncentivo.class));
 		fc.addComando(ComandoSped.class.getName(), (IComando) GWT.create(ComandoSped.class));
 
 		// acoes

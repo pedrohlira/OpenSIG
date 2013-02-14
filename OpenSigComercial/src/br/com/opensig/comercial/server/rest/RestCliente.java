@@ -14,6 +14,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.log4j.Logger;
 
+import br.com.opensig.comercial.shared.rest.SisCliente;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroBinario;
@@ -26,6 +27,7 @@ import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.servico.CoreException;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.EBusca;
+import br.com.opensig.empresa.shared.modelo.EmpCliente;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.financeiro.shared.modelo.FinForma;
 import br.com.opensig.fiscal.shared.modelo.FisNotaSaida;
@@ -132,6 +134,45 @@ public class RestCliente extends ARest {
 
 			}
 			return escolhidos;
+		} catch (Exception ex) {
+			log.error(ex);
+			throw new RestException(ex);
+		}
+	}
+
+	/**
+	 * Metodo que retorna a lista de cliente do sistema.
+	 * 
+	 * @param data
+	 *            data usada como corte para considerar novo cliente.
+	 * @return uma lista de objetos cliente em formato JSON.
+	 * @throws RestException
+	 *             em caso de nao conseguir acessar a informacao.
+	 */
+	@Path("/cliente")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SisCliente> getClientes(@QueryParam("data") String data) throws RestException {
+		autorizar();
+		try {
+			Date dt = UtilServer.formataData(data.substring(0, 10), "dd/MM/yyyy");
+			GrupoFiltro gf = new GrupoFiltro();
+			if (dt != null) {
+				FiltroData fd = new FiltroData("empEntidade.empEntidadeData", ECompara.MAIOR_IGUAL, dt);
+				gf.add(fd, EJuncao.E);
+			}
+			FiltroTexto ft1 = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.DIFERENTE, "00.000.000/0000-00");
+			gf.add(ft1, EJuncao.E);
+			FiltroTexto ft2 = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.DIFERENTE, "000.000.000-00");
+			gf.add(ft2);
+			
+			List<EmpCliente> clis = service.selecionar(new EmpCliente(), 0, 0, gf, false).getLista();
+			List<SisCliente> clientes = new ArrayList<SisCliente>();
+			for (EmpCliente cli : clis) {
+				SisCliente sisCli = new SisCliente(cli);
+				clientes.add(sisCli);
+			}
+			return clientes;
 		} catch (Exception ex) {
 			log.error(ex);
 			throw new RestException(ex);

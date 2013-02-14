@@ -40,11 +40,11 @@ import com.gwtext.client.widgets.tree.event.TreeNodeListenerAdapter;
  * @param <E>
  *            o tipo generico de dados usado.
  * @author Pedro H. Lira
- * @version 1.0
  */
 public class Arvore<E extends Dados> extends TreePanel {
 
 	private E classe;
+	private CoreProxy<E> proxy;
 	private TreeFilter treeFiltro;
 	private Toolbar toolFiltro;
 	private ToolbarButton btnAdicionar;
@@ -75,6 +75,7 @@ public class Arvore<E extends Dados> extends TreePanel {
 	 */
 	public Arvore(E classe, String titulo) {
 		this.classe = classe;
+		this.proxy = new CoreProxy<E>(classe);
 		this.root = new TreeNode(titulo);
 	}
 
@@ -96,7 +97,6 @@ public class Arvore<E extends Dados> extends TreePanel {
 	 *            a funcao de retorno a ser disparada apos recuperar os dados.
 	 */
 	public void carregar(final IFiltro filtro, final AsyncCallback<Lista<E>> asyncCallback) {
-		CoreProxy<E> proxy = new CoreProxy<E>(classe);
 		proxy.selecionar(0, 0, filtro, false, new AsyncCallback<Lista<E>>() {
 
 			public void onFailure(final Throwable caught) {
@@ -222,7 +222,6 @@ public class Arvore<E extends Dados> extends TreePanel {
 		btnAdicionar.setTooltip(OpenSigCore.i18n.txtAdicionar());
 		btnAdicionar.setDisabled(true);
 		btnAdicionar.addListener(new ButtonListenerAdapter() {
-
 			public void onClick(Button button, EventObject e) {
 				adicionar();
 			}
@@ -233,7 +232,6 @@ public class Arvore<E extends Dados> extends TreePanel {
 		btnRemover.setTooltip(OpenSigCore.i18n.txtRemover());
 		btnRemover.disable();
 		btnRemover.addListener(new ButtonListenerAdapter() {
-
 			public void onClick(Button button, EventObject e) {
 				remover();
 			}
@@ -472,12 +470,21 @@ public class Arvore<E extends Dados> extends TreePanel {
 			tNode = (TreeNode) node;
 			if (getSelectionModel().isSelected(tNode)) {
 				obj = (E) tNode.getUserObject();
-				if (obj.getId().intValue() == 0) {
-					root.removeChild(tNode);
-					btnRemover.disable();
-					existe = true;
-					break;
+				if (obj.getId().intValue() > 0) {
+					proxy.deletar(obj, new AsyncCallback<E>() {
+						public void onFailure(Throwable caught) {
+							MessageBox.alert(getTitle(), OpenSigCore.i18n.errExcluir());
+						}
+
+						public void onSuccess(E result) {
+							MessageBox.alert(getTitle(), OpenSigCore.i18n.msgExcluir());
+						}
+					});
 				}
+				root.removeChild(tNode);
+				btnRemover.disable();
+				existe = true;
+				break;
 			}
 		}
 

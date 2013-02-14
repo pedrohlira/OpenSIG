@@ -1,6 +1,7 @@
 package br.com.opensig.empresa.shared.modelo;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,15 +13,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import br.com.opensig.core.client.UtilClient;
 import br.com.opensig.core.shared.modelo.Dados;
 
 /**
  * Classe que representa uma entidade no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 09/06/2009
  */
 @Entity
 @Table(name = "emp_entidade")
@@ -55,6 +57,10 @@ public class EmpEntidade extends Dados implements Serializable {
 	@Column(name = "emp_entidade_pessoa")
 	private String empEntidadePessoa;
 
+	@Column(name = "emp_entidade_data")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date empEntidadeData;
+	
 	@OneToMany(mappedBy = "empEntidade", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<EmpContato> empContatos;
 
@@ -162,6 +168,14 @@ public class EmpEntidade extends Dados implements Serializable {
 		return getEmpEntidadeAtivo();
 	}
 
+	public Date getEmpEntidadeData() {
+		return empEntidadeData;
+	}
+
+	public void setEmpEntidadeData(Date empEntidadeData) {
+		this.empEntidadeData = empEntidadeData;
+	}
+
 	public Number getId() {
 		return empEntidadeId;
 	}
@@ -172,7 +186,7 @@ public class EmpEntidade extends Dados implements Serializable {
 
 	public String[] toArray() {
 		return new String[] { empEntidadeId + "", empEntidadeNome1, empEntidadeNome2, empEntidadePessoa, empEntidadeDocumento1, empEntidadeDocumento2, empEntidadeDocumento3,
-				getEmpEntidadeAtivo() + "", empEntidadeObservacao };
+				getEmpEntidadeAtivo() + "", empEntidadeObservacao, UtilClient.getDataHoraGrid(empEntidadeData) };
 	}
 
 	public void anularDependencia() {

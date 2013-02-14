@@ -181,12 +181,12 @@ public class ComCompraProduto extends Dados implements Serializable {
 	}
 
 	public String[] toArray() {
-		return new String[] { comCompraProdutoId + "", comCompra.getComCompraId() + "", comCompra.getEmpEmpresa().getEmpEmpresaId() + "", comCompra.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(),
-				prodProduto.getEmpFornecedor().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getProdProdutoId() + "", prodProduto.getProdProdutoBarra(), prodProduto.getProdProdutoDescricao(),
-				prodProduto.getProdProdutoReferencia(), prodProduto.getProdTributacao().getProdTributacaoDentro() + "", prodProduto.getProdTributacao().getProdTributacaoCst(),
-				UtilClient.getDataGrid(comCompra.getComCompraRecebimento()), comCompraProdutoQuantidade + "", prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(),
-				comCompraProdutoValor.toString(), comCompraProdutoTotal.toString(), comCompraProdutoCfop + "", comCompraProdutoIcms + "", comCompraProdutoIpi + "", comCompraProdutoPreco.toString(),
-				prodProduto.getProdProdutoIncentivo() + "", comCompraProdutoOrdem + "" };
+		return new String[] { comCompraProdutoId + "", comCompra.getComCompraId() + "", comCompra.getEmpEmpresa().getEmpEmpresaId() + "",
+				comCompra.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getEmpFornecedor().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getProdProdutoId() + "",
+				prodProduto.getProdProdutoBarra(), prodProduto.getProdProdutoDescricao(), prodProduto.getProdProdutoReferencia(), prodProduto.getProdTributacao().getProdTributacaoDentro() + "",
+				prodProduto.getProdTributacao().getProdTributacaoCst(), UtilClient.getDataGrid(comCompra.getComCompraRecebimento()), comCompraProdutoQuantidade + "",
+				prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), comCompraProdutoValor.toString(), comCompraProdutoTotal.toString(), comCompraProdutoCfop + "",
+				comCompraProdutoIcms + "", comCompraProdutoIpi + "", comCompraProdutoPreco.toString(), comCompraProdutoOrdem + "" };
 	}
 
 	public Dados getObjeto(String campo) {

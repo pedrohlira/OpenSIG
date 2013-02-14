@@ -111,8 +111,8 @@ public class ListagemEntrada extends AListagemNota<FisNotaEntrada> {
 
 		// valida se pode excluir ou cancelar
 		if (comando instanceof ComandoExcluir) {
-			comando = null;
 			if (rec != null && rec.getAsInteger("fisNotaStatus.fisNotaStatusId") == ENotaStatus.AUTORIZADO.getId()) {
+				comando = null;
 				MessageBox.prompt(OpenSigCore.i18n.txtCancelar(), OpenSigCore.i18n.msgConfirma(), new PromptCallback() {
 					public void execute(String btnID, String text) {
 						if (btnID.equalsIgnoreCase("ok")) {
@@ -126,8 +126,6 @@ public class ListagemEntrada extends AListagemNota<FisNotaEntrada> {
 						}
 					}
 				}, true);
-			} else {
-				MessageBox.alert(OpenSigCore.i18n.txtAcesso(), OpenSigCore.i18n.txtAcessoNegado());
 			}
 		}
 

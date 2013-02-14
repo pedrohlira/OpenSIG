@@ -64,6 +64,7 @@ public class ImportarNfe implements IImportacao<ComCompra> {
 	private CoreService servico;
 	private ComCompra compra;
 	private List<ComCompraProduto> comProdutos;
+	private List<ProdOrigem> origens;
 	private List<ProdTributacao> tributacao;
 	private List<ProdIpi> ipis;
 	private List<ProdEmbalagem> embalagem;
@@ -137,6 +138,7 @@ public class ImportarNfe implements IImportacao<ComCompra> {
 			ent.setEmpEntidadeDocumento1(auth.getEmpresa()[5]);
 			ent.setEmpEntidadeDocumento2(auth.getEmpresa()[6]);
 			ent.setEmpEntidadeObservacao("");
+			ent.setEmpEntidadeData(new Date());
 			empresa = new EmpEmpresa(Integer.valueOf(auth.getEmpresa()[0]));
 			empresa.setEmpEntidade(ent);
 		} else {
@@ -287,6 +289,7 @@ public class ImportarNfe implements IImportacao<ComCompra> {
 			enti.setEmpEntidadeAtivo(true);
 			enti.setEmpEntidadePessoa(auth.getConf().get("txtJuridica"));
 			enti.setEmpEntidadeObservacao("");
+			enti.setEmpEntidadeData(new Date());
 
 			// seta o endereco
 			EmpEndereco endereco = new EmpEndereco();
@@ -324,17 +327,11 @@ public class ImportarNfe implements IImportacao<ComCompra> {
 	}
 
 	private void validarProduto() throws OpenSigException {
-		// pega os tributados
-		Lista<ProdTributacao> tributo = servico.selecionar(new ProdTributacao(), 0, 0, null, false);
-		tributacao = tributo.getLista();
-
-		// pega os ipis
-		Lista<ProdIpi> tributoIpi = servico.selecionar(new ProdIpi(), 0, 0, null, false);
-		ipis = tributoIpi.getLista();
-
-		// pega as embalagens
-		Lista<ProdEmbalagem> emb = servico.selecionar(new ProdEmbalagem(), 0, 0, null, false);
-		embalagem = emb.getLista();
+		// pega os dados auxiliares
+		origens = servico.selecionar(new ProdOrigem(), 0, 0, null, false).getLista();
+		tributacao = servico.selecionar(new ProdTributacao(), 0, 0, null, false).getLista();
+		ipis = servico.selecionar(new ProdIpi(), 0, 0, null, false).getLista();
+		embalagem = servico.selecionar(new ProdEmbalagem(), 0, 0, null, false).getLista();
 
 		// seta os tipos
 		comProdutos = new ArrayList<ComCompraProduto>();
@@ -462,7 +459,7 @@ public class ImportarNfe implements IImportacao<ComCompra> {
 			produto.setProdEmbalagem(getEmbalagem(prod.getUCom()));
 			produto.setProdTipo(new ProdTipo(1));
 			produto.setProdIpi(getIpi(ipi));
-			produto.setProdOrigem(new ProdOrigem(Integer.valueOf(icms.getOrigem()) + 1));
+			produto.setProdOrigem(getOrigem(icms.getOrigem()));
 			produto.setEmpFornecedor(fornecedor);
 			produto.setEmpFabricante(fornecedor);
 			produto.setProdTributacao(getTributacao(icms.getCst()));
@@ -475,7 +472,7 @@ public class ImportarNfe implements IImportacao<ComCompra> {
 			produto.setProdEmbalagem(new ProdEmbalagem(1));
 			produto.setProdTipo(new ProdTipo(1));
 			produto.setProdProdutoVolume(1);
-			produto.setProdOrigem(new ProdOrigem(Integer.valueOf(icms.getOrigem()) + 1));
+			produto.setProdOrigem(getOrigem(icms.getOrigem()));
 			produto.setEmpFornecedor(fornecedor);
 			produto.setEmpFabricante(fornecedor);
 			produto.setProdTributacao(getTributacao(icms.getCst()));
@@ -506,6 +503,23 @@ public class ImportarNfe implements IImportacao<ComCompra> {
 		return resp;
 	}
 
+	private ProdOrigem getOrigem(String origem){
+		// se nao achar colocar a padrao 0
+		ProdOrigem resp = null;
+		
+		// percorre as origens
+		for (ProdOrigem ori : origens) {
+			if (ori.getProdOrigemValor() == Integer.valueOf(origem)) {
+				resp = ori;
+				break;
+			} else if (ori.getProdOrigemValor() == 0) {
+				resp = ori;
+			}
+		}
+
+		return resp;
+	}
+	
 	private ProdTributacao getTributacao(String cst) {
 		// se nao achar colocar a padrao 00
 		ProdTributacao resp = null;

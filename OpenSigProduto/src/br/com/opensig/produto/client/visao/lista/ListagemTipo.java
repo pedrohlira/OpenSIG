@@ -27,8 +27,8 @@ public class ListagemTipo extends AListagem<ProdTipo> {
 
 		// colunas
 		ColumnConfig ccId = new ColumnConfig(OpenSigCore.i18n.txtCod(), "prodTipoId", 50, true);
-		ColumnConfig ccValor = new ColumnConfig(OpenSigCore.i18n.txtValor(), "prodTipoValor", 100, true);
-		ColumnConfig ccDescricao = new ColumnConfig(OpenSigCore.i18n.txtDescricao(), "prodTipoDescricao", 400, true);
+		ColumnConfig ccValor = new ColumnConfig(OpenSigCore.i18n.txtValor(), "prodTipoValor", 60, true);
+		ColumnConfig ccDescricao = new ColumnConfig(OpenSigCore.i18n.txtDescricao(), "prodTipoDescricao", 300, true);
 		
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccValor, ccDescricao };
 		modelos = new ColumnModel(bcc);

@@ -205,6 +205,13 @@
 		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoOrigem
+		</classe>
+		<nome>Origin</nome>
+		<descricao>Administer the origins of products.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
 		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoCompra
 		</classe>
 		<nome>Purchase</nome>
@@ -371,8 +378,8 @@
 	<funcao>
 		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoForma
 		</classe>
-		<nome>Types of Payments</nome>
-		<descricao>Administer payment types in the system.</descricao>
+		<nome>Methods</nome>
+		<descricao>Administer payment methods in the system.</descricao>
 		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
@@ -424,13 +431,6 @@
 		<nome>Consulta Empresa</nome>
 		<descricao>Check the status of the Company with the Sefaz.</descricao>
 		<imagem>icon-cadastro</imagem>
-	</funcao>
-	<funcao>
-		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoIncentivo
-		</classe>
-		<nome>Incentive</nome>
-		<descricao>>Administer the incentives.</descricao>
-		<imagem>icon-incentivo</imagem>
 	</funcao>
 	<funcao>
 		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSped

@@ -2,13 +2,10 @@ package br.com.opensig.fiscal.server.acao;
 
 import org.w3c.dom.Document;
 
-import br.com.opensig.core.client.controlador.filtro.ECompara;
-import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
 import br.com.opensig.core.client.padroes.Chain;
 import br.com.opensig.core.client.servico.OpenSigException;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Autenticacao;
-import br.com.opensig.core.shared.modelo.EBusca;
 import br.com.opensig.fiscal.server.FiscalServiceImpl;
 import br.com.opensig.fiscal.server.NFe;
 import br.com.opensig.fiscal.shared.modelo.ENotaStatus;
@@ -42,7 +39,6 @@ public class EnviarNfeInutilizadaSaida extends Chain {
 			// valida
 			String xsd = UtilServer.getRealPath(auth.getConf().get("nfe.xsd_inutilizando"));
 			NFe.validarXML(xml, xsd);
-			validarNumero(doc);
 			// envia para sefaz
 			String inut = servico.inutilizar(xml);
 			// analisa o retorno e seta os status
@@ -83,22 +79,6 @@ public class EnviarNfeInutilizadaSaida extends Chain {
 		sb.append("</ProcInutNFe>");
 
 		return sb.toString();
-	}
-
-	private void validarNumero(Document doc) throws OpenSigException {
-		int ini = Integer.valueOf(doc.getElementsByTagName("nNFIni").item(0).getTextContent());
-		int fim = Integer.valueOf(doc.getElementsByTagName("nNFFin").item(0).getTextContent());
-
-		if (ini <= fim) {
-			FiltroNumero fn = new FiltroNumero("empEmpresa.empEmpresaId", ECompara.IGUAL, auth.getEmpresa()[0]);
-			Number nfeNumero = servico.buscar(new FisNotaSaida(), "t.fisNotaSaidaNumero", EBusca.MAXIMO, fn);
-			int ultimo = nfeNumero != null ? nfeNumero.intValue() : 0;
-			if (fim > ultimo) {
-				throw new OpenSigException("A NFe final nao pode ser maior que a ultima NFe emitida.");
-			}
-		} else {
-			throw new OpenSigException("A NFe de inicio nao pode ser maior que a NFe final.");
-		}
 	}
 
 }

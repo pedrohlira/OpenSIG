@@ -27,7 +27,7 @@ public class FormularioTipo extends AFormulario<ProdTipo> {
 		hdnCod = new Hidden("prodTipoId", "0");
 		add(hdnCod);
 
-		txtValor = new TextField(OpenSigCore.i18n.txtValor(), "prodTipoValor", 100);
+		txtValor = new TextField(OpenSigCore.i18n.txtValor(), "prodTipoValor", 50);
 		txtValor.setAllowBlank(false);
 		txtValor.setMinLength(2);
 		txtValor.setMaxLength(2);
@@ -39,7 +39,7 @@ public class FormularioTipo extends AFormulario<ProdTipo> {
 		
 		MultiFieldPanel linha1 = new MultiFieldPanel();
 		linha1.setBorder(false);
-		linha1.addToRow(txtValor, 120);
+		linha1.addToRow(txtValor, 70);
 		linha1.addToRow(txtDescricao, 420);
 		add(linha1);
 	}

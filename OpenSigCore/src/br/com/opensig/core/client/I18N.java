@@ -2230,15 +2230,6 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtImprimir();
 
   /**
-   * Translated "Incentivo".
-   * 
-   * @return translated "Incentivo"
-   */
-  @DefaultMessage("Incentivo")
-  @Key("txtIncentivo")
-  String txtIncentivo();
-
-  /**
    * Translated "Informação".
    * 
    * @return translated "Informação"

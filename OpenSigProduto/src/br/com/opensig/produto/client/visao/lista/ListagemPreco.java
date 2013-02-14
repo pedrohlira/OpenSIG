@@ -87,9 +87,7 @@ public class ListagemPreco extends AListagemEditor<ProdPreco> {
 		ccPreco.setEditor(new GridEditor(txtValor));
 
 		txtBarra = new TextField();
-		txtBarra.setMinLength(8);
 		txtBarra.setMaxLength(14);
-		txtBarra.setRegex("^(\\d{8}|\\d{12}|\\d{13}|\\d{14})$");
 		txtBarra.setSelectOnFocus(true);
 		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "prodPrecoBarra", 100, false);
 		ccBarra.setEditor(new GridEditor(txtBarra));
@@ -115,7 +113,7 @@ public class ListagemPreco extends AListagemEditor<ProdPreco> {
 				double valor = rec.getAsDouble("prodPrecoValor");
 				String barra = rec.getAsString("prodPrecoBarra");
 
-				if (embalagemId < 1 || valor < 0.01 || (barra != null && barra.length() != 8 && barra.length() != 12 && barra.length() != 13 && barra.length() != 14)) {
+				if (embalagemId < 1 || valor < 0.01) {
 					throw new Exception();
 				}
 
