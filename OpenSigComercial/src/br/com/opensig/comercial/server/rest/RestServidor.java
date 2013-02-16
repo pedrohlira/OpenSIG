@@ -66,6 +66,8 @@ import br.com.opensig.permissao.shared.modelo.SisConfiguracao;
 import br.com.opensig.permissao.shared.modelo.SisUsuario;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
+import br.com.opensig.produto.shared.modelo.ProdEstoqueGrade;
+import br.com.opensig.produto.shared.modelo.ProdGrade;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 /**
@@ -132,8 +134,7 @@ public class RestServidor extends ARest {
 				np.setId(0);
 				np.setComEcfNotaProdutoDesconto(desc);
 				np.setComEcfNota(ecfNota);
-				Sql sql = getEstoque(np.getComEcfNotaProdutoQuantidade(), np.getProdEmbalagem(), np.getProdProduto());
-				sqls.add(sql);
+				getEstoque(sqls, np.getComEcfNotaProdutoQuantidade(), np.getProdEmbalagem(), np.getProdProduto(), np.getComEcfNotaProdutoBarra());
 				sqls.add(getAtualizaProduto(np.getProdProduto()));
 			}
 			service.salvar(nps);
@@ -301,7 +302,7 @@ public class RestServidor extends ARest {
 
 					// monta a atualizacao do estoque
 					double qtd = Double.valueOf(det.getProd().getQCom());
-					sqls.add(getEstoque(qtd, emb, prod));
+					getEstoque(sqls, qtd, emb, prod, "");
 					sqls.add(getAtualizaProduto(prod));
 
 					// montando o produto da venda
@@ -501,8 +502,7 @@ public class RestServidor extends ARest {
 			vp.setComEcfVendaProdutoDesconto(desc);
 			vp.setComEcfVenda(venda);
 			if (!vp.getComEcfVendaProdutoCancelado()) {
-				Sql sql = getEstoque(vp.getComEcfVendaProdutoQuantidade(), vp.getProdEmbalagem(), vp.getProdProduto());
-				sqls.add(sql);
+				getEstoque(sqls, vp.getComEcfVendaProdutoQuantidade(), vp.getProdEmbalagem(), vp.getProdProduto(), vp.getComEcfVendaProdutoCodigo());
 				sqls.add(getAtualizaProduto(vp.getProdProduto()));
 			}
 		}
@@ -602,7 +602,7 @@ public class RestServidor extends ARest {
 	 */
 	private EmpCliente getCliente(SisCliente sisCliente) throws Exception {
 		// acha o cliente ou seta os dados
-		String doc = sisCliente.getSisClienteDoc().replaceAll("[^0-9]", "");
+		String doc = sisCliente.getSisClienteDoc().replaceAll("\\D", "");
 		String mask;
 		String pessoa;
 
@@ -667,17 +667,21 @@ public class RestServidor extends ARest {
 	/**
 	 * Metodo que gera o SQL de atualizacao do estoque para as vendas recebidas.
 	 * 
+	 * @param sqls
+	 *            uma lista de instrucoes.
 	 * @param qtd
 	 *            a quantidade de produtos vendidos.
 	 * @param emb
 	 *            o tipo de embalagem usada na venda.
 	 * @param prod
 	 *            o produto que foi vendido.
+	 * @param barra
+	 *            o codigo escolhido na hora da venda.
 	 * @return uma instrucao de SQL no formato de objeto para ser executada.
 	 * @throws CoreException
 	 *             dispara caso nao consiga gerar o sql de atualizacao.
 	 */
-	private Sql getEstoque(double qtd, ProdEmbalagem emb, ProdProduto prod) throws CoreException {
+	private void getEstoque(List<Sql> sqls, double qtd, ProdEmbalagem emb, ProdProduto prod, String barra) throws CoreException {
 		// fatorando a quantida no estoque
 		if (emb.getProdEmbalagemId() != prod.getProdEmbalagem().getProdEmbalagemId()) {
 			qtd *= emb.getProdEmbalagemUnidade();
@@ -689,7 +693,23 @@ public class RestServidor extends ARest {
 		FiltroObjeto fo1 = new FiltroObjeto("prodProduto", ECompara.IGUAL, prod);
 		FiltroObjeto fo2 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, ecf.getEmpEmpresa());
 		GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
-		return new Sql(new ProdEstoque(), EComando.ATUALIZAR, gf, pf);
+		Sql sql = new Sql(new ProdEstoque(), EComando.ATUALIZAR, gf, pf);
+		sqls.add(sql);
+		
+		// remove estoque da grade caso o produto tenha
+		for (ProdGrade grade : prod.getProdGrades()) {
+			if (grade.getProdGradeBarra().equals(barra)) {
+				// formando os parametros
+				ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
+				// formando o filtro
+				FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
+				GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
+				// busca o item
+				Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
+				sqls.add(sql1);
+				break;
+			}
+		}
 	}
 
 	/**

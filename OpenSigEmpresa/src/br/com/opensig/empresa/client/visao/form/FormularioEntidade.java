@@ -279,13 +279,13 @@ public abstract class FormularioEntidade<E extends Dados> extends AFormulario<E>
 
 		if (!gridContatos.validar(contatos)) {
 			retorno = false;
-			tabDados.setActiveItem(0);
+			tabDados.setActiveTab(0);
 			new ToastWindow(OpenSigCore.i18n.txtListagem(), OpenSigCore.i18n.errLista()).show();
 		}
 
 		if (!gridEnderecos.validar(enderecos)) {
 			retorno = false;
-			tabDados.setActiveItem(1);
+			tabDados.setActiveTab(1);
 			new ToastWindow(OpenSigCore.i18n.txtListagem(), OpenSigCore.i18n.errLista()).show();
 		}
 

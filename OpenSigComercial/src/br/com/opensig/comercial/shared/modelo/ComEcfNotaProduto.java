@@ -64,6 +64,10 @@ public class ComEcfNotaProduto extends Dados implements Serializable {
 	@XmlElement(name = "ecfNotaProdutoOrdem")
 	private int comEcfNotaProdutoOrdem;
 
+	@Column(name = "com_ecf_nota_produto_barra")
+	@XmlElement(name = "ecfNotaProdutoBarra")
+	private String comEcfNotaProdutoBarra;
+
 	@JoinColumn(name = "prod_produto_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ProdProduto prodProduto;
@@ -150,6 +154,14 @@ public class ComEcfNotaProduto extends Dados implements Serializable {
 		this.comEcfNotaProdutoOrdem = comEcfNotaProdutoOrdem;
 	}
 
+	public String getComEcfNotaProdutoBarra() {
+		return comEcfNotaProdutoBarra;
+	}
+
+	public void setComEcfNotaProdutoBarra(String comEcfNotaProdutoBarra) {
+		this.comEcfNotaProdutoBarra = comEcfNotaProdutoBarra;
+	}
+
 	public ProdProduto getProdProduto() {
 		return prodProduto;
 	}
@@ -185,7 +197,7 @@ public class ComEcfNotaProduto extends Dados implements Serializable {
 	public String[] toArray() {
 		return new String[] { comEcfNotaProdutoId + "", comEcfNota.getComEcfNotaId() + "", comEcfNota.getEmpEmpresa().getEmpEmpresaId() + "",
 				comEcfNota.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(), comEcfNota.getEmpCliente().getEmpEntidade().getEmpEntidadeNome1(),
-				prodProduto.getEmpFornecedor().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getProdProdutoId() + "", prodProduto.getProdProdutoBarra(), prodProduto.getProdProdutoDescricao(),
+				prodProduto.getEmpFornecedor().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getProdProdutoId() + "", comEcfNotaProdutoBarra, prodProduto.getProdProdutoDescricao(),
 				prodProduto.getProdProdutoReferencia(), UtilClient.getDataGrid(comEcfNota.getComEcfNotaData()), comEcfNotaProdutoQuantidade + "", prodEmbalagem.getProdEmbalagemId() + "",
 				prodEmbalagem.getProdEmbalagemNome(), comEcfNotaProdutoBruto.toString(), comEcfNotaProdutoDesconto.toString(), comEcfNotaProdutoLiquido.toString(), comEcfNotaProdutoIcms + "",
 				comEcfNotaProdutoIpi + "", comEcfNotaProdutoOrdem + "" };

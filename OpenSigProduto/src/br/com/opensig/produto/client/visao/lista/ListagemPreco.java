@@ -35,7 +35,6 @@ public class ListagemPreco extends AListagemEditor<ProdPreco> {
 	private Store storeEmbalagem;
 	private NumberField txtValor;
 	private TextField txtBarra;
-	private RecordDef camposTabela;
 
 	public ListagemPreco(boolean barraTarefa) {
 		super(new ProdPreco(), barraTarefa);
@@ -113,7 +112,7 @@ public class ListagemPreco extends AListagemEditor<ProdPreco> {
 				double valor = rec.getAsDouble("prodPrecoValor");
 				String barra = rec.getAsString("prodPrecoBarra");
 
-				if (embalagemId < 1 || valor < 0.01) {
+				if (embalagemId < 1 || valor == Double.NaN) {
 					throw new Exception();
 				}
 
@@ -132,7 +131,7 @@ public class ListagemPreco extends AListagemEditor<ProdPreco> {
 	}
 
 	private ComboBox getEmbalagem() {
-		ComboBox cmbEmbalagem = new ComboBox(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemId", 60);
+		ComboBox cmbEmbalagem = new ComboBox();
 		cmbEmbalagem.setAllowBlank(false);
 		cmbEmbalagem.setStore(storeEmbalagem);
 		cmbEmbalagem.setTriggerAction(ComboBox.ALL);
@@ -168,14 +167,6 @@ public class ListagemPreco extends AListagemEditor<ProdPreco> {
 
 	public void setTxtBarra(TextField txtBarra) {
 		this.txtBarra = txtBarra;
-	}
-
-	public RecordDef getCamposTabela() {
-		return camposTabela;
-	}
-
-	public void setCamposTabela(RecordDef camposTabela) {
-		this.camposTabela = camposTabela;
 	}
 
 }

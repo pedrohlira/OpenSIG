@@ -58,6 +58,9 @@ public class ComVendaProduto extends Dados implements Serializable {
 	@Column(name = "com_venda_produto_ordem")
 	private int comVendaProdutoOrdem;
 
+	@Column(name = "com_venda_produto_barra")
+	private String comVendaProdutoBarra;
+
 	@JoinColumn(name = "prod_produto_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ProdProduto prodProduto;
@@ -183,6 +186,14 @@ public class ComVendaProduto extends Dados implements Serializable {
 		this.comVenda = comVenda;
 	}
 
+	public String getComVendaProdutoBarra() {
+		return comVendaProdutoBarra;
+	}
+
+	public void setComVendaProdutoBarra(String comVendaProdutoBarra) {
+		this.comVendaProdutoBarra = comVendaProdutoBarra;
+	}
+
 	public Number getId() {
 		return comVendaProdutoId;
 	}
@@ -194,7 +205,7 @@ public class ComVendaProduto extends Dados implements Serializable {
 	public String[] toArray() {
 		return new String[] { comVendaProdutoId + "", comVenda.getComVendaId() + "", comVenda.getEmpEmpresa().getEmpEmpresaId() + "", comVenda.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(),
 				comVenda.getEmpCliente().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getEmpFornecedor().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getProdProdutoId() + "",
-				prodProduto.getProdProdutoBarra(), prodProduto.getProdProdutoDescricao(), prodProduto.getProdProdutoReferencia(), UtilClient.getDataGrid(comVenda.getComVendaData()),
+				comVendaProdutoBarra, prodProduto.getProdProdutoDescricao(), prodProduto.getProdProdutoReferencia(), UtilClient.getDataGrid(comVenda.getComVendaData()),
 				comVendaProdutoQuantidade + "", prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), comVendaProdutoBruto.toString(), comVendaProdutoDesconto.toString(),
 				comVendaProdutoLiquido.toString(), comVendaProdutoTotalBruto.toString(), comVendaProdutoTotalLiquido.toString(), "0", prodProduto.getProdOrigem().getProdOrigemId() + "",
 				comVendaProdutoIcms + "", comVendaProdutoIpi + "", comVendaProdutoOrdem + "" };

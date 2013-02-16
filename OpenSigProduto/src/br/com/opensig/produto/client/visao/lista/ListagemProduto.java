@@ -15,6 +15,7 @@ import br.com.opensig.core.shared.modelo.IFavorito;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
 import br.com.opensig.empresa.client.controlador.comando.ComandoFornecedor;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
+import br.com.opensig.produto.client.visao.form.FormularioProduto;
 import br.com.opensig.produto.shared.modelo.ProdCategoria;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdIpi;
@@ -60,7 +61,7 @@ public class ListagemProduto extends AListagem<ProdProduto> {
 				new IntegerFieldDef("prodTributacao.prodTributacaoFora"), new StringFieldDef("prodTributacao.prodTributacaoDecreto"), new IntegerFieldDef("prodIpi.prodIpiId"),
 				new StringFieldDef("prodIpi.prodIpiNome"), new FloatFieldDef("prodIpi.prodIpiAliquota"), new IntegerFieldDef("prodTipo.prodTipoId"), new StringFieldDef("prodTipo.prodTipoDescricao"),
 				new IntegerFieldDef("prodOrigem.prodOrigemId"), new StringFieldDef("prodOrigem.prodOrigemDescricao"), new DateFieldDef("prodProdutoCadastrado"),
-				new DateFieldDef("prodProdutoAlterado"), new BooleanFieldDef("prodProdutoAtivo"), new IntegerFieldDef("prodProdutoSinc"), new StringFieldDef("prodProdutoObservacao") };
+				new DateFieldDef("prodProdutoAlterado"), new BooleanFieldDef("prodProdutoAtivo"), new StringFieldDef("prodProdutoObservacao") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -119,15 +120,12 @@ public class ListagemProduto extends AListagem<ProdProduto> {
 		ccCadastro.setHidden(true);
 		ColumnConfig ccAlterado = new ColumnConfig(OpenSigCore.i18n.txtAlterado(), "prodProdutoAlterado", 120, true, DATAHORA);
 		ColumnConfig ccAtivo = new ColumnConfig(OpenSigCore.i18n.txtAtivo(), "prodProdutoAtivo", 50, true, BOLEANO);
-		ColumnConfig ccSinc = new ColumnConfig("", "prodProdutoSinc", 10, false);
-		ccSinc.setHidden(true);
-		ccSinc.setFixed(true);
 		ColumnConfig ccObservacao = new ColumnConfig(OpenSigCore.i18n.txtObservacao(), "prodProdutoObservacao", 200, true);
 
-		if (form != null) {
+		if (form instanceof FormularioProduto) {
 			BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccNcm, ccBarra, ccDescricao, ccRef, ccCusto, ccPreco, ccEmbalagemId, ccEmbalagem, ccVolume, ccEstoque, ccCategoria, ccCodForn,
 					ccFornecedor, ccCodFabr, ccFabricante, ccTributacaoId, ccTributacao, ccCst, ccCfop, ccDentro, ccFora, ccDecreto, ccIpiId, ccIpi, ccAliquota, ccTipoId, ccTipoDesc, ccOrigemId,
-					ccOrigem, ccCadastro, ccAlterado, ccAtivo, ccSinc, ccObservacao };
+					ccOrigem, ccCadastro, ccAlterado, ccAtivo, ccObservacao };
 			modelos = new ColumnModel(bcc);
 		} else {
 			BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccBarra, ccDescricao, ccRef, ccEmbalagem, ccVolume, ccPreco, ccEstoque, ccFornecedor, ccObservacao };
@@ -256,6 +254,14 @@ public class ListagemProduto extends AListagem<ProdProduto> {
 			mnuContexto.addItem(itemEcf);
 		}
 
+		// grade produtos
+		String strGrades = FabricaComando.getInstancia().getComandoCompleto("ComandoGrade");
+		SisFuncao grades = UtilClient.getFuncaoPermitida(strGrades);
+		MenuItem itemGrades = gerarFuncao(grades, "prodGrade.prodProduto.prodProdutoId", "prodProdutoId");
+		if (itemGrades != null) {
+			mnuContexto.addItem(itemGrades);
+		}
+		
 		if (mnuContexto.getItems().length > 0) {
 			MenuItem mnuItem = getIrPara();
 			mnuItem.setMenu(mnuContexto);

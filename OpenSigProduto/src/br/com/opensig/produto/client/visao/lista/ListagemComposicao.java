@@ -139,7 +139,7 @@ public class ListagemComposicao extends AListagemEditor<ProdComposicao> {
 				double qtd = rec.getAsDouble("prodComposicaoQuantidade");
 				double valor = rec.getAsDouble("prodComposicaoValor");
 
-				if (produtoId < 1 || embalagemId < 1 || qtd < 0.0001 || valor < 0.01) {
+				if (produtoId < 1 || embalagemId < 1 || qtd == Double.NaN || valor == Double.NaN) {
 					throw new Exception();
 				}
 
@@ -164,7 +164,7 @@ public class ListagemComposicao extends AListagemEditor<ProdComposicao> {
 		final CoreProxy<ProdProduto> proxyProduto = new CoreProxy<ProdProduto>(new ProdProduto());
 		Store storeProduto = new Store(proxyProduto, new ArrayReader(new RecordDef(fdProduto)), false);
 
-		cmbProduto = new ComboBox(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoId", 60);
+		cmbProduto = new ComboBox();
 		cmbProduto.setMinChars(1);
 		cmbProduto.setWidth(250);
 		cmbProduto.setAllowBlank(false);
@@ -188,7 +188,7 @@ public class ListagemComposicao extends AListagemEditor<ProdComposicao> {
 	}
 
 	private ComboBox getEmbalagem() {
-		ComboBox cmbEmbalagem = new ComboBox(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemId", 60);
+		ComboBox cmbEmbalagem = new ComboBox();
 		cmbEmbalagem.setAllowBlank(false);
 		cmbEmbalagem.setStore(storeEmbalagem);
 		cmbEmbalagem.setTriggerAction(ComboBox.ALL);

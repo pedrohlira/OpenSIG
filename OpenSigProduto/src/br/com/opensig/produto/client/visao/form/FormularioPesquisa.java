@@ -11,6 +11,7 @@ import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.visao.abstrato.AFormulario;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
+import br.com.opensig.produto.client.visao.lista.ListagemGrades;
 import br.com.opensig.produto.client.visao.lista.ListagemPreco;
 import br.com.opensig.produto.client.visao.lista.ListagemProduto;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
@@ -25,6 +26,7 @@ import com.gwtext.client.data.event.StoreListenerAdapter;
 import com.gwtext.client.widgets.Button;
 import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.MessageBox.AlertCallback;
+import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.Toolbar;
 import com.gwtext.client.widgets.ToolbarButton;
 import com.gwtext.client.widgets.Window;
@@ -37,10 +39,12 @@ import com.gwtext.client.widgets.grid.event.GridListenerAdapter;
 import com.gwtext.client.widgets.grid.event.GridRowListenerAdapter;
 import com.gwtext.client.widgets.layout.ColumnLayout;
 import com.gwtext.client.widgets.layout.ColumnLayoutData;
+import com.gwtext.client.widgets.layout.RowLayout;
 
 public class FormularioPesquisa extends AFormulario<ProdProduto> {
 	private ListagemProduto gridProdutos;
 	private ListagemPreco gridPrecos;
+	private ListagemGrades gridGrades;
 	private TextField txtBusca;
 	private Checkbox chkCod;
 	private Checkbox chkBarra;
@@ -60,7 +64,6 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 		// montando o grid de produtos
 		gridProdutos = new ListagemProduto(this);
 		gridProdutos.purgeListeners();
-		gridProdutos.getTopToolbar().hide();
 		gridProdutos.setTitle(OpenSigCore.i18n.txtProduto());
 		gridProdutos.setIconCls("icon-produto");
 		gridProdutos.setFiltroPadrao(new FiltroNumero("prodProdutoId", ECompara.IGUAL, 0));
@@ -68,9 +71,15 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 			public void onLoad(Store store, Record[] records) {
 				if (records.length > 0) {
 					gridProdutos.getSelectionModel().selectFirstRow();
-					pesquisaSucesso();
+					setDados();
+					gridProdutos.focus(true, 10);
 				} else {
-					pesquisaFalha();
+					limparDados();
+					MessageBox.alert(OpenSigCore.i18n.txtPesquisar(), OpenSigCore.i18n.errRegistro(), new AlertCallback() {
+						public void execute() {
+							txtBusca.focus(true, 10);
+						}
+					});
 				}
 			}
 		});
@@ -112,17 +121,52 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 		});
 		gridPrecos.getStore().addStoreListener(new StoreListenerAdapter() {
 			public void onLoad(Store store, Record[] records) {
-				if (records.length == 0 && gridProdutos.getStore().getRecords().length == 1) {
+				if (records.length == 0) {
+					gridGrades.getStore().reload();
+				} else {
+					gridGrades.getStore().removeAll();
+				}
+			}
+		});
+
+		// montando o grid de grade
+		gridGrades = new ListagemGrades(false);
+		for (int i = 0; i < gridGrades.getModelos().getColumnCount(); i++) {
+			gridGrades.getModelos().setEditable(i, false);
+		}
+		gridGrades.addGridRowListener(new GridRowListenerAdapter() {
+			public void onRowDblClick(GridPanel grid, int rowIndex, EventObject e) {
+				selecionar();
+			}
+		});
+		gridGrades.addGridListener(new GridListenerAdapter() {
+			public void onKeyPress(EventObject e) {
+				if (e.getKey() == EventObject.ENTER) {
+					selecionar();
+				}
+			}
+		});
+		gridGrades.getStore().addStoreListener(new StoreListenerAdapter() {
+			public void onLoad(Store store, Record[] records) {
+				if (records.length > 0) {
+					gridGrades.getSelectionModel().selectFirstRow();
+				} else if (gridProdutos.getStore().getRecords().length == 1) {
 					selecionar();
 				}
 			}
 		});
 
-		// setando do form
-		setLayout(new ColumnLayout());
-		add(gridProdutos, new ColumnLayoutData(.80));
-		add(gridPrecos, new ColumnLayoutData(.20));
+		// setando as sublistas
+		Panel coluna = new Panel();
+		coluna.setLayout(new ColumnLayout());
+		coluna.setBorder(false);
+		coluna.add(gridPrecos, new ColumnLayoutData(.48));
+		coluna.add(gridGrades, new ColumnLayoutData(.52));
 
+		// setando do form
+		setLayout(new RowLayout());
+		add(gridProdutos);
+		add(coluna);
 		super.inicializar();
 		setHeader(false);
 		enable();
@@ -157,9 +201,7 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 			}
 		});
 
-		// muda a barra de tarefas
-		Toolbar tool = new Toolbar();
-
+		// botao de selecionar
 		ToolbarButton btnSelecionar = new ToolbarButton(OpenSigCore.i18n.txtSelecionar());
 		btnSelecionar.setTooltip(OpenSigCore.i18n.msgSelecionar());
 		btnSelecionar.setIconCls("icon-selecionar");
@@ -173,8 +215,8 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 				selecionar();
 			}
 		});
-		tool.addButton(btnSelecionar);
 
+		// botao de cancelar
 		ToolbarButton btnCancelar = new ToolbarButton(OpenSigCore.i18n.txtCancelar());
 		btnCancelar.setTooltip(OpenSigCore.i18n.msgCancelar());
 		btnCancelar.setIconCls("icon-cancelar");
@@ -185,8 +227,11 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 				wnd.hide();
 			}
 		});
-		tool.addButton(btnCancelar);
 
+		// muda a barra de tarefas
+		Toolbar tool = new Toolbar();
+		tool.addButton(btnSelecionar);
+		tool.addButton(btnCancelar);
 		tool.addSeparator();
 		tool.addText(OpenSigCore.i18n.txtPesquisar() + ":");
 		tool.addField(txtBusca);
@@ -212,7 +257,13 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 
 	public boolean setDados() {
 		Record rec = gridProdutos.getSelectionModel().getSelected();
-		carregaPrecos(new ProdProduto(rec.getAsInteger("prodProdutoId")));
+		ProdProduto prod = new ProdProduto(rec.getAsInteger("prodProdutoId"));
+
+		FiltroObjeto fo = new FiltroObjeto("prodProduto", ECompara.IGUAL, prod);
+		gridPrecos.getProxy().setFiltroPadrao(fo);
+		gridPrecos.getStore().reload();
+
+		gridGrades.getProxy().setFiltroPadrao(fo);
 		return true;
 	}
 
@@ -220,6 +271,7 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 		try {
 			gridProdutos.getStore().removeAll();
 			gridPrecos.getStore().removeAll();
+			gridGrades.getStore().removeAll();
 			txtBusca.setValue("");
 		} catch (Exception e) {
 			// nada
@@ -227,30 +279,29 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 	}
 
 	public void mostrarDados() {
-		gridProdutos.setHeight(Ext.getBody().getHeight() - 100);
-		gridPrecos.setHeight(Ext.getBody().getHeight() - 100);
-	}
-
-	private void carregaPrecos(ProdProduto prod) {
-		FiltroObjeto fo = new FiltroObjeto("prodProduto", ECompara.IGUAL, prod);
-		gridPrecos.getProxy().setFiltroPadrao(fo);
-		gridPrecos.getStore().reload();
+		gridProdutos.setHeight(Ext.getBody().getHeight() - 250);
+		gridPrecos.setHeight(150);
+		gridGrades.setHeight(150);
 	}
 
 	private void selecionar() {
 		if (asyncResultado != null && getForm().isValid()) {
 			Record pro = gridProdutos.getSelectionModel().getSelected();
 			Record pre = gridPrecos.getSelectionModel().getSelected();
+			Record gra = gridGrades.getSelectionModel().getSelected();
 
 			if (pro != null) {
 				if (pre != null) {
 					pro.set("prodEmbalagem.prodEmbalagemId", pre.getAsString("prodEmbalagem.prodEmbalagemId"));
 					pro.set("prodEmbalagem.prodEmbalagemNome", pre.getAsString("prodEmbalagem.prodEmbalagemNome"));
-					pro.set("prodProdutoPreco", pre.getAsString("prodPrecoValor"));
+					pro.set("prodProdutoPreco", pre.getAsDouble("prodPrecoValor"));
+				} else if (gra != null) {
+					pro.set("t1.prodEstoqueQuantidade", gra.getAsDouble("prodGradeEstoque"));
+					pro.set("prodProdutoBarra", gra.getAsString("prodGradeBarra"));
 				}
 				asyncResultado.onSuccess(pro);
 			} else {
-				asyncResultado.onFailure(new NullPointerException());
+				asyncResultado.onFailure(null);
 			}
 
 			asyncResultado = null;
@@ -282,6 +333,10 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 					FiltroTexto ft1 = new FiltroTexto("prodPrecoBarra", ECompara.IGUAL, txtBusca.getValueAsString());
 					ft1.setCampoPrefixo("t2.");
 					gf.add(ft1, EJuncao.OU);
+					// barra da grade
+					FiltroTexto ft2 = new FiltroTexto("prodGradeBarra", ECompara.IGUAL, txtBusca.getValueAsString());
+					ft2.setCampoPrefixo("t4.");
+					gf.add(ft2, EJuncao.OU);
 				} catch (Exception e) {
 					FiltroTexto ft = new FiltroTexto("prodProdutoBarra", ECompara.IGUAL, "");
 					gf.add(ft, EJuncao.OU);
@@ -312,28 +367,6 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 			gridProdutos.getProxy().setFiltroPadrao(padrao);
 			gridProdutos.getStore().load(0, gridProdutos.getPaginador().getPageSize());
 		}
-	}
-
-	private void pesquisaFalha() {
-		limparDados();
-		MessageBox.alert(OpenSigCore.i18n.txtPesquisar(), OpenSigCore.i18n.errRegistro(), new AlertCallback() {
-			public void execute() {
-				txtBusca.focus(true, 10);
-			}
-		});
-	}
-
-	private void pesquisaSucesso() {
-		setDados();
-		gridProdutos.focus(true, 10);
-	}
-
-	public SisFuncao getFuncao() {
-		return funcao;
-	}
-
-	public void setFuncao(SisFuncao funcao) {
-		this.funcao = funcao;
 	}
 
 	public ListagemProduto getGridProdutos() {
@@ -422,6 +455,14 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 
 	public void setWnd(Window wnd) {
 		this.wnd = wnd;
+	}
+
+	public ListagemGrades getGridGrades() {
+		return gridGrades;
+	}
+
+	public void setGridGrades(ListagemGrades gridGrades) {
+		this.gridGrades = gridGrades;
 	}
 
 	public void gerarListas() {

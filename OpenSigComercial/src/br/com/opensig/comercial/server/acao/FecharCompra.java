@@ -1,12 +1,12 @@
 package br.com.opensig.comercial.server.acao;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
+import br.com.opensig.comercial.server.ComercialServiceImpl;
 import br.com.opensig.comercial.shared.modelo.ComCompra;
 import br.com.opensig.comercial.shared.modelo.ComCompraProduto;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
@@ -26,22 +26,23 @@ import br.com.opensig.core.client.servico.OpenSigException;
 import br.com.opensig.core.server.Conexao;
 import br.com.opensig.core.server.CoreServiceImpl;
 import br.com.opensig.core.server.UtilServer;
+import br.com.opensig.core.shared.modelo.Autenticacao;
 import br.com.opensig.core.shared.modelo.EComando;
 import br.com.opensig.core.shared.modelo.Sql;
-import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 public class FecharCompra extends Chain {
 
 	private CoreServiceImpl servico;
+	private ComercialServiceImpl impl;
 	private ComCompra compra;
-	private List<ProdEmbalagem> embalagens;
 
-	public FecharCompra(Chain next, CoreServiceImpl servico, ComCompra compra) throws OpenSigException {
+	public FecharCompra(Chain next, CoreServiceImpl servico, ComCompra compra, Autenticacao auth) throws OpenSigException {
 		super(null);
 		this.servico = servico;
 		this.compra = compra;
+		this.impl = new ComercialServiceImpl();
 
 		// atualiza compra
 		AtualizarCompra atuComp = new AtualizarCompra(next);
@@ -50,7 +51,11 @@ public class FecharCompra extends Chain {
 		// atauliza estoque
 		AtualizarEstoque atuEst = new AtualizarEstoque(atuProd);
 		// seleciona os produtos
-		this.next = atuEst;
+		if (!auth.getConf().get("estoque.ativo").equalsIgnoreCase("ignorar")) {
+			this.setNext(atuEst);
+		} else {
+			this.setNext(atuProd);
+		}
 	}
 
 	@Override
@@ -60,21 +65,6 @@ public class FecharCompra extends Chain {
 		if (next != null) {
 			next.execute();
 		}
-	}
-
-	private int getQtdEmbalagem(int embalagemId) throws Exception {
-		int unid = 1;
-		if (embalagens == null) {
-			embalagens = servico.selecionar(new ProdEmbalagem(), 0, 0, null, false).getLista();
-		}
-
-		for (ProdEmbalagem emb : embalagens) {
-			if (emb.getProdEmbalagemId() == embalagemId) {
-				unid = emb.getProdEmbalagemUnidade();
-				break;
-			}
-		}
-		return unid;
 	}
 
 	private class AtualizarEstoque extends Chain {
@@ -103,8 +93,8 @@ public class FecharCompra extends Chain {
 					// fatorando a quantida no estoque
 					double qtd = comProd.getComCompraProdutoQuantidade();
 					if (comProd.getProdEmbalagem().getProdEmbalagemId() != comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
-						qtd *= getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
-						qtd /= getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+						qtd *= impl.getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
+						qtd /= impl.getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 					}
 
 					// formando o sql
@@ -154,10 +144,10 @@ public class FecharCompra extends Chain {
 					double custo = comProd.getComCompraProdutoValor();
 					double preco = comProd.getComCompraProdutoPreco();
 					if (comProd.getProdEmbalagem().getProdEmbalagemId() != comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
-						custo /= getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
-						custo *= getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
-						preco /= getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
-						preco *= getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+						custo /= impl.getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
+						custo *= impl.getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+						preco /= impl.getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
+						preco *= impl.getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 					}
 					// formando os parametros
 					ParametroNumero pn1 = new ParametroNumero("prodProdutoCusto", custo);

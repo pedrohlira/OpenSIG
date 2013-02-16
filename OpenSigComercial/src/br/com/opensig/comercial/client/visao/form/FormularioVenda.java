@@ -131,7 +131,6 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 		final AsyncCallback<Record> asyncPesquisa = new AsyncCallback<Record>() {
 
 			public void onFailure(Throwable arg0) {
-				// nada
 			}
 
 			public void onSuccess(Record result) {
@@ -154,7 +153,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 					Record reg = gridProdutos.getCampos().createRecord(new Object[gridProdutos.getCampos().getFields().length]);
 					reg.set("comVendaProdutoId", 0);
 					reg.set("prodProdutoId", result.getAsInteger("prodProdutoId"));
-					reg.set("prodProduto.prodProdutoBarra", result.getAsString("prodProdutoBarra"));
+					reg.set("comVendaProdutoBarra", result.getAsString("prodProdutoBarra"));
 					reg.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
 					reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
 					reg.set("comVendaProdutoQuantidade", 0);
@@ -169,7 +168,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 					reg.set("comVendaProdutoIpi", result.getAsDouble("prodIpi.prodIpiAliquota"));
 					reg.set("comVendaProdutoEstoque", result.getAsInteger("t1.prodEstoqueQuantidade"));
 
-					if (reg.getAsInteger("comVendaProdutoEstoque") > 0 || UtilClient.CONF.get("estoque.ativo").equalsIgnoreCase("nao")) {
+					if (reg.getAsInteger("comVendaProdutoEstoque") > 0 || !UtilClient.CONF.get("estoque.ativo").equalsIgnoreCase("sim")) {
 						gridProdutos.getStore().add(reg);
 					} else {
 						new ToastWindow(OpenSigCore.i18n.txtEstoque(), reg.getAsString("prodProduto.prodProdutoDescricao") + " = 0").show();

@@ -111,7 +111,6 @@ public class ListagemValidarProduto {
 		final AsyncCallback<Record> asyncPesquisa = new AsyncCallback<Record>() {
 
 			public void onFailure(Throwable arg0) {
-				// nada
 			}
 
 			public void onSuccess(Record result) {

@@ -1366,6 +1366,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtCoo();
 
   /**
+   * Translated "Cor".
+   * 
+   * @return translated "Cor"
+   */
+  @DefaultMessage("Cor")
+  @Key("txtCor")
+  String txtCor();
+
+  /**
    * Translated "CRO".
    * 
    * @return translated "CRO"
@@ -2113,6 +2122,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtGnf();
 
   /**
+   * Translated "Grade".
+   * 
+   * @return translated "Grade"
+   */
+  @DefaultMessage("Grade")
+  @Key("txtGrade")
+  String txtGrade();
+
+  /**
    * Translated "Gráfico".
    * 
    * @return translated "Gráfico"
@@ -2588,6 +2606,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("OK")
   @Key("txtOk")
   String txtOk();
+
+  /**
+   * Translated "Opção".
+   * 
+   * @return translated "Opção"
+   */
+  @DefaultMessage("Opção")
+  @Key("txtOpcao")
+  String txtOpcao();
 
   /**
    * Translated "Operacao".
@@ -3155,6 +3182,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Tags")
   @Key("txtTags")
   String txtTags();
+
+  /**
+   * Translated "Tamanho".
+   * 
+   * @return translated "Tamanho"
+   */
+  @DefaultMessage("Tamanho")
+  @Key("txtTamanho")
+  String txtTamanho();
 
   /**
    * Translated "TEF".

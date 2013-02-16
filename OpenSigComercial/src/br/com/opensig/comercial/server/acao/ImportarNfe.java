@@ -130,7 +130,7 @@ public class ImportarNfe implements IImportacao<ComCompra> {
 	}
 
 	private void validarEmpresa() throws OpenSigException {
-		if (nfe.getInfNFe().getDest().getCNPJ().equals(auth.getEmpresa()[5].replaceAll("\\W", ""))) {
+		if (nfe.getInfNFe().getDest().getCNPJ().equals(auth.getEmpresa()[5].replaceAll("\\D", ""))) {
 			EmpEntidade ent = new EmpEntidade(Integer.valueOf(auth.getEmpresa()[1]));
 			ent.setEmpEntidadeNome1(auth.getEmpresa()[2]);
 			ent.setEmpEntidadeNome2(auth.getEmpresa()[3]);

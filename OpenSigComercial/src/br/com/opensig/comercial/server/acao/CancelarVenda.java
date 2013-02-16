@@ -1,5 +1,6 @@
 package br.com.opensig.comercial.server.acao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
+import br.com.opensig.comercial.server.ComercialServiceImpl;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
 import br.com.opensig.comercial.shared.modelo.ComVendaProduto;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
@@ -32,12 +34,15 @@ import br.com.opensig.fiscal.server.acao.GerarNfeCanceladaSaida;
 import br.com.opensig.fiscal.server.acao.GerarNfeInutilizadaSaida;
 import br.com.opensig.fiscal.shared.modelo.ENotaStatus;
 import br.com.opensig.fiscal.shared.modelo.FisNotaSaida;
-import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
+import br.com.opensig.produto.shared.modelo.ProdComposicao;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
+import br.com.opensig.produto.shared.modelo.ProdEstoqueGrade;
+import br.com.opensig.produto.shared.modelo.ProdGrade;
 
 public class CancelarVenda extends Chain {
 
 	private CoreServiceImpl servico;
+	private ComercialServiceImpl impl;
 	private ComVenda venda;
 	private Autenticacao auth;
 
@@ -46,6 +51,7 @@ public class CancelarVenda extends Chain {
 		this.servico = servico;
 		this.venda = venda;
 		this.auth = auth;
+		this.impl = new ComercialServiceImpl();
 
 		FiltroNumero fn = new FiltroNumero("fisNotaSaidaId", ECompara.IGUAL, venda.getFisNotaSaida().getId());
 		FisNotaSaida saida = (FisNotaSaida) servico.selecionar(venda.getFisNotaSaida(), fn, false);
@@ -79,7 +85,7 @@ public class CancelarVenda extends Chain {
 		AtualizarConta atuConta = new AtualizarConta(atuVenda);
 		// valida o estoque
 		AtualizarEstoque atuEst = new AtualizarEstoque(atuConta);
-		if (auth.getConf().get("estoque.ativo").equalsIgnoreCase("sim")) {
+		if (!auth.getConf().get("estoque.ativo").equalsIgnoreCase("ignorar")) {
 			this.setNext(atuEst);
 		} else {
 			this.setNext(atuConta);
@@ -94,13 +100,27 @@ public class CancelarVenda extends Chain {
 		venda = (ComVenda) servico.selecionar(venda, fn, false);
 		venda.setComVendaObservacao(motivo);
 
+		// verifica se tem produtos com composicoes
+		List<ComVendaProduto> auxProdutos = new ArrayList<ComVendaProduto>();
+		for (ComVendaProduto venProd : venda.getComVendaProdutos()) {
+			auxProdutos.add(venProd);
+			for (ProdComposicao comp : venProd.getProdProduto().getProdComposicoes()) {
+				ComVendaProduto auxVenProd = new ComVendaProduto();
+				auxVenProd.setProdProduto(comp.getProdProduto());
+				auxVenProd.setProdEmbalagem(comp.getProdEmbalagem());
+				double qtd = venProd.getComVendaProdutoQuantidade() * comp.getProdComposicaoQuantidade();
+				auxVenProd.setComVendaProdutoQuantidade(qtd);
+				auxProdutos.add(auxVenProd);
+			}
+		}
+		venda.setComVendaProdutos(auxProdutos);
+		
 		if (next != null) {
 			next.execute();
 		}
 	}
 
 	private class AtualizarEstoque extends Chain {
-		private List<ProdEmbalagem> embalagens;
 
 		public AtualizarEstoque(Chain next) throws OpenSigException {
 			super(next);
@@ -118,24 +138,37 @@ public class CancelarVenda extends Chain {
 				em = emf.createEntityManager();
 				em.getTransaction().begin();
 
-				if (auth.getConf().get("estoque.ativo").equalsIgnoreCase("sim")) {
-					for (ComVendaProduto comVen : venda.getComVendaProdutos()) {
-						// fatorando a quantida no estoque
-						double qtd = comVen.getComVendaProdutoQuantidade();
-						if (comVen.getProdEmbalagem().getProdEmbalagemId() != comVen.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
-							qtd *= getQtdEmbalagem(comVen.getProdEmbalagem().getProdEmbalagemId());
-							qtd /= getQtdEmbalagem(comVen.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+				for (ComVendaProduto venProd : venda.getComVendaProdutos()) {
+					// fatorando a quantida no estoque
+					double qtd = venProd.getComVendaProdutoQuantidade();
+					if (venProd.getProdEmbalagem().getProdEmbalagemId() != venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
+						qtd *= impl.getQtdEmbalagem(venProd.getProdEmbalagem().getProdEmbalagemId());
+						qtd /= impl.getQtdEmbalagem(venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+					}
+					// formando os parametros
+					ParametroFormula pn1 = new ParametroFormula("prodEstoqueQuantidade", qtd);
+					// formando o filtro
+					FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, venProd.getProdProduto());
+					GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
+					// busca o item
+					ProdEstoque est = new ProdEstoque();
+					// formando o sql
+					Sql sql = new Sql(est, EComando.ATUALIZAR, gf, pn1);
+					servico.executar(em, sql);
+
+					// remove estoque da grade caso o produto tenha
+					for (ProdGrade grade : venProd.getProdProduto().getProdGrades()) {
+						if (grade.getProdGradeBarra().equals(venProd.getComVendaProdutoBarra())) {
+							// formando os parametros
+							ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", qtd);
+							// formando o filtro
+							FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
+							GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
+							// busca o item
+							Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
+							servico.executar(em, sql1);
+							break;
 						}
-						// formando os parametros
-						ParametroFormula pn1 = new ParametroFormula("prodEstoqueQuantidade", qtd);
-						// formando o filtro
-						FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, comVen.getProdProduto());
-						GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
-						// busca o item
-						ProdEstoque est = new ProdEstoque();
-						// formando o sql
-						Sql sql = new Sql(est, EComando.ATUALIZAR, gf, pn1);
-						servico.executar(em, sql);
 					}
 				}
 
@@ -154,21 +187,6 @@ public class CancelarVenda extends Chain {
 				em.close();
 				emf.close();
 			}
-		}
-
-		private int getQtdEmbalagem(int embalagemId) throws Exception {
-			int unid = 1;
-			if (embalagens == null) {
-				embalagens = servico.selecionar(new ProdEmbalagem(), 0, 0, null, false).getLista();
-			}
-
-			for (ProdEmbalagem emb : embalagens) {
-				if (emb.getProdEmbalagemId() == embalagemId) {
-					unid = emb.getProdEmbalagemUnidade();
-					break;
-				}
-			}
-			return unid;
 		}
 	}
 

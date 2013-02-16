@@ -38,11 +38,11 @@ import br.com.opensig.core.shared.modelo.Sql;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * Classe que implementa na parte do servidor a resposta a chamada de procedimento do cliente, executando os comandos de persistencia no banco de dados.
+ * Classe que implementa na parte do servidor a resposta a chamada de
+ * procedimento do cliente, executando os comandos de persistencia no banco de
+ * dados.
  * 
  * @param <E>
- * @author Pedro H. Lira
- * @version 1.0
  */
 public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet implements CoreService<E> {
 
@@ -718,7 +718,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * Metodo para executar instruções de atualizacao diretas no BD com a mesma transacao.
+	 * Metodo para executar instruções de atualizacao diretas no BD com a mesma
+	 * transacao.
 	 * 
 	 * @param em
 	 *            o gerenciador de entidades.
@@ -824,7 +825,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * Metodo para executar instruções de exclusoes diretas no BD com a mesma transacao.
+	 * Metodo para executar instruções de exclusoes diretas no BD com a mesma
+	 * transacao.
 	 * 
 	 * @param em
 	 *            o gerenciador de entidades.
@@ -1013,7 +1015,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			HttpSession sessao = getThreadLocalRequest().getSession();
 			auth = SessionManager.LOGIN.get(sessao);
 		} catch (Exception e) {
-			// caso nao consiga, nao altera o valor atual, que pode ser null ou nao.
+			// caso nao consiga, nao altera o valor atual, que pode ser null ou
+			// nao.
 		}
 		return auth;
 	}

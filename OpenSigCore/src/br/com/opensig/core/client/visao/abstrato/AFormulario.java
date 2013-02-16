@@ -250,6 +250,11 @@ public abstract class AFormulario<E extends Dados> extends FormPanel implements 
 		expRegistro.setFiltro(filtro);
 
 		gerarListas();
+		if (expLista != null) {
+			for (ExpListagem exp : expLista) {
+				exp.getClasse().setEmpresa(classe.getEmpresa());
+			}
+		}
 		expRegistro.setExpLista(expLista);
 		return expRegistro;
 	}

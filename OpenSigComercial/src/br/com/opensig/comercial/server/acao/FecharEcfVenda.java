@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
+import br.com.opensig.comercial.server.ComercialServiceImpl;
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.comercial.shared.modelo.ComEcfVendaProduto;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
@@ -24,12 +25,14 @@ import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Autenticacao;
 import br.com.opensig.core.shared.modelo.EComando;
 import br.com.opensig.core.shared.modelo.Sql;
-import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
+import br.com.opensig.produto.shared.modelo.ProdEstoqueGrade;
+import br.com.opensig.produto.shared.modelo.ProdGrade;
 
 public class FecharEcfVenda extends Chain {
 
 	private CoreServiceImpl servico;
+	private ComercialServiceImpl impl;
 	private ComEcfVenda venda;
 	private List<String[]> invalidos;
 
@@ -38,6 +41,7 @@ public class FecharEcfVenda extends Chain {
 		this.servico = servico;
 		this.venda = venda;
 		this.invalidos = invalidos;
+		this.impl = new ComercialServiceImpl();
 
 		// atualiza venda
 		AtualizarVenda atuVen = new AtualizarVenda(next);
@@ -66,8 +70,6 @@ public class FecharEcfVenda extends Chain {
 
 	private class ValidarEstoque extends Chain {
 
-		private List<ProdEmbalagem> embalagens;
-
 		public ValidarEstoque(Chain next) throws OpenSigException {
 			super(next);
 		}
@@ -86,8 +88,8 @@ public class FecharEcfVenda extends Chain {
 						// fatorando a quantida no estoque
 						double qtd = venProd.getComEcfVendaProdutoQuantidade();
 						if (venProd.getProdEmbalagem().getProdEmbalagemId() != venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
-							qtd *= getQtdEmbalagem(venProd.getProdEmbalagem().getProdEmbalagemId());
-							qtd /= getQtdEmbalagem(venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+							qtd *= impl.getQtdEmbalagem(venProd.getProdEmbalagem().getProdEmbalagemId());
+							qtd /= impl.getQtdEmbalagem(venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 						}
 						// verificar a qtd do estoque
 						if (qtd > est.getProdEstoqueQuantidade()) {
@@ -106,21 +108,6 @@ public class FecharEcfVenda extends Chain {
 			if (next != null && invalidos.isEmpty()) {
 				next.execute();
 			}
-		}
-
-		private int getQtdEmbalagem(int embalagemId) throws Exception {
-			int unid = 1;
-			if (embalagens == null) {
-				embalagens = servico.selecionar(new ProdEmbalagem(), 0, 0, null, false).getLista();
-			}
-
-			for (ProdEmbalagem emb : embalagens) {
-				if (emb.getProdEmbalagemId() == embalagemId) {
-					unid = emb.getProdEmbalagemUnidade();
-					break;
-				}
-			}
-			return unid;
 		}
 	}
 
@@ -142,18 +129,39 @@ public class FecharEcfVenda extends Chain {
 
 				// recupera uma instância do gerenciador de entidades
 				FiltroObjeto fo1 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, venda.getComEcf().getEmpEmpresa());
-				for (ComEcfVendaProduto comProd : venda.getComEcfVendaProdutos()) {
-					if (!comProd.getComEcfVendaProdutoCancelado()) {
+				for (ComEcfVendaProduto venProd : venda.getComEcfVendaProdutos()) {
+					if (!venProd.getComEcfVendaProdutoCancelado()) {
+						// fatorando a quantida no estoque
+						double qtd = venProd.getComEcfVendaProdutoQuantidade();
+						if (venProd.getProdEmbalagem().getProdEmbalagemId() != venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
+							qtd *= impl.getQtdEmbalagem(venProd.getProdEmbalagem().getProdEmbalagemId());
+							qtd /= impl.getQtdEmbalagem(venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+						}
 						// formando os parametros
-						ParametroFormula pn1 = new ParametroFormula("prodEstoqueQuantidade", -1 * comProd.getComEcfVendaProdutoQuantidade());
+						ParametroFormula pn1 = new ParametroFormula("prodEstoqueQuantidade", -1 * qtd);
 						// formando o filtro
-						FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, comProd.getProdProduto());
+						FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, venProd.getProdProduto());
 						GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
 						// busca o item
 						ProdEstoque est = new ProdEstoque();
 						// formando o sql
 						Sql sql = new Sql(est, EComando.ATUALIZAR, gf, pn1);
 						servico.executar(em, sql);
+						
+						// remove estoque da grade caso o produto tenha
+						for (ProdGrade grade : venProd.getProdProduto().getProdGrades()) {
+							if (grade.getProdGradeBarra().equals(venProd.getComEcfVendaProdutoCodigo())) {
+								// formando os parametros
+								ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
+								// formando o filtro
+								FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
+								GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
+								// busca o item
+								Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
+								servico.executar(em, sql1);
+								break;
+							}
+						}
 					}
 				}
 

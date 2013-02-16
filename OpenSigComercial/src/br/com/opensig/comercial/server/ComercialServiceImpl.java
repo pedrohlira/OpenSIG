@@ -6,10 +6,10 @@ import java.util.Map;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.client.servico.ComercialService;
+import br.com.opensig.comercial.server.acao.CancelarEcfVenda;
 import br.com.opensig.comercial.server.acao.CancelarVenda;
 import br.com.opensig.comercial.server.acao.ExcluirCompra;
 import br.com.opensig.comercial.server.acao.ExcluirConsumo;
-import br.com.opensig.comercial.server.acao.CancelarEcfVenda;
 import br.com.opensig.comercial.server.acao.ExcluirFrete;
 import br.com.opensig.comercial.server.acao.ExcluirVenda;
 import br.com.opensig.comercial.server.acao.FecharCompra;
@@ -42,14 +42,32 @@ import br.com.opensig.fiscal.shared.modelo.ENotaStatus;
 import br.com.opensig.fiscal.shared.modelo.FisNotaEntrada;
 import br.com.opensig.fiscal.shared.modelo.FisNotaSaida;
 import br.com.opensig.fiscal.shared.modelo.FisNotaStatus;
+import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 
 public class ComercialServiceImpl extends CoreServiceImpl implements ComercialService {
+
+	private List<ProdEmbalagem> embalagens;
 
 	public ComercialServiceImpl() {
 	}
 
 	public ComercialServiceImpl(Autenticacao auth) {
 		super(auth);
+	}
+
+	public int getQtdEmbalagem(int embalagemId) throws Exception {
+		int unid = 1;
+		if (embalagens == null) {
+			embalagens = selecionar(new ProdEmbalagem(), 0, 0, null, false).getLista();
+		}
+
+		for (ProdEmbalagem emb : embalagens) {
+			if (emb.getProdEmbalagemId() == embalagemId) {
+				unid = emb.getProdEmbalagemUnidade();
+				break;
+			}
+		}
+		return unid;
 	}
 
 	@Override
@@ -65,7 +83,7 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 	}
 
 	@Override
-	public FisNotaEntrada gerarNfe(ComCompra compra, ComFrete frete) throws ComercialException{
+	public FisNotaEntrada gerarNfe(ComCompra compra, ComFrete frete) throws ComercialException {
 		try {
 			GerarNfeEntrada gerar = new GerarNfeEntrada(null, this, compra, frete, getAuth());
 			gerar.execute();
@@ -75,11 +93,11 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 			throw new ComercialException(e.getMessage());
 		}
 	}
-	
+
 	@Override
 	public void fecharCompra(ComCompra compra) throws ComercialException {
 		try {
-			new FecharCompra(null, this, compra).execute();
+			new FecharCompra(null, this, compra, getAuth()).execute();
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro no comando fecharCompra.", e);
 			throw new ComercialException(e.getMessage());
@@ -107,7 +125,7 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 			throw new ComercialException(e.getMessage());
 		}
 	}
-	
+
 	@Override
 	public void fecharConsumo(ComConsumo consumo) throws ComercialException {
 		try {
@@ -142,7 +160,7 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 			new SalvarCompra(null, this, compra).execute();
 			// verifica se fecha a compra
 			if (compra.getComCompraFechada()) {
-				new FecharCompra(null, this, new ComCompra(compra.getComCompraId())).execute();
+				new FecharCompra(null, this, new ComCompra(compra.getComCompraId()), getAuth()).execute();
 			}
 
 			compra.anularDependencia();
@@ -237,7 +255,7 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 			throw new ComercialException(e.getMessage());
 		}
 	}
-	
+
 	@Override
 	public void excluirConsumo(ComConsumo consumo) throws ComercialException {
 		try {

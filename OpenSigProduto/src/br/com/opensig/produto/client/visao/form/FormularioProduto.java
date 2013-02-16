@@ -20,7 +20,6 @@ import br.com.opensig.core.client.visao.Arvore;
 import br.com.opensig.core.client.visao.ComboEntidade;
 import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.core.client.visao.abstrato.AFormulario;
-import br.com.opensig.core.shared.modelo.EBusca;
 import br.com.opensig.core.shared.modelo.EDirecao;
 import br.com.opensig.core.shared.modelo.ExpListagem;
 import br.com.opensig.core.shared.modelo.ExpMeta;
@@ -30,11 +29,13 @@ import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.empresa.shared.modelo.EmpFornecedor;
 import br.com.opensig.produto.client.servico.ProdutoProxy;
 import br.com.opensig.produto.client.visao.lista.ListagemComposicao;
+import br.com.opensig.produto.client.visao.lista.ListagemGrades;
 import br.com.opensig.produto.client.visao.lista.ListagemPreco;
 import br.com.opensig.produto.shared.modelo.ProdCategoria;
 import br.com.opensig.produto.shared.modelo.ProdComposicao;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
+import br.com.opensig.produto.shared.modelo.ProdGrade;
 import br.com.opensig.produto.shared.modelo.ProdIpi;
 import br.com.opensig.produto.shared.modelo.ProdOrigem;
 import br.com.opensig.produto.shared.modelo.ProdPreco;
@@ -68,7 +69,6 @@ import com.gwtext.client.widgets.form.event.ComboBoxListenerAdapter;
 import com.gwtext.client.widgets.layout.ColumnLayout;
 import com.gwtext.client.widgets.layout.ColumnLayoutData;
 import com.gwtext.client.widgets.layout.FormLayout;
-import com.gwtextux.client.widgets.grid.plugins.SummaryColumnConfig;
 import com.gwtextux.client.widgets.window.ToastWindow;
 
 public class FormularioProduto extends AFormulario<ProdProduto> {
@@ -76,7 +76,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 	private Hidden hdnFornecedor;
 	private Hidden hdnFabricante;
 	private Hidden hdnCod;
-	private Hidden hdnSinc;
 	private TextField txtDescricao;
 	private TextField txtReferencia;
 	private NumberField txtCusto;
@@ -99,8 +98,10 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 	private TabPanel tabDados;
 	private ListagemPreco gridPrecos;
 	private ListagemComposicao gridComposicoes;
+	private ListagemGrades gridGrades;
 	private List<ProdPreco> precos;
 	private List<ProdComposicao> composicoes;
+	private List<ProdGrade> grades;
 	private List<ProdCategoria> categorias;
 
 	public FormularioProduto(SisFuncao funcao) {
@@ -122,9 +123,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 		hdnCod = new Hidden("prodProdutoId", "0");
 		add(hdnCod);
-
-		hdnSinc = new Hidden("prodProdutoSinc", "0");
-		add(hdnSinc);
 
 		txtNcm = new TextField(OpenSigCore.i18n.txtNcm(), "prodProdutoNcm", 80);
 		txtNcm.setAllowBlank(false);
@@ -228,9 +226,32 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		tabDados.setActiveTab(0);
 
 		gridPrecos = new ListagemPreco(true);
+		gridPrecos.getStore().addStoreListener(new StoreListenerAdapter() {
+			public void onLoad(Store store, Record[] records) {
+				if (records.length > 0) {
+					tabDados.setActiveTab(0);
+				}
+			};
+		});
 		gridComposicoes = new ListagemComposicao(true);
+		gridComposicoes.getStore().addStoreListener(new StoreListenerAdapter() {
+			public void onLoad(Store store, Record[] records) {
+				if (records.length > 0) {
+					tabDados.setActiveTab(1);
+				}
+			};
+		});
+		gridGrades = new ListagemGrades(true);
+		gridGrades.getStore().addStoreListener(new StoreListenerAdapter() {
+			public void onLoad(Store store, Record[] records) {
+				if (records.length > 0) {
+					tabDados.setActiveTab(2);
+				}
+			};
+		});
 		tabDados.add(gridPrecos);
 		tabDados.add(gridComposicoes);
+		tabDados.add(gridGrades);
 		add(tabDados);
 
 		super.inicializar();
@@ -258,6 +279,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		Collection<String[]> valores = new ArrayList<String[]>();
 		boolean retorno = treeCategoria.validarCategoria(valores);
 		String strCategorias = "";
+		int subListas = 0;
 
 		for (String[] valor : valores) {
 			strCategorias += valor[1] + "::";
@@ -271,33 +293,66 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		// valida os precos
 		precos = new ArrayList<ProdPreco>();
 		if (!gridPrecos.validar(precos)) {
+			tabDados.setActiveTab(0);
 			retorno = false;
 			new ToastWindow(OpenSigCore.i18n.txtListagem(), OpenSigCore.i18n.errLista()).show();
+		} else if (!precos.isEmpty()) {
+			subListas++;
 		}
-		
+
 		// valida a composicao
 		composicoes = new ArrayList<ProdComposicao>();
 		if (!gridComposicoes.validar(composicoes)) {
+			tabDados.setActiveTab(1);
 			retorno = false;
 			new ToastWindow(OpenSigCore.i18n.txtListagem(), OpenSigCore.i18n.errLista()).show();
+		} else if (!composicoes.isEmpty()) {
+			subListas++;
 		}
-		
-		// valida os valores
+
+		// valida os valores da composicao
 		double parcial = 0.00;
 		for (ProdComposicao comp : composicoes) {
 			parcial += comp.getProdComposicaoValor();
 		}
-
 		String strTotal = UtilClient.formataNumero(txtPreco.getValue().doubleValue(), 1, 2, true);
 		String strParcial = UtilClient.formataNumero(parcial, 1, 2, true);
-
 		if (parcial > 0.00 && !strTotal.equals(strParcial)) {
 			retorno = false;
 			new ToastWindow(OpenSigCore.i18n.msgCampoInvalido(), OpenSigCore.i18n.txtParcial() + " = " + strParcial + " :: " + OpenSigCore.i18n.txtTotal() + " = " + strTotal).show();
 		}
-		
+
+		// valida as grades
+		grades = new ArrayList<ProdGrade>();
+		if (!gridGrades.validar(grades)) {
+			tabDados.setActiveTab(2);
+			retorno = false;
+			new ToastWindow(OpenSigCore.i18n.txtListagem(), OpenSigCore.i18n.errLista()).show();
+		} else if (!grades.isEmpty()) {
+			subListas++;
+		}
+
+		// valida os valores da grade
+		double subEst = 0.00;
+		for (ProdGrade grade : grades) {
+			subEst += grade.getProdGradeEstoque();
+		}
+		String strEstoque = UtilClient.formataNumero(txtEstoque.getValue().doubleValue(), 1, 2, true);
+		String strSub = UtilClient.formataNumero(subEst, 1, 2, true);
+		if (subEst > 0.00 && !strEstoque.equals(strSub)) {
+			retorno = false;
+			new ToastWindow(OpenSigCore.i18n.msgCampoInvalido(), OpenSigCore.i18n.txtParcial() + " = " + strSub + " :: " + OpenSigCore.i18n.txtEstoque() + " = " + strEstoque).show();
+		}
+
+		// somente pode ter um dos tres tipos
+		if (subListas > 1) {
+			retorno = false;
+			new ToastWindow(OpenSigCore.i18n.txtListagem(), OpenSigCore.i18n.errLista()).show();
+		}
+
 		classe.setProdPrecos(precos);
 		classe.setProdComposicoes(composicoes);
+		classe.setProdGrades(grades);
 		classe.setProdProdutoId(Integer.valueOf(hdnCod.getValueAsString()));
 		classe.setProdProdutoNcm(txtNcm.getValueAsString());
 		classe.setProdProdutoBarra(txtBarra.getValueAsString().equals("") ? null : txtBarra.getValueAsString());
@@ -313,7 +368,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		}
 		classe.setProdProdutoDescricao(txtDescricao.getValueAsString());
 		classe.setProdProdutoAtivo(chkAtivo.getValue());
-		classe.setProdProdutoSinc(Integer.valueOf(hdnSinc.getValueAsString()));
 		if (!hdnFornecedor.getValueAsString().equals("0")) {
 			EmpFornecedor fornecedor = new EmpFornecedor(Integer.valueOf(hdnFornecedor.getValueAsString()));
 			classe.setEmpFornecedor(fornecedor);
@@ -360,13 +414,19 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 	public void limparDados() {
 		getForm().reset();
+		treeCategoria.getLblValidacao().hide();
+
 		FiltroNumero fn = new FiltroNumero("prodPrecoId", ECompara.IGUAL, 0);
 		gridPrecos.getProxy().setFiltroPadrao(fn);
 		gridPrecos.getStore().removeAll();
+
 		FiltroNumero fn1 = new FiltroNumero("prodComposicaoId", ECompara.IGUAL, 0);
 		gridComposicoes.getProxy().setFiltroPadrao(fn1);
 		gridComposicoes.getStore().removeAll();
-		treeCategoria.getLblValidacao().hide();
+
+		FiltroNumero fn2 = new FiltroNumero("prodGradeId", ECompara.IGUAL, 0);
+		gridGrades.getProxy().setFiltroPadrao(fn2);
+		gridGrades.getStore().removeAll();
 	}
 
 	public void mostrarDados() {
@@ -396,6 +456,9 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 			gridComposicoes.getProxy().setFiltroPadrao(fo1);
 			gridComposicoes.getStore().reload();
 
+			gridGrades.getProxy().setFiltroPadrao(fo);
+			gridGrades.getStore().reload();
+
 			String[] objs = rec.getAsString("prodProdutoCategoria").split("::");
 			treeCategoria.selecionar(objs);
 		} else {
@@ -410,7 +473,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 		if (duplicar) {
 			hdnCod.setValue("0");
-			hdnSinc.setValue("0");
 			duplicar = false;
 		}
 	}
@@ -668,11 +730,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 				metadados.add(null);
 			} else {
 				ExpMeta meta = new ExpMeta(gridPrecos.getModelos().getColumnHeader(i), gridPrecos.getModelos().getColumnWidth(i), null);
-				if (gridPrecos.getModelos().getColumnConfigs()[i] instanceof SummaryColumnConfig) {
-					SummaryColumnConfig col = (SummaryColumnConfig) gridPrecos.getModelos().getColumnConfigs()[i];
-					String tp = col.getSummaryType().equals("average") ? "AVG" : col.getSummaryType().toUpperCase();
-					meta.setGrupo(EBusca.getBusca(tp));
-				}
 				metadados.add(meta);
 			}
 		}
@@ -699,23 +756,18 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		List<ExpMeta> metadados1 = new ArrayList<ExpMeta>();
 		for (int i = 0; i < gridComposicoes.getModelos().getColumnCount(); i++) {
 			if (gridComposicoes.getModelos().isHidden(i)) {
-				metadados.add(null);
+				metadados1.add(null);
 			} else {
 				ExpMeta meta = new ExpMeta(gridComposicoes.getModelos().getColumnHeader(i), gridComposicoes.getModelos().getColumnWidth(i), null);
-				if (gridComposicoes.getModelos().getColumnConfigs()[i] instanceof SummaryColumnConfig) {
-					SummaryColumnConfig col = (SummaryColumnConfig) gridComposicoes.getModelos().getColumnConfigs()[i];
-					String tp = col.getSummaryType().equals("average") ? "AVG" : col.getSummaryType().toUpperCase();
-					meta.setGrupo(EBusca.getBusca(tp));
-				}
 				metadados1.add(meta);
 			}
 		}
 
 		// alterando campos visiveis
-		metadados.set(2, metadados1.get(1));
-		metadados.set(1, null);
-		metadados.set(4, metadados1.get(3));
-		metadados.set(3, null);
+		metadados1.set(2, metadados1.get(1));
+		metadados1.set(1, null);
+		metadados1.set(4, metadados1.get(3));
+		metadados1.set(3, null);
 
 		SortState ordem1 = gridComposicoes.getStore().getSortState();
 		ProdComposicao composicao = new ProdComposicao();
@@ -730,10 +782,33 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		composicoes.setNome(gridComposicoes.getTitle());
 		composicoes.setFiltro(filtro1);
 
+		// grades
+		List<ExpMeta> metadados2 = new ArrayList<ExpMeta>();
+		for (int i = 0; i < gridGrades.getModelos().getColumnCount(); i++) {
+			if (gridGrades.getModelos().isHidden(i)) {
+				metadados2.add(null);
+			} else {
+				ExpMeta meta = new ExpMeta(gridGrades.getModelos().getColumnHeader(i), gridGrades.getModelos().getColumnWidth(i), null);
+				metadados2.add(meta);
+			}
+		}
+
+		SortState ordem2 = gridGrades.getStore().getSortState();
+		ProdGrade grade = new ProdGrade();
+		grade.setCampoOrdem(ordem2.getField());
+		grade.setOrdemDirecao(EDirecao.valueOf(ordem2.getDirection().getDirection()));
+
+		ExpListagem<ProdGrade> grades = new ExpListagem<ProdGrade>();
+		grades.setClasse(grade);
+		grades.setMetadados(metadados2);
+		grades.setNome(gridGrades.getTitle());
+		grades.setFiltro(filtro);
+
 		// sub listagens
 		expLista = new ArrayList<ExpListagem>();
 		expLista.add(precos);
 		expLista.add(composicoes);
+		expLista.add(grades);
 	}
 
 	public Hidden getHdnFornecedor() {
@@ -750,14 +825,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 	public void setHdnFabricante(Hidden hdnFabricante) {
 		this.hdnFabricante = hdnFabricante;
-	}
-
-	public Hidden getHdnSinc() {
-		return hdnSinc;
-	}
-
-	public void setHdnSinc(Hidden hdnSinc) {
-		this.hdnSinc = hdnSinc;
 	}
 
 	public NumberField getTxtEstoque() {
@@ -898,6 +965,14 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 	public void setPrecos(List<ProdPreco> precos) {
 		this.precos = precos;
+	}
+
+	public List<ProdGrade> getGrades() {
+		return grades;
+	}
+
+	public void setGrades(List<ProdGrade> grades) {
+		this.grades = grades;
 	}
 
 	public ListagemComposicao getGridComposicoes() {

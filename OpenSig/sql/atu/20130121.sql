@@ -31,7 +31,7 @@ ALTER TABLE `com_ecf_z_totais`
 ADD UNIQUE INDEX `UK_com_ecf_z_totais_1` (`com_ecf_z_id` ASC, `com_ecf_z_totais_codigo` ASC) ;
 
 # Removendo o campo de incentivo dos produtos e deletando a tabela de incentivo fiscal e sua funcao
-ALTER TABLE `prod_produto` DROP COLUMN `prod_produto_incentivo` ;
+ALTER TABLE `prod_produto` DROP COLUMN `prod_produto_incentivo`, DROP COLUMN `prod_produto_sinc` ;
 DROP TABLE `fis_incentivo_estado`;
 DELETE FROM `sis_funcao` WHERE `sis_funcao_classe`='br.com.opensig.fiscal.client.controlador.comando.ComandoIncentivo';
 
@@ -49,28 +49,45 @@ INSERT INTO `prod_origem` (`prod_origem_id`, `prod_origem_descricao`) VALUES ('8
 UPDATE `prod_origem` SET `prod_origem_valor` = `prod_origem_id` - 1, `prod_origem_descricao` = UPPER(`prod_origem_descricao`);
 INSERT INTO `sis_funcao` (`sis_modulo_id`, `sis_funcao_classe`, `sis_funcao_ordem`, `sis_funcao_subordem`, `sis_funcao_ativo`) VALUES ('4', 'br.com.opensig.produto.client.controlador.comando.ComandoOrigem', '9', '0', '1');
 
+# Adicionando o cascate a tabela de estoque e composicao de produtos
+ALTER TABLE `prod_estoque` DROP FOREIGN KEY `FK_prod_estoque_2` ;
+ALTER TABLE `prod_estoque` 
+  ADD CONSTRAINT `FK_prod_estoque_2`
+  FOREIGN KEY (`prod_produto_id` )
+  REFERENCES `prod_produto` (`prod_produto_id` )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `prod_composicao` DROP FOREIGN KEY `FK_prod_composicao_1` ;
+ALTER TABLE `prod_composicao` 
+  ADD CONSTRAINT `FK_prod_composicao_1`
+  FOREIGN KEY (`prod_produto_principal` )
+  REFERENCES `prod_produto` (`prod_produto_id` )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
 # Criando as tabelas que vao tratar da funcionalidade de grade dos produtos
-CREATE  TABLE `prod_sub` (
-  `prod_sub_id` INT NOT NULL AUTO_INCREMENT ,
-  `prod_sub_nome` VARCHAR(50) NOT NULL ,
-  `prod_sub_tipo` VARCHAR(1) NOT NULL ,
-  PRIMARY KEY (`prod_sub_id`) );
+CREATE  TABLE `prod_grade_tipo` (
+  `prod_grade_tipo_id` INT NOT NULL AUTO_INCREMENT ,
+  `prod_grade_tipo_nome` VARCHAR(50) NOT NULL ,
+  `prod_grade_tipo_opcao` VARCHAR(1) NOT NULL ,
+  PRIMARY KEY (`prod_grade_tipo_id`) );
 
 CREATE  TABLE `prod_grade` (
   `prod_grade_id` INT NOT NULL AUTO_INCREMENT ,
   `prod_produto_id` INT NOT NULL ,
-  `prod_grade_barra` VARCHAR(14) NULL DEFAULT NULL ,
+  `prod_grade_barra` VARCHAR(14) NOT NULL ,
   `prod_grade_tamanho` VARCHAR(50) NOT NULL ,
   `prod_grade_cor` VARCHAR(50) NOT NULL ,
-  `prod_grade_tipo` VARCHAR(50) NOT NULL ,
+  `prod_grade_opcao` VARCHAR(50) NOT NULL ,
   PRIMARY KEY (`prod_grade_id`) ,
   UNIQUE INDEX `prod_grade_barra_UNIQUE` (`prod_grade_barra` ASC) ,
-  INDEX `FK_prod_grade_idx` (`prod_produto_id` ASC) ,
+  INDEX `FK_prod_grade_idx` USING BTREE (`prod_produto_id` ASC) ,
   CONSTRAINT `FK_prod_grade_1`
     FOREIGN KEY (`prod_produto_id` )
     REFERENCES `prod_produto` (`prod_produto_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
 
 CREATE  TABLE `prod_estoque_grade` (
   `prod_estoque_grade_id` INT NOT NULL AUTO_INCREMENT ,
@@ -78,8 +95,8 @@ CREATE  TABLE `prod_estoque_grade` (
   `prod_grade_id` INT NOT NULL ,
   `prod_estoque_grade_quantidade` DECIMAL(10,4) NOT NULL ,
   PRIMARY KEY (`prod_estoque_grade_id`) ,
-  INDEX `FK_ prod_estoque_grade_1_idx` (`emp_empresa_id` ASC) ,
-  INDEX `FK_ prod_estoque_grade_2_idx` (`prod_grade_id` ASC) ,
+  INDEX `FK_ prod_estoque_grade_1_idx` USING BTREE (`emp_empresa_id` ASC) ,
+  INDEX `FK_ prod_estoque_grade_2_idx` USING BTREE (`prod_grade_id` ASC) ,
   CONSTRAINT `FK_ prod_estoque_grade_1`
     FOREIGN KEY (`emp_empresa_id` )
     REFERENCES `emp_empresa` (`emp_empresa_id` )
@@ -88,5 +105,19 @@ CREATE  TABLE `prod_estoque_grade` (
   CONSTRAINT `FK_ prod_estoque_grade_2`
     FOREIGN KEY (`prod_grade_id` )
     REFERENCES `prod_grade` (`prod_grade_id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+# Adicionando a funcao de tipo de grade ao menu
+INSERT INTO `sis_funcao` (`sis_modulo_id`, `sis_funcao_classe`, `sis_funcao_ordem`, `sis_funcao_subordem`, `sis_funcao_ativo`) VALUES ('4', 'br.com.opensig.produto.client.controlador.comando.ComandoGrade', '4', '1', '1');
+INSERT INTO `sis_funcao` (`sis_modulo_id`, `sis_funcao_classe`, `sis_funcao_ordem`, `sis_funcao_subordem`, `sis_funcao_ativo`) VALUES ('4', 'br.com.opensig.produto.client.controlador.comando.ComandoGradeTipo', '4', '2', '1');
+
+# Adicionando novo campo para produto da venda, assim podendo identificar se caso tenha grade, qual o sub-produto
+ALTER TABLE `com_venda_produto` ADD COLUMN `com_venda_produto_barra` VARCHAR(14) NULL DEFAULT NULL  AFTER `prod_embalagem_id` ;
+UPDATE `com_venda_produto`, `prod_produto` SET `com_venda_produto_barra` = `prod_produto_barra`
+WHERE `com_venda_produto`.`prod_produto_id` = `prod_produto`.`prod_produto_id`;
+
+# Adicionando novo campo para produto da nota, assim podendo identificar se caso tenha grade, qual o sub-produto
+ALTER TABLE `com_ecf_nota_produto` ADD COLUMN `com_ecf_nota_produto_barra` VARCHAR(14) NULL DEFAULT NULL  AFTER `prod_embalagem_id` ;
+UPDATE `com_ecf_nota_produto`, `prod_produto` SET `com_ecf_nota_produto_barra` = `prod_produto_barra`
+WHERE `com_ecf_nota_produto`.`prod_produto_id` = `prod_produto`.`prod_produto_id`;

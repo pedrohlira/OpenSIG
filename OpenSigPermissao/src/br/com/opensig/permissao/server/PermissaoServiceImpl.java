@@ -223,7 +223,7 @@ public class PermissaoServiceImpl extends CoreServiceImpl implements PermissaoSe
 
 		// gera o texto para envio ao servidor de utilizacao
 		StringBuilder sb = new StringBuilder();
-		sb.append("cli.cnpj").append("=").append(emp.getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("[^0-9]", "")).append("\n");
+		sb.append("cli.cnpj").append("=").append(emp.getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("\\D", "")).append("\n");
 		sb.append("out.validade").append("=").append("null");
 		String local = UtilServer.encriptar(sb.toString());
 

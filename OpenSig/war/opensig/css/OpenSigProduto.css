@@ -20,6 +20,10 @@
     background: url(../img/preco.png) no-repeat center left !important;
 }
 
+.icon-grade {
+    background: url(../img/grade.png) no-repeat center left !important;
+}
+
 .icon-pesquisa {
     background: url(../img/pesquisa.png) no-repeat center left !important;
 }

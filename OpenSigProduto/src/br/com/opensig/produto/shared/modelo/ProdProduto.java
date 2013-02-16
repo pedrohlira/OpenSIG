@@ -96,6 +96,9 @@ public class ProdProduto extends Dados implements Serializable {
 	@XmlTransient
 	private List<ProdEstoque> prodEstoques;
 
+	@OneToMany(mappedBy = "prodProduto", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	private List<ProdGrade> prodGrades;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "prod_tributacao_id")
 	@XmlTransient
@@ -130,10 +133,6 @@ public class ProdProduto extends Dados implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ProdEmbalagem prodEmbalagem;
 
-	@Column(name = "prod_produto_sinc")
-	@XmlTransient
-	private int prodProdutoSinc;
-
 	@Transient
 	private Double prodProdutoEstoque;
 
@@ -165,7 +164,8 @@ public class ProdProduto extends Dados implements Serializable {
 		Colecao col = new Colecao("ProdEstoque", "t.prodEstoques", "JOIN", "t1");
 		Colecao col1 = new Colecao("ProdPreco", "t.prodPrecos", "LEFT JOIN", "t2");
 		Colecao col2 = new Colecao("ProdComposicao", "t.prodComposicoes", "LEFT JOIN", "t3");
-		setColecao(new Colecao[] { col, col1, col2 });
+		Colecao col3 = new Colecao("ProdGrade", "t.prodGrades", "LEFT JOIN", "t4");
+		setColecao(new Colecao[] { col, col1, col2, col3 });
 	}
 
 	public int getProdProdutoId() {
@@ -288,6 +288,14 @@ public class ProdProduto extends Dados implements Serializable {
 		this.prodPrecos = prodPrecos;
 	}
 
+	public List<ProdGrade> getProdGrades() {
+		return prodGrades;
+	}
+
+	public void setProdGrades(List<ProdGrade> prodGrades) {
+		this.prodGrades = prodGrades;
+	}
+
 	public List<ProdComposicao> getProdComposicoes() {
 		return prodComposicoes;
 	}
@@ -350,14 +358,6 @@ public class ProdProduto extends Dados implements Serializable {
 
 	public void setProdEmbalagem(ProdEmbalagem prodEmbalagem) {
 		this.prodEmbalagem = prodEmbalagem;
-	}
-
-	public int getProdProdutoSinc() {
-		return prodProdutoSinc;
-	}
-
-	public void setProdProdutoSinc(int prodProdutoSinc) {
-		this.prodProdutoSinc = prodProdutoSinc;
 	}
 
 	public Double getProdProdutoEstoque() {
@@ -425,22 +425,21 @@ public class ProdProduto extends Dados implements Serializable {
 	}
 
 	public String[] toArray() {
-		double estoque = 0;
 		for (ProdEstoque est : prodEstoques) {
 			if (est.getEmpEmpresa().getEmpEmpresaId() == getEmpresa()) {
-				estoque = est.getProdEstoqueQuantidade();
+				prodProdutoEstoque = est.getProdEstoqueQuantidade();
 				break;
 			}
 		}
 
 		return new String[] { prodProdutoId + "", prodProdutoNcm, prodProdutoBarra, prodProdutoDescricao, prodProdutoReferencia, prodProdutoCusto + "", prodProdutoPreco + "",
-				prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), prodProdutoVolume + "", estoque + "", prodProdutoCategoria, empFornecedor.getEmpFornecedorId() + "",
+				prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), prodProdutoVolume + "", prodProdutoEstoque + "", prodProdutoCategoria, empFornecedor.getEmpFornecedorId() + "",
 				empFornecedor.getEmpEntidade().getEmpEntidadeNome1(), empFabricante.getEmpFornecedorId() + "", empFabricante.getEmpEntidade().getEmpEntidadeNome1(),
 				prodTributacao.getProdTributacaoId() + "", prodTributacao.getProdTributacaoNome(), prodTributacao.getProdTributacaoCst(), prodTributacao.getProdTributacaoCfop() + "",
 				prodTributacao.getProdTributacaoDentro() + "", prodTributacao.getProdTributacaoFora() + "", prodTributacao.getProdTributacaoDecreto(), prodIpi.getProdIpiId() + "",
 				prodIpi.getProdIpiNome(), prodIpi.getProdIpiAliquota() + "", prodTipo.getProdTipoId() + "", prodTipo.getProdTipoDescricao(), prodOrigem.getProdOrigemId() + "",
 				prodOrigem.getProdOrigemDescricao(), UtilClient.getDataHoraGrid(prodProdutoCadastrado), UtilClient.getDataHoraGrid(prodProdutoAlterado), getProdProdutoAtivo() + "",
-				prodProdutoSinc + "", prodProdutoObservacao };
+				prodProdutoObservacao };
 	}
 
 	public Dados getObjeto(String campo) {
@@ -467,6 +466,7 @@ public class ProdProduto extends Dados implements Serializable {
 		prodPrecos = null;
 		prodComposicoes = null;
 		prodEstoques = null;
+		prodGrades = null;
 		prodTributacao = null;
 		prodIpi = null;
 		prodTipo = null;

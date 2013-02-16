@@ -184,6 +184,20 @@
 		<imagem>icon-ipi</imagem>
 	</funcao>
 	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoGrade
+		</classe>
+		<nome>Grid</nome>
+		<descricao>Administers the grid of products.</descricao>
+		<imagem>icon-grade</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoGradeTipo
+		</classe>
+		<nome>Types of Grid</nome>
+		<descricao>Administers the types of grid of products.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoPesquisa
 		</classe>
 		<nome>Search</nome>

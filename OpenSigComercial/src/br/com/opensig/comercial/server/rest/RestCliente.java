@@ -297,7 +297,7 @@ public class RestCliente extends ARest {
 	 *             dispara uma exececao caso nao consiga executar.
 	 */
 	private FiltroTexto getFiltroCnpj(String campo) throws ParseException {
-		cnpj = cnpj.replaceAll("[^0-9]", "");
+		cnpj = cnpj.replaceAll("\\D", "");
 		cnpj = UtilServer.formataTexto(cnpj, "##.###.###/####-##");
 		return new FiltroTexto(campo, ECompara.IGUAL, cnpj);
 	}

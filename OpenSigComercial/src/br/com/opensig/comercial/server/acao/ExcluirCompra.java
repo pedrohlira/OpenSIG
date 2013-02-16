@@ -1,11 +1,10 @@
 package br.com.opensig.comercial.server.acao;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
+import br.com.opensig.comercial.server.ComercialServiceImpl;
 import br.com.opensig.comercial.shared.modelo.ComCompra;
 import br.com.opensig.comercial.shared.modelo.ComCompraProduto;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
@@ -26,12 +25,12 @@ import br.com.opensig.core.shared.modelo.Sql;
 import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinPagamento;
 import br.com.opensig.fiscal.shared.modelo.FisNotaEntrada;
-import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
 
 public class ExcluirCompra extends Chain {
 
 	private CoreServiceImpl servico;
+	private ComercialServiceImpl impl;
 	private ComCompra compra;
 	private Autenticacao auth;
 
@@ -40,6 +39,7 @@ public class ExcluirCompra extends Chain {
 		this.servico = servico;
 		this.compra = compra;
 		this.auth = auth;
+		this.impl = new ComercialServiceImpl();
 
 		// deletar compra
 		DeletarCompra delComp = new DeletarCompra(next);
@@ -50,7 +50,11 @@ public class ExcluirCompra extends Chain {
 		// atauliza estoque
 		AtualizarEstoque atuEst = new AtualizarEstoque(atuConta);
 		// seleciona os produtos
-		this.next = atuEst;
+		if (!auth.getConf().get("estoque.ativo").equalsIgnoreCase("ignorar")) {
+			this.setNext(atuEst);
+		} else {
+			this.setNext(atuConta);
+		}
 	}
 
 	public void execute() throws OpenSigException {
@@ -63,8 +67,6 @@ public class ExcluirCompra extends Chain {
 
 	private class AtualizarEstoque extends Chain {
 
-		private List<ProdEmbalagem> embalagens;
-		
 		public AtualizarEstoque(Chain next) throws OpenSigException {
 			super(next);
 		}
@@ -86,8 +88,8 @@ public class ExcluirCompra extends Chain {
 						// fatorando a quantida no estoque
 						double qtd = comProd.getComCompraProdutoQuantidade();
 						if(comProd.getProdEmbalagem().getProdEmbalagemId() != comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()){
-							qtd *= getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
-							qtd /= getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+							qtd *= impl.getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
+							qtd /= impl.getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 						}
 						// formando os parametros
 						ParametroFormula pn1 = new ParametroFormula("prodEstoqueQuantidade", -1 * qtd);
@@ -117,21 +119,6 @@ public class ExcluirCompra extends Chain {
 				em.close();
 				emf.close();
 			}
-		}
-		
-		private int getQtdEmbalagem(int embalagemId) throws Exception {
-			int unid = 1;
-			if (embalagens == null) {
-				embalagens = servico.selecionar(new ProdEmbalagem(), 0, 0, null, false).getLista();
-			}
-
-			for (ProdEmbalagem emb : embalagens) {
-				if (emb.getProdEmbalagemId() == embalagemId) {
-					unid = emb.getProdEmbalagemUnidade();
-					break;
-				}
-			}
-			return unid;
 		}
 	}
 

@@ -471,7 +471,7 @@ public class RestFiscal extends ARest {
 			String[] login = creds[0].split("@");
 			// separado os dados
 			String usuario = login[0];
-			cnpj = login[1].replaceAll("[^0-9]", "");
+			cnpj = login[1].replaceAll("\\D", "");
 			String senha = creds[1];
 
 			// seleciona a empresa

@@ -13,6 +13,9 @@
 		<class>br.com.opensig.produto.shared.modelo.ProdCategoria</class>
 		<class>br.com.opensig.produto.shared.modelo.ProdEstoque</class>
 		<class>br.com.opensig.produto.shared.modelo.ProdOrigem</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdGrade</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdEstoqueGrade</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdGradeTipo</class>
 		<class>br.com.opensig.empresa.shared.modelo.EmpContato</class>
 		<class>br.com.opensig.empresa.shared.modelo.EmpContatoTipo</class>
 		<class>br.com.opensig.empresa.shared.modelo.EmpEndereco</class>

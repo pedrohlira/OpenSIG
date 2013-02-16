@@ -20,8 +20,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
  * Classe que representa um estoque de produtos no sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
- * @since 27/05/2010
  */
 @Entity
 @Table(name = "prod_estoque")

@@ -185,6 +185,20 @@
 		<imagem>icon-ipi</imagem>
 	</funcao>
 	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoGrade
+		</classe>
+		<nome>Grade</nome>
+		<descricao>Administrar a grade dos produtos.</descricao>
+		<imagem>icon-grade</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoGradeTipo
+		</classe>
+		<nome>Tipo de Grades</nome>
+		<descricao>Administrar os tipos das grades dos produtos.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoPesquisa
 		</classe>
 		<nome>Pesquisa</nome>

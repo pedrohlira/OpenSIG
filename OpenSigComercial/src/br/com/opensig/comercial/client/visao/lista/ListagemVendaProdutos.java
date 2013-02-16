@@ -48,7 +48,7 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 	public void inicializar() {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comVendaProdutoId"), new IntegerFieldDef("comVenda.comVendaId"), new IntegerFieldDef("empEmpresaId"), new StringFieldDef("empEmpresa"),
-				new StringFieldDef("empCliente"), new StringFieldDef("empFornecedor"), new IntegerFieldDef("prodProdutoId"), new StringFieldDef("prodProduto.prodProdutoBarra"),
+				new StringFieldDef("empCliente"), new StringFieldDef("empFornecedor"), new IntegerFieldDef("prodProdutoId"), new StringFieldDef("comVendaProdutoBarra"),
 				new StringFieldDef("prodProduto.prodProdutoDescricao"), new StringFieldDef("prodProduto.prodProdutoReferencia"), new DateFieldDef("comVenda.comVendaData"),
 				new FloatFieldDef("comVendaProdutoQuantidade"), new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"),
 				new FloatFieldDef("comVendaProdutoBruto"), new FloatFieldDef("comVendaProdutoDesconto"), new FloatFieldDef("comVendaProdutoLiquido"), new FloatFieldDef("comVendaProdutoTotalBruto"),
@@ -118,7 +118,7 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		ccProdId.setHidden(true);
 		ccProdId.setFixed(true);
 
-		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "prodProduto.prodProdutoBarra", 100, true);
+		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "comVendaProdutoBarra", 100, true);
 
 		ColumnConfig ccProduto = new ColumnConfig(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoDescricao", 250, true);
 
@@ -225,9 +225,10 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		for (Record rec : recs) {
 			try {
 				int prodId = rec.getAsInteger("prodProdutoId");
+				String barra = rec.getAsString("comVendaProdutoBarra");
 				double quantidade = rec.getAsDouble("comVendaProdutoQuantidade");
 				int embalagemId = rec.getAsInteger("prodEmbalagem.prodEmbalagemId");
-				int estoque = UtilClient.CONF.get("estoque.ativo").equalsIgnoreCase("nao") ? 0 : rec.getAsInteger("comVendaProdutoEstoque");
+				int estoque = UtilClient.CONF.get("estoque.ativo").equalsIgnoreCase("sim") ? rec.getAsInteger("comVendaProdutoEstoque") : 0;
 				double bruto = rec.getAsDouble("comVendaProdutoBruto");
 				double desconto = rec.getAsDouble("comVendaProdutoDesconto");
 				double liquido = rec.getAsDouble("comVendaProdutoLiquido");
@@ -242,6 +243,7 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 
 				ComVendaProduto venProduto = new ComVendaProduto();
 				venProduto.setProdProduto(new ProdProduto(prodId));
+				venProduto.setComVendaProdutoBarra(barra);
 				venProduto.setComVendaProdutoQuantidade(quantidade);
 				venProduto.setProdEmbalagem(new ProdEmbalagem(embalagemId));
 				venProduto.setComVendaProdutoBruto(bruto);

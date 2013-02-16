@@ -117,7 +117,7 @@ public abstract class ARest {
 			
 			// realiza a validacao
 			if (ecf != null) {
-				if (!cnpj.equals(ecf.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("[^0-9]", ""))) {
+				if (!cnpj.equals(ecf.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("\\D", ""))) {
 					throw new RestException(Status.UNAUTHORIZED);
 				}
 			} else {
