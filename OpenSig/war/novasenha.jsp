@@ -24,7 +24,7 @@
 	String redir = "document.location = '/';";
 
 	if (email == null || id == null || email.isEmpty() || id.isEmpty()) {
-		msg = "alert('Email ou Id inválidos');";
+		msg = "alert('Email ou Id inválidos');document.location.href = '/';";
 	} else {
 		SisUsuario usuario = new SisUsuario();
 		FiltroTexto ft1 = new FiltroTexto("sisUsuarioEmail",

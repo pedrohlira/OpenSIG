@@ -293,10 +293,8 @@ public class RestCliente extends ARest {
 	 * @param campo
 	 *            o nome do campo a ser usadao.
 	 * @return Um objeto do tipo filtro de texto.
-	 * @throws ParseException
-	 *             dispara uma exececao caso nao consiga executar.
 	 */
-	private FiltroTexto getFiltroCnpj(String campo) throws ParseException {
+	private FiltroTexto getFiltroCnpj(String campo) {
 		cnpj = cnpj.replaceAll("\\D", "");
 		cnpj = UtilServer.formataTexto(cnpj, "##.###.###/####-##");
 		return new FiltroTexto(campo, ECompara.IGUAL, cnpj);

@@ -194,8 +194,8 @@
 	<funcao>
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoGradeTipo
 		</classe>
-		<nome>Tipo de Grades</nome>
-		<descricao>Administrar os tipos das grades dos produtos.</descricao>
+		<nome>Tipos de Grade</nome>
+		<descricao>Administrar os tipos da grade dos produtos.</descricao>
 		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>

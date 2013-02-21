@@ -76,6 +76,9 @@ public class ProdTipo extends Dados implements Serializable {
 		return new String[] { prodTipoId + "", prodTipoValor, prodTipoDescricao };
 	}
 
-	public void anularDependencia() {
+	@Override
+	public String toString() {
+		// utilizado pelo rest server, para enviar o dado como o openpdv recebe.
+		return prodTipoValor;
 	}
 }

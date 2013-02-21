@@ -84,4 +84,28 @@ public class SalvarReceber extends Chain {
 		}
 	}
 
+	public CoreServiceImpl getServico() {
+		return servico;
+	}
+
+	public void setServico(CoreServiceImpl servico) {
+		this.servico = servico;
+	}
+
+	public FinReceber getReceber() {
+		return receber;
+	}
+
+	public void setReceber(FinReceber receber) {
+		this.receber = receber;
+	}
+
+	public List<FinCategoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<FinCategoria> categorias) {
+		this.categorias = categorias;
+	}
+
 }

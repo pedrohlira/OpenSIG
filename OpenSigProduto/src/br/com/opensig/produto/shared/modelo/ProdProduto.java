@@ -163,9 +163,8 @@ public class ProdProduto extends Dados implements Serializable {
 		this.prodProdutoId = prodProdutoId;
 		Colecao col = new Colecao("ProdEstoque", "t.prodEstoques", "JOIN", "t1");
 		Colecao col1 = new Colecao("ProdPreco", "t.prodPrecos", "LEFT JOIN", "t2");
-		Colecao col2 = new Colecao("ProdComposicao", "t.prodComposicoes", "LEFT JOIN", "t3");
-		Colecao col3 = new Colecao("ProdGrade", "t.prodGrades", "LEFT JOIN", "t4");
-		setColecao(new Colecao[] { col, col1, col2, col3 });
+		Colecao col2 = new Colecao("ProdGrade", "t.prodGrades", "LEFT JOIN", "t3");
+		setColecao(new Colecao[] { col, col1, col2 });
 	}
 
 	public int getProdProdutoId() {

@@ -11,6 +11,7 @@ import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.core.shared.modelo.IFavorito;
 
 import com.gwtext.client.data.BooleanFieldDef;
+import com.gwtext.client.data.DateFieldDef;
 import com.gwtext.client.data.FieldDef;
 import com.gwtext.client.data.IntegerFieldDef;
 import com.gwtext.client.data.StringFieldDef;
@@ -41,7 +42,7 @@ public abstract class AListagemEntidade<E extends Dados> extends AListagem<E> {
 		listaCampos.add(new StringFieldDef("empEntidade.empEntidadeDocumento3"));
 		listaCampos.add(new BooleanFieldDef("empEntidade.empEntidadeAtivo"));
 		listaCampos.add(new StringFieldDef("empEntidade.empEntidadeObservacao"));
-		listaCampos.add(new StringFieldDef("empEntidade.empEntidadeData"));
+		listaCampos.add(new DateFieldDef("empEntidade.empEntidadeData"));
 
 		// colunas
 		ccEntidade = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtEntidade(), "empEntidade.empEntidadeId", 100, true);

@@ -76,4 +76,9 @@ public class ProdOrigem extends Dados implements Serializable {
 		return new String[] { prodOrigemId + "", prodOrigemValor + "", prodOrigemDescricao };
 	}
 	
+	@Override
+	public String toString() {
+		// utilizado pelo rest server, para enviar o dado como o openpdv recebe.
+		return prodOrigemValor + "";
+	}
 }

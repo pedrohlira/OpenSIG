@@ -548,13 +548,15 @@ public class UtilServer extends HttpServlet {
 	 * @param mascara
 	 *            a mascara a ser usada.
 	 * @return o texto formatado.
-	 * @throws ParseException
-	 *             caso ocorra erro.
 	 */
-	public static String formataTexto(String texto, String mascara) throws ParseException {
-		MaskFormatter mf = new MaskFormatter(mascara);
-		mf.setValueContainsLiteralCharacters(false);
-		return mf.valueToString(texto);
+	public static String formataTexto(String texto, String mascara) {
+		try {
+			MaskFormatter mf = new MaskFormatter(mascara);
+			mf.setValueContainsLiteralCharacters(false);
+			return mf.valueToString(texto);
+		} catch (ParseException e) {
+			return texto;
+		}
 	}
 
 	/**

@@ -112,6 +112,14 @@
 	font-weight: bold;
 }
 
+.vermelho {
+	color: red;
+}
+
+.azul {
+	color: blue;
+}
+
 .icon-voltar {
 	background: url(../img/voltar.png) no-repeat center left !important;
 }

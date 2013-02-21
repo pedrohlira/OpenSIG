@@ -6,8 +6,10 @@ INSERT INTO `emp_entidade`
 `emp_entidade_nome2`,
 `emp_entidade_documento1`,
 `emp_entidade_documento2`,
+`emp_entidade_documento3`,
 `emp_entidade_ativo`,
-`emp_entidade_observacao`)
+`emp_entidade_observacao`,
+`emp_entidade_data`)
 VALUES
 (
 1,
@@ -16,8 +18,10 @@ VALUES
 'EMPRESA',
 '00.000.000/0000-00',
 'ISENTO',
+'ISENTO',
 1,
-''
+'',
+CURRENT_DATE()
 );
 
 INSERT INTO `emp_entidade`
@@ -27,8 +31,10 @@ INSERT INTO `emp_entidade`
 `emp_entidade_nome2`,
 `emp_entidade_documento1`,
 `emp_entidade_documento2`,
+`emp_entidade_documento3`,
 `emp_entidade_ativo`,
-`emp_entidade_observacao`)
+`emp_entidade_observacao`,
+`emp_entidade_data`)
 VALUES
 (
 2,
@@ -37,8 +43,10 @@ VALUES
 'FORNECEDOR',
 '00.000.000/0000-00',
 'ISENTO',
+'ISENTO',
 1,
-''
+'',
+CURRENT_DATE()
 );
 
 INSERT INTO `emp_entidade`
@@ -48,8 +56,10 @@ INSERT INTO `emp_entidade`
 `emp_entidade_nome2`,
 `emp_entidade_documento1`,
 `emp_entidade_documento2`,
+`emp_entidade_documento3`,
 `emp_entidade_ativo`,
-`emp_entidade_observacao`)
+`emp_entidade_observacao`,
+`emp_entidade_data`)
 VALUES
 (
 3,
@@ -58,8 +68,10 @@ VALUES
 'TRANSPORTADORA',
 '00.000.000/0000-00',
 'ISENTO',
+'ISENTO',
 1,
-''
+'',
+CURRENT_DATE()
 );
 
 INSERT INTO `emp_entidade`
@@ -69,8 +81,10 @@ INSERT INTO `emp_entidade`
 `emp_entidade_nome2`,
 `emp_entidade_documento1`,
 `emp_entidade_documento2`,
+`emp_entidade_documento3`,
 `emp_entidade_ativo`,
-`emp_entidade_observacao`)
+`emp_entidade_observacao`,
+`emp_entidade_data`)
 VALUES
 (
 4,
@@ -79,8 +93,10 @@ VALUES
 'CLIENTE',
 '000.000.000-00',
 '00.000.000-0',
+'ISENTO',
 1,
-''
+'',
+CURRENT_DATE()
 );
 
 INSERT INTO `emp_entidade`
@@ -90,8 +106,10 @@ INSERT INTO `emp_entidade`
 `emp_entidade_nome2`,
 `emp_entidade_documento1`,
 `emp_entidade_documento2`,
+`emp_entidade_documento3`,
 `emp_entidade_ativo`,
-`emp_entidade_observacao`)
+`emp_entidade_observacao`,
+`emp_entidade_data`)
 VALUES
 (
 5,
@@ -100,8 +118,10 @@ VALUES
 'FUNCIONARIO',
 '000.000.000-00',
 '00.000.000-0',
+'ISENTO',
 1,
-''
+'',
+CURRENT_DATE()
 );
 
 /* CONTATOS*/;
@@ -429,7 +449,7 @@ VALUES
 1,
 1,
 CURRENT_DATE(),
-NULL,
+CURRENT_DATE(),
 0,
 1
 );
@@ -608,7 +628,7 @@ INSERT INTO `fin_conta`
 VALUES
 (
 1,
-1,
+39,
 1,
 'BB',
 '00000-0',
@@ -620,25 +640,24 @@ VALUES
 
 INSERT INTO `fin_forma`
 (`fin_forma_id`,
-`fin_forma_codigo`,
-`fin_forma_debito`,
 `fin_forma_descricao`,
-`fin_forma_pagar`,
-`fin_forma_receber`,
-`fin_forma_rede`,
 `fin_forma_tef`,
-`fin_forma_vinculado`)
+`fin_forma_vinculado`,
+`fin_forma_debito`,
+`fin_forma_rede`,
+`fin_forma_pagar`,
+`fin_forma_receber`
+)
 VALUES
 (
 1,
-'01',
-0,
 'DINHEIRO',
-1,
-1,
-'LOJA',
 0,
-0
+0,
+0,
+'LOJA',
+1,
+1
 );
 
 /* Comercial */
@@ -647,3 +666,4 @@ INSERT INTO `com_natureza` VALUES (2,1,'COMPRA','COMPRA DE MERCADORIAS',1102,140
 INSERT INTO `com_natureza` VALUES (3,1,'PERDA,ROUBO,QUEBRA','LANÇAMENTO EFETUADO A TÍTULO DE BAIXA DE ESTOQUE DECORRENTE ',5927,5927,0,0,0,0);
 INSERT INTO `com_valor_produto` VALUES (1,1,NULL,NULL,10,50,'BRUTO * 1.ICMS * 1.IPI * 1.DESPESA * 1.MARKUP');
 INSERT INTO `prod_embalagem` VALUES(1,'UND', 'MENOR UNIDADE', 1);
+INSERT INTO `prod_categoria` VALUES(1, 'PADRAO');

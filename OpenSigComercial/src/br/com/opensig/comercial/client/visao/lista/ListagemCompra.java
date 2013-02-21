@@ -275,7 +275,7 @@ public class ListagemCompra extends AListagem<ComCompra> {
 
 			public void onSuccess(Map<String, List<ComCompra>> result) {
 				getEl().unmask();
-				new ListagemValidarProduto(result.get("ok").get(0), funcao);
+				new ListagemValidarCompra(result.get("ok").get(0), funcao);
 			}
 
 			public void onFailure(Throwable caught) {

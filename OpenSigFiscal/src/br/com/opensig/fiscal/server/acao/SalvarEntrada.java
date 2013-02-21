@@ -94,7 +94,8 @@ public class SalvarEntrada extends Chain {
 			} else {
 				atualizar(filtro);
 			}
-		} else if (status.getFisNotaStatusId() == ENotaStatus.AUTORIZANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId() || status.getFisNotaStatusId() == ENotaStatus.FS_DA.getId()) {
+		} else if (status.getFisNotaStatusId() == ENotaStatus.AUTORIZANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId()
+				|| status.getFisNotaStatusId() == ENotaStatus.FS_DA.getId()) {
 			nota = new FisNotaEntrada();
 			salvarNota();
 		} else if (status.getFisNotaStatusId() == ENotaStatus.CANCELANDO.getId() || status.getFisNotaStatusId() == ENotaStatus.CANCELADO.getId()) {
@@ -149,12 +150,7 @@ public class SalvarEntrada extends Chain {
 			// recupera o cnpj
 			Element emit = (Element) doc.getElementsByTagName("emit").item(0);
 			String cnpj = UtilServer.getValorTag(emit, "CNPJ", true);
-			try {
-				cnpj = UtilServer.formataTexto(cnpj, "##.###.###/####-##");
-			} catch (ParseException e) {
-				UtilServer.LOG.debug("Cnpj invalido.");
-				throw new FiscalException(auth.getConf().get("errInvalido") + " -> CNPJ");
-			}
+			cnpj = UtilServer.formataTexto(cnpj, "##.###.###/####-##");
 			// recupera os totais
 			Element total = (Element) doc.getElementsByTagName("total").item(0);
 			// recupera o valor

@@ -83,13 +83,13 @@ public class ListagemGrades extends AListagemEditor<ProdGrade> {
 		ccBarra.setEditor(new GridEditor(txtBarra));
 
 		ColumnConfig ccTamanho = new ColumnConfig(OpenSigCore.i18n.txtTamanho(), "prodGradeTamanho", 100, false);
-		ccTamanho.setEditor(new GridEditor(getSub(stTamanho)));
+		ccTamanho.setEditor(new GridEditor(getTipo(stTamanho)));
 
 		ColumnConfig ccCor = new ColumnConfig(OpenSigCore.i18n.txtCor(), "prodGradeCor", 100, false);
-		ccCor.setEditor(new GridEditor(getSub(stCor)));
+		ccCor.setEditor(new GridEditor(getTipo(stCor)));
 
 		ColumnConfig ccTipo = new ColumnConfig(OpenSigCore.i18n.txtOpcao(), "prodGradeOpcao", 100, false);
-		ccTipo.setEditor(new GridEditor(getSub(stTipo)));
+		ccTipo.setEditor(new GridEditor(getTipo(stTipo)));
 
 		txtEstoque = new NumberField();
 		txtEstoque.setAllowBlank(false);
@@ -149,18 +149,18 @@ public class ListagemGrades extends AListagemEditor<ProdGrade> {
 		return valida;
 	}
 
-	private ComboBox getSub(Store store) {
-		ComboBox cmbSub = new ComboBox();
-		cmbSub.setAllowBlank(false);
-		cmbSub.setStore(store);
-		cmbSub.setTriggerAction(ComboBox.ALL);
-		cmbSub.setMode(ComboBox.LOCAL);
-		cmbSub.setDisplayField("prodGradeTipoNome");
-		cmbSub.setValueField("prodGradeTipoNome");
-		cmbSub.setForceSelection(true);
-		cmbSub.setListWidth(150);
-		cmbSub.setEditable(false);
-		return cmbSub;
+	private ComboBox getTipo(Store store) {
+		ComboBox cmbTipo = new ComboBox();
+		cmbTipo.setAllowBlank(false);
+		cmbTipo.setStore(store);
+		cmbTipo.setTriggerAction(ComboBox.ALL);
+		cmbTipo.setMode(ComboBox.LOCAL);
+		cmbTipo.setDisplayField("prodGradeTipoNome");
+		cmbTipo.setValueField("prodGradeTipoNome");
+		cmbTipo.setForceSelection(true);
+		cmbTipo.setListWidth(150);
+		cmbTipo.setEditable(false);
+		return cmbTipo;
 	}
 
 	public TextField getTxtBarra() {

@@ -35,9 +35,12 @@ import br.com.opensig.core.server.CoreServiceImpl;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Autenticacao;
 import br.com.opensig.financeiro.server.acao.SalvarPagar;
+import br.com.opensig.financeiro.server.acao.SalvarReceber;
 import br.com.opensig.financeiro.shared.modelo.FinCategoria;
 import br.com.opensig.financeiro.shared.modelo.FinPagar;
+import br.com.opensig.financeiro.shared.modelo.FinReceber;
 import br.com.opensig.fiscal.server.acao.SalvarEntrada;
+import br.com.opensig.fiscal.server.acao.SalvarSaida;
 import br.com.opensig.fiscal.shared.modelo.ENotaStatus;
 import br.com.opensig.fiscal.shared.modelo.FisNotaEntrada;
 import br.com.opensig.fiscal.shared.modelo.FisNotaSaida;
@@ -183,11 +186,44 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 
 	@Override
 	public ComVenda salvarVenda(ComVenda venda) throws ComercialException {
+		FinReceber finReceber = null;
+		FisNotaSaida fisNota = null;
+
 		try {
+			// verifica se tem a receber
+			if (venda.getComVendaRecebida()) {
+				SalvarReceber receber = new SalvarReceber(null, this, venda.getFinReceber(), new ArrayList<FinCategoria>());
+				receber.execute();
+				finReceber = receber.getReceber();
+			}
+			// verifica se tem nota
+			if (venda.getComVendaNfe()) {
+				SalvarSaida saida = new SalvarSaida(null, venda.getFisNotaSaida().getFisNotaSaidaXml(), new FisNotaStatus(ENotaStatus.AUTORIZADO), getAuth());
+				saida.execute();
+				fisNota = saida.getNota();
+			}
+			// salva a venda
+			venda.setFinReceber(finReceber);
+			venda.setFisNotaSaida(fisNota);
 			new SalvarVenda(null, this, venda).execute();
+			// verifica se fecha a venda
+			if (venda.getComVendaFechada()) {
+				new FecharVenda(null, this, new ComVenda(venda.getComVendaId()), new ArrayList<String[]>(), getAuth()).execute();
+			}
+
 			venda.anularDependencia();
 			return venda;
 		} catch (Exception e) {
+			try {
+				if (finReceber != null) {
+					deletar(finReceber);
+				}
+				if (fisNota != null) {
+					deletar(fisNota);
+				}
+			} catch (Exception ex) {
+			}
+			
 			UtilServer.LOG.error("Erro no comando salvarVenda.", e);
 			throw new ComercialException(e.getMessage());
 		}

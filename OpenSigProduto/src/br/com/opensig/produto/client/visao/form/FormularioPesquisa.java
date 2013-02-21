@@ -335,7 +335,7 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 					gf.add(ft1, EJuncao.OU);
 					// barra da grade
 					FiltroTexto ft2 = new FiltroTexto("prodGradeBarra", ECompara.IGUAL, txtBusca.getValueAsString());
-					ft2.setCampoPrefixo("t4.");
+					ft2.setCampoPrefixo("t3.");
 					gf.add(ft2, EJuncao.OU);
 				} catch (Exception e) {
 					FiltroTexto ft = new FiltroTexto("prodProdutoBarra", ECompara.IGUAL, "");

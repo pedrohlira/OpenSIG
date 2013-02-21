@@ -39,7 +39,7 @@ public class ComEcfVendaProduto extends Dados implements Serializable {
 	private int comEcfVendaProdutoId;
 
 	@Column(name = "com_ecf_venda_produto_codigo")
-	@XmlTransient
+	@XmlElement(name = "ecfVendaProdutoBarra")
 	private String comEcfVendaProdutoCodigo;
 
 	@Column(name = "com_ecf_venda_produto_descricao")

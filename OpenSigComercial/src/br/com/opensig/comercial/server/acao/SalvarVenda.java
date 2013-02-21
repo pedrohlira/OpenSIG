@@ -17,6 +17,8 @@ import br.com.opensig.core.server.CoreServiceImpl;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.EComando;
 import br.com.opensig.core.shared.modelo.Sql;
+import br.com.opensig.produto.server.acao.SalvarProduto;
+import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 public class SalvarVenda extends Chain {
 
@@ -33,6 +35,7 @@ public class SalvarVenda extends Chain {
 	public void execute() throws OpenSigException {
 		EntityManagerFactory emf = null;
 		EntityManager em = null;
+		validarProduto();
 
 		try {
 			// recupera uma instância do gerenciador de entidades
@@ -50,8 +53,6 @@ public class SalvarVenda extends Chain {
 
 			// salva
 			venda.setComVendaProdutos(null);
-			venda.setFinReceber(null);
-			venda.setFisNotaSaida(null);
 			servico.salvar(em, venda);
 
 			// insere
@@ -77,4 +78,19 @@ public class SalvarVenda extends Chain {
 		}
 	}
 
+	private void validarProduto() throws ComercialException {
+		try {
+			// salva os produtos novos
+			for (ComVendaProduto venProd : venda.getComVendaProdutos()) {
+				ProdProduto prod = venProd.getProdProduto();
+				if (prod.getProdProdutoId() == 0) {
+					SalvarProduto salProduto = new SalvarProduto(null, servico, prod, null);
+					salProduto.execute();
+				}
+			}
+		} catch (Exception ex) {
+			UtilServer.LOG.error("Erro ao validar o produto.", ex);
+			throw new ComercialException(ex.getMessage());
+		}
+	}
 }

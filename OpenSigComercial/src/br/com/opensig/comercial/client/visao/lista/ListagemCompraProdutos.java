@@ -160,8 +160,8 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		ColumnConfig ccEmbalagemId = new ColumnConfig(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemId", 75, true, new Renderer() {
 			public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
 				if (value != null) {
-					Record reg = UtilClient.getRegistro(storeEmbalagem, "prodEmbalagemId", value.toString());
-					return reg.getAsString("prodEmbalagemNome");
+					record = UtilClient.getRegistro(storeEmbalagem, "prodEmbalagemId", value.toString());
+					return record.getAsString("prodEmbalagemNome");
 				} else {
 					return "";
 				}

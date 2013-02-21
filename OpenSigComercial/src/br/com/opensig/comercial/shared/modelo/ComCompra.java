@@ -121,7 +121,7 @@ public class ComCompra extends Dados implements Serializable {
 	private FinPagar finPagar;
 
 	@JoinColumn(name = "fis_nota_entrada_id")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private FisNotaEntrada fisNotaEntrada;
 
 	@OneToMany(mappedBy = "comCompra", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

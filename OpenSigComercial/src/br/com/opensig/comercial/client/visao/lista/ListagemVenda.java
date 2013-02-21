@@ -1,6 +1,7 @@
 package br.com.opensig.comercial.client.visao.lista;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -24,10 +25,13 @@ import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.servico.CoreProxy;
+import br.com.opensig.core.client.servico.ImportacaoProxy;
+import br.com.opensig.core.client.visao.JanelaUpload;
 import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.core.client.visao.abstrato.AListagem;
 import br.com.opensig.core.client.visao.abstrato.IFormulario;
 import br.com.opensig.core.shared.modelo.IFavorito;
+import br.com.opensig.core.shared.modelo.sistema.SisExpImp;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
 import br.com.opensig.empresa.client.controlador.comando.ComandoCliente;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
@@ -60,6 +64,8 @@ import com.gwtextux.client.widgets.grid.plugins.GridListFilter;
 import com.gwtextux.client.widgets.grid.plugins.GridLongFilter;
 import com.gwtextux.client.widgets.grid.plugins.GridSummaryPlugin;
 import com.gwtextux.client.widgets.grid.plugins.SummaryColumnConfig;
+import com.gwtextux.client.widgets.upload.UploadDialog;
+import com.gwtextux.client.widgets.upload.UploadDialogListenerAdapter;
 import com.gwtextux.client.widgets.window.ToastWindow;
 
 public class ListagemVenda extends AListagem<ComVenda> {
@@ -271,6 +277,50 @@ public class ListagemVenda extends AListagem<ComVenda> {
 		super.setFavorito(favorito);
 	}
 
+	@Override
+	public void setImportacao(final SisExpImp modo) {
+		final JanelaUpload<ComVenda> janela = new JanelaUpload<ComVenda>();
+		janela.setTipos(modo.getSisExpImpExtensoes() != null ? modo.getSisExpImpExtensoes().split(" ") : null);
+		janela.setAssincrono(new AsyncCallback() {
+			public void onSuccess(Object result) {
+				analisarNfe(modo, janela.getOks());
+				janela.getUplArquivo().close();
+			}
+
+			public void onFailure(Throwable caught) {
+				janela.resultado();
+			}
+		});
+		janela.inicializar();
+		janela.getUplArquivo().addListener(new UploadDialogListenerAdapter() {
+			public boolean onBeforeAdd(UploadDialog source, String filename) {
+				return source.getQueuedCount() == 0;
+			}
+
+			public void onFileAdd(UploadDialog source, String filename) {
+				source.startUpload();
+			}
+		});
+	}
+
+	private void analisarNfe(SisExpImp modo, List<String> arquivos) {
+		getEl().mask(OpenSigCore.i18n.txtAguarde());
+		ImportacaoProxy<ComVenda> proxy = new ImportacaoProxy<ComVenda>();
+		proxy.importar(modo, arquivos, new AsyncCallback<Map<String, List<ComVenda>>>() {
+
+			public void onSuccess(Map<String, List<ComVenda>> result) {
+				getEl().unmask();
+				new ListagemValidarVenda(result.get("ok").get(0), funcao);
+			}
+
+			public void onFailure(Throwable caught) {
+				getEl().unmask();
+				MessageBox.alert(OpenSigCore.i18n.txtImportar(), OpenSigCore.i18n.errImportar());
+				new ToastWindow(OpenSigCore.i18n.txtImportar(), caught.getMessage()).show();
+			}
+		});
+	}
+	
 	@Override
 	public void irPara() {
 		Menu mnuContexto = new Menu();

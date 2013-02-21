@@ -194,7 +194,7 @@
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoGradeTipo
 		</classe>
 		<nome>Types of Grid</nome>
-		<descricao>Administers the types of grid of products.</descricao>
+		<descricao>Administers the types of grid of the products.</descricao>
 		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
