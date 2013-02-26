@@ -1,6 +1,5 @@
 package br.com.opensig.comercial.server.rest;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -165,7 +164,7 @@ public class RestCliente extends ARest {
 			gf.add(ft1, EJuncao.E);
 			FiltroTexto ft2 = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.DIFERENTE, "000.000.000-00");
 			gf.add(ft2);
-			
+
 			List<EmpCliente> clis = service.selecionar(new EmpCliente(), 0, 0, gf, false).getLista();
 			List<SisCliente> clientes = new ArrayList<SisCliente>();
 			for (EmpCliente cli : clis) {
@@ -270,11 +269,12 @@ public class RestCliente extends ARest {
 	public List<ProdProduto> getProdutoAtualizado(@QueryParam("data") String data, @QueryParam("pagina") int pagina, @QueryParam("limite") int limite) throws RestException {
 		autorizar();
 		try {
-			Date alterado = UtilServer.formataData(data.substring(0, 10), "dd/MM/yyyy");
 			IFiltro filtro = null;
-			if (alterado != null) {
+			if (data != null && !data.equals("")) {
+				Date alterado = UtilServer.formataData(data, "dd/MM/yyyy");
 				filtro = new FiltroData("prodProdutoAlterado", ECompara.MAIOR_IGUAL, alterado);
 			}
+			
 			ProdProduto prod = new ProdProduto();
 			prod.setCampoOrdem("prodProdutoAlterado");
 

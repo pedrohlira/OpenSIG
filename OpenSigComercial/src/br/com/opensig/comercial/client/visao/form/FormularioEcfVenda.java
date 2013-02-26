@@ -46,6 +46,7 @@ import com.gwtext.client.widgets.form.Hidden;
 import com.gwtext.client.widgets.form.Label;
 import com.gwtext.client.widgets.form.MultiFieldPanel;
 import com.gwtext.client.widgets.form.NumberField;
+import com.gwtext.client.widgets.form.TextArea;
 import com.gwtext.client.widgets.grid.GridPanel;
 import com.gwtext.client.widgets.grid.event.EditorGridListenerAdapter;
 import com.gwtext.client.widgets.grid.event.GridRowListenerAdapter;
@@ -67,6 +68,7 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 	private NumberField txtDesc;
 	private NumberField txtAcres;
 	private NumberField txtLiquido;
+	private TextArea txtObservacao;
 	private Label lblRegistros;
 	private ListagemEcfVendaProdutos gridProdutos;
 	private List<ComEcfVendaProduto> produtos;
@@ -215,6 +217,11 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 		gridProdutos.getTopToolbar().addElement(lblRegistros.getElement());
 		gridProdutos.getTopToolbar().addSpacer();
 		add(gridProdutos);
+		
+		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), "comEcfVendaObservacao");
+		txtObservacao.setMaxLength(255);
+		txtObservacao.setWidth("95%");
+		add(txtObservacao);
 
 		gridProdutos.addEditorGridListener(new EditorGridListenerAdapter() {
 			public void onAfterEdit(GridPanel grid, Record record, String field, Object newValue, Object oldValue, int rowIndex, int colIndex) {
@@ -359,6 +366,7 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 		} else {
 			classe.setFinReceber(new FinReceber(Integer.valueOf(hdnReceber.getValueAsString())));
 		}
+		classe.setComEcfVendaObservacao(txtObservacao.getValueAsString());
 		return retorno;
 	}
 
@@ -580,4 +588,11 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 		this.txtAcres = txtAcres;
 	}
 
+	public TextArea getTxtObservacao() {
+		return txtObservacao;
+	}
+
+	public void setTxtObservacao(TextArea txtObservacao) {
+		this.txtObservacao = txtObservacao;
+	}
 }

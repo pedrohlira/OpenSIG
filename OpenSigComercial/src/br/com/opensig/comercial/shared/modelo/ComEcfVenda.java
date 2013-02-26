@@ -87,6 +87,10 @@ public class ComEcfVenda extends Dados implements Serializable {
 	@XmlElement(name = "ecfVendaLiquido")
 	private Double comEcfVendaLiquido;
 
+	@Column(name = "com_ecf_venda_observacao")
+	@XmlElement(name = "ecfVendaObservacao")
+	private String comEcfVendaObservacao;
+
 	@JoinColumn(name = "sis_usuario_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private SisUsuario sisUsuario;
@@ -312,6 +316,14 @@ public class ComEcfVenda extends Dados implements Serializable {
 		this.acresIndicador = acresIndicador;
 	}
 
+	public String getComEcfVendaObservacao() {
+		return comEcfVendaObservacao;
+	}
+
+	public void setComEcfVendaObservacao(String comEcfVendaObservacao) {
+		this.comEcfVendaObservacao = comEcfVendaObservacao;
+	}
+
 	public List<ComEcfVendaProduto> getComEcfVendaProdutos() {
 		return this.comEcfVendaProdutos;
 	}
@@ -348,7 +360,7 @@ public class ComEcfVenda extends Dados implements Serializable {
 		return new String[] { comEcfVendaId + "", comEcfZ.getComEcfZId() + "", comEcf.getEmpEmpresa().getEmpEmpresaId() + "", comEcf.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(),
 				sisUsuario.getSisUsuarioId() + "", sisUsuario.getSisUsuarioLogin(), vendedorId + "", vendedorNome, gerenteId + "", gerenteNome, clienteId + "", clienteNome, comEcf.getComEcfId() + "",
 				comEcf.getComEcfSerie(), comEcfVendaCcf + "", comEcfVendaCoo + "", UtilClient.getDataGrid(comEcfVendaData), comEcfVendaBruto.toString(), comEcfVendaDesconto.toString(),
-				comEcfVendaAcrescimo.toString(), comEcfVendaLiquido.toString(), getComEcfVendaFechada() + "", receberId + "", getComEcfVendaCancelada() + "" };
+				comEcfVendaAcrescimo.toString(), comEcfVendaLiquido.toString(), getComEcfVendaFechada() + "", receberId + "", getComEcfVendaCancelada() + "", comEcfVendaObservacao };
 	}
 
 	public void anularDependencia() {

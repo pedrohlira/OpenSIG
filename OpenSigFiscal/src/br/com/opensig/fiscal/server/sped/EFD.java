@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.opensig.comercial.shared.modelo.ComCompra;
+import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.comercial.shared.modelo.ComEcfNota;
 import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
 import br.com.opensig.comercial.shared.modelo.ComNatureza;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
-import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroBinario;
@@ -44,8 +44,8 @@ import br.com.opensig.fiscal.shared.modelo.ENotaStatus;
 import br.com.opensig.fiscal.shared.modelo.FisNotaEntrada;
 import br.com.opensig.fiscal.shared.modelo.FisNotaSaida;
 import br.com.opensig.fiscal.shared.modelo.FisNotaStatus;
-import br.com.opensig.fiscal.shared.modelo.FisSpedBloco;
 import br.com.opensig.fiscal.shared.modelo.FisSped;
+import br.com.opensig.fiscal.shared.modelo.FisSpedBloco;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 public class EFD implements Runnable {
@@ -131,12 +131,12 @@ public class EFD implements Runnable {
 
 	// metodo que recupera os blocos
 	private List<FisSpedBloco> getBlocos() throws Exception {
+		// monta o filtro
 		GrupoFiltro gf = new GrupoFiltro();
-		FiltroBinario fb = new FiltroBinario(sped.getFisSpedTipo().contains("ICMS") ? "fisSpedBlocoIcmsIpi" : "fisSpedBlocoPisCofins", ECompara.IGUAL, 1);
-		gf.add(fb, EJuncao.E);
-		FiltroTexto ft = new FiltroTexto("fisSpedBlocoClasse", ECompara.DIFERENTE, "NULL");
-		gf.add(ft);
-		// seleciona os blocos
+		FiltroTexto ft = new FiltroTexto("fisSpedBlocoTipo", ECompara.IGUAL, sped.getFisSpedTipo());
+		gf.add(ft, EJuncao.E);
+		FiltroTexto ft1 = new FiltroTexto("fisSpedBlocoClasse", ECompara.DIFERENTE, "NULL");
+		gf.add(ft1);
 		return service.selecionar(new FisSpedBloco(), 0, 0, gf, false).getLista();
 	}
 

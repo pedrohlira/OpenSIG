@@ -37,12 +37,15 @@ import com.gwtext.client.widgets.menu.MenuItem;
 import com.gwtextux.client.widgets.grid.plugins.GridFilter;
 import com.gwtextux.client.widgets.grid.plugins.GridListFilter;
 import com.gwtextux.client.widgets.grid.plugins.GridLongFilter;
+import com.gwtextux.client.widgets.grid.plugins.GridSummaryPlugin;
+import com.gwtextux.client.widgets.grid.plugins.SummaryColumnConfig;
 
 public class ListagemEcfZ extends AListagem<ComEcfZ> {
 
 	public ListagemEcfZ(IFormulario formulario) {
 		super(formulario);
 		inicializar();
+		addPlugin(new GridSummaryPlugin());
 	}
 
 	public void inicializar() {
@@ -71,11 +74,13 @@ public class ListagemEcfZ extends AListagem<ComEcfZ> {
 		ColumnConfig ccCrz = new ColumnConfig(OpenSigCore.i18n.txtCrz(), "comEcfZCrz", 75, true);
 		ColumnConfig ccMovimento = new ColumnConfig(OpenSigCore.i18n.txtData(), "comEcfZMovimento", 80, true, DATA);
 		ColumnConfig ccEmissao = new ColumnConfig(OpenSigCore.i18n.txtEmissao(), "comEcfZEmissao", 120, true, DATAHORA);
-		ColumnConfig ccBruto = new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comEcfZBruto", 100, true, DINHEIRO);
 		ColumnConfig ccGt = new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comEcfZGt", 100, true, DINHEIRO);
 		ColumnConfig ccIssqn = new ColumnConfig(OpenSigCore.i18n.txtIssqn(), "comEcfZIssqn", 50, true, BOLEANO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccEcfId, ccEcf, ccEmpresaId, ccEmpresa, ccUsuario, ccCooIni, ccCooFin, ccCro, ccCrz, ccMovimento, ccEmissao, ccBruto, ccGt, ccIssqn };
+		// sumarios
+		SummaryColumnConfig sumBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comEcfZBruto", 100, true, DINHEIRO), DINHEIRO);
+
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccEcfId, ccEcf, ccEmpresaId, ccEmpresa, ccUsuario, ccCooIni, ccCooFin, ccCro, ccCrz, ccMovimento, ccEmissao, sumBruto, ccGt, ccIssqn };
 		modelos = new ColumnModel(bcc);
 
 		if (UtilClient.getAcaoPermitida(funcao, ComandoPermiteEmpresa.class) == null) {

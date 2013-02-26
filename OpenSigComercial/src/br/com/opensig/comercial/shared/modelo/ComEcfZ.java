@@ -104,9 +104,7 @@ public class ComEcfZ extends Dados implements Serializable {
 	@XmlElement(name = "ecfDocumentos")
 	private List<ComEcfDocumento> comEcfDocumentos;
 
-	@Transient
-	@XmlTransient
-	private String issqn;
+	private transient String issqn;
 
 	public ComEcfZ() {
 		this(0);

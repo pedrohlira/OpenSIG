@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beanio xmlns="http://www.beanio.org/2011/01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.beanio.org/2011/01 http://www.beanio.org/2011/01/mapping.xsd">
+	<stream name="EFD" format="delimited">
+		<writer>
+			<property name="delimiter" value="|" />
+		</writer>
+		<record name="Dados" minOccurs="1" maxOccurs="1" class="br.com.opensig.fiscal.server.sped.fiscal.blocoD.DadosD500">
+			<field name="padrao" type="string" length="1" default="" />
+			<field name="reg" type="string" length="4" trim="true" />
+			<field name="ind_oper" type="string" length="1" trim="true" />
+			<field name="ind_emit" type="string" length="1" trim="true" />
+			<field name="cod_part" type="string" length="60" trim="true" />
+			<field name="cod_mod" type="string" length="2" trim="true" />
+			<field name="cod_sit" type="string" length="2" trim="true" />
+			<field name="ser" type="string" length="4" trim="true" default="" />
+			<field name="sub" type="string" length="3" trim="true" default="" />
+			<field name="num_doc" type="int" length="9" />
+			<field name="dt_doc" type="date" format="ddMMyyyy" />
+			<field name="dt_a_p" type="date" format="ddMMyyyy" />
+			<field name="vl_doc" type="double" format="##0.00" />
+			<field name="vl_desc" type="double" format="##0.00" default="" />
+			<field name="vl_serv" type="double" format="##0.00" />
+			<field name="vl_serv_nt" type="double" format="##0.00" default="" />
+			<field name="vl_terc" type="double" format="##0.00" default="" />
+			<field name="vl_da" type="double" format="##0.00" default="" />
+			<field name="vl_bc_icms" type="double" format="##0.00" default="" />
+			<field name="vl_icms" type="double" format="##0.00" default="" />
+			<field name="cod_inf" type="string" length="6" trim="true" default="" />
+			<field name="vl_pis" type="double" format="##0.00" default="" />
+			<field name="vl_cofins" type="double" format="##0.00" default="" />
+			<field name="cod_cta" type="string" length="255" trim="true" default="" />
+			<field name="tp_assinante" type="int" length="1" default="" />
+			<field name="padrao" type="string" length="1" default="" />
+		</record>
+	</stream>
+</beanio>

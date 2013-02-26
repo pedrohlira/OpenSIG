@@ -1,6 +1,7 @@
 package br.com.opensig.comercial.shared.rest;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -29,6 +30,7 @@ public class SisCliente extends Dados implements Serializable {
 	private String sisClienteCep;
 	private String sisClienteTelefone;
 	private String sisClienteEmail;
+	private Date sisClienteData;
 	private SisMunicipio sisMunicipio;
 
 	/**
@@ -59,7 +61,7 @@ public class SisCliente extends Dados implements Serializable {
 		super("", "", "");
 		EmpEntidade ent = cli.getEmpEntidade();
 		EmpEndereco ende = ent.getEmpEnderecos().get(0);
-		
+
 		sisClienteId = cli.getEmpClienteId();
 		sisClienteDoc = ent.getEmpEntidadeDocumento1();
 		sisClienteDoc1 = ent.getEmpEntidadeDocumento2();
@@ -69,11 +71,12 @@ public class SisCliente extends Dados implements Serializable {
 		sisClienteComplemento = ende.getEmpEnderecoComplemento();
 		sisClienteBairro = ende.getEmpEnderecoBairro();
 		sisClienteCep = ende.getEmpEnderecoCep();
+		sisClienteData = ent.getEmpEntidadeData();
 		sisMunicipio = new SisMunicipio(ende.getEmpMunicipio());
-		for(EmpContato cont : ent.getEmpContatos()){
-			if(cont.getEmpContatoDescricao().contains("@")){
+		for (EmpContato cont : ent.getEmpContatos()) {
+			if (cont.getEmpContatoDescricao().contains("@")) {
 				sisClienteEmail = cont.getEmpContatoDescricao();
-			}else{
+			} else {
 				sisClienteTelefone = cont.getEmpContatoDescricao();
 			}
 		}
@@ -175,6 +178,14 @@ public class SisCliente extends Dados implements Serializable {
 
 	public void setSisClienteEmail(String sisClienteEmail) {
 		this.sisClienteEmail = sisClienteEmail;
+	}
+
+	public Date getSisClienteData() {
+		return sisClienteData;
+	}
+
+	public void setSisClienteData(Date sisClienteData) {
+		this.sisClienteData = sisClienteData;
 	}
 
 	public SisMunicipio getSisMunicipio() {

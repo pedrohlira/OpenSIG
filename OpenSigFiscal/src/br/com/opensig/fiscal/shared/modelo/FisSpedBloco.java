@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import br.com.opensig.core.shared.modelo.Dados;
 
 /**
- * Classe que representa os bloco usados no SPED.
+ * Classe que representa os Fiscal usados no SPED.
  * 
  * @author Pedro H. Lira
  */
@@ -25,14 +25,14 @@ public class FisSpedBloco extends Dados implements Serializable {
 	@Column(name = "fis_sped_bloco_id")
 	private int fisSpedBlocoId;
 
+	@Column(name = "fis_sped_bloco_tipo")
+	private String fisSpedBlocoTipo;
+
 	@Column(name = "fis_sped_bloco_classe")
 	private String fisSpedBlocoClasse;
 
 	@Column(name = "fis_sped_bloco_descricao")
 	private String fisSpedBlocoDescricao;
-
-	@Column(name = "fis_sped_bloco_icms_ipi")
-	private int fisSpedBlocoIcmsIpi;
 
 	@Column(name = "fis_sped_bloco_letra")
 	private String fisSpedBlocoLetra;
@@ -45,9 +45,6 @@ public class FisSpedBloco extends Dados implements Serializable {
 
 	@Column(name = "fis_sped_bloco_nivel")
 	private int fisSpedBlocoNivel;
-	
-	@Column(name = "fis_sped_bloco_pis_cofins")
-	private int fisSpedBlocoPisCofins;
 
 	@Column(name = "fis_sped_bloco_registro")
 	private String fisSpedBlocoRegistro;
@@ -62,15 +59,23 @@ public class FisSpedBloco extends Dados implements Serializable {
 	}
 
 	public int getFisSpedBlocoId() {
-		return this.fisSpedBlocoId;
+		return fisSpedBlocoId;
 	}
 
 	public void setFisSpedBlocoId(int fisSpedBlocoId) {
 		this.fisSpedBlocoId = fisSpedBlocoId;
 	}
 
+	public String getFisSpedBlocoTipo() {
+		return fisSpedBlocoTipo;
+	}
+
+	public void setFisSpedBlocoTipo(String fisSpedBlocoTipo) {
+		this.fisSpedBlocoTipo = fisSpedBlocoTipo;
+	}
+
 	public String getFisSpedBlocoClasse() {
-		return this.fisSpedBlocoClasse;
+		return fisSpedBlocoClasse;
 	}
 
 	public void setFisSpedBlocoClasse(String fisSpedBlocoClasse) {
@@ -78,23 +83,15 @@ public class FisSpedBloco extends Dados implements Serializable {
 	}
 
 	public String getFisSpedBlocoDescricao() {
-		return this.fisSpedBlocoDescricao;
+		return fisSpedBlocoDescricao;
 	}
 
 	public void setFisSpedBlocoDescricao(String fisSpedBlocoDescricao) {
 		this.fisSpedBlocoDescricao = fisSpedBlocoDescricao;
 	}
 
-	public boolean getFisSpedBlocoIcmsIpi() {
-		return this.fisSpedBlocoIcmsIpi == 0 ? false : true;
-	}
-
-	public void setFisSpedBlocoIcmsIpi(boolean fisSpedBlocoIcmsIpi) {
-		this.fisSpedBlocoIcmsIpi = fisSpedBlocoIcmsIpi == false ? 0 : 1;
-	}
-
 	public String getFisSpedBlocoLetra() {
-		return this.fisSpedBlocoLetra;
+		return fisSpedBlocoLetra;
 	}
 
 	public void setFisSpedBlocoLetra(String fisSpedBlocoLetra) {
@@ -102,7 +99,7 @@ public class FisSpedBloco extends Dados implements Serializable {
 	}
 
 	public boolean getFisSpedBlocoObrigatorio() {
-		return this.fisSpedBlocoObrigatorio == 0 ? false : true;
+		return fisSpedBlocoObrigatorio == 0 ? false : true;
 	}
 
 	public void setFisSpedBlocoObrigatorio(boolean fisSpedBlocoObrigatorio) {
@@ -110,7 +107,7 @@ public class FisSpedBloco extends Dados implements Serializable {
 	}
 
 	public int getFisSpedBlocoOrdem() {
-		return this.fisSpedBlocoOrdem;
+		return fisSpedBlocoOrdem;
 	}
 
 	public void setFisSpedBlocoOrdem(int fisSpedBlocoOrdem) {
@@ -120,21 +117,13 @@ public class FisSpedBloco extends Dados implements Serializable {
 	public int getFisSpedBlocoNivel() {
 		return fisSpedBlocoNivel;
 	}
-	
+
 	public void setFisSpedBlocoNivel(int fisSpedBlocoNivel) {
 		this.fisSpedBlocoNivel = fisSpedBlocoNivel;
 	}
-	
-	public boolean getFisSpedBlocoPisCofins() {
-		return this.fisSpedBlocoPisCofins == 0 ? false : true;
-	}
-
-	public void setFisSpedBlocoPisCofins(boolean fisSpedBlocoPisCofins) {
-		this.fisSpedBlocoPisCofins = fisSpedBlocoPisCofins == false ? 0 : 1;
-	}
 
 	public String getFisSpedBlocoRegistro() {
-		return this.fisSpedBlocoRegistro;
+		return fisSpedBlocoRegistro;
 	}
 
 	public void setFisSpedBlocoRegistro(String fisSpedBlocoRegistro) {
@@ -153,8 +142,7 @@ public class FisSpedBloco extends Dados implements Serializable {
 
 	@Override
 	public String[] toArray() {
-		return new String[] { fisSpedBlocoId + "", getFisSpedBlocoIcmsIpi() + "", getFisSpedBlocoPisCofins() + "", fisSpedBlocoLetra, fisSpedBlocoDescricao, fisSpedBlocoRegistro,
-				getFisSpedBlocoObrigatorio() + "", fisSpedBlocoClasse, fisSpedBlocoOrdem + "", fisSpedBlocoNivel + "" };
+		return null;
 	}
 
 }

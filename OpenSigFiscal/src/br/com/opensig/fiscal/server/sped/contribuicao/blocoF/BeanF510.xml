@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beanio xmlns="http://www.beanio.org/2011/01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.beanio.org/2011/01 http://www.beanio.org/2011/01/mapping.xsd">
+	<stream name="EFD" format="delimited">
+		<writer>
+			<property name="delimiter" value="|" />
+		</writer>
+		<record name="Dados" minOccurs="1" maxOccurs="1" class="br.com.opensig.fiscal.server.sped.contribuicao.blocoF.DadosF510">
+			<field name="padrao" type="string" length="1" default=""/>
+			<field name="reg" type="string" length="4" trim="true"/>
+			<field name="vl_rec_caixa" type="double" format="##0.00"/>
+			<field name="cst_pis" type="string" length="2" trim="true" default="" />
+			<field name="vl_desc_pis" type="double" format="##0.00"/>
+			<field name="quant_bc_pis" type="double" format="##0.000"/>
+			<field name="aliq_pis_quant" type="double" length="8" format="##0.0000"/>
+			<field name="vl_pis" type="double" format="##0.00"/>
+			<field name="cst_cofins" type="string" length="2" trim="true" default="" />
+			<field name="vl_desc_cofins" type="double" format="##0.000"/>
+			<field name="quant_bc_cofins" type="double" format="##0.00"/>
+			<field name="aliq_cofins_quant" type="double" length="8" format="##0.0000"/>
+			<field name="vl_cofins" type="double" format="##0.00"/>
+			<field name="cod_mod" type="string" length="2" trim="true" default="" />
+			<field name="cfop" type="int" length="4"/>
+			<field name="cod_cta" type="string" length="60" trim="true" default="" />
+			<field name="info_compl" type="string" length="255" trim="true" default="" />
+			<field name="padrao" type="string" length="1" default=""/>
+		</record>
+	</stream>
+</beanio>

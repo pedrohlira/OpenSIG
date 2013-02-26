@@ -82,7 +82,8 @@ public class ListagemEcfVenda extends AListagem<ComEcfVenda> {
 				new StringFieldDef("sisGerente.sisUsuarioLogin"), new IntegerFieldDef("empCliente.empClienteId"), new StringFieldDef("empCliente.empEntidade.empEntidadeNome1"),
 				new IntegerFieldDef("comEcf.comEcfId"), new StringFieldDef("comEcf.comEcfSerie"), new IntegerFieldDef("comEcfVendaCcf"), new IntegerFieldDef("comEcfVendaCoo"),
 				new DateFieldDef("comEcfVendaData"), new FloatFieldDef("comEcfVendaBruto"), new FloatFieldDef("comEcfVendaDesconto"), new FloatFieldDef("comEcfVendaAcrescimo"),
-				new FloatFieldDef("comEcfVendaLiquido"), new BooleanFieldDef("comEcfVendaFechada"), new IntegerFieldDef("finReceber.finReceberId"), new BooleanFieldDef("comEcfVendaCancelada") };
+				new FloatFieldDef("comEcfVendaLiquido"), new BooleanFieldDef("comEcfVendaFechada"), new IntegerFieldDef("finReceber.finReceberId"), new BooleanFieldDef("comEcfVendaCancelada"),
+				new StringFieldDef("comEcfVendaObservacao") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -116,18 +117,18 @@ public class ListagemEcfVenda extends AListagem<ComEcfVenda> {
 		ColumnConfig ccDesconto = new ColumnConfig(OpenSigCore.i18n.txtDesconto(), "comEcfVendaDesconto", 75, true, PORCENTAGEM);
 		ColumnConfig ccAcrescimo = new ColumnConfig(OpenSigCore.i18n.txtAcrescimo(), "comEcfVendaAcrescimo", 75, true, PORCENTAGEM);
 		ColumnConfig ccFechada = new ColumnConfig(OpenSigCore.i18n.txtFechada(), "comEcfVendaFechada", 75, true, BOLEANO);
-
 		ColumnConfig ccReceberId = new ColumnConfig("", "finReceber.finReceberId", 10, false);
 		ccReceberId.setHidden(true);
 		ccReceberId.setFixed(true);
 		ColumnConfig ccCancelada = new ColumnConfig(OpenSigCore.i18n.txtCancelada(), "comEcfVendaCancelada", 75, true, BOLEANO);
-
+		ColumnConfig ccObs = new ColumnConfig(OpenSigCore.i18n.txtObservacao(), "comEcfVendaObservacao", 200, true);
+		
 		// sumarios
 		SummaryColumnConfig sumBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comEcfVendaBruto", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig sumLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtLiquido(), "comEcfVendaLiquido", 75, true, DINHEIRO), DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccZId, ccEmpresaId, ccEmpresa, ccUsuarioId, ccLogin, ccVendedorId, ccVendedor, ccGerenteId, ccGerente, ccClienteId, ccCliente, ccEcfId,
-				ccEcf, ccCcf, ccCoo, ccData, sumBruto, ccDesconto, ccAcrescimo, sumLiquido, ccFechada, ccReceberId, ccCancelada };
+				ccEcf, ccCcf, ccCoo, ccData, sumBruto, ccDesconto, ccAcrescimo, sumLiquido, ccFechada, ccReceberId, ccCancelada, ccObs };
 		modelos = new ColumnModel(bcc);
 
 		// cancelando

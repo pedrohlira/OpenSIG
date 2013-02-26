@@ -1,11 +1,11 @@
 # Module opensig
 # RPC service class, partial path of RPC policy file
-br.com.opensig.empresa.client.servico.EmpresaService, 940DA54CC63A041021B3C69ACD71FACD.gwt.rpc
-br.com.opensig.fiscal.client.servico.FiscalService, 9AC0EFF237A5DFC60EBB7EECED3BCAD1.gwt.rpc
-br.com.opensig.financeiro.client.servico.FinanceiroService, 987687B25C3E30C8CCCB9CB3A053D15F.gwt.rpc
-br.com.opensig.comercial.client.servico.ComercialService, 317622B05E68C6F7E73E9DCE78E69A12.gwt.rpc
-br.com.opensig.core.client.servico.CoreService, CBC9CBD88165EBFBC60A1B95FFCB407B.gwt.rpc
-br.com.opensig.core.client.servico.ExportacaoService, 5615B92A422A103ADD931DCC13512BD1.gwt.rpc
-br.com.opensig.produto.client.servico.ProdutoService, 5364D543E16CD63233C6AB05DD4C19E0.gwt.rpc
-br.com.opensig.permissao.client.servico.PermissaoService, 98E5F93841DE53D0E9609FB2FC16E1FA.gwt.rpc
-br.com.opensig.core.client.servico.ImportacaoService, 6DFF68A25213F3726C7BF66054142468.gwt.rpc
+br.com.opensig.produto.client.servico.ProdutoService, A03BCBF52BE7AC871F3EC2FFCE7BF8A8.gwt.rpc
+br.com.opensig.fiscal.client.servico.FiscalService, 9084F34022B09456DA34F44F6A754174.gwt.rpc
+br.com.opensig.core.client.servico.ExportacaoService, E2FECF0689C860EA26DD882D3FED4C08.gwt.rpc
+br.com.opensig.comercial.client.servico.ComercialService, 715903F99B0922435435AD606EBD8906.gwt.rpc
+br.com.opensig.permissao.client.servico.PermissaoService, FDC0956DC809309C81F8A92FE771A66C.gwt.rpc
+br.com.opensig.empresa.client.servico.EmpresaService, 3363F31935163A2B9E624266C64F655D.gwt.rpc
+br.com.opensig.core.client.servico.ImportacaoService, A2F77A6131317A787A1BAB7A362A5400.gwt.rpc
+br.com.opensig.financeiro.client.servico.FinanceiroService, 77407A2E1D16A7C8D370F982AC7EEC25.gwt.rpc
+br.com.opensig.core.client.servico.CoreService, 4420D79D48E0662F68343B464C19FBAA.gwt.rpc
