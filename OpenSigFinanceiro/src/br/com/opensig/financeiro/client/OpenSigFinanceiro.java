@@ -19,8 +19,6 @@ import br.com.opensig.financeiro.client.controlador.comando.ComandoPagamento;
 import br.com.opensig.financeiro.client.controlador.comando.ComandoPagar;
 import br.com.opensig.financeiro.client.controlador.comando.ComandoReceber;
 import br.com.opensig.financeiro.client.controlador.comando.ComandoRecebimento;
-import br.com.opensig.financeiro.client.controlador.comando.ComandoRemessa;
-import br.com.opensig.financeiro.client.controlador.comando.ComandoRetorno;
 import br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerar;
 import br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerarHtml;
 import br.com.opensig.financeiro.client.controlador.comando.boleto.ComandoGerarImprimir;
@@ -59,8 +57,6 @@ public class OpenSigFinanceiro implements EntryPoint {
         fc.addComando(ComandoPagar.class.getName(), (IComando) GWT.create(ComandoPagar.class));
         fc.addComando(ComandoPagamento.class.getName(), (IComando) GWT.create(ComandoPagamento.class));
         fc.addComando(ComandoRecebimento.class.getName(), (IComando) GWT.create(ComandoRecebimento.class));
-        fc.addComando(ComandoRemessa.class.getName(), (IComando) GWT.create(ComandoRemessa.class));
-        fc.addComando(ComandoRetorno.class.getName(), (IComando) GWT.create(ComandoRetorno.class));
         fc.addComando(ComandoBanco.class.getName(), (IComando) GWT.create(ComandoBanco.class));
         fc.addComando(ComandoConta.class.getName(), (IComando) GWT.create(ComandoConta.class));
         fc.addComando(ComandoForma.class.getName(), (IComando) GWT.create(ComandoForma.class));
@@ -98,7 +94,5 @@ public class OpenSigFinanceiro implements EntryPoint {
 
 		Ponte.setAcoesProibidas(ComandoPagamento.class.getName(), acoes);
 		Ponte.setAcoesProibidas(ComandoRecebimento.class.getName(), acoes);
-		Ponte.setAcoesProibidas(ComandoRemessa.class.getName(), acoes2);
-		Ponte.setAcoesProibidas(ComandoRetorno.class.getName(), acoes2);
      }
 }

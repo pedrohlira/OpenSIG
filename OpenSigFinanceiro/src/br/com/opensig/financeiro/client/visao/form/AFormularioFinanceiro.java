@@ -21,10 +21,8 @@ import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
 import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
-import br.com.opensig.core.client.servico.CoreProxy;
 import br.com.opensig.core.client.visao.Arvore;
 import br.com.opensig.core.client.visao.ComboEntidade;
-import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.core.client.visao.abstrato.AFormulario;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.core.shared.modelo.EBusca;
@@ -33,11 +31,9 @@ import br.com.opensig.core.shared.modelo.ExpListagem;
 import br.com.opensig.core.shared.modelo.ExpMeta;
 import br.com.opensig.core.shared.modelo.Lista;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
-import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.empresa.shared.modelo.EmpEntidade;
 import br.com.opensig.financeiro.client.visao.lista.ListagemFinanciados;
 import br.com.opensig.financeiro.shared.modelo.FinCategoria;
-import br.com.opensig.financeiro.shared.modelo.FinConta;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
@@ -53,7 +49,6 @@ import com.gwtext.client.data.Store;
 import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.data.event.StoreListenerAdapter;
 import com.gwtext.client.widgets.MessageBox;
-import com.gwtext.client.widgets.MessageBox.ConfirmCallback;
 import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.form.ComboBox;
 import com.gwtext.client.widgets.form.DateField;
@@ -79,7 +74,6 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 	protected NumberField txtNfe;
 	protected DateField dtCadastro;
 	protected ComboBox cmbEntidade;
-	protected ComboBox cmbConta;
 	protected TextArea txtObservacao;
 	protected Arvore<FinCategoria> treeCategoria;
 	protected List<FinCategoria> categorias;
@@ -110,31 +104,27 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 		hdnEntidade = new Hidden("empEntidade.empEntidadeId", "0");
 		add(hdnEntidade);
 
-		txtNfe = new NumberField(OpenSigCore.i18n.txtNota(), nomes.get("nota"), 100);
+		txtNfe = new NumberField(OpenSigCore.i18n.txtNota(), nomes.get("nota"), 80);
+		txtNfe.setAllowBlank(false);
 		txtNfe.setAllowNegative(false);
 		txtNfe.setAllowDecimals(false);
 		txtNfe.setMaxLength(10);
 
-		MultiFieldPanel linha1 = new MultiFieldPanel();
-		linha1.setBorder(false);
-		linha1.addToRow(getEntidade(), 350);
-		linha1.addToRow(txtNfe, 110);
-		coluna1.add(linha1);
-
-		txtValor = new NumberField(OpenSigCore.i18n.txtValor(), nomes.get("valor"), 100);
+		txtValor = new NumberField(OpenSigCore.i18n.txtValor(), nomes.get("valor"), 80);
 		txtValor.setAllowBlank(false);
 		txtValor.setAllowNegative(false);
 		txtValor.setMaxLength(13);
 
 		dtCadastro = new DateField(OpenSigCore.i18n.txtCadastro(), nomes.get("cadastro"), 100);
 		dtCadastro.setAllowBlank(false);
-
-		MultiFieldPanel linha2 = new MultiFieldPanel();
-		linha2.setBorder(false);
-		linha2.addToRow(getConta(), 220);
-		linha2.addToRow(txtValor, 120);
-		linha2.addToRow(dtCadastro, 120);
-		coluna1.add(linha2);
+		
+		MultiFieldPanel linha1 = new MultiFieldPanel();
+		linha1.setBorder(false);
+		linha1.addToRow(getEntidade(), 260);
+		linha1.addToRow(txtNfe, 100);
+		linha1.addToRow(txtValor, 100);
+		linha1.addToRow(dtCadastro, 120);
+		coluna1.add(linha1);
 
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), nomes.get("observacao"));
 		txtObservacao.setWidth("95%");
@@ -144,8 +134,8 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 		Panel formColuna = new Panel();
 		formColuna.setBorder(false);
 		formColuna.setLayout(new ColumnLayout());
-		formColuna.add(coluna1, new ColumnLayoutData(.7));
-		formColuna.add(getCategoria(), new ColumnLayoutData(.3));
+		formColuna.add(coluna1, new ColumnLayoutData(.75));
+		formColuna.add(getCategoria(), new ColumnLayoutData(.25));
 		add(formColuna);
 
 		add(new HTML("<br/>"));
@@ -303,7 +293,7 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 	}
 
 	public void gerarListas() {
-		// produtos
+		// financeiro
 		List<ExpMeta> metadados = new ArrayList<ExpMeta>();
 		for (int i = 0; i < gridFormas.getModelos().getColumnCount(); i++) {
 			if (gridFormas.getModelos().isHidden(i)) {
@@ -320,8 +310,8 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 		}
 
 		// trocando campos visiveis
-		metadados.set(5, metadados.get(4));
-		metadados.set(4, null);
+		metadados.set(8, metadados.get(7));
+		metadados.set(7, null);
 
 		SortState ordem = gridFormas.getStore().getSortState();
 		financeiro.setCampoOrdem(ordem.getField());
@@ -355,7 +345,7 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 				new StringFieldDef("empEntidadePessoa"), new StringFieldDef("empEntidadeDocumento1") };
 		Store dados = new Store(persiste, new ArrayReader(new RecordDef(campos)), true);
 
-		cmbEntidade = new ComboBox(OpenSigCore.i18n.txtEntidade(), "empEntidade.empEntidadeNome1", 330);
+		cmbEntidade = new ComboBox(OpenSigCore.i18n.txtEntidade(), "empEntidade.empEntidadeNome1", 230);
 		cmbEntidade.setMinChars(1);
 		cmbEntidade.setSelectOnFocus(true);
 		cmbEntidade.setListWidth(500);
@@ -383,60 +373,13 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 		return cmbEntidade;
 	}
 
-	protected ComboBox getConta() {
-		FieldDef[] fdConta = new FieldDef[] { new IntegerFieldDef("finContaId"), new IntegerFieldDef("empEmpresa.empEmpresaId"), new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"),
-				new IntegerFieldDef("finBanco.finBancoId"), new StringFieldDef("finBanco.finBancoDescricao"), new StringFieldDef("finContaNome") };
-		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Ponte.getLogin().getEmpresaId()));
-
-		CoreProxy<FinConta> proxy = new CoreProxy<FinConta>(new FinConta(), fo);
-		final Store storeConta = new Store(proxy, new ArrayReader(new RecordDef(fdConta)), true);
-		storeConta.addStoreListener(new StoreListenerAdapter() {
-			public void onLoad(Store store, Record[] records) {
-				treeCategoria.limpar();
-				treeCategoria.carregar(null, new AsyncCallback<Lista<FinCategoria>>() {
-
-					public void onSuccess(Lista<FinCategoria> result) {
-						mostrar();
-					}
-
-					public void onFailure(Throwable caught) {
-						new ToastWindow(OpenSigCore.i18n.txtCategoria(), OpenSigCore.i18n.errListagem());
-					}
-				});
-			}
-
-			public void onLoadException(Throwable error) {
-				MessageBox.confirm(OpenSigCore.i18n.txtEmbalagem(), OpenSigCore.i18n.msgRecarregar(), new ConfirmCallback() {
-					public void execute(String btnID) {
-						if (btnID.equalsIgnoreCase("yes")) {
-							storeConta.load();
-						}
-					}
-				});
-			}
-		});
-
-		cmbConta = new ComboBox(OpenSigCore.i18n.txtConta(), "finConta.finContaId", 200);
-		cmbConta.setAllowBlank(false);
-		cmbConta.setStore(storeConta);
-		cmbConta.setListWidth(200);
-		cmbConta.setTriggerAction(ComboBox.ALL);
-		cmbConta.setMode(ComboBox.LOCAL);
-		cmbConta.setDisplayField("finContaNome");
-		cmbConta.setValueField("finContaId");
-		cmbConta.setForceSelection(true);
-		cmbConta.setEditable(false);
-
-		return cmbConta;
-	}
-
 	protected Arvore getCategoria() {
 		treeCategoria = new Arvore(new FinCategoria(), OpenSigCore.i18n.txtCategoria());
 		treeCategoria.setIconeNode("icon-categoria");
 		treeCategoria.setFiltrar(true);
 		treeCategoria.setEditar(true);
 		treeCategoria.setWidth(200);
-		treeCategoria.setHeight(200);
+		treeCategoria.setHeight(120);
 		treeCategoria.setBodyBorder(true);
 		treeCategoria.inicializar();
 		treeCategoria.getTxtFiltro().setMaxLength(20);
@@ -445,7 +388,17 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 	}
 
 	public void mostrarDados() {
-		cmbConta.getStore().reload();
+		treeCategoria.limpar();
+		treeCategoria.carregar(null, new AsyncCallback<Lista<FinCategoria>>() {
+
+			public void onSuccess(Lista<FinCategoria> result) {
+				mostrar();
+			}
+
+			public void onFailure(Throwable caught) {
+				new ToastWindow(OpenSigCore.i18n.txtCategoria(), OpenSigCore.i18n.errListagem());
+			}
+		});
 	}
 
 	private void mostrar() {
@@ -465,9 +418,6 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 			treeCategoria.selecionar(objs);
 		} else {
 			treeCategoria.selecionar(null);
-			if (cmbConta.getStore().getRecords().length == 1) {
-				cmbConta.setValue(cmbConta.getStore().getRecordAt(0).getAsString("finContaId"));
-			}
 		}
 		cmbEntidade.focus(true);
 
@@ -556,14 +506,6 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 
 	public void setCmbEntidade(ComboBox cmbEntidade) {
 		this.cmbEntidade = cmbEntidade;
-	}
-
-	public ComboBox getCmbConta() {
-		return cmbConta;
-	}
-
-	public void setCmbConta(ComboBox cmbConta) {
-		this.cmbConta = cmbConta;
 	}
 
 	public TextArea getTxtObservacao() {

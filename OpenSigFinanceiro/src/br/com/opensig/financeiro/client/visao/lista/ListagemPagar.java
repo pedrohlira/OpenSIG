@@ -1,14 +1,9 @@
 package br.com.opensig.financeiro.client.visao.lista;
 
-import java.util.Map;
-
 import br.com.opensig.core.client.UtilClient;
-import br.com.opensig.core.client.controlador.comando.AComando;
 import br.com.opensig.core.client.controlador.comando.FabricaComando;
-import br.com.opensig.core.client.controlador.comando.lista.ComandoExcluirFinal;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
 import br.com.opensig.financeiro.client.controlador.comando.ComandoPagamento;
-import br.com.opensig.financeiro.client.servico.FinanceiroProxy;
 import br.com.opensig.financeiro.client.visao.form.AFormularioFinanceiro;
 import br.com.opensig.financeiro.shared.modelo.FinPagamento;
 import br.com.opensig.financeiro.shared.modelo.FinPagar;
@@ -21,20 +16,8 @@ public class ListagemPagar extends AListagemFinanceiro<FinPagar, FinPagamento> {
 	public ListagemPagar(AFormularioFinanceiro<FinPagar, FinPagamento> formulario) {
 		super(formulario);
 		inicializar();
-
-		// deletando
-		cmdExcluir = new AComando(new ComandoExcluirFinal()) {
-			public void execute(Map contexto) {
-				super.execute(contexto);
-				int id = UtilClient.getSelecionado(getPanel());
-				classe.setId(id);
-
-				FinanceiroProxy proxy = new FinanceiroProxy();
-				proxy.excluirPagar(classe, ASYNC);
-			}
-		};
 	}
-	
+
 	@Override
 	public void irPara() {
 		Menu mnuContexto = new Menu();
@@ -54,7 +37,7 @@ public class ListagemPagar extends AListagemFinanceiro<FinPagar, FinPagamento> {
 		if (itemFrete != null) {
 			mnuContexto.addItem(itemFrete);
 		}
-		
+
 		// pagamentos
 		SisFuncao pagamentos = UtilClient.getFuncaoPermitida(ComandoPagamento.class);
 		MenuItem itemPagamentos = gerarFuncao(pagamentos, "finPagar.finPagarId", "finPagarId");

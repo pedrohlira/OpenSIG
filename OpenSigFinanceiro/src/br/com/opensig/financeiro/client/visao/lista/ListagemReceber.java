@@ -1,14 +1,9 @@
 package br.com.opensig.financeiro.client.visao.lista;
 
-import java.util.Map;
-
 import br.com.opensig.core.client.UtilClient;
-import br.com.opensig.core.client.controlador.comando.AComando;
 import br.com.opensig.core.client.controlador.comando.FabricaComando;
-import br.com.opensig.core.client.controlador.comando.lista.ComandoExcluirFinal;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
 import br.com.opensig.financeiro.client.controlador.comando.ComandoRecebimento;
-import br.com.opensig.financeiro.client.servico.FinanceiroProxy;
 import br.com.opensig.financeiro.client.visao.form.AFormularioFinanceiro;
 import br.com.opensig.financeiro.shared.modelo.FinReceber;
 import br.com.opensig.financeiro.shared.modelo.FinRecebimento;
@@ -21,18 +16,6 @@ public class ListagemReceber extends AListagemFinanceiro<FinReceber, FinRecebime
 	public ListagemReceber(AFormularioFinanceiro<FinReceber, FinRecebimento> formulario) {
 		super(formulario);
 		inicializar();
-		
-		// deletando
-		cmdExcluir = new AComando(new ComandoExcluirFinal()) {
-			public void execute(Map contexto) {
-				super.execute(contexto);
-				int id = UtilClient.getSelecionado(getPanel());
-				classe.setId(id);
-
-				FinanceiroProxy proxy = new FinanceiroProxy();
-				proxy.excluirReceber(classe, ASYNC);
-			}
-		};
 	}
 	
 	@Override

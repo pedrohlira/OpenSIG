@@ -180,12 +180,6 @@ public class ListagemValidarCompra {
 				formPagar.mostrarDados();
 				formPagar.getGridFormas().setHeight(260);
 				formPagar.getGridFormas().setStore(getDadosPagamentos());
-				formPagar.getCmbConta().getStore().addStoreListener(new StoreListenerAdapter() {
-					public void onLoad(Store store, Record[] records) {
-						formPagar.getCmbConta().setValue(UtilClient.CONF.get("conta.padrao"));
-					}
-				});
-
 				formPagar.getGridFormas().getStoreForma().addStoreListener(new StoreListenerAdapter() {
 					public void onLoad(Store store, Record[] records) {
 						formPagar.getGridFormas().getStore().load();

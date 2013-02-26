@@ -85,8 +85,8 @@ public class ListagemVenda extends AListagem<ComVenda> {
 				new StringFieldDef("empCliente.empEntidade.empEntidadeNome1"), new IntegerFieldDef("empEmpresa.empEmpresaId"), new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"),
 				new IntegerFieldDef("sisUsuario.sisUsuarioId"), new StringFieldDef("sisUsuario.sisUsuarioLogin"), new DateFieldDef("comVendaData"), new FloatFieldDef("comVendaValorBruto"),
 				new FloatFieldDef("comVendaValorLiquido"), new IntegerFieldDef("comNatureza.comNaturezaId"), new StringFieldDef("comNatureza.comNaturezaNome"), new BooleanFieldDef("comVendaFechada"),
-				new IntegerFieldDef("finReceber.finConta.finContaId"), new IntegerFieldDef("finReceber.finReceberId"), new BooleanFieldDef("comVendaRecebida"),
-				new IntegerFieldDef("fisNotaSaida.fisNotaSaidaId"), new BooleanFieldDef("comVendaNfe"), new BooleanFieldDef("comVendaCancelada"), new StringFieldDef("comVendaObservacao") };
+				new IntegerFieldDef("finReceber.finReceberId"), new BooleanFieldDef("comVendaRecebida"), new IntegerFieldDef("fisNotaSaida.fisNotaSaidaId"), new BooleanFieldDef("comVendaNfe"),
+				new BooleanFieldDef("comVendaCancelada"), new StringFieldDef("comVendaObservacao") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -108,8 +108,6 @@ public class ListagemVenda extends AListagem<ComVenda> {
 		ColumnConfig ccNaturezaNome = new ColumnConfig(OpenSigCore.i18n.txtNatureza(), "comNatureza.comNaturezaNome", 100, true);
 		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), "comVendaData", 120, true, DATAHORA);
 		ColumnConfig ccFechada = new ColumnConfig(OpenSigCore.i18n.txtFechada(), "comVendaFechada", 75, true, BOLEANO);
-		ColumnConfig ccContaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtConta(), "finReceber.finConta.finContaId", 100, true);
-		ccContaId.setHidden(true);
 		ColumnConfig ccReceberId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtReceber(), "finReceber.finReceberId", 100, true);
 		ccReceberId.setHidden(true);
 		ColumnConfig ccRecebida = new ColumnConfig(OpenSigCore.i18n.txtRecebida(), "comVendaRecebida", 75, true, BOLEANO);
@@ -126,7 +124,7 @@ public class ListagemVenda extends AListagem<ComVenda> {
 		SummaryColumnConfig sumLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtLiquido(), "comVendaValorLiquido", 75, true, DINHEIRO), DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccClienteId, ccEntidadeId, ccNome, ccEmpresaId, ccEmpresa, ccUsuarioId, ccLogin, ccData, sumBruto, sumLiquido, ccNatureza,
-				ccNaturezaNome, ccFechada, ccContaId, ccReceberId, ccRecebida, ccNfeId, ccNfe, ccCancelada, ccObs };
+				ccNaturezaNome, ccFechada, ccReceberId, ccRecebida, ccNfeId, ccNfe, ccCancelada, ccObs };
 		modelos = new ColumnModel(bcc);
 
 		// cancelando
@@ -320,7 +318,7 @@ public class ListagemVenda extends AListagem<ComVenda> {
 			}
 		});
 	}
-	
+
 	@Override
 	public void irPara() {
 		Menu mnuContexto = new Menu();
@@ -331,7 +329,7 @@ public class ListagemVenda extends AListagem<ComVenda> {
 		if (itemCliente != null) {
 			mnuContexto.addItem(itemCliente);
 		}
-		
+
 		// produtos venda
 		SisFuncao produto = UtilClient.getFuncaoPermitida(ComandoVendaProduto.class);
 		MenuItem itemProduto = gerarFuncao(produto, "comVenda.comVendaId", "comVendaId");

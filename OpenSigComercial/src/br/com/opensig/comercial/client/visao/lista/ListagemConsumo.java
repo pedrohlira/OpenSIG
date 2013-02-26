@@ -67,8 +67,7 @@ public class ListagemConsumo extends AListagem<ComConsumo> {
 				new StringFieldDef("empFornecedor.empEntidade.empEntidadeNome1"), new IntegerFieldDef("empEmpresa.empEmpresaId"), new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"),
 				new StringFieldDef("comConsumoTipo"), new IntegerFieldDef("comConsumoDocumento"), new DateFieldDef("comConsumoData"), new FloatFieldDef("comConsumoValor"),
 				new IntegerFieldDef("comConsumoCfop"), new FloatFieldDef("comConsumoBase"), new FloatFieldDef("comConsumoAliquota"), new FloatFieldDef("comConsumoIcms"),
-				new BooleanFieldDef("comConsumoFechada"), new IntegerFieldDef("contaId"), new IntegerFieldDef("finPagar.finPagarId"), new BooleanFieldDef("comConsumoPaga"),
-				new StringFieldDef("comConsumoObservacao") };
+				new BooleanFieldDef("comConsumoFechada"), new IntegerFieldDef("finPagar.finPagarId"), new BooleanFieldDef("comConsumoPaga"), new StringFieldDef("comConsumoObservacao") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -89,9 +88,6 @@ public class ListagemConsumo extends AListagem<ComConsumo> {
 		ColumnConfig ccBase = new ColumnConfig(OpenSigCore.i18n.txtIcmsBase(), "comConsumoBase", 75, true, DINHEIRO);
 		ColumnConfig ccAliquota = new ColumnConfig(OpenSigCore.i18n.txtAliquota(), "comConsumoAliquota", 75, true, PORCENTAGEM);
 		ColumnConfig ccFechada = new ColumnConfig(OpenSigCore.i18n.txtFechada(), "comConsumoFechada", 75, true, BOLEANO);
-		ColumnConfig ccContaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtConta(), "contaId", 100, true);
-		ccContaId.setHidden(true);
-		ccContaId.setFixed(true);
 		ColumnConfig ccPagarId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtPagar(), "finPagar.finPagarId", 100, true);
 		ccPagarId.setHidden(true);
 		ColumnConfig ccPaga = new ColumnConfig(OpenSigCore.i18n.txtPaga(), "comConsumoPaga", 75, true, BOLEANO);
@@ -101,8 +97,8 @@ public class ListagemConsumo extends AListagem<ComConsumo> {
 		SummaryColumnConfig sumValor = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtValor(), "comConsumoValor", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig sumIcms = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comConsumoIcms", 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccFornecedorId, ccEntidadeId, ccFonecedorNome, ccEmpresaId, ccEmpresa, ccTipo, ccDoc, ccData, sumValor, ccCfop, ccBase, ccAliquota, sumIcms,
-				ccFechada, ccContaId, ccPagarId, ccPaga, ccObservacao };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccFornecedorId, ccEntidadeId, ccFonecedorNome, ccEmpresaId, ccEmpresa, ccTipo, ccDoc, ccData, sumValor, ccCfop, ccBase, ccAliquota,
+				sumIcms, ccFechada, ccPagarId, ccPaga, ccObservacao };
 		modelos = new ColumnModel(bcc);
 
 		// excluindo
@@ -176,13 +172,8 @@ public class ListagemConsumo extends AListagem<ComConsumo> {
 				entry.setValue(fEmpresa);
 			} else if (entry.getKey().equals("comConsumoTipo")) {
 				// tipos de consumos
-				Store store = new SimpleStore(new String[] { "id", "valor" }, new String[][] { 
-						new String[] { "21 - REDE", "21 - REDE" },
-						new String[] { "22 - FONE", "22 - FONE" },
-						new String[] { "06 - LUZ", "06 - LUZ" }, 
-						new String[] { "28 - GÁS", "28 - GÁS" },
-						new String[] { "29 - ÁGUA", "29 - ÁGUA" }
-						});
+				Store store = new SimpleStore(new String[] { "id", "valor" }, new String[][] { new String[] { "21 - REDE", "21 - REDE" }, new String[] { "22 - FONE", "22 - FONE" },
+						new String[] { "06 - LUZ", "06 - LUZ" }, new String[] { "28 - GÁS", "28 - GÁS" }, new String[] { "29 - ÁGUA", "29 - ÁGUA" } });
 				store.load();
 				GridListFilter fTipo = new GridListFilter("comConsumoTipo", store);
 				fTipo.setLabelField("id");

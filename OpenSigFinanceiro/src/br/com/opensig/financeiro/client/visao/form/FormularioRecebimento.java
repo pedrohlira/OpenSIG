@@ -15,7 +15,6 @@ public class FormularioRecebimento extends AFormularioFinanciado<FinRecebimento>
 		nomes.put("id", "finRecebimentoId");
 		nomes.put("financeiroId", "finReceber.finReceberId");
 		nomes.put("financeiroNome", "finReceber.empEntidade.empEntidadeNome1");
-		nomes.put("financeiroConta", "finReceber.finConta.finContaId");
 		nomes.put("financeiroEmpresa", "finReceber.empEmpresa");
 		nomes.put("documento", "finRecebimentoDocumento");
 		nomes.put("valor", "finRecebimentoValor");
@@ -36,6 +35,7 @@ public class FormularioRecebimento extends AFormularioFinanciado<FinRecebimento>
 	public boolean setDados() {
 		classe.setFinForma(new FinForma(Integer.valueOf(cmbForma.getValue())));
 		classe.setFinReceber(new FinReceber(Integer.valueOf(hdnFinanceiro.getValueAsString())));
+		classe.setFinConta(null);
 		classe.setFinRecebimentoId(Integer.valueOf(hdnCod.getValueAsString()));
 		classe.setFinRecebimentoParcela(txtParcela.getValueAsString());
 		classe.setFinRecebimentoObservacao(txtObservacao.getValueAsString());
@@ -44,11 +44,11 @@ public class FormularioRecebimento extends AFormularioFinanciado<FinRecebimento>
 		classe.setFinRecebimentoStatus(OpenSigCore.i18n.txtAberto().toUpperCase());
 		classe.setFinRecebimentoRealizado(null);
 		classe.setFinRecebimentoConciliado(null);
-
+		classe.setFinRecebimentoDocumento(txtDocumento.getValueAsString());
 		if (txtValor.getValue() != null) {
 			classe.setFinRecebimentoValor(txtValor.getValue().doubleValue());
 		}
-		classe.setFinRecebimentoDocumento(txtDocumento.getValueAsString());
+		
 		return true;
 	}
 

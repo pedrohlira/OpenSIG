@@ -17,23 +17,19 @@ import br.com.opensig.financeiro.server.boleto.IBoleto;
 import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinRecebimento;
 
-public abstract class ACobranca implements ICobranca {
+public class Boleto{
 
-	protected Autenticacao auth;
-	protected FinConta conta;
-	protected int banco;
+	private Autenticacao auth;
+	private FinConta conta;
+	private int banco;
 
-	public ACobranca(FinConta conta, int banco) {
+	public Boleto(FinConta conta, Autenticacao auth) {
 		this.conta = conta;
-		this.banco = banco;
-	}
-
-	@Override
-	public void setAuth(Autenticacao auth) {
+		this.banco = Integer.valueOf(conta.getFinBanco().getFinBancoNumero());
 		this.auth = auth;
 	}
-	
-	public byte[] boleto(String tipo, FinRecebimento finBoleto) throws FinanceiroException {
+
+	public byte[] gerar(String tipo, FinRecebimento finBoleto) throws FinanceiroException {
 		IBoleto bol = FabricaBoleto.getInstancia().getBoleto(tipo);
 		JBoletoBean bean = getBean(auth.getEmpresa(), finBoleto);
 		Banco banco = FabricaBanco.getBanco(bean, this.banco);

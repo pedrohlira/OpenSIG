@@ -27,8 +27,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtext.client.data.Record;
-import com.gwtext.client.data.Store;
-import com.gwtext.client.data.event.StoreListenerAdapter;
 import com.gwtext.client.widgets.Component;
 import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.form.event.FormPanelListenerAdapter;
@@ -129,12 +127,6 @@ public class ComandoReceber extends ComandoAcao<ComVenda> {
 				formReceber.getDtCadastro().disable();
 				formReceber.mostrarDados();
 				formReceber.getGridFormas().setHeight(260);
-
-				formReceber.getCmbConta().getStore().addStoreListener(new StoreListenerAdapter() {
-					public void onLoad(Store store, Record[] records) {
-						formReceber.getCmbConta().setValue(UtilClient.CONF.get("conta.padrao"));
-					}
-				});
 
 				Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
 					public boolean execute() {

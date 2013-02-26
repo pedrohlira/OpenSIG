@@ -21,7 +21,5 @@
 		<class>br.com.opensig.empresa.shared.modelo.EmpPais</class>
 		<class>br.com.opensig.empresa.shared.modelo.EmpEstado</class>
 		<class>br.com.opensig.empresa.shared.modelo.EmpMunicipio</class>
-		<class>br.com.opensig.financeiro.shared.modelo.FinRemessa</class>
-		<class>br.com.opensig.financeiro.shared.modelo.FinRetorno</class>
 	</persistence-unit>
 </persistence>

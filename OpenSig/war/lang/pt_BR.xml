@@ -363,20 +363,6 @@
 		<imagem>icon-preco</imagem>
 	</funcao>
 	<funcao>
-		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoRemessa
-		</classe>
-		<nome>Remessa</nome>
-		<descricao>Administrar as remessas geradas para o banco.</descricao>
-		<imagem>icon-remessa</imagem>
-	</funcao>
-	<funcao>
-		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoRetorno
-		</classe>
-		<nome>Retorno</nome>
-		<descricao>Administrar os retornos gerados pelo banco.</descricao>
-		<imagem>icon-retorno</imagem>
-	</funcao>
-	<funcao>
 		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoBanco
 		</classe>
 		<nome>Banco</nome>

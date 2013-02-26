@@ -51,7 +51,7 @@ public class FinReceber extends Dados implements Serializable {
 	@Column(name = "fin_receber_categoria")
 	@XmlElement(name = "ecfPagamentoNsu")
 	private String finReceberCategoria;
-	
+
 	@Column(name = "fin_receber_nfe")
 	@XmlElement(name = "ecfPagamentoGnf")
 	private int finReceberNfe;
@@ -75,19 +75,14 @@ public class FinReceber extends Dados implements Serializable {
 	@XmlTransient
 	private EmpEntidade empEntidade;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "fin_conta_id")
-	@XmlTransient
-	private FinConta finConta;
-
 	@OneToMany(mappedBy = "finReceber", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@XmlElement(name = "ecfPagamentoParcelas")
 	private List<FinRecebimento> finRecebimentos;
-	
+
 	@Transient
 	@XmlElement(name = "ecfPagamentoTipo")
 	private FinForma finForma;
-	
+
 	public FinReceber() {
 		this(0);
 	}
@@ -153,14 +148,6 @@ public class FinReceber extends Dados implements Serializable {
 		this.empEntidade = empEntidade;
 	}
 
-	public FinConta getFinConta() {
-		return finConta;
-	}
-
-	public void setFinConta(FinConta finConta) {
-		this.finConta = finConta;
-	}
-
 	public List<FinRecebimento> getFinRecebimentos() {
 		return finRecebimentos;
 	}
@@ -180,11 +167,11 @@ public class FinReceber extends Dados implements Serializable {
 	public FinForma getFinForma() {
 		return finForma;
 	}
-	
+
 	public void setFinForma(FinForma finForma) {
 		this.finForma = finForma;
 	}
-	
+
 	public Number getId() {
 		return finReceberId;
 	}
@@ -195,15 +182,12 @@ public class FinReceber extends Dados implements Serializable {
 
 	public String[] toArray() {
 		return new String[] { finReceberId + "", empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), empEntidade.getEmpEntidadeId() + "",
-				empEntidade.getEmpEntidadeNome1(), finConta.getFinContaId() + "", finConta.getFinContaNome(), finReceberValor.toString(), UtilClient.getDataGrid(finReceberCadastro),
-				finReceberCategoria, finReceberNfe + "", finReceberObservacao };
+				empEntidade.getEmpEntidadeNome1(), finReceberValor.toString(), UtilClient.getDataGrid(finReceberCadastro), finReceberCategoria, finReceberNfe + "", finReceberObservacao };
 	}
 
 	public Dados getObjeto(String campo) {
 		if (campo.startsWith("empEmpresa")) {
 			return new EmpEmpresa();
-		} else if (campo.startsWith("finConta")) {
-			return new FinConta();
 		} else {
 			return null;
 		}
@@ -212,7 +196,6 @@ public class FinReceber extends Dados implements Serializable {
 	public void anularDependencia() {
 		empEmpresa = null;
 		empEntidade = null;
-		finConta = null;
 		finRecebimentos = null;
 	}
 }

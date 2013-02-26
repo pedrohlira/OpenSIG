@@ -15,7 +15,6 @@ public class FormularioPagamento extends AFormularioFinanciado<FinPagamento> {
 		nomes.put("id", "finPagamentoId");
 		nomes.put("financeiroId", "finPagar.finPagarId");
 		nomes.put("financeiroNome", "finPagar.empEntidade.empEntidadeNome1");
-		nomes.put("financeiroConta", "finPagar.finConta.finContaId");
 		nomes.put("financeiroEmpresa", "finPagar.empEmpresa");
 		nomes.put("documento", "finPagamentoDocumento");
 		nomes.put("valor", "finPagamentoValor");
@@ -36,6 +35,7 @@ public class FormularioPagamento extends AFormularioFinanciado<FinPagamento> {
 	public boolean setDados() {
 		classe.setFinForma(new FinForma(Integer.valueOf(cmbForma.getValue())));
 		classe.setFinPagar(new FinPagar(Integer.valueOf(hdnFinanceiro.getValueAsString())));
+		classe.setFinConta(null);
 		classe.setFinPagamentoId(Integer.valueOf(hdnCod.getValueAsString()));
 		classe.setFinPagamentoParcela(txtParcela.getValueAsString());
 		classe.setFinPagamentoObservacao(txtObservacao.getValueAsString());
@@ -44,11 +44,10 @@ public class FormularioPagamento extends AFormularioFinanciado<FinPagamento> {
 		classe.setFinPagamentoStatus(OpenSigCore.i18n.txtAberto().toUpperCase());
 		classe.setFinPagamentoRealizado(null);
 		classe.setFinPagamentoConciliado(null);
-
+		classe.setFinPagamentoDocumento(txtDocumento.getValueAsString());
 		if (txtValor.getValue() != null) {
 			classe.setFinPagamentoValor(txtValor.getValue().doubleValue());
 		}
-		classe.setFinPagamentoDocumento(txtDocumento.getValueAsString());
 
 		return true;
 	}

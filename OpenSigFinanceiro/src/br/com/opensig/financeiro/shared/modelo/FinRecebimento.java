@@ -87,6 +87,11 @@ public class FinRecebimento extends Dados implements Serializable {
 	@XmlTransient
 	private FinForma finForma;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "fin_conta_id")
+	@XmlTransient
+	private FinConta finConta;
+
 	public FinRecebimento() {
 		this(0);
 	}
@@ -200,9 +205,18 @@ public class FinRecebimento extends Dados implements Serializable {
 		finRecebimentoId = id.intValue();
 	}
 
+	public FinConta getFinConta() {
+		return finConta;
+	}
+
+	public void setFinConta(FinConta finConta) {
+		this.finConta = finConta;
+	}
+
 	public void anularDependencia() {
 		finReceber = null;
 		finForma = null;
+		finConta = null;
 	}
 
 	public Dados getObjeto(String campo) {
@@ -210,17 +224,22 @@ public class FinRecebimento extends Dados implements Serializable {
 			return new FinReceber();
 		} else if (campo.startsWith("finForma")) {
 			return new FinForma();
+		} else if (campo.startsWith("finConta")) {
+			return new FinConta();
 		} else {
 			return null;
 		}
 	}
 
 	public String[] toArray() {
+		int contaId = finConta == null ? 0 : finConta.getFinContaId();
+		String contaNome = finConta == null ? "" : finConta.getFinContaNome();
+
 		return new String[] { finRecebimentoId + "", finReceber.getFinReceberId() + "", finReceber.getEmpEmpresa().getEmpEmpresaId() + "",
-				finReceber.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(), finReceber.getEmpEntidade().getEmpEntidadeNome1(), finReceber.getFinConta().getFinContaId() + "",
-				finForma.getFinFormaId() + "", finForma.getFinFormaDescricao(), finRecebimentoDocumento, finRecebimentoValor.toString(), finRecebimentoParcela,
-				UtilClient.getDataGrid(finRecebimentoCadastro), UtilClient.getDataGrid(finRecebimentoVencimento), finRecebimentoStatus, UtilClient.getDataGrid(finRecebimentoRealizado),
-				UtilClient.getDataGrid(finRecebimentoConciliado), finReceber.getFinReceberNfe() + "", finRecebimentoObservacao };
+				finReceber.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(), finReceber.getEmpEntidade().getEmpEntidadeNome1(), contaId + "", contaNome, finForma.getFinFormaId() + "",
+				finForma.getFinFormaDescricao(), finRecebimentoDocumento, finRecebimentoValor.toString(), finRecebimentoParcela, UtilClient.getDataGrid(finRecebimentoCadastro),
+				UtilClient.getDataGrid(finRecebimentoVencimento), finRecebimentoStatus, UtilClient.getDataGrid(finRecebimentoRealizado), UtilClient.getDataGrid(finRecebimentoConciliado),
+				finReceber.getFinReceberNfe() + "", finRecebimentoObservacao };
 	}
 
 }

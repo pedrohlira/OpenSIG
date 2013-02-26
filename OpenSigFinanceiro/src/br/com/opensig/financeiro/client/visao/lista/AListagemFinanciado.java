@@ -55,11 +55,11 @@ public class AListagemFinanciado<E extends Dados> extends AListagem<E> {
 	public void inicializar() {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef(nomes.get("id")), new IntegerFieldDef(nomes.get("financeiroId")), new IntegerFieldDef(nomes.get("financeiroEmpresa") + ".empEmpresaId"),
-				new StringFieldDef(nomes.get("financeiroEmpresa") + ".empEntidade.empEntidadeNome1"), new StringFieldDef(nomes.get("financeiroNome")),
-				new IntegerFieldDef(nomes.get("financeiroConta")), new IntegerFieldDef("finForma.finFormaId"), new StringFieldDef("finForma.finFormaDescricao"),
-				new StringFieldDef(nomes.get("documento")), new FloatFieldDef(nomes.get("valor")), new StringFieldDef(nomes.get("parcela")), new DateFieldDef(nomes.get("cadastro")),
-				new DateFieldDef(nomes.get("vencimento")), new StringFieldDef(nomes.get("status")), new DateFieldDef(nomes.get("realizado")), new DateFieldDef(nomes.get("conciliado")),
-				new IntegerFieldDef(nomes.get("financeiroNfe")), new StringFieldDef(nomes.get("observacao")) };
+				new StringFieldDef(nomes.get("financeiroEmpresa") + ".empEntidade.empEntidadeNome1"), new StringFieldDef(nomes.get("financeiroNome")), new IntegerFieldDef("finConta.finContaId"),
+				new StringFieldDef("finConta.finContaNome"), new IntegerFieldDef("finForma.finFormaId"), new StringFieldDef("finForma.finFormaDescricao"), new StringFieldDef(nomes.get("documento")),
+				new FloatFieldDef(nomes.get("valor")), new StringFieldDef(nomes.get("parcela")), new DateFieldDef(nomes.get("cadastro")), new DateFieldDef(nomes.get("vencimento")),
+				new StringFieldDef(nomes.get("status")), new DateFieldDef(nomes.get("realizado")), new DateFieldDef(nomes.get("conciliado")), new IntegerFieldDef(nomes.get("financeiroNfe")),
+				new StringFieldDef(nomes.get("observacao")) };
 		campos = new RecordDef(fd);
 
 		// selected
@@ -75,8 +75,10 @@ public class AListagemFinanciado<E extends Dados> extends AListagem<E> {
 		ColumnConfig ccEmpresa = new ColumnConfig(OpenSigCore.i18n.txtEmpresa(), nomes.get("financeiroEmpresa") + ".empEntidade.empEntidadeNome1", 100, true);
 		ccEmpresa.setHidden(true);
 		ColumnConfig ccNome = new ColumnConfig(OpenSigCore.i18n.txtEntidade(), nomes.get("financeiroNome"), 200, true);
-		ColumnConfig ccContaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtConta(), nomes.get("financeiroConta"), 100, true);
+		ColumnConfig ccContaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtConta(), nomes.get("finConta.finContaId"), 100, true);
 		ccContaId.setHidden(true);
+		ColumnConfig ccContaNome = new ColumnConfig(OpenSigCore.i18n.txtConta(), nomes.get("finConta.finContaNome"), 100, true);
+		ccContaNome.setHidden(true);
 		ColumnConfig ccFormaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtTipo(), "finForma.finFormaId", 100, true);
 		ccFormaId.setHidden(true);
 		ColumnConfig ccDescricao = new ColumnConfig(OpenSigCore.i18n.txtTipo(), "finForma.finFormaDescricao", 100, true);
@@ -93,8 +95,8 @@ public class AListagemFinanciado<E extends Dados> extends AListagem<E> {
 		// sumarios
 		SummaryColumnConfig sumValor = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtValor(), nomes.get("valor"), 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { check, ccId, ccFinanceiroId, ccEmpresaId, ccEmpresa, ccNome, ccContaId, ccFormaId, ccDescricao, ccDocumento, sumValor, ccParcela, ccCadastro,
-				ccVencimento, ccStatus, ccRealizado, ccConciliado, ccNfe, ccObservacao };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { check, ccId, ccFinanceiroId, ccEmpresaId, ccEmpresa, ccNome, ccContaId, ccContaNome, ccFormaId, ccDescricao, ccDocumento, sumValor,
+				ccParcela, ccCadastro, ccVencimento, ccStatus, ccRealizado, ccConciliado, ccNfe, ccObservacao };
 		modelos = new ColumnModel(bcc);
 
 		if (UtilClient.getAcaoPermitida(funcao, ComandoPermiteEmpresa.class) == null) {
@@ -128,7 +130,8 @@ public class AListagemFinanciado<E extends Dados> extends AListagem<E> {
 		for (Entry<String, GridFilter> entry : filtros.entrySet()) {
 			if (entry.getKey().equals(nomes.get("status"))) {
 				// status
-				Store storeStatus = new SimpleStore("status", new String[] { OpenSigCore.i18n.txtAberto().toUpperCase(), OpenSigCore.i18n.txtRealizado().toUpperCase(), OpenSigCore.i18n.txtConciliado().toUpperCase() });
+				Store storeStatus = new SimpleStore("status", new String[] { OpenSigCore.i18n.txtAberto().toUpperCase(), OpenSigCore.i18n.txtRealizado().toUpperCase(),
+						OpenSigCore.i18n.txtConciliado().toUpperCase() });
 				GridListFilter fTipo = new GridListFilter(nomes.get("status"), storeStatus);
 				fTipo.setLabelField("status");
 				fTipo.setLabelValue("status");

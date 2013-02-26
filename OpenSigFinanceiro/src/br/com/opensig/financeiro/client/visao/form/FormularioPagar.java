@@ -11,7 +11,6 @@ import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.empresa.shared.modelo.EmpEntidade;
 import br.com.opensig.financeiro.client.servico.FinanceiroProxy;
-import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinPagamento;
 import br.com.opensig.financeiro.shared.modelo.FinPagar;
 
@@ -66,14 +65,8 @@ public class FormularioPagar extends AFormularioFinanceiro<FinPagar, FinPagament
 			EmpEntidade entidade = new EmpEntidade(Integer.valueOf(hdnEntidade.getValueAsString()));
 			classe.setEmpEntidade(entidade);
 		}
-		if (cmbConta.getValue() != null) {
-			FinConta conta = new FinConta(Integer.valueOf(cmbConta.getValue()));
-			classe.setFinConta(conta);
-		}
 		if (txtNfe.getValue() != null) {
 			classe.setFinPagarNfe(txtNfe.getValue().intValue());
-		} else {
-			classe.setFinPagarNfe(0);
 		}
 		if (txtValor.getValue() != null) {
 			classe.setFinPagarValor(txtValor.getValue().doubleValue());

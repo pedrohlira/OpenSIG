@@ -69,8 +69,8 @@ public class ListagemFrete extends AListagem<ComFrete> {
 				new DateFieldDef("comFreteEmissao"), new DateFieldDef("comFreteRecebimento"), new IntegerFieldDef("comFreteSerie"), new IntegerFieldDef("comFreteCfop"),
 				new IntegerFieldDef("comFreteVolume"), new StringFieldDef("comFreteEspecie"), new FloatFieldDef("comFretePeso"), new FloatFieldDef("comFreteCubagem"),
 				new FloatFieldDef("comFreteValorProduto"), new IntegerFieldDef("comFreteNota"), new FloatFieldDef("comFreteValor"), new FloatFieldDef("comFreteBase"),
-				new FloatFieldDef("comFreteAliquota"), new FloatFieldDef("comFreteIcms"), new BooleanFieldDef("comFreteFechada"), new IntegerFieldDef("contaId"),
-				new IntegerFieldDef("finPagar.finPagarId"), new BooleanFieldDef("comFretePaga"), new StringFieldDef("comFreteObservacao") };
+				new FloatFieldDef("comFreteAliquota"), new FloatFieldDef("comFreteIcms"), new BooleanFieldDef("comFreteFechada"), new IntegerFieldDef("finPagar.finPagarId"),
+				new BooleanFieldDef("comFretePaga"), new StringFieldDef("comFreteObservacao") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -101,9 +101,6 @@ public class ListagemFrete extends AListagem<ComFrete> {
 		ColumnConfig ccBase = new ColumnConfig(OpenSigCore.i18n.txtIcmsBase(), "comFreteBase", 75, true, DINHEIRO);
 		ColumnConfig ccAliquota = new ColumnConfig(OpenSigCore.i18n.txtAliquota(), "comFreteAliquota", 75, true, PORCENTAGEM);
 		ColumnConfig ccFechada = new ColumnConfig(OpenSigCore.i18n.txtFechada(), "comFreteFechada", 75, true, BOLEANO);
-		ColumnConfig ccContaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtConta(), "contaId", 100, true);
-		ccContaId.setHidden(true);
-		ccContaId.setFixed(true);
 		ColumnConfig ccPagarId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtPagar(), "finPagar.finPagarId", 100, true);
 		ccPagarId.setHidden(true);
 		ColumnConfig ccPaga = new ColumnConfig(OpenSigCore.i18n.txtPaga(), "comFretePaga", 75, true, BOLEANO);
@@ -114,7 +111,7 @@ public class ListagemFrete extends AListagem<ComFrete> {
 		SummaryColumnConfig sumIcms = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comFreteIcms", 75, true, DINHEIRO), DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccFornecedorId, ccFonecedorNome, ccEmpresaId, ccEmpresa, ccTransportadoraId, ccEntidadeId, ccEntidadeNome, ccCtrc, ccEmissao,
-				ccRecebimento, ccSerie, ccCfop, ccVolume, ccEspecie, ccPeso, ccCubagem, ccProduto, ccNota, sumValor, ccBase, ccAliquota, sumIcms, ccFechada, ccContaId, ccPagarId, ccPaga, ccObservacao };
+				ccRecebimento, ccSerie, ccCfop, ccVolume, ccEspecie, ccPeso, ccCubagem, ccProduto, ccNota, sumValor, ccBase, ccAliquota, sumIcms, ccFechada, ccPagarId, ccPaga, ccObservacao };
 		modelos = new ColumnModel(bcc);
 
 		// excluindo
@@ -195,32 +192,32 @@ public class ListagemFrete extends AListagem<ComFrete> {
 		filtros.get("empEmpresa.empEmpresaId").setActive(false, true);
 		super.setFavorito(favorito);
 	}
-	
+
 	@Override
 	public void irPara() {
 		Menu mnuContexto = new Menu();
-		
+
 		// transportadora
 		SisFuncao transportadora = UtilClient.getFuncaoPermitida(ComandoTransportadora.class);
 		MenuItem itemTransportadora = gerarFuncao(transportadora, "empTransportadoraId", "empTransportadora.empTransportadoraId");
 		if (itemTransportadora != null) {
 			mnuContexto.addItem(itemTransportadora);
 		}
-		
+
 		// fornecedor
 		SisFuncao fornecedor = UtilClient.getFuncaoPermitida(ComandoFornecedor.class);
 		MenuItem itemFornecedor = gerarFuncao(fornecedor, "empFornecedorId", "empFornecedor.empFornecedorId");
 		if (itemFornecedor != null) {
 			mnuContexto.addItem(itemFornecedor);
 		}
-		
+
 		// pagar
 		SisFuncao pagar = UtilClient.getFuncaoPermitida(ComandoPagar.class);
 		MenuItem itemPagar = gerarFuncao(pagar, "finPagarId", "finPagar.finPagarId");
 		if (itemPagar != null) {
 			mnuContexto.addItem(itemPagar);
 		}
-		
+
 		if (mnuContexto.getItems().length > 0) {
 			MenuItem mnuItem = getIrPara();
 			mnuItem.setMenu(mnuContexto);

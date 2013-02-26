@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.opensig.core.shared.modelo.Dados;
-import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 
 /**
  * Classe que representa uma conta no sistema.
@@ -46,14 +45,10 @@ public class FinConta extends Dados implements Serializable {
 
 	@Column(name = "fin_conta_convenio")
 	private String finContaConvenio;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fin_banco_id")
 	private FinBanco finBanco;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "emp_empresa_id")
-	private EmpEmpresa empEmpresa;
 
 	public FinConta() {
 		this(0);
@@ -128,14 +123,6 @@ public class FinConta extends Dados implements Serializable {
 		this.finBanco = finBanco;
 	}
 
-	public EmpEmpresa getEmpEmpresa() {
-		return empEmpresa;
-	}
-
-	public void setEmpEmpresa(EmpEmpresa empEmpresa) {
-		this.empEmpresa = empEmpresa;
-	}
-
 	public Number getId() {
 		return finContaId;
 	}
@@ -145,15 +132,13 @@ public class FinConta extends Dados implements Serializable {
 	}
 
 	public String[] toArray() {
-		return new String[] { finContaId + "", empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), finBanco.getFinBancoId() + "", finBanco.getFinBancoDescricao(),
-				finContaNome, finContaNumero, finContaAgencia, finContaCarteira, finContaConvenio, finContaSaldo.toString() };
+		return new String[] { finContaId + "", finBanco.getFinBancoId() + "", finBanco.getFinBancoDescricao(), finContaNome, finContaNumero, finContaAgencia, finContaCarteira, finContaConvenio,
+				finContaSaldo.toString() };
 	}
 
 	public Dados getObjeto(String campo) {
 		if (campo.startsWith("finBanco")) {
 			return new FinBanco();
-		} else if (campo.startsWith("empEmpresa")) {
-			return new EmpEmpresa();
 		} else {
 			return null;
 		}
@@ -161,6 +146,5 @@ public class FinConta extends Dados implements Serializable {
 
 	public void anularDependencia() {
 		finBanco = null;
-		empEmpresa = null;
 	}
 }

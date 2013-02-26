@@ -71,6 +71,10 @@ public class FinPagamento extends Dados implements Serializable {
 	@JoinColumn(name = "fin_forma_id")
 	private FinForma finForma;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "fin_conta_id")
+	private FinConta finConta;
+
 	public FinPagamento() {
 		this(0);
 	}
@@ -176,6 +180,14 @@ public class FinPagamento extends Dados implements Serializable {
 		this.finForma = finForma;
 	}
 
+	public FinConta getFinConta() {
+		return finConta;
+	}
+
+	public void setFinConta(FinConta finConta) {
+		this.finConta = finConta;
+	}
+
 	public Number getId() {
 		return finPagamentoId;
 	}
@@ -189,6 +201,8 @@ public class FinPagamento extends Dados implements Serializable {
 			return new FinPagar();
 		} else if (campo.startsWith("finForma")) {
 			return new FinForma();
+		} else if (campo.startsWith("finConta")) {
+			return new FinConta();
 		} else {
 			return null;
 		}
@@ -197,11 +211,15 @@ public class FinPagamento extends Dados implements Serializable {
 	public void anularDependencia() {
 		finPagar = null;
 		finForma = null;
+		finConta = null;
 	}
 
 	public String[] toArray() {
+		int contaId = finConta == null ? 0 : finConta.getFinContaId();
+		String contaNome = finConta == null ? "" : finConta.getFinContaNome();
+
 		return new String[] { finPagamentoId + "", finPagar.getFinPagarId() + "", finPagar.getEmpEmpresa().getEmpEmpresaId() + "", finPagar.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(),
-				finPagar.getEmpEntidade().getEmpEntidadeNome1(), finPagar.getFinConta().getFinContaId() + "", finForma.getFinFormaId() + "", finForma.getFinFormaDescricao(), finPagamentoDocumento,
+				finPagar.getEmpEntidade().getEmpEntidadeNome1(), contaId + "", contaNome, finForma.getFinFormaId() + "", finForma.getFinFormaDescricao(), finPagamentoDocumento,
 				finPagamentoValor.toString(), finPagamentoParcela, UtilClient.getDataGrid(finPagamentoCadastro), UtilClient.getDataGrid(finPagamentoVencimento), finPagamentoStatus,
 				UtilClient.getDataGrid(finPagamentoRealizado), UtilClient.getDataGrid(finPagamentoConciliado), finPagar.getFinPagarNfe() + "", finPagamentoObservacao };
 	}

@@ -10,18 +10,25 @@ import br.com.opensig.core.client.controlador.comando.IComando;
 import br.com.opensig.core.client.controlador.comando.lista.ComandoExcluir;
 import br.com.opensig.core.client.controlador.comando.lista.ComandoPermiteEmpresa;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
+import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
+import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
+import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
+import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.servico.CoreProxy;
 import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.core.client.visao.abstrato.AListagem;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.core.shared.modelo.IFavorito;
+import br.com.opensig.core.shared.modelo.Lista;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
+import br.com.opensig.financeiro.client.servico.FinanceiroProxy;
 import br.com.opensig.financeiro.client.visao.form.AFormularioFinanceiro;
 import br.com.opensig.financeiro.shared.modelo.FinCategoria;
-import br.com.opensig.financeiro.shared.modelo.FinConta;
+import br.com.opensig.financeiro.shared.modelo.FinPagamento;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtext.client.data.ArrayReader;
 import com.gwtext.client.data.DateFieldDef;
 import com.gwtext.client.data.FieldDef;
@@ -46,10 +53,11 @@ public abstract class AListagemFinanceiro<E extends Dados, T extends Dados> exte
 
 	protected Map<String, String> nomes;
 	protected double financeiro;
-	protected IComando cmdExcluir;
+	protected T subClasse;
 
 	public AListagemFinanceiro(AFormularioFinanceiro<E, T> formulario) {
 		super(formulario);
+		subClasse = formulario.getFinanceiro();
 		nomes = formulario.getNomes();
 		addPlugin(new GridSummaryPlugin());
 	}
@@ -57,9 +65,8 @@ public abstract class AListagemFinanceiro<E extends Dados, T extends Dados> exte
 	public void inicializar() {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef(nomes.get("id")), new IntegerFieldDef("empEmpresa.empEmpresaId"), new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"),
-				new IntegerFieldDef("empEntidade.empEntidadeId"), new StringFieldDef("empEntidade.empEntidadeNome1"), new IntegerFieldDef("finConta.finContaId"),
-				new StringFieldDef("finConta.finContaNome"), new FloatFieldDef(nomes.get("valor")), new DateFieldDef(nomes.get("cadastro")), new StringFieldDef(nomes.get("categoria")),
-				new IntegerFieldDef(nomes.get("nota")), new StringFieldDef(nomes.get("observacao")) };
+				new IntegerFieldDef("empEntidade.empEntidadeId"), new StringFieldDef("empEntidade.empEntidadeNome1"), new FloatFieldDef(nomes.get("valor")), new DateFieldDef(nomes.get("cadastro")),
+				new StringFieldDef(nomes.get("categoria")), new IntegerFieldDef(nomes.get("nota")), new StringFieldDef(nomes.get("observacao")) };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -71,10 +78,6 @@ public abstract class AListagemFinanceiro<E extends Dados, T extends Dados> exte
 		ColumnConfig ccEntidadeId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtEntidade(), "empEntidade.empEntidadeId", 100, true);
 		ccEntidadeId.setHidden(true);
 		ColumnConfig ccNome = new ColumnConfig(OpenSigCore.i18n.txtEntidade(), "empEntidade.empEntidadeNome1", 200, true);
-		ColumnConfig ccContaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtConta(), "finConta.finContaId", 100, true);
-		ccContaId.setHidden(true);
-		ColumnConfig ccConta = new ColumnConfig(OpenSigCore.i18n.txtConta(), "finConta.finContaNome", 100, true);
-		ccConta.setHidden(true);
 		ColumnConfig ccCadastro = new ColumnConfig(OpenSigCore.i18n.txtCadastro(), nomes.get("cadastro"), 75, true, DATA);
 		ColumnConfig ccCategoria = new ColumnConfig(OpenSigCore.i18n.txtCategoria(), nomes.get("categoria"), 100, true);
 		ColumnConfig ccNota = new ColumnConfig(OpenSigCore.i18n.txtNota(), nomes.get("nota"), 75, true);
@@ -83,7 +86,7 @@ public abstract class AListagemFinanceiro<E extends Dados, T extends Dados> exte
 		// sumarios
 		SummaryColumnConfig sumValor = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtValor(), nomes.get("valor"), 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccEmpresaId, ccEmpresa, ccEntidadeId, ccNome, ccContaId, ccConta, sumValor, ccCadastro, ccCategoria, ccNota, ccObservacao };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccEmpresaId, ccEmpresa, ccEntidadeId, ccNome, sumValor, ccCadastro, ccCategoria, ccNota, ccObservacao };
 		modelos = new ColumnModel(bcc);
 
 		if (UtilClient.getAcaoPermitida(funcao, ComandoPermiteEmpresa.class) == null) {
@@ -94,23 +97,39 @@ public abstract class AListagemFinanceiro<E extends Dados, T extends Dados> exte
 	}
 
 	public IComando AntesDaAcao(IComando comando) {
-		final Record rec = getSelectionModel().getSelected();
-
 		if (comando instanceof ComandoExcluir) {
 			comando = null;
-			MessageBox.confirm(OpenSigCore.i18n.txtExcluir(), OpenSigCore.i18n.msgExcluir(), new MessageBox.ConfirmCallback() {
-				public void execute(String btnID) {
-					if (btnID.equalsIgnoreCase("yes") && rec != null) {
-						MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtExcluir());
-						cmdExcluir.execute(contexto);
+			Record rec = getSelectionModel().getSelected();
+
+			classe.setId(rec.getAsInteger(nomes.get("id")));
+			FiltroObjeto fo = new FiltroObjeto(nomes.get("classe"), ECompara.IGUAL, classe);
+			String campo = subClasse instanceof FinPagamento ? "finPagamentoStatus" : "finRecebimentoStatus";
+			FiltroTexto ft = new FiltroTexto(campo, ECompara.IGUAL, OpenSigCore.i18n.txtConciliado());
+			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, ft });
+
+			FinanceiroProxy<T> proxy = new FinanceiroProxy<T>(subClasse);
+			proxy.selecionar(gf, new AsyncCallback<Lista<T>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					MessageBox.alert(OpenSigCore.i18n.txtPagar(), OpenSigCore.i18n.errExcluir());
+				}
+
+				@Override
+				public void onSuccess(Lista<T> result) {
+					if (result.getTotal() > 0) {
+						onFailure(null);
+					} else {
+						new ComandoExcluir<E>().execute(contexto);
 					}
 				}
+
 			});
 		}
 
 		return comando;
 	}
-	
+
 	public void setGridFiltro() {
 		super.setGridFiltro();
 		for (Entry<String, GridFilter> entry : filtros.entrySet()) {
@@ -134,19 +153,6 @@ public abstract class AListagemFinanceiro<E extends Dados, T extends Dados> exte
 				fEmpresa.setLabelValue("empEntidade.empEntidadeNome1");
 				fEmpresa.setLoadingText(OpenSigCore.i18n.txtAguarde());
 				entry.setValue(fEmpresa);
-
-			} else if (entry.getKey().equals("finConta.finContaNome")) {
-				// conta
-				FieldDef[] fdConta = new FieldDef[] { new IntegerFieldDef("finContaId"), new IntegerFieldDef("EmpresaId"), new StringFieldDef("EmpresaNome"), new IntegerFieldDef("BancoId"),
-						new StringFieldDef("BancoNome"), new StringFieldDef("finContaNome") };
-				CoreProxy<FinConta> proxy = new CoreProxy<FinConta>(new FinConta(), filtroPadrao);
-				Store storeConta = new Store(proxy, new ArrayReader(new RecordDef(fdConta)), true);
-
-				GridListFilter fConta = new GridListFilter("finConta.finContaNome", storeConta);
-				fConta.setLabelField("finContaNome");
-				fConta.setLabelValue("finContaNome");
-				fConta.setLoadingText(OpenSigCore.i18n.txtAguarde());
-				entry.setValue(fConta);
 			} else if (entry.getKey().equals(nomes.get("categoria"))) {
 				// categoria
 				FieldDef[] fdCategoria = new FieldDef[] { new IntegerFieldDef("finCategoriaId"), new StringFieldDef("finCategoriaDescricao") };

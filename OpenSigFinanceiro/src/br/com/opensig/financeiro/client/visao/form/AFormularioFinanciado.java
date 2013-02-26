@@ -31,7 +31,6 @@ import com.gwtext.client.widgets.form.NumberField;
 import com.gwtext.client.widgets.form.TextArea;
 import com.gwtext.client.widgets.form.TextField;
 import com.gwtext.client.widgets.form.event.ComboBoxListenerAdapter;
-import com.gwtext.client.widgets.layout.ColumnLayoutData;
 
 public abstract class AFormularioFinanciado<E extends Dados> extends AFormulario<E> {
 
@@ -64,13 +63,7 @@ public abstract class AFormularioFinanciado<E extends Dados> extends AFormulario
 		add(hdnFinanceiro);
 
 		txtDocumento = new TextField(OpenSigCore.i18n.txtDocumento(), nomes.get("documento"), 250);
-		txtDocumento.setAllowBlank(true);
-
-		MultiFieldPanel linha1 = new MultiFieldPanel();
-		linha1.setBorder(false);
-		linha1.addToRow(getForma(), 150);
-		linha1.addToRow(txtDocumento, new ColumnLayoutData(1));
-		add(linha1);
+		txtDocumento.setAllowBlank(false);
 
 		txtValor = new NumberField(OpenSigCore.i18n.txtValor(), nomes.get("valor"), 100);
 		txtValor.setAllowBlank(false);
@@ -85,12 +78,14 @@ public abstract class AFormularioFinanciado<E extends Dados> extends AFormulario
 		dtVencimento = new DateField(OpenSigCore.i18n.txtVencimento(), nomes.get("vencimento"), 100);
 		dtVencimento.setAllowBlank(false);
 
-		MultiFieldPanel linha2 = new MultiFieldPanel();
-		linha2.setBorder(false);
-		linha2.addToRow(txtValor, 120);
-		linha2.addToRow(txtParcela, 120);
-		linha2.addToRow(dtVencimento, 120);
-		add(linha2);
+		MultiFieldPanel linha1 = new MultiFieldPanel();
+		linha1.setBorder(false);
+		linha1.addToRow(getForma(), 150);
+		linha1.addToRow(txtDocumento, 270);
+		linha1.addToRow(txtValor, 120);
+		linha1.addToRow(txtParcela, 120);
+		linha1.addToRow(dtVencimento, 120);
+		add(linha1);
 
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), nomes.get("observacao"));
 		txtObservacao.setMaxLength(255);

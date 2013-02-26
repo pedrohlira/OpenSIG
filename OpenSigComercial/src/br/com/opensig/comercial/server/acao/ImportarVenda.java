@@ -34,7 +34,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEnderecoTipo;
 import br.com.opensig.empresa.shared.modelo.EmpEntidade;
 import br.com.opensig.empresa.shared.modelo.EmpFornecedor;
 import br.com.opensig.empresa.shared.modelo.EmpMunicipio;
-import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinForma;
 import br.com.opensig.financeiro.shared.modelo.FinReceber;
 import br.com.opensig.financeiro.shared.modelo.FinRecebimento;
@@ -153,7 +152,6 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 		// receber
 		FinReceber receber = new FinReceber();
 		List<FinRecebimento> recebimentos = new ArrayList<FinRecebimento>();
-		receber.setFinConta(new FinConta(Integer.valueOf(auth.getConf().get("conta.padrao"))));
 		receber.setFinRecebimentos(recebimentos);
 		receber.setFinReceberObservacao("");
 		// acha a forma de pagamento boleto
@@ -184,6 +182,7 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 				// recebimentos
 				FinRecebimento rec = new FinRecebimento();
 				rec.setFinForma(forma);
+				rec.setFinConta(null);
 				rec.setFinRecebimentoDocumento(dup.getNDup());
 				rec.setFinRecebimentoValor(Double.valueOf(dup.getVDup()));
 				rec.setFinRecebimentoParcela(parcela);

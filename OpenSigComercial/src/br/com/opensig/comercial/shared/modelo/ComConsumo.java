@@ -223,15 +223,10 @@ public class ComConsumo extends Dados implements Serializable {
 	public String[] toArray() {
 		int pagarId = finPagar == null ? 0 : finPagar.getFinPagarId();
 
-		int contaId = 0;
-		if (finPagar != null) {
-			contaId = finPagar.getFinConta().getFinContaId();
-		}
-
 		return new String[] { comConsumoId + "", empFornecedor.getId().toString(), empFornecedor.getEmpEntidade().getEmpEntidadeId() + "", empFornecedor.getEmpEntidade().getEmpEntidadeNome1(),
 				empEmpresa.getId().toString(), empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), comConsumoTipo, comConsumoDocumento + "", UtilClient.getDataGrid(comConsumoData),
-				comConsumoValor.toString(), comConsumoCfop + "", comConsumoBase.toString(), comConsumoAliquota + "", comConsumoIcms.toString(), getComConsumoFechada() + "", contaId + "",
-				pagarId + "", getComConsumoPaga() + "", comConsumoObservacao };
+				comConsumoValor.toString(), comConsumoCfop + "", comConsumoBase.toString(), comConsumoAliquota + "", comConsumoIcms.toString(), getComConsumoFechada() + "", pagarId + "",
+				getComConsumoPaga() + "", comConsumoObservacao };
 	}
 
 	public Dados getObjeto(String campo) {

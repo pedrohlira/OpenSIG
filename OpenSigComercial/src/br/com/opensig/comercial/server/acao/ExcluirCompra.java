@@ -22,7 +22,6 @@ import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Autenticacao;
 import br.com.opensig.core.shared.modelo.EComando;
 import br.com.opensig.core.shared.modelo.Sql;
-import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinPagamento;
 import br.com.opensig.fiscal.shared.modelo.FisNotaEntrada;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
@@ -45,16 +44,17 @@ public class ExcluirCompra extends Chain {
 		DeletarCompra delComp = new DeletarCompra(next);
 		// deletar nota
 		DeletarNota delNota = new DeletarNota(delComp);
-		// atualiza os conta
-		AtualizarConta atuConta = new AtualizarConta(delNota);
 		// atauliza estoque
-		AtualizarEstoque atuEst = new AtualizarEstoque(atuConta);
-		// seleciona os produtos
+		AtualizarEstoque atuEst = new AtualizarEstoque(delNota);
+		// valida os pagamentos
+		ValidarPagar valPagar = new ValidarPagar(null);
+
 		if (!auth.getConf().get("estoque.ativo").equalsIgnoreCase("ignorar")) {
-			this.setNext(atuEst);
+			valPagar.setNext(atuEst);
 		} else {
-			this.setNext(atuConta);
+			valPagar.setNext(delNota);
 		}
+		this.next = valPagar;
 	}
 
 	public void execute() throws OpenSigException {
@@ -87,7 +87,7 @@ public class ExcluirCompra extends Chain {
 					for (ComCompraProduto comProd : compra.getComCompraProdutos()) {
 						// fatorando a quantida no estoque
 						double qtd = comProd.getComCompraProdutoQuantidade();
-						if(comProd.getProdEmbalagem().getProdEmbalagemId() != comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()){
+						if (comProd.getProdEmbalagem().getProdEmbalagemId() != comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
 							qtd *= impl.getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
 							qtd /= impl.getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 						}
@@ -122,53 +122,26 @@ public class ExcluirCompra extends Chain {
 		}
 	}
 
-	private class AtualizarConta extends Chain {
+	private class ValidarPagar extends Chain {
 
-		public AtualizarConta(Chain next) throws OpenSigException {
+		public ValidarPagar(Chain next) throws OpenSigException {
 			super(next);
 		}
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
-			EntityManager em = null;
-
-			try {
-				// recupera uma instância do gerenciador de entidades
-				FinConta conta = new FinConta();
-				emf = Conexao.getInstancia(conta.getPu());
-				em = emf.createEntityManager();
-				em.getTransaction().begin();
-
-				if (compra.getFinPagar() != null) {
-					conta = compra.getFinPagar().getFinConta();
-					double valPag = 0.00;
-					for (FinPagamento pag : compra.getFinPagar().getFinPagamentos()) {
-						if (!pag.getFinPagamentoStatus().equalsIgnoreCase(auth.getConf().get("txtAberto"))) {
-							valPag += pag.getFinPagamentoValor();
-						}
-					}
-
-					if (valPag > 0) {
-						conta.setFinContaSaldo(conta.getFinContaSaldo() + valPag);
-						servico.salvar(em, conta);
+			// valida se tem a pagar
+			if (compra.getFinPagar() != null) {
+				// valida se os pagamentos tem algum conciliado
+				for (FinPagamento pagamento : compra.getFinPagar().getFinPagamentos()) {
+					if (pagamento.getFinPagamentoStatus().equalsIgnoreCase(auth.getConf().get("txtConciliado"))) {
+						throw new OpenSigException("Existe pagamentos conciliados! Estorne antes de excluir a compra.");
 					}
 				}
+			}
 
-				if (next != null) {
-					next.execute();
-				}
-				em.getTransaction().commit();
-			} catch (Exception ex) {
-				if (em != null && em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-
-				UtilServer.LOG.error("Erro ao atualizar a conta.", ex);
-				throw new ComercialException(ex.getMessage());
-			} finally {
-				em.close();
-				emf.close();
+			if (next != null) {
+				next.execute();
 			}
 		}
 	}
@@ -189,7 +162,7 @@ public class ExcluirCompra extends Chain {
 				emf = Conexao.getInstancia(new FisNotaEntrada().getPu());
 				em = emf.createEntityManager();
 				em.getTransaction().begin();
-				
+
 				if (compra.getFisNotaEntrada() != null) {
 					servico.deletar(em, compra.getFisNotaEntrada());
 				}

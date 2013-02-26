@@ -80,8 +80,8 @@ public class ListagemCompra extends AListagem<ComCompra> {
 				new StringFieldDef("empEstado.empEstadoDescricao"), new FloatFieldDef("comCompraIcmsBase"), new FloatFieldDef("comCompraIcmsValor"), new FloatFieldDef("comCompraIcmssubBase"),
 				new FloatFieldDef("comCompraIcmssubValor"), new FloatFieldDef("comCompraValorProduto"), new FloatFieldDef("comCompraValorFrete"), new FloatFieldDef("comCompraValorSeguro"),
 				new FloatFieldDef("comCompraValorDesconto"), new FloatFieldDef("comCompraValorIpi"), new FloatFieldDef("comCompraValorOutros"), new FloatFieldDef("comCompraValorNota"),
-				new BooleanFieldDef("comCompraFechada"), new IntegerFieldDef("finPagar.finConta.finContaId"), new IntegerFieldDef("finPagar.finPagarId"), new BooleanFieldDef("comCompraPaga"),
-				new IntegerFieldDef("fisNotaEntrada.fisNotaEntradaId"), new BooleanFieldDef("comCompraNfe"), new StringFieldDef("comCompraObservacao") };
+				new BooleanFieldDef("comCompraFechada"), new IntegerFieldDef("finPagar.finPagarId"), new BooleanFieldDef("comCompraPaga"), new IntegerFieldDef("fisNotaEntrada.fisNotaEntradaId"),
+				new BooleanFieldDef("comCompraNfe"), new StringFieldDef("comCompraObservacao") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -126,8 +126,6 @@ public class ListagemCompra extends AListagem<ComCompra> {
 		ccOutros.setHidden(true);
 		ColumnConfig ccValorNota = new ColumnConfig(OpenSigCore.i18n.txtValorNota(), "comCompraValorNota", 75, true, DINHEIRO);
 		ColumnConfig ccFechar = new ColumnConfig(OpenSigCore.i18n.txtFechada(), "comCompraFechada", 75, true, BOLEANO);
-		ColumnConfig ccContaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtConta(), "finPagar.finConta.finContaId", 100, true);
-		ccContaId.setHidden(true);
 		ColumnConfig ccPagarId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtPagar(), "finPagar.finPagarId", 100, true);
 		ccPagarId.setHidden(true);
 		ColumnConfig ccPagar = new ColumnConfig(OpenSigCore.i18n.txtPaga(), "comCompraPaga", 75, true, BOLEANO);
@@ -147,8 +145,8 @@ public class ListagemCompra extends AListagem<ComCompra> {
 		SummaryColumnConfig sumNota = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccValorNota, DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccSerie, ccNumero, ccNaturezaId, ccNatureza, ccEmissao, ccRecebimento, ccFonecedorId, ccEntidadeId, ccFornecedor, ccEmpresaId,
-				ccEmpresa, ccEstadoId, ccEstado, ccIcmsBase, sumIcms, ccSubBase, sumSub, ccValorProduto, sumFrete, sumSeguro, sumDesconto, sumIpi, sumOutros, sumNota, ccFechar, ccContaId, ccPagarId,
-				ccPagar, ccNfeId, ccNfe, ccObs };
+				ccEmpresa, ccEstadoId, ccEstado, ccIcmsBase, sumIcms, ccSubBase, sumSub, ccValorProduto, sumFrete, sumSeguro, sumDesconto, sumIpi, sumOutros, sumNota, ccFechar, ccPagarId, ccPagar,
+				ccNfeId, ccNfe, ccObs };
 		modelos = new ColumnModel(bcc);
 
 		// deletando

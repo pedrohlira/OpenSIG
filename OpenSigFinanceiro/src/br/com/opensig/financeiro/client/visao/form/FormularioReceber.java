@@ -11,7 +11,6 @@ import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.empresa.shared.modelo.EmpEntidade;
 import br.com.opensig.financeiro.client.servico.FinanceiroProxy;
-import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinReceber;
 import br.com.opensig.financeiro.shared.modelo.FinRecebimento;
 
@@ -66,14 +65,8 @@ public class FormularioReceber extends AFormularioFinanceiro<FinReceber, FinRece
 			EmpEntidade entidade = new EmpEntidade(Integer.valueOf(hdnEntidade.getValueAsString()));
 			classe.setEmpEntidade(entidade);
 		}
-		if (cmbConta.getValue() != null) {
-			FinConta conta = new FinConta(Integer.valueOf(cmbConta.getValue()));
-			classe.setFinConta(conta);
-		}
 		if (txtNfe.getValue() != null) {
 			classe.setFinReceberNfe(txtNfe.getValue().intValue());
-		} else {
-			classe.setFinReceberNfe(0);
 		}
 		if (txtValor.getValue() != null) {
 			classe.setFinReceberValor(txtValor.getValue().doubleValue());

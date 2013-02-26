@@ -11,9 +11,7 @@ import br.com.opensig.core.client.padroes.Chain;
 import br.com.opensig.core.client.servico.OpenSigException;
 import br.com.opensig.core.server.Conexao;
 import br.com.opensig.core.server.CoreServiceImpl;
-import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Autenticacao;
-import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinPagamento;
 
 public class ExcluirFrete extends Chain {
@@ -30,10 +28,9 @@ public class ExcluirFrete extends Chain {
 		
 		// atualiza frete
 		DeletarFrete delFrete = new DeletarFrete(next);
-		// atualiza os conta
-		AtualizarConta atuConta = new AtualizarConta(delFrete);
-		// seleciona os produtos
-		this.next = atuConta;
+		// valida os pagamentos
+		ValidarPagar valPagar = new ValidarPagar(delFrete);
+		this.next = valPagar;
 	}
 
 	public void execute() throws OpenSigException {
@@ -44,53 +41,26 @@ public class ExcluirFrete extends Chain {
 		}
 	}
 
-	private class AtualizarConta extends Chain {
+	private class ValidarPagar extends Chain {
 
-		public AtualizarConta(Chain next) throws OpenSigException {
+		public ValidarPagar(Chain next) throws OpenSigException {
 			super(next);
 		}
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
-			EntityManager em = null;
-
-			try {
-				// recupera uma instância do gerenciador de entidades
-				FinConta conta = new FinConta();
-				emf = Conexao.getInstancia(conta.getPu());
-				em = emf.createEntityManager();
-				em.getTransaction().begin();
-
-				if (frete.getFinPagar() != null) {
-					conta = frete.getFinPagar().getFinConta();
-					double valPag = 0.00;
-					for (FinPagamento pag : frete.getFinPagar().getFinPagamentos()) {
-						if (!pag.getFinPagamentoStatus().equalsIgnoreCase(auth.getConf().get("txtAberto"))) {
-							valPag += pag.getFinPagamentoValor();
-						}
-					}
-
-					if (valPag > 0) {
-						conta.setFinContaSaldo(conta.getFinContaSaldo() + valPag);
-						servico.salvar(em, conta);
+			// valida se tem a pagar
+			if (frete.getFinPagar() != null) {
+				// valida se os pagamentos tem algum conciliado
+				for (FinPagamento pagamento : frete.getFinPagar().getFinPagamentos()) {
+					if (pagamento.getFinPagamentoStatus().equalsIgnoreCase(auth.getConf().get("txtConciliado"))) {
+						throw new OpenSigException("Existe pagamentos conciliados! Estorne antes de excluir o frete.");
 					}
 				}
+			}
 
-				if (next != null) {
-					next.execute();
-				}
-				em.getTransaction().commit();
-			} catch (Exception ex) {
-				if (em != null && em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-
-				UtilServer.LOG.error("Erro ao atualiza a conta.", ex);
-				throw new ComercialException(ex.getMessage());
-			} finally {
-				em.close();
-				emf.close();
+			if (next != null) {
+				next.execute();
 			}
 		}
 	}

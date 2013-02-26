@@ -1,7 +1,6 @@
 package br.com.opensig.financeiro.client.controlador.comando.financeiro;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,23 +16,41 @@ import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.parametro.GrupoParametro;
 import br.com.opensig.core.client.controlador.parametro.IParametro;
 import br.com.opensig.core.client.controlador.parametro.ParametroData;
+import br.com.opensig.core.client.controlador.parametro.ParametroFormula;
 import br.com.opensig.core.client.controlador.parametro.ParametroTexto;
+import br.com.opensig.core.client.servico.CoreProxy;
 import br.com.opensig.core.shared.modelo.EComando;
 import br.com.opensig.core.shared.modelo.Sql;
+import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinPagamento;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwtext.client.core.EventObject;
+import com.gwtext.client.core.Position;
+import com.gwtext.client.data.ArrayReader;
+import com.gwtext.client.data.FieldDef;
+import com.gwtext.client.data.IntegerFieldDef;
 import com.gwtext.client.data.Record;
+import com.gwtext.client.data.RecordDef;
+import com.gwtext.client.data.Store;
+import com.gwtext.client.data.StringFieldDef;
+import com.gwtext.client.widgets.Button;
 import com.gwtext.client.widgets.MessageBox;
-import com.gwtext.client.widgets.MessageBox.PromptCallback;
+import com.gwtext.client.widgets.Window;
+import com.gwtext.client.widgets.event.ButtonListenerAdapter;
+import com.gwtext.client.widgets.form.ComboBox;
+import com.gwtext.client.widgets.form.DateField;
+import com.gwtext.client.widgets.form.FormPanel;
+import com.gwtext.client.widgets.form.MultiFieldPanel;
+import com.gwtext.client.widgets.layout.FitLayout;
 
 public class ComandoConciliarPagamento extends ComandoAcao<FinPagamento> {
 
 	private Record[] recs;
-	private Date hoje;
 	private IComando validaConciliar;
+	private DateField data;
+	private ComboBox conta;
+	private double valor;
 
 	public ComandoConciliarPagamento() {
 		// finaliza e libera
@@ -46,7 +63,7 @@ public class ComandoConciliarPagamento extends ComandoAcao<FinPagamento> {
 					int row = LISTA.getPanel().getStore().indexOf(rec);
 					LISTA.getPanel().getSelectionModel().deselectRow(row);
 					rec.set("finPagamentoStatus", OpenSigCore.i18n.txtConciliado().toUpperCase());
-					rec.set("finPagamentoConciliado", hoje);
+					rec.set("finPagamentoConciliado", data.getValue());
 				}
 			}
 		};
@@ -56,27 +73,29 @@ public class ComandoConciliarPagamento extends ComandoAcao<FinPagamento> {
 				MessageBox.wait(OpenSigCore.i18n.txtConciliar(), OpenSigCore.i18n.txtAguarde());
 
 				// variaveis usadas
-				try {
-					hoje = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM).parse(contexto.get("data").toString());
-				} catch (Exception e) {
-					hoje = new Date();
-				}
 				GrupoFiltro gf = new GrupoFiltro();
 				List<Sql> sqls = new ArrayList<Sql>();
 
 				// gerando o filtro dos pagamentos e separando por conta
 				for (Record rec : recs) {
+					valor += rec.getAsDouble("finPagamentoValor");
 					FiltroNumero fn = new FiltroNumero("finPagamentoId", ECompara.IGUAL, rec.getAsInteger("finPagamentoId"));
 					gf.add(fn, EJuncao.OU);
 				}
 
 				// atualizando pagamento
 				ParametroTexto pt = new ParametroTexto("finPagamentoStatus", OpenSigCore.i18n.txtConciliado().toUpperCase());
-				ParametroData pd = new ParametroData("finPagamentoConciliado", hoje);
+				ParametroData pd = new ParametroData("finPagamentoConciliado", data.getValue());
 				GrupoParametro gp = new GrupoParametro(new IParametro[] { pt, pd });
 				Sql sqlForma = new Sql(new FinPagamento(), EComando.ATUALIZAR, gf, gp);
 				sqls.add(sqlForma);
 
+				// atualizando a conta
+				ParametroFormula pf = new ParametroFormula("finContaSaldo", valor * -1);
+				FiltroNumero fn = new FiltroNumero("finContaId", ECompara.IGUAL, conta.getValue());
+				Sql sqlConta = new Sql(new FinConta(), EComando.ATUALIZAR, fn, pf);
+				sqls.add(sqlConta);
+				
 				setSqls(sqls.toArray(new Sql[] {}));
 				super.execute(contexto);
 			}
@@ -98,14 +117,36 @@ public class ComandoConciliarPagamento extends ComandoAcao<FinPagamento> {
 				recs = LISTA.getPanel().getSelectionModel().getSelections();
 				// pede permissao ou mostra mensagem
 				if (recs.length > 0) {
-					MessageBox.prompt(OpenSigCore.i18n.txtQuitar(), OpenSigCore.i18n.msgConfirma() + "<br>" + OpenSigCore.i18n.txtData() + ": <b>DD/MM/AAAA</b>", new PromptCallback() {
-						public void execute(String btnID, String text) {
-							if (btnID.equalsIgnoreCase("ok")) {
-								contexto.put("data", text);
+					final Window wnd = new Window("", 300, 130, true, false);
+					final FormPanel frm = new FormPanel();
+
+					frm.setLabelAlign(Position.TOP);
+					frm.setPaddings(5);
+					frm.setMargins(1);
+
+					MultiFieldPanel linha1 = new MultiFieldPanel();
+					linha1.setBorder(false);
+					linha1.addToRow(conta, 150);
+					linha1.addToRow(data, 120);
+					frm.add(linha1);
+
+					Button btn = new Button(OpenSigCore.i18n.txtOk());
+					btn.setIconCls("icon-salvar");
+					btn.addListener(new ButtonListenerAdapter() {
+						public void onClick(Button button, EventObject e) {
+							if (frm.getForm().isValid()) {
 								comando.execute(contexto);
+								wnd.close();
 							}
 						}
 					});
+
+					wnd.setTitle(OpenSigCore.i18n.txtRecebimento(), "icon-preco");
+					wnd.setLayout(new FitLayout());
+					wnd.add(frm);
+					wnd.addButton(btn);
+					wnd.setButtonAlign(Position.CENTER);
+					wnd.show();
 				} else {
 					MessageBox.alert(OpenSigCore.i18n.errInvalido(), OpenSigCore.i18n.errSelecionar());
 				}
@@ -119,11 +160,32 @@ public class ComandoConciliarPagamento extends ComandoAcao<FinPagamento> {
 	public void execute(final Map contexto) {
 		super.execute(contexto, new AsyncCallback() {
 			public void onSuccess(Object result) {
+				data = new DateField(OpenSigCore.i18n.txtData(), "data", 100);
+				data.setAllowBlank(false);
+				getConta();
 				validaConciliar.execute(contexto);
 			}
 
 			public void onFailure(Throwable caught) {
 			}
 		});
+	}
+
+	private void getConta() {
+		FieldDef[] fdConta = new FieldDef[] { new IntegerFieldDef("finContaId"), new IntegerFieldDef("finBancoId"), new StringFieldDef("finBanco"), new StringFieldDef("finContaNome") };
+		CoreProxy<FinConta> proxy = new CoreProxy<FinConta>(new FinConta());
+		Store stConta = new Store(proxy, new ArrayReader(new RecordDef(fdConta)), false);
+		stConta.load();
+
+		conta = new ComboBox(OpenSigCore.i18n.txtConta(), "conta", 130);
+		conta.setListWidth(200);
+		conta.setAllowBlank(false);
+		conta.setStore(stConta);
+		conta.setTriggerAction(ComboBox.ALL);
+		conta.setMode(ComboBox.LOCAL);
+		conta.setDisplayField("finContaNome");
+		conta.setValueField("finContaId");
+		conta.setForceSelection(true);
+		conta.setEditable(false);
 	}
 }

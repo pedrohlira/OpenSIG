@@ -57,7 +57,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEndereco;
 import br.com.opensig.empresa.shared.modelo.EmpEnderecoTipo;
 import br.com.opensig.empresa.shared.modelo.EmpEntidade;
 import br.com.opensig.empresa.shared.modelo.EmpMunicipio;
-import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinForma;
 import br.com.opensig.financeiro.shared.modelo.FinReceber;
 import br.com.opensig.financeiro.shared.modelo.FinRecebimento;
@@ -158,7 +157,6 @@ public class RestServidor extends ARest {
 				FinReceber receber = new FinReceber();
 				receber.setEmpEmpresa(ecf.getEmpEmpresa());
 				receber.setEmpEntidade(cliente.getEmpEntidade());
-				receber.setFinConta(new FinConta(Integer.valueOf(conf.get("conta.padrao"))));
 				receber.setFinReceberCadastro(ecfNota.getComEcfNotaData());
 				receber.setFinReceberCategoria(conf.get("categoria.ecf"));
 				receber.setFinReceberNfe(ecfNota.getComEcfNotaNumero());
@@ -170,13 +168,14 @@ public class RestServidor extends ARest {
 				FinRecebimento recebimento = new FinRecebimento();
 				recebimento.setFinReceber(receber);
 				recebimento.setFinForma(new FinForma(1));
+				recebimento.setFinConta(null);
 				recebimento.setFinRecebimentoCadastro(ecfNota.getComEcfNotaData());
 				recebimento.setFinRecebimentoConciliado(ecfNota.getComEcfNotaData());
 				recebimento.setFinRecebimentoDocumento("Serie:" + ecfNota.getComEcfNotaSerie() + " Sub:" + ecfNota.getComEcfNotaSubserie() + " N:" + ecfNota.getComEcfNotaNumero());
 				recebimento.setFinRecebimentoObservacao("NFC emitido pelo ECF.");
 				recebimento.setFinRecebimentoParcela("01/01");
 				recebimento.setFinRecebimentoRealizado(ecfNota.getComEcfNotaData());
-				recebimento.setFinRecebimentoStatus("REALIZADO");
+				recebimento.setFinRecebimentoStatus(conf.get("txtRealizado"));
 				recebimento.setFinRecebimentoValor(ecfNota.getComEcfNotaLiquido());
 				recebimento.setFinRecebimentoVencimento(ecfNota.getComEcfNotaData());
 				service.salvar(recebimento);
@@ -250,7 +249,6 @@ public class RestServidor extends ARest {
 					receber = new FinReceber();
 					receber.setEmpEmpresa(ecf.getEmpEmpresa());
 					receber.setEmpEntidade(cliente.getEmpEntidade());
-					receber.setFinConta(new FinConta(Integer.valueOf(conf.get("conta.padrao"))));
 					receber.setFinReceberCadastro(ecfNfe.getFisNotaSaidaCadastro());
 					receber.setFinReceberCategoria(conf.get("categoria.ecf"));
 					receber.setFinReceberNfe(ecfNfe.getFisNotaSaidaNumero());
@@ -262,13 +260,14 @@ public class RestServidor extends ARest {
 					FinRecebimento recebimento = new FinRecebimento();
 					recebimento.setFinReceber(receber);
 					recebimento.setFinForma(new FinForma(1));
+					recebimento.setFinConta(null);
 					recebimento.setFinRecebimentoCadastro(ecfNfe.getFisNotaSaidaCadastro());
 					recebimento.setFinRecebimentoConciliado(ecfNfe.getFisNotaSaidaCadastro());
 					recebimento.setFinRecebimentoDocumento("NFe: " + ecfNfe.getFisNotaSaidaNumero());
 					recebimento.setFinRecebimentoObservacao("NFe emitido pelo ECF.");
 					recebimento.setFinRecebimentoParcela("01/01");
 					recebimento.setFinRecebimentoRealizado(ecfNfe.getFisNotaSaidaCadastro());
-					recebimento.setFinRecebimentoStatus("REALIZADO");
+					recebimento.setFinRecebimentoStatus(conf.get("txtRealizado"));
 					recebimento.setFinRecebimentoValor(ecfNfe.getFisNotaSaidaValor());
 					recebimento.setFinRecebimentoVencimento(ecfNfe.getFisNotaSaidaCadastro());
 					service.salvar(recebimento);
@@ -590,7 +589,6 @@ public class RestServidor extends ARest {
 		FinReceber receber = new FinReceber();
 		receber.setEmpEmpresa(ecf.getEmpEmpresa());
 		receber.setEmpEntidade(cliente.getEmpEntidade());
-		receber.setFinConta(new FinConta(Integer.valueOf(conf.get("conta.padrao"))));
 		receber.setFinReceberCadastro(venda.getComEcfVendaData());
 		receber.setFinReceberCategoria(conf.get("categoria.ecf"));
 		receber.setFinReceberNfe(venda.getComEcfVendaCcf());
@@ -605,9 +603,10 @@ public class RestServidor extends ARest {
 				recebimento.setFinRecebimentoId(0);
 				recebimento.setFinReceber(receber);
 				recebimento.setFinForma(rec.getFinForma());
+				recebimento.setFinConta(null);
 				recebimento.setFinRecebimentoCadastro(rec.getFinReceberCadastro());
 				recebimento.setFinRecebimentoRealizado(rec.getFinReceberCadastro());
-				recebimento.setFinRecebimentoStatus("REALIZADO");
+				recebimento.setFinRecebimentoStatus(conf.get("txtRealizado"));
 				if (rec.getFinForma().getFinFormaId() == 1) {
 					recebimento.setFinRecebimentoDocumento("CCF: " + venda.getComEcfVendaCcf());
 				}

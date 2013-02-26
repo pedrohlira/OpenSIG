@@ -112,3 +112,44 @@ ALTER TABLE `sis_favorito_usuario`
   REFERENCES `sis_favorito` (`sis_favorito_id` )
   ON DELETE CASCADE
   ON UPDATE CASCADE;
+
+# Modificando a conta
+ALTER TABLE `fin_conta` DROP FOREIGN KEY `FK_fin_conta_2` ;
+ALTER TABLE `fin_conta` DROP COLUMN `emp_empresa_id`
+, DROP INDEX `FK_fin_conta_2` ;
+
+# Adicionando a conta para os pagamentos e recebimentos
+ALTER TABLE `fin_pagamento` ADD COLUMN `fin_conta_id` INT NULL DEFAULT NULL  AFTER `fin_forma_id` , 
+  ADD CONSTRAINT `FK_fin_pagamento_3`
+  FOREIGN KEY (`fin_conta_id` )
+  REFERENCES `fin_conta` (`fin_conta_id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION
+, ADD INDEX `FK_fin_pagamento_3_idx` USING BTREE (`fin_conta_id` ASC) ;
+UPDATE fin_pagamento, fin_pagar SET fin_pagamento.fin_conta_id = fin_pagar.fin_conta_id
+WHERE fin_pagamento.fin_pagar_id = fin_pagar.fin_pagar_id;
+
+ALTER TABLE `fin_recebimento` ADD COLUMN `fin_conta_id` INT NULL DEFAULT NULL  AFTER `fin_forma_id` , 
+  ADD CONSTRAINT `FK_fin_recebimento_3`
+  FOREIGN KEY (`fin_conta_id` )
+  REFERENCES `fin_conta` (`fin_conta_id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION
+, ADD INDEX `FK_fin_recebimento_3_idx` USING BTREE (`fin_conta_id` ASC) ;
+UPDATE fin_recebimento, fin_receber SET fin_recebimento.fin_conta_id = fin_receber.fin_conta_id
+WHERE fin_recebimento.fin_receber_id = fin_receber.fin_receber_id;
+
+# Removendo a conta do Pagar e Receber
+ALTER TABLE `fin_pagar` DROP FOREIGN KEY `FK_fin_pagar_3` ;
+ALTER TABLE `fin_pagar` DROP COLUMN `fin_conta_id` 
+, DROP INDEX `FK_fin_pagar_3` ;
+
+ALTER TABLE `fin_receber` DROP FOREIGN KEY `FK_fin_receber_3` ;
+ALTER TABLE `fin_receber` DROP COLUMN `fin_conta_id` 
+, DROP INDEX `FK_fin_receber_3` ;
+
+# deletando os retornos e remessas
+DROP TABLE `fin_retorno`;
+DROP TABLE `fin_remessa`;
+DELETE FROM `sis_funcao` WHERE `sis_modulo_id` = 7 AND `sis_funcao_ordem` IN (3,4,5);
+DELETE FROM `sis_configuracao` WHERE `sis_configuracao_chave` = 'conta.padrao';

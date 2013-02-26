@@ -2,10 +2,8 @@ package br.com.opensig.financeiro.client.visao.form;
 
 import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.servico.CoreProxy;
-import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.core.client.visao.abstrato.AFormulario;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
-import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.financeiro.shared.modelo.FinBanco;
 import br.com.opensig.financeiro.shared.modelo.FinConta;
 
@@ -28,13 +26,11 @@ import com.gwtext.client.widgets.form.TextField;
 public class FormularioConta extends AFormulario<FinConta> {
 
 	private Hidden hdnCod;
-	private Hidden hdnEmpresa;
 	private TextField txtNome;
 	private TextField txtNumero;
 	private TextField txtAgencia;
 	private TextField txtCarteira;
 	private TextField txtConvenio;
-	private TextField txtEmpresa;
 	private NumberField txtSaldo;
 	private ComboBox cmbBanco;
 
@@ -48,47 +44,37 @@ public class FormularioConta extends AFormulario<FinConta> {
 
 		hdnCod = new Hidden("finContaId", "0");
 		add(hdnCod);
-		hdnEmpresa = new Hidden("empEmpresa.empEmpresaId", "0");
-		add(hdnEmpresa);
 
-		txtNome = new TextField(OpenSigCore.i18n.txtNome(), "finContaNome", 180);
+		txtNome = new TextField(OpenSigCore.i18n.txtNome(), "finContaNome", 130);
 		txtNome.setAllowBlank(false);
 		txtNome.setMaxLength(20);
 
-		txtNumero = new TextField(OpenSigCore.i18n.txtNumero(), "finContaNumero", 80);
+		txtNumero = new TextField(OpenSigCore.i18n.txtNumero(), "finContaNumero", 60);
 		txtNumero.setMaxLength(10);
 
-		txtAgencia = new TextField(OpenSigCore.i18n.txtAgencia(), "finContaAgencia", 80);
+		txtAgencia = new TextField(OpenSigCore.i18n.txtAgencia(), "finContaAgencia", 60);
 		txtAgencia.setMaxLength(10);
 
-		txtCarteira = new TextField(OpenSigCore.i18n.txtCarteira(), "finContaCarteira", 80);
+		txtCarteira = new TextField(OpenSigCore.i18n.txtCarteira(), "finContaCarteira", 60);
 		txtCarteira.setMaxLength(10);
 
-		txtConvenio = new TextField(OpenSigCore.i18n.txtConvenio(), "finContaConvenio", 80);
+		txtConvenio = new TextField(OpenSigCore.i18n.txtConvenio(), "finContaConvenio", 60);
 		txtConvenio.setMaxLength(10);
 
 		txtSaldo = new NumberField(OpenSigCore.i18n.txtSaldo(), "finContaSaldo", 80);
 		txtSaldo.setAllowBlank(false);
 		txtSaldo.setMaxLength(13);
-
+		
 		MultiFieldPanel linha1 = new MultiFieldPanel();
 		linha1.setBorder(false);
-		linha1.addToRow(txtNome, 200);
-		linha1.addToRow(txtNumero, 100);
-		linha1.addToRow(txtAgencia, 90);
-		linha1.addToRow(txtCarteira, 90);
-		linha1.addToRow(txtConvenio, 90);
+		linha1.addToRow(txtNome, 150);
+		linha1.addToRow(txtNumero, 80);
+		linha1.addToRow(txtAgencia, 70);
+		linha1.addToRow(txtCarteira, 70);
+		linha1.addToRow(txtConvenio, 70);
 		linha1.addToRow(txtSaldo, 100);
+		linha1.addToRow(getBanco(), 250);
 		add(linha1);
-
-		txtEmpresa = new TextField(OpenSigCore.i18n.txtEmpresa(), "empEmpresa.empEntidade.empEntidadeNome1", 320);
-		txtEmpresa.setReadOnly(true);
-
-		MultiFieldPanel linha2 = new MultiFieldPanel();
-		linha2.setBorder(false);
-		linha2.addToRow(getBanco(), 350);
-		linha2.addToRow(txtEmpresa, 350);
-		add(linha2);
 	}
 
 	public boolean setDados() {
@@ -98,7 +84,6 @@ public class FormularioConta extends AFormulario<FinConta> {
 		classe.setFinContaAgencia(txtAgencia.getValueAsString() == null ? "" : txtAgencia.getValueAsString());
 		classe.setFinContaCarteira(txtCarteira.getValueAsString() == null ? "" : txtCarteira.getValueAsString());
 		classe.setFinContaConvenio(txtConvenio.getValueAsString() == null ? "" : txtConvenio.getValueAsString());
-		classe.setEmpEmpresa(new EmpEmpresa(Integer.valueOf(hdnEmpresa.getValueAsString())));
 
 		if (cmbBanco.getValue() != null) {
 			FinBanco banco = new FinBanco(Integer.valueOf(cmbBanco.getValue()));
@@ -127,9 +112,6 @@ public class FormularioConta extends AFormulario<FinConta> {
 		Record rec = lista.getPanel().getSelectionModel().getSelected();
 		if (rec != null) {
 			getForm().loadRecord(rec);
-		} else {
-			hdnEmpresa.setValue(Ponte.getLogin().getEmpresaId() + "");
-			txtEmpresa.setValue(Ponte.getLogin().getEmpresaNome());
 		}
 		txtNome.focus(true);
 
@@ -162,7 +144,7 @@ public class FormularioConta extends AFormulario<FinConta> {
 			}
 		});
 
-		cmbBanco = new ComboBox(OpenSigCore.i18n.txtBanco(), "finBanco.finBancoId", 320);
+		cmbBanco = new ComboBox(OpenSigCore.i18n.txtBanco(), "finBanco.finBancoId", 230);
 		cmbBanco.setAllowBlank(false);
 		cmbBanco.setEditable(false);
 		cmbBanco.setStore(storeBanco);
@@ -171,7 +153,7 @@ public class FormularioConta extends AFormulario<FinConta> {
 		cmbBanco.setDisplayField("finBancoDescricao");
 		cmbBanco.setValueField("finBancoId");
 		cmbBanco.setForceSelection(true);
-		cmbBanco.setListWidth(320);
+		cmbBanco.setListWidth(230);
 
 		return cmbBanco;
 	}
@@ -182,14 +164,6 @@ public class FormularioConta extends AFormulario<FinConta> {
 
 	public void setHdnCod(Hidden hdnCod) {
 		this.hdnCod = hdnCod;
-	}
-
-	public Hidden getHdnEmpresa() {
-		return hdnEmpresa;
-	}
-
-	public void setHdnEmpresa(Hidden hdnEmpresa) {
-		this.hdnEmpresa = hdnEmpresa;
 	}
 
 	public TextField getTxtNome() {
@@ -222,14 +196,6 @@ public class FormularioConta extends AFormulario<FinConta> {
 
 	public void setTxtCarteira(TextField txtCarteira) {
 		this.txtCarteira = txtCarteira;
-	}
-
-	public TextField getTxtEmpresa() {
-		return txtEmpresa;
-	}
-
-	public void setTxtEmpresa(TextField txtEmpresa) {
-		this.txtEmpresa = txtEmpresa;
 	}
 
 	public NumberField getTxtSaldo() {

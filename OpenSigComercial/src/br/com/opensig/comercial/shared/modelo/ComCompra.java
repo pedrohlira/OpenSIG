@@ -111,7 +111,7 @@ public class ComCompra extends Dados implements Serializable {
 	@JoinColumn(name = "com_natureza_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ComNatureza comNatureza;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "emp_estado_id")
 	private EmpEstado empEstado;
@@ -363,14 +363,14 @@ public class ComCompra extends Dados implements Serializable {
 	public String[] toArray() {
 		int pagarId = finPagar == null ? 0 : finPagar.getFinPagarId();
 		int nfeId = fisNotaEntrada == null ? 0 : fisNotaEntrada.getFisNotaEntradaId();
-		int contaId = finPagar == null ? 0 : finPagar.getFinConta().getFinContaId();
 
-		return new String[] { comCompraId + "", comCompraSerie + "", comCompraNumero + "", comNatureza.getComNaturezaId() + "", comNatureza.getComNaturezaNome(), UtilClient.getDataGrid(comCompraEmissao), UtilClient.getDataGrid(comCompraRecebimento),
-				empFornecedor.getEmpFornecedorId() + "", empFornecedor.getEmpEntidade().getEmpEntidadeId() + "", empFornecedor.getEmpEntidade().getEmpEntidadeNome1(),
-				empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), empEstado.getEmpEstadoId() + "", empEstado.getEmpEstadoDescricao(), comCompraIcmsBase.toString(),
-				comCompraIcmsValor.toString(), comCompraIcmssubBase.toString(), comCompraIcmssubValor.toString(), comCompraValorProduto.toString(), comCompraValorFrete.toString(),
-				comCompraValorSeguro.toString(), comCompraValorDesconto.toString(), comCompraValorIpi.toString(), comCompraValorOutros.toString(), comCompraValorNota.toString(),
-				getComCompraFechada() + "", contaId + "", pagarId + "", getComCompraPaga() + "", nfeId + "", getComCompraNfe() + "", comCompraObservacao };
+		return new String[] { comCompraId + "", comCompraSerie + "", comCompraNumero + "", comNatureza.getComNaturezaId() + "", comNatureza.getComNaturezaNome(),
+				UtilClient.getDataGrid(comCompraEmissao), UtilClient.getDataGrid(comCompraRecebimento), empFornecedor.getEmpFornecedorId() + "",
+				empFornecedor.getEmpEntidade().getEmpEntidadeId() + "", empFornecedor.getEmpEntidade().getEmpEntidadeNome1(), empEmpresa.getEmpEmpresaId() + "",
+				empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), empEstado.getEmpEstadoId() + "", empEstado.getEmpEstadoDescricao(), comCompraIcmsBase.toString(), comCompraIcmsValor.toString(),
+				comCompraIcmssubBase.toString(), comCompraIcmssubValor.toString(), comCompraValorProduto.toString(), comCompraValorFrete.toString(), comCompraValorSeguro.toString(),
+				comCompraValorDesconto.toString(), comCompraValorIpi.toString(), comCompraValorOutros.toString(), comCompraValorNota.toString(), getComCompraFechada() + "", pagarId + "",
+				getComCompraPaga() + "", nfeId + "", getComCompraNfe() + "", comCompraObservacao };
 	}
 
 	public Dados getObjeto(String campo) {

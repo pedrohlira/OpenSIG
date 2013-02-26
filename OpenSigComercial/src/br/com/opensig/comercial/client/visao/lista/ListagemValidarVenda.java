@@ -170,12 +170,6 @@ public class ListagemValidarVenda {
 				formReceber.mostrarDados();
 				formReceber.getGridFormas().setHeight(260);
 				formReceber.getGridFormas().setStore(getDadosRecebimentos());
-				formReceber.getCmbConta().getStore().addStoreListener(new StoreListenerAdapter() {
-					public void onLoad(Store store, Record[] records) {
-						formReceber.getCmbConta().setValue(UtilClient.CONF.get("conta.padrao"));
-					}
-				});
-
 				formReceber.getGridFormas().getStoreForma().addStoreListener(new StoreListenerAdapter() {
 					public void onLoad(Store store, Record[] records) {
 						formReceber.getGridFormas().getStore().load();

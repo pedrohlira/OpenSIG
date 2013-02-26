@@ -62,13 +62,9 @@ public class FinPagar extends Dados implements Serializable {
 	@JoinColumn(name = "emp_entidade_id")
 	private EmpEntidade empEntidade;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "fin_conta_id")
-	private FinConta finConta;
-
 	@OneToMany(mappedBy = "finPagar", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<FinPagamento> finPagamentos;
-	
+
 	public FinPagar() {
 		this(0);
 	}
@@ -126,14 +122,6 @@ public class FinPagar extends Dados implements Serializable {
 		this.empEntidade = empEntidade;
 	}
 
-	public FinConta getFinConta() {
-		return finConta;
-	}
-
-	public void setFinConta(FinConta finConta) {
-		this.finConta = finConta;
-	}
-
 	public List<FinPagamento> getFinPagamentos() {
 		return finPagamentos;
 	}
@@ -169,15 +157,12 @@ public class FinPagar extends Dados implements Serializable {
 	public String[] toArray() {
 
 		return new String[] { finPagarId + "", empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), empEntidade.getEmpEntidadeId() + "",
-				empEntidade.getEmpEntidadeNome1(), finConta.getFinContaId() + "", finConta.getFinContaNome(), finPagarValor.toString(), UtilClient.getDataGrid(finPagarCadastro),
-				finPagarCategoria, finPagarNfe + "", finPagarObservacao };
+				empEntidade.getEmpEntidadeNome1(), finPagarValor.toString(), UtilClient.getDataGrid(finPagarCadastro), finPagarCategoria, finPagarNfe + "", finPagarObservacao };
 	}
 
 	public Dados getObjeto(String campo) {
 		if (campo.startsWith("empEmpresa")) {
 			return new EmpEmpresa();
-		} else if (campo.startsWith("finConta")) {
-			return new FinConta();
 		} else {
 			return null;
 		}
@@ -186,7 +171,6 @@ public class FinPagar extends Dados implements Serializable {
 	public void anularDependencia() {
 		empEmpresa = null;
 		empEntidade = null;
-		finConta = null;
 		finPagamentos = null;
 	}
 }

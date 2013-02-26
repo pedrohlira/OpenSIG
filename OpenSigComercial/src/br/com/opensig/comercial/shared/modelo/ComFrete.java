@@ -314,16 +314,11 @@ public class ComFrete extends Dados implements Serializable {
 	public String[] toArray() {
 		int pagarId = finPagar == null ? 0 : finPagar.getFinPagarId();
 
-		int contaId = 0;
-		if (finPagar != null) {
-			contaId = finPagar.getFinConta().getFinContaId();
-		}
-
 		return new String[] { comFreteId + "", empFornecedor.getId().toString(), empFornecedor.getEmpEntidade().getEmpEntidadeNome1(), empEmpresa.getId().toString(),
 				empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), empTransportadora.getId().toString(), empTransportadora.getEmpEntidade().getEmpEntidadeId() + "",
 				empTransportadora.getEmpEntidade().getEmpEntidadeNome1(), comFreteCtrc + "", UtilClient.getDataGrid(comFreteEmissao), UtilClient.getDataGrid(comFreteRecebimento), comFreteSerie + "",
 				comFreteCfop + "", comFreteVolume + "", comFreteEspecie, comFretePeso.toString(), comFreteCubagem + "", comFreteValorProduto.toString(), comFreteNota + "", comFreteValor.toString(),
-				comFreteBase.toString(), comFreteAliquota + "", comFreteIcms.toString(), getComFreteFechada() + "", contaId + "", pagarId + "", getComFretePaga() + "", comFreteObservacao };
+				comFreteBase.toString(), comFreteAliquota + "", comFreteIcms.toString(), getComFreteFechada() + "", pagarId + "", getComFretePaga() + "", comFreteObservacao };
 	}
 
 	public Dados getObjeto(String campo) {

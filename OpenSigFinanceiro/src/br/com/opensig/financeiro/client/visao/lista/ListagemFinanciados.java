@@ -24,6 +24,7 @@ import com.gwtext.client.data.FloatFieldDef;
 import com.gwtext.client.data.IntegerFieldDef;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.data.RecordDef;
+import com.gwtext.client.data.SimpleStore;
 import com.gwtext.client.data.Store;
 import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.widgets.Component;
@@ -47,6 +48,7 @@ import com.gwtextux.client.widgets.grid.plugins.SummaryColumnConfig;
 public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 
 	private Store storeForma;
+	private Store storeStatus;
 
 	public ListagemFinanciados(E classe, boolean barraTarefa) {
 		super(classe, barraTarefa);
@@ -57,15 +59,22 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 	public void inicializar() {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("id"), new IntegerFieldDef("financeiroId"), new IntegerFieldDef("empresaId"), new StringFieldDef("empresaNome"),
-				new StringFieldDef("nome"), new IntegerFieldDef("conta"), new IntegerFieldDef("finFormaId"), new StringFieldDef("finFormaDescricao"), new StringFieldDef("documento"),
-				new FloatFieldDef("valor"), new StringFieldDef("parcela"), new DateFieldDef("cadastro"), new DateFieldDef("vencimento"), new StringFieldDef("status"), new DateFieldDef("realizado"),
-				new DateFieldDef("conciliado"), new IntegerFieldDef("nfe"), new StringFieldDef("observacao") };
+				new StringFieldDef("nome"), new IntegerFieldDef("finContaId"), new StringFieldDef("finContaNome"), new IntegerFieldDef("finFormaId"), new StringFieldDef("finFormaDescricao"),
+				new StringFieldDef("documento"), new FloatFieldDef("valor"), new StringFieldDef("parcela"), new DateFieldDef("cadastro"), new DateFieldDef("vencimento"), new StringFieldDef("status"),
+				new DateFieldDef("realizado"), new DateFieldDef("conciliado"), new IntegerFieldDef("nfe"), new StringFieldDef("observacao") };
 		campos = new RecordDef(fd);
 
+		// formas
 		FieldDef[] fdForma = new FieldDef[] { new IntegerFieldDef("finFormaId"), new StringFieldDef("finFormaDescricao") };
 		CoreProxy<FinForma> proxy = new CoreProxy<FinForma>(new FinForma());
 		storeForma = new Store(proxy, new ArrayReader(new RecordDef(fdForma)), false);
 		storeForma.load();
+
+		// status
+		String aberto = OpenSigCore.i18n.txtAberto().toUpperCase();
+		String realizado = OpenSigCore.i18n.txtRealizado().toUpperCase();
+		storeStatus = new SimpleStore(new String[] { "id", "valor" }, new String[][] { new String[] { aberto, aberto }, new String[] { realizado, realizado } });
+		storeStatus.load();
 
 		// colunas
 		ColumnConfig ccId = new ColumnConfig("", "id", 10, false);
@@ -88,9 +97,11 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 		ccNome.setHidden(true);
 		ccNome.setFixed(true);
 
-		ColumnConfig ccConta = new ColumnConfig("", "conta", 10, false);
-		ccConta.setHidden(true);
-		ccConta.setFixed(true);
+		ColumnConfig ccContaId = new ColumnConfig("", "finContaId", 10, false);
+		ccContaId.setHidden(true);
+		ccContaId.setFixed(true);
+
+		ColumnConfig ccConta = new ColumnConfig(OpenSigCore.i18n.txtConta(), "finContaNome", 100, false);
 
 		ColumnConfig ccTipoId = new ColumnConfig(OpenSigCore.i18n.txtTipo(), "finFormaId", 150, false, new Renderer() {
 			public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
@@ -113,7 +124,7 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 
 		ColumnConfig ccParcela = new ColumnConfig(OpenSigCore.i18n.txtParcela(), "parcela", 50, false);
 		ccParcela.setEditor(new GridEditor(getParcela()));
-		
+
 		ColumnConfig ccCadastro = new ColumnConfig("", "cadastro", 10, false);
 		ccCadastro.setHidden(true);
 		ccCadastro.setFixed(true);
@@ -122,11 +133,12 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 		ccVencimento.setEditor(new GridEditor(getVencimento()));
 
 		ColumnConfig ccStatus = new ColumnConfig(OpenSigCore.i18n.txtStatus(), "status", 100, false);
+		ccStatus.setEditor(new GridEditor(getStatus()));
 
 		ColumnConfig ccRealizado = new ColumnConfig("", "realizado", 10, false);
 		ccRealizado.setHidden(true);
 		ccRealizado.setFixed(true);
-		
+
 		ColumnConfig ccConciliado = new ColumnConfig("", "conciliado", 10, false);
 		ccConciliado.setHidden(true);
 		ccConciliado.setFixed(true);
@@ -138,19 +150,19 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 		ColumnConfig ccObservacao = new ColumnConfig("", "observacao", 10, false);
 		ccObservacao.setHidden(true);
 		ccObservacao.setFixed(true);
-		
+
 		// sumarios
 		ColumnConfig ccValor = new ColumnConfig(OpenSigCore.i18n.txtValor(), "valor", 75, false, IListagem.DINHEIRO);
 		ccValor.setEditor(new GridEditor(getValor()));
 		SummaryColumnConfig sumValor = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccValor, IListagem.DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccFinanceiroId, ccEmpresaId, ccEmpresaNome, ccNome, ccConta, ccTipoId, ccTipo, ccDocumento, sumValor, ccParcela, ccCadastro,
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccFinanceiroId, ccEmpresaId, ccEmpresaNome, ccNome, ccContaId, ccConta, ccTipoId, ccTipo, ccDocumento, sumValor, ccParcela, ccCadastro,
 				ccVencimento, ccStatus, ccRealizado, ccConciliado, ccNfe, ccObservacao };
 		modelos = new ColumnModel(bcc);
 
 		addEditorGridListener(new EditorGridListenerAdapter() {
 			public boolean doBeforeEdit(GridPanel grid, Record record, String field, Object value, int rowIndex, int colIndex) {
-				if (!record.getAsString("status").equalsIgnoreCase(OpenSigCore.i18n.txtAberto())) {
+				if (record.getAsString("status").equalsIgnoreCase(OpenSigCore.i18n.txtConciliado())) {
 					MessageBox.alert(OpenSigCore.i18n.txtAcesso(), OpenSigCore.i18n.txtAcessoNegado());
 					return false;
 				} else {
@@ -161,7 +173,7 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 
 		filtroPadrao = new FiltroNumero(classe.getCampoId(), ECompara.IGUAL, 0);
 		setTitle(OpenSigCore.i18n.txtParcela(), "icon-preco");
-		setHeight(Ext.getBody().getHeight() - 420);
+		setHeight(Ext.getBody().getHeight() - 340);
 		super.inicializar();
 	}
 
@@ -197,7 +209,11 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 					fin.setFinPagamentoCadastro(new Date());
 					fin.setFinPagamentoVencimento(vencimento);
 					fin.setFinPagamentoStatus(status);
-					fin.setFinPagamentoRealizado(realizado);
+					if (realizado == null && status.equalsIgnoreCase(OpenSigCore.i18n.txtRealizado())) {
+						fin.setFinPagamentoRealizado(vencimento);
+					} else {
+						fin.setFinPagamentoRealizado(realizado);
+					}
 					fin.setFinPagamentoConciliado(conciliado);
 					fin.setFinPagamentoObservacao(obs == null ? "" : obs);
 					lista.add((E) fin);
@@ -211,7 +227,11 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 					fin.setFinRecebimentoCadastro(new Date());
 					fin.setFinRecebimentoVencimento(vencimento);
 					fin.setFinRecebimentoStatus(status);
-					fin.setFinRecebimentoRealizado(realizado);
+					if (realizado == null && status.equalsIgnoreCase(OpenSigCore.i18n.txtRealizado())) {
+						fin.setFinRecebimentoRealizado(vencimento);
+					} else {
+						fin.setFinRecebimentoRealizado(realizado);
+					}
 					fin.setFinRecebimentoConciliado(conciliado);
 					fin.setFinRecebimentoObservacao(obs == null ? "" : obs);
 					lista.add((E) fin);
@@ -246,7 +266,7 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 		txtDocumento.setMaxLength(50);
 		return txtDocumento;
 	}
-	
+
 	private TextField getParcela() {
 		TextField txtParcela = new TextField();
 		txtParcela.setAllowBlank(false);
@@ -277,6 +297,19 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 		dtVencimento.setAllowBlank(false);
 		dtVencimento.setSelectOnFocus(true);
 		return dtVencimento;
+	}
+
+	private ComboBox getStatus() {
+		ComboBox cmbStatus = new ComboBox();
+		cmbStatus.setAllowBlank(false);
+		cmbStatus.setStore(storeStatus);
+		cmbStatus.setTriggerAction(ComboBox.ALL);
+		cmbStatus.setMode(ComboBox.LOCAL);
+		cmbStatus.setDisplayField("id");
+		cmbStatus.setValueField("valor");
+		cmbStatus.setForceSelection(true);
+		cmbStatus.setEditable(false);
+		return cmbStatus;
 	}
 
 	public Store getStoreForma() {

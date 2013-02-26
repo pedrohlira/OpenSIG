@@ -34,7 +34,6 @@ import br.com.opensig.empresa.shared.modelo.EmpEntidade;
 import br.com.opensig.empresa.shared.modelo.EmpEstado;
 import br.com.opensig.empresa.shared.modelo.EmpFornecedor;
 import br.com.opensig.empresa.shared.modelo.EmpMunicipio;
-import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinForma;
 import br.com.opensig.financeiro.shared.modelo.FinPagamento;
 import br.com.opensig.financeiro.shared.modelo.FinPagar;
@@ -169,7 +168,6 @@ public class ImportarCompra extends ImportarNFe<ComCompra> {
 		// pagar
 		FinPagar pagar = new FinPagar();
 		List<FinPagamento> pagamentos = new ArrayList<FinPagamento>();
-		pagar.setFinConta(new FinConta(Integer.valueOf(auth.getConf().get("conta.padrao"))));
 		pagar.setFinPagamentos(pagamentos);
 		pagar.setFinPagarObservacao("");
 		// acha a forma de pagamento boleto
@@ -200,6 +198,7 @@ public class ImportarCompra extends ImportarNFe<ComCompra> {
 				// pagamentos
 				FinPagamento pag = new FinPagamento();
 				pag.setFinForma(forma);
+				pag.setFinConta(null);
 				pag.setFinPagamentoDocumento(dup.getNDup());
 				pag.setFinPagamentoValor(Double.valueOf(dup.getVDup()));
 				pag.setFinPagamentoParcela(parcela);

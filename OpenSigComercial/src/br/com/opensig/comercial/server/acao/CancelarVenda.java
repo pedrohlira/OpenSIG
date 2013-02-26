@@ -27,7 +27,6 @@ import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Autenticacao;
 import br.com.opensig.core.shared.modelo.EComando;
 import br.com.opensig.core.shared.modelo.Sql;
-import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinReceber;
 import br.com.opensig.financeiro.shared.modelo.FinRecebimento;
 import br.com.opensig.fiscal.server.acao.GerarNfeCanceladaSaida;
@@ -81,15 +80,17 @@ public class CancelarVenda extends Chain {
 				atuVenda.setNext(inuNota);
 			}
 		}
-		// atualiza os conta
-		AtualizarConta atuConta = new AtualizarConta(atuVenda);
-		// valida o estoque
-		AtualizarEstoque atuEst = new AtualizarEstoque(atuConta);
+		// atualiza o estoque
+		AtualizarEstoque atuEst = new AtualizarEstoque(atuVenda);
+		// valida os recebimentos
+		ValidarRecebimentos valReceber = new ValidarRecebimentos(null);
+		
 		if (!auth.getConf().get("estoque.ativo").equalsIgnoreCase("ignorar")) {
-			this.setNext(atuEst);
+			valReceber.setNext(atuEst);
 		} else {
-			this.setNext(atuConta);
+			valReceber.setNext(atuVenda);
 		}
+		this.next = valReceber;
 	}
 
 	@Override
@@ -114,7 +115,7 @@ public class CancelarVenda extends Chain {
 			}
 		}
 		venda.setComVendaProdutos(auxProdutos);
-		
+
 		if (next != null) {
 			next.execute();
 		}
@@ -190,53 +191,26 @@ public class CancelarVenda extends Chain {
 		}
 	}
 
-	private class AtualizarConta extends Chain {
+	private class ValidarRecebimentos extends Chain {
 
-		public AtualizarConta(Chain next) throws OpenSigException {
+		public ValidarRecebimentos(Chain next) throws OpenSigException {
 			super(next);
 		}
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
-			EntityManager em = null;
-
-			try {
-				// recupera uma instância do gerenciador de entidades
-				FinConta conta = new FinConta();
-				emf = Conexao.getInstancia(conta.getPu());
-				em = emf.createEntityManager();
-				em.getTransaction().begin();
-
-				if (venda.getFinReceber() != null) {
-					conta = venda.getFinReceber().getFinConta();
-					double valPag = 0.00;
-					for (FinRecebimento rec : venda.getFinReceber().getFinRecebimentos()) {
-						if (!rec.getFinRecebimentoStatus().equalsIgnoreCase(auth.getConf().get("txtAberto"))) {
-							valPag += rec.getFinRecebimentoValor();
-						}
-					}
-
-					if (valPag > 0) {
-						conta.setFinContaSaldo(conta.getFinContaSaldo() - valPag);
-						servico.salvar(em, conta);
+			// valida se tem a receber
+			if (venda.getFinReceber() != null) {
+				// valida se os recebimentos tem algum conciliado
+				for (FinRecebimento recebimento : venda.getFinReceber().getFinRecebimentos()) {
+					if (recebimento.getFinRecebimentoStatus().equalsIgnoreCase(auth.getConf().get("txtConciliado"))) {
+						throw new OpenSigException("Existe recebimentos conciliados! Estorne antes de cancelar a venda.");
 					}
 				}
+			}
 
-				if (next != null) {
-					next.execute();
-				}
-				em.getTransaction().commit();
-			} catch (Exception ex) {
-				if (em != null && em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-
-				UtilServer.LOG.error("Erro ao atualizar a conta.", ex);
-				throw new ComercialException(ex.getMessage());
-			} finally {
-				em.close();
-				emf.close();
+			if (next != null) {
+				next.execute();
 			}
 		}
 	}

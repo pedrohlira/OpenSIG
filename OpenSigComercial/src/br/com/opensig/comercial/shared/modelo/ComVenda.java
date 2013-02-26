@@ -241,12 +241,11 @@ public class ComVenda extends Dados implements Serializable {
 	public String[] toArray() {
 		int receberId = finReceber == null ? 0 : finReceber.getFinReceberId();
 		int nfeId = fisNotaSaida == null ? 0 : fisNotaSaida.getFisNotaSaidaId();
-		int contaId = finReceber == null ? 0 : finReceber.getFinConta().getFinContaId();
 
 		return new String[] { comVendaId + "", empCliente.getEmpClienteId() + "", empCliente.getEmpEntidade().getEmpEntidadeId() + "", empCliente.getEmpEntidade().getEmpEntidadeNome1(),
 				empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), sisUsuario.getSisUsuarioId() + "", sisUsuario.getSisUsuarioLogin(),
 				UtilClient.getDataHoraGrid(comVendaData), comVendaValorBruto.toString(), comVendaValorLiquido.toString(), comNatureza.getComNaturezaId() + "", comNatureza.getComNaturezaNome(),
-				getComVendaFechada() + "", contaId + "", receberId + "", getComVendaRecebida() + "", nfeId + "", getComVendaNfe() + "", getComVendaCancelada() + "", comVendaObservacao };
+				getComVendaFechada() + "", receberId + "", getComVendaRecebida() + "", nfeId + "", getComVendaNfe() + "", getComVendaCancelada() + "", comVendaObservacao };
 	}
 
 	public Dados getObjeto(String campo) {
