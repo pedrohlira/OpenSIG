@@ -37,6 +37,14 @@ public class ListagemPagar extends AListagemFinanceiro<FinPagar, FinPagamento> {
 		if (itemFrete != null) {
 			mnuContexto.addItem(itemFrete);
 		}
+		
+		// consumo
+		String strConsumo = FabricaComando.getInstancia().getComandoCompleto("ComandoConsumo");
+		SisFuncao consumo = UtilClient.getFuncaoPermitida(strConsumo);
+		MenuItem itemConsumo = gerarFuncao(consumo, "finPagar.finPagarId", "finPagarId");
+		if (itemConsumo != null) {
+			mnuContexto.addItem(itemConsumo);
+		}
 
 		// pagamentos
 		SisFuncao pagamentos = UtilClient.getFuncaoPermitida(ComandoPagamento.class);

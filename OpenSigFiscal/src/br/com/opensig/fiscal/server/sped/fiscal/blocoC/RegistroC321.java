@@ -14,7 +14,7 @@ public class RegistroC321 extends ARegistro<DadosC321, List<ComEcfNotaProduto>> 
 			d.setCod_item(np.getProdProduto().getProdProdutoId() + "");
 			d.setQtd(np.getComEcfNotaProdutoQuantidade());
 			d.setUnid(np.getProdEmbalagem().getProdEmbalagemNome());
-			d.setVl_item(somarDoubles(d.getVl_item() + np.getComEcfNotaProdutoLiquido()));
+			d.setVl_item(somarDoubles(d.getVl_item(), np.getComEcfNotaProdutoLiquido()));
 			d.setDesc(somarDoubles(d.getDesc() , np.getComEcfNotaProdutoDesconto()));
 			if (np.getComEcfNotaProdutoIcms() != null) {
 				d.setVl_bc_icms(d.getVl_item());

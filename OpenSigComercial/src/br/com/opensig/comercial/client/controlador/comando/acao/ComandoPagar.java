@@ -128,7 +128,6 @@ public class ComandoPagar extends ComandoAcao<ComCompra> {
 				formPagar.getDtCadastro().setValue(data);
 				formPagar.getDtCadastro().disable();
 				formPagar.mostrarDados();
-				formPagar.getGridFormas().setHeight(260);
 				
 				Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
 					public boolean execute() {

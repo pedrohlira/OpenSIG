@@ -35,6 +35,9 @@ import br.com.opensig.permissao.shared.modelo.SisGrupo;
 import br.com.opensig.permissao.shared.modelo.SisUsuario;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
+import br.com.opensig.produto.shared.modelo.ProdEstoqueGrade;
+import br.com.opensig.produto.shared.modelo.ProdGrade;
+import br.com.opensig.produto.shared.modelo.ProdGradeTipo;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 /**
@@ -154,7 +157,7 @@ public class RestCliente extends ARest {
 	public List<SisCliente> getClientes(@QueryParam("data") String data) throws RestException {
 		autorizar();
 		try {
-			Date dt = UtilServer.formataData(data.substring(0, 10), "dd/MM/yyyy");
+			Date dt = UtilServer.formataData(data, "dd/MM/yyyy");
 			GrupoFiltro gf = new GrupoFiltro();
 			if (dt != null) {
 				FiltroData fd = new FiltroData("empEntidade.empEntidadeData", ECompara.MAIOR_IGUAL, dt);
@@ -220,6 +223,26 @@ public class RestCliente extends ARest {
 	}
 
 	/**
+	 * Metodo que retorna a lista de tipos de grades cadastradas no sistema.
+	 * 
+	 * @return uma lista de objetos tipo grade em formato JSON.
+	 * @throws RestException
+	 *             em caso de nao conseguir acessar a informacao.
+	 */
+	@Path("/tipo_grade")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ProdGradeTipo> getGradeTipo() throws RestException {
+		autorizar();
+		try {
+			return service.selecionar(new ProdGradeTipo(), 0, 0, null, false).getLista();
+		} catch (Exception ex) {
+			log.error(ex);
+			throw new RestException(ex);
+		}
+	}
+
+	/**
 	 * Metodo que retorna a lista de novos produtos cadastrados no sistema.
 	 * 
 	 * @param id
@@ -274,7 +297,7 @@ public class RestCliente extends ARest {
 				Date alterado = UtilServer.formataData(data, "dd/MM/yyyy");
 				filtro = new FiltroData("prodProdutoAlterado", ECompara.MAIOR_IGUAL, alterado);
 			}
-			
+
 			ProdProduto prod = new ProdProduto();
 			prod.setCampoOrdem("prodProdutoAlterado");
 
@@ -342,6 +365,15 @@ public class RestCliente extends ARest {
 				if (ecf.getEmpEmpresa().getEmpEmpresaId() == est.getEmpEmpresa().getEmpEmpresaId()) {
 					produto.setProdProdutoEstoque(est.getProdEstoqueQuantidade());
 					break;
+				}
+			}
+			// estoque das grades do produto
+			for (ProdGrade grade : produto.getProdGrades()) {
+				for (ProdEstoqueGrade est : grade.getProdEstoqueGrades()) {
+					if (ecf.getEmpEmpresa().getEmpEmpresaId() == est.getEmpEmpresa().getEmpEmpresaId()) {
+						grade.setProdGradeEstoque(est.getProdEstoqueGradeQuantidade());
+						break;
+					}
 				}
 			}
 		}

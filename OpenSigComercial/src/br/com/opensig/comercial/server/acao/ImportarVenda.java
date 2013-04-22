@@ -144,7 +144,7 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 			venda.setComVendaValorLiquido(Double.valueOf(tot.getVNF()));
 			venda.setComVendaRecebida(nfe.getInfNFe().getCobr() != null);
 			venda.setFinReceber(getReceber());
-			venda.setComVendaObservacao(nfe.getInfNFe().getInfAdic().getInfCpl() == null ? "" : nfe.getInfNFe().getInfAdic().getInfCpl());
+			venda.setComVendaObservacao("");
 		}
 	}
 

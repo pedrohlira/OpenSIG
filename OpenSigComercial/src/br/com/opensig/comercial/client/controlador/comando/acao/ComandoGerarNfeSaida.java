@@ -173,10 +173,10 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 						if (txtLiquido.getValue() != null) {
 							frete.setComFreteCubagem(txtLiquido.getValue().doubleValue());
 						}
-						// seta info
-						venda.setComVendaObservacao(txtObservacao.getValueAsString());
 					}
-
+					// seta info
+					venda.setComVendaObservacao(txtObservacao.getValueAsString());
+					
 					MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtNfe());
 					ComercialProxy proxy = new ComercialProxy();
 					proxy.gerarNfe(venda, frete, salvar);

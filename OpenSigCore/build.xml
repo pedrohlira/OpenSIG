@@ -3,7 +3,7 @@
 
 	<property name="gwt" location="/Volumes/Macintosh HD 2/Users/pedrohenriquelira/Documents/Java/gwt-2.4.0" />
 	<property name="pacote" value="br.com.opensig.core.client" />
-	<property name="versao" value="1.1.0" />
+	<property name="versao" value="1.1.2" />
 	<property name="empresa" value="PhD - Systems Solutions" />
 	<property name="autor" value="Pedro H. Lira" />
 	<property name="url" value="http://phdss.com.br" />

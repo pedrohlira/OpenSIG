@@ -23,10 +23,10 @@ public class Registro0000 extends ARegistro<Dados0000, Dados> {
 		
 		EmpMunicipio mun = sped.getEmpEmpresa().getEmpEntidade().getEmpEnderecos().get(0).getEmpMunicipio();
 		d.setUf(mun.getEmpEstado().getEmpEstadoSigla());
-		d.setIe(sped.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento2());
+		d.setIe(sped.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento2().replaceAll("\\D", ""));
 		d.setCod_mun(mun.getEmpMunicipioIbge());
-		d.setIm(sped.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento3());
-		d.setSuframa(auth.getConf().get("sped.fiscal.0000.suframa"));
+		d.setIm(sped.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento3().replaceAll("\\D", ""));
+		d.setSuframa(auth.getConf().get("sped.0000.suframa"));
 		d.setInd_perfil(auth.getConf().get("sped.fiscal.0000.ind_perfil"));
 		d.setInd_ativ(Integer.valueOf(auth.getConf().get("sped.fiscal.0000.ind_ativ")));
 		return d;

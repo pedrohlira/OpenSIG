@@ -31,7 +31,7 @@ public class ComandoPesquisa extends ComandoFuncao {
 	}
 
 	public void execute(Map contexto) {
-		if (wnd == null) {
+		if (wnd == null || wnd.getWidth() != Ext.getBody().getWidth() - 20 || wnd.getHeight() != Ext.getBody().getHeight() - 20) {
 			wnd = new Window();
 			wnd.setLayout(new FitLayout());
 			wnd.setModal(true);
@@ -39,7 +39,7 @@ public class ComandoPesquisa extends ComandoFuncao {
 			wnd.setTitle(OpenSigCore.i18n.txtPesquisar());
 			wnd.setIconCls("icon-pesquisa");
 			wnd.setButtonAlign(Position.CENTER);
-			wnd.addListener(new WindowListenerAdapter(){
+			wnd.addListener(new WindowListenerAdapter() {
 				public void onShow(Component component) {
 					formPesquisa.getTxtBusca().focus(true, 10);
 				}

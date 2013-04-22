@@ -8,7 +8,7 @@ public class Dados0000 extends Bean {
 
 	private int cod_ver;
 	private int tipo_escrit;
-	private int ind_sit_esp;
+	private Integer ind_sit_esp;
 	private String num_rec_anterior;
 	private Date dt_ini;
 	private Date dt_fin;
@@ -17,7 +17,7 @@ public class Dados0000 extends Bean {
 	private String uf;
 	private int cod_mun;
 	private String suframa;
-	private String ind_nat_pj;
+	private int ind_nat_pj;
 	private int ind_ativ;
 
 	public Dados0000() {
@@ -104,11 +104,11 @@ public class Dados0000 extends Bean {
 		this.tipo_escrit = tipo_escrit;
 	}
 
-	public int getInd_sit_esp() {
+	public Integer getInd_sit_esp() {
 		return ind_sit_esp;
 	}
 
-	public void setInd_sit_esp(int ind_sit_esp) {
+	public void setInd_sit_esp(Integer ind_sit_esp) {
 		this.ind_sit_esp = ind_sit_esp;
 	}
 
@@ -120,11 +120,11 @@ public class Dados0000 extends Bean {
 		this.num_rec_anterior = num_rec_anterior;
 	}
 
-	public String getInd_nat_pj() {
+	public int getInd_nat_pj() {
 		return ind_nat_pj;
 	}
 
-	public void setInd_nat_pj(String ind_nat_pj) {
+	public void setInd_nat_pj(int ind_nat_pj) {
 		this.ind_nat_pj = ind_nat_pj;
 	}
 

@@ -21,33 +21,36 @@ public class RegistroC350 extends ARegistro<DadosC350, ComEcfNota> {
 
 	@Override
 	public void executar() {
-		try {
-			StreamFactory factory = StreamFactory.newInstance();
-			factory.load(getClass().getResourceAsStream(bean));
-			BeanWriter out = factory.createWriter("EFD", escritor);
+		// executa para perfil igual a A
+		if (auth.getConf().get("sped.fiscal.0000.ind_perfil").equals("A")) {
+			try {
+				StreamFactory factory = StreamFactory.newInstance();
+				factory.load(getClass().getResourceAsStream(bean));
+				BeanWriter out = factory.createWriter("EFD", escritor);
 
-			RegistroC370 c370 = new RegistroC370();
-			for (ComEcfNota nota : notas) {
-				if (nota.getComEcfNotaCancelada() == false) {
-					bloco = getDados(nota);
-					out.write(bloco);
-					out.flush();
+				RegistroC370 c370 = new RegistroC370();
+				for (ComEcfNota nota : notas) {
+					if (nota.getComEcfNotaCancelada() == false) {
+						bloco = getDados(nota);
+						out.write(bloco);
+						out.flush();
 
-					// itens da venda
-					for (ComEcfNotaProduto np : nota.getComEcfNotaProdutos()) {
-						c370.setDados(np);
-						c370.executar();
-						qtdLinhas += c370.getQtdLinhas();
-						setAnalitico(np);
+						// itens da venda
+						for (ComEcfNotaProduto np : nota.getComEcfNotaProdutos()) {
+							c370.setDados(np);
+							c370.executar();
+							qtdLinhas += c370.getQtdLinhas();
+							setAnalitico(np);
+						}
+
+						// analitico
+						getAnalitico();
 					}
-
-					// analitico
-					getAnalitico();
 				}
+			} catch (Exception e) {
+				qtdLinhas = 0;
+				UtilServer.LOG.error("Erro na geracao do Registro -> " + bean, e);
 			}
-		} catch (Exception e) {
-			qtdLinhas = 0;
-			UtilServer.LOG.error("Erro na geracao do Registro -> " + bean, e);
 		}
 	}
 

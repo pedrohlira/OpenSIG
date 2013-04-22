@@ -17,8 +17,12 @@ import br.com.opensig.core.client.controlador.comando.form.ComandoSalvar;
 import br.com.opensig.core.client.controlador.comando.form.ComandoSalvarFinal;
 import br.com.opensig.core.client.controlador.comando.lista.ComandoAdicionar;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
+import br.com.opensig.core.client.controlador.filtro.EJuncao;
+import br.com.opensig.core.client.controlador.filtro.FiltroBinario;
 import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
+import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
+import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.servico.CoreProxy;
 import br.com.opensig.core.client.visao.ComboEntidade;
 import br.com.opensig.core.client.visao.PermitirSistema;
@@ -71,6 +75,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 	private Hidden hdnUsuario;
 	private Hidden hdnEmpresa;
 	private ComboBox cmbCliente;
+	private ComboBox cmbVendedor;
 	private ComboBox cmbNatureza;
 	private TextField txtUsuario;
 	private NumberField txtPadraoDesc;
@@ -105,13 +110,14 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 		hdnEmpresa = new Hidden("empEmpresa.empEmpresaId", "0");
 		add(hdnEmpresa);
 
-		txtUsuario = new TextField(OpenSigCore.i18n.txtUsuario(), "sisUsuario.sisUsuarioLogin", 150);
+		txtUsuario = new TextField(OpenSigCore.i18n.txtUsuario(), "sisUsuario.sisUsuarioLogin", 140);
 		txtUsuario.setReadOnly(true);
 
 		MultiFieldPanel linha1 = new MultiFieldPanel();
 		linha1.setBorder(false);
 		linha1.addToRow(getCliente(), 330);
-		linha1.addToRow(txtUsuario, 160);
+		linha1.addToRow(txtUsuario, 150);
+		linha1.addToRow(getVendedor(), 150);
 		linha1.addToRow(getNatureza(), 170);
 		add(linha1);
 		lblRegistros = new Label();
@@ -135,52 +141,40 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 
 			public void onSuccess(Record result) {
 				gridProdutos.stopEditing();
-				int pos;
+				double bruto = result.getAsDouble("prodProdutoPreco");
+				double desc = txtPadraoDesc.getValue().doubleValue();
+				double liquido = bruto - (bruto * desc / 100);
+				String strValor = NumberFormat.getFormat("0.##").format(liquido);
+				liquido = Double.valueOf(strValor.replace(",", "."));
 
-				for (pos = 0; pos < gridProdutos.getStore().getCount(); pos++) {
-					if (gridProdutos.getStore().getAt(pos).getAsInteger("prodProdutoId") == result.getAsInteger("prodProdutoId")) {
-						break;
-					}
-				}
+				Record reg = gridProdutos.getCampos().createRecord(new Object[gridProdutos.getCampos().getFields().length]);
+				reg.set("comVendaProdutoId", 0);
+				reg.set("prodProdutoId", result.getAsInteger("prodProdutoId"));
+				reg.set("comVendaProdutoBarra", result.getAsString("prodProdutoBarra"));
+				reg.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
+				reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
+				reg.set("comVendaProdutoQuantidade", 0);
+				reg.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
+				reg.set("prodEmbalagem.prodEmbalagemNome", result.getAsString("prodEmbalagem.prodEmbalagemNome"));
+				reg.set("comVendaProdutoBruto", bruto);
+				reg.set("comVendaProdutoDesconto", desc);
+				reg.set("comVendaProdutoLiquido", liquido);
+				reg.set("comVendaProdutoTotalBruto", 0);
+				reg.set("comVendaProdutoTotalLiquido", 0);
+				reg.set("comVendaProdutoIcms", 0);
+				reg.set("comVendaProdutoIpi", result.getAsDouble("prodIpi.prodIpiAliquota"));
+				reg.set("comVendaProdutoEstoque", result.getAsInteger("t1.prodEstoqueQuantidade"));
 
-				if (pos == gridProdutos.getStore().getCount()) {
-					double bruto = result.getAsDouble("prodProdutoPreco");
-					double desc = txtPadraoDesc.getValue().doubleValue();
-					double liquido = bruto - (bruto * desc / 100);
-					String strValor = NumberFormat.getFormat("0.##").format(liquido);
-					liquido = Double.valueOf(strValor.replace(",", "."));
-
-					Record reg = gridProdutos.getCampos().createRecord(new Object[gridProdutos.getCampos().getFields().length]);
-					reg.set("comVendaProdutoId", 0);
-					reg.set("prodProdutoId", result.getAsInteger("prodProdutoId"));
-					reg.set("comVendaProdutoBarra", result.getAsString("prodProdutoBarra"));
-					reg.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
-					reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
-					reg.set("comVendaProdutoQuantidade", 0);
-					reg.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
-					reg.set("prodEmbalagem.prodEmbalagemNome", result.getAsString("prodEmbalagem.prodEmbalagemNome"));
-					reg.set("comVendaProdutoBruto", bruto);
-					reg.set("comVendaProdutoDesconto", desc);
-					reg.set("comVendaProdutoLiquido", liquido);
-					reg.set("comVendaProdutoTotalBruto", 0);
-					reg.set("comVendaProdutoTotalLiquido", 0);
-					reg.set("comVendaProdutoIcms", 0);
-					reg.set("comVendaProdutoIpi", result.getAsDouble("prodIpi.prodIpiAliquota"));
-					reg.set("comVendaProdutoEstoque", result.getAsInteger("t1.prodEstoqueQuantidade"));
-
-					if (reg.getAsInteger("comVendaProdutoEstoque") > 0 || !UtilClient.CONF.get("estoque.ativo").equalsIgnoreCase("sim")) {
-						gridProdutos.getStore().add(reg);
-					} else {
-						new ToastWindow(OpenSigCore.i18n.txtEstoque(), reg.getAsString("prodProduto.prodProdutoDescricao") + " = 0").show();
-						return;
-					}
+				if (reg.getAsInteger("comVendaProdutoEstoque") > 0 || !UtilClient.CONF.get("estoque.ativo").equalsIgnoreCase("sim")) {
+					gridProdutos.getStore().add(reg);
 				} else {
-					new ToastWindow(getTitle(), OpenSigCore.i18n.errExiste()).show();
+					new ToastWindow(OpenSigCore.i18n.txtEstoque(), reg.getAsString("prodProduto.prodProdutoDescricao") + " = 0").show();
+					return;
 				}
 
 				for (int col = 0; col < gridProdutos.getModelos().getColumnCount(); col++) {
 					if (gridProdutos.getModelos().getDataIndex(col).equals("comVendaProdutoQuantidade")) {
-						gridProdutos.startEditing(pos, col);
+						gridProdutos.startEditing(gridProdutos.getStore().getCount() - 1, col);
 						break;
 					}
 				}
@@ -331,31 +325,31 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 			retorno = false;
 			new ToastWindow(OpenSigCore.i18n.txtListagem(), OpenSigCore.i18n.errLista()).show();
 		}
-
-		classe.setComVendaProdutos(produtos);
-		classe.setComVendaId(Integer.valueOf(hdnCod.getValueAsString()));
 		if (!hdnCliente.getValueAsString().equals("0")) {
 			EmpCliente cliente = new EmpCliente(Integer.valueOf(hdnCliente.getValueAsString()));
 			classe.setEmpCliente(cliente);
 		}
-
+		if (cmbVendedor.getValue() != null) {
+			SisUsuario vendedor = new SisUsuario(Integer.valueOf(cmbVendedor.getValue()));
+			classe.setSisVendedor(vendedor);
+		}
 		if (cmbNatureza.getValue() != null) {
 			ComNatureza natureza = new ComNatureza(Integer.valueOf(cmbNatureza.getValue()));
 			classe.setComNatureza(natureza);
 		}
-
 		if (hdnEmpresa.getValueAsString().equals("0")) {
 			classe.setEmpEmpresa(new EmpEmpresa(Ponte.getLogin().getEmpresaId()));
 		} else {
 			classe.setEmpEmpresa(new EmpEmpresa(Integer.valueOf(hdnEmpresa.getValueAsString())));
 		}
-
 		if (hdnUsuario.getValueAsString().equals("0")) {
 			classe.setSisUsuario(new SisUsuario(Ponte.getLogin().getId()));
 		} else {
 			classe.setSisUsuario(new SisUsuario(Integer.valueOf(hdnUsuario.getValueAsString())));
 		}
 
+		classe.setComVendaProdutos(produtos);
+		classe.setComVendaId(Integer.valueOf(hdnCod.getValueAsString()));
 		classe.setComVendaData(new Date());
 		classe.setComVendaValorBruto(bruto);
 		classe.setComVendaValorLiquido(liquido);
@@ -374,8 +368,8 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 	}
 
 	public void mostrarDados() {
-		if (cmbNatureza.getStore().getRecords().length == 0) {
-			cmbNatureza.getStore().load();
+		if (cmbVendedor.getStore().getRecords().length == 0) {
+			cmbVendedor.getStore().load();
 		} else {
 			mostrar();
 		}
@@ -392,6 +386,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 			gridProdutos.getStore().reload();
 		} else {
 			txtUsuario.setValue(Ponte.getLogin().getUsuario());
+			cmbVendedor.setValue(Ponte.getLogin().getId() + "");
 			for (Record rec2 : cmbNatureza.getStore().getRecords()) {
 				if (rec2.getAsString("comNaturezaNome").equalsIgnoreCase("Venda")) {
 					cmbNatureza.setValue(rec2.getAsString("comNaturezaId"));
@@ -432,6 +427,44 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 		});
 
 		return cmbCliente;
+	}
+
+	private ComboBox getVendedor() {
+		FieldDef[] fdVendedor = new FieldDef[] { new IntegerFieldDef("sisUsuarioId"), new StringFieldDef("sisUsuarioLogin") };
+		FiltroBinario fb = new FiltroBinario("sisUsuarioAtivo", ECompara.IGUAL, 1);
+		FiltroNumero fn = new FiltroNumero("t1.empEmpresaId", ECompara.IGUAL, Ponte.getLogin().getEmpresaId());
+		GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fb, fn });
+
+		CoreProxy<SisUsuario> proxy = new CoreProxy<SisUsuario>(new SisUsuario(), gf);
+		final Store stVendedor = new Store(proxy, new ArrayReader(new RecordDef(fdVendedor)), true);
+		stVendedor.addStoreListener(new StoreListenerAdapter() {
+			public void onLoad(Store store, Record[] records) {
+				cmbNatureza.getStore().load();
+			}
+
+			public void onLoadException(Throwable error) {
+				MessageBox.confirm(OpenSigCore.i18n.txtNatureza(), OpenSigCore.i18n.msgRecarregar(), new ConfirmCallback() {
+					public void execute(String btnID) {
+						if (btnID.equalsIgnoreCase("yes")) {
+							stVendedor.load();
+						}
+					}
+				});
+			}
+		});
+
+		cmbVendedor = new ComboBox(OpenSigCore.i18n.txtVendedor(), "sisVendedor.sisUsuarioId", 130);
+		cmbVendedor.setListWidth(200);
+		cmbVendedor.setAllowBlank(false);
+		cmbVendedor.setStore(stVendedor);
+		cmbVendedor.setTriggerAction(ComboBox.ALL);
+		cmbVendedor.setMode(ComboBox.LOCAL);
+		cmbVendedor.setDisplayField("sisUsuarioLogin");
+		cmbVendedor.setValueField("sisUsuarioId");
+		cmbVendedor.setForceSelection(true);
+		cmbVendedor.setEditable(false);
+
+		return cmbVendedor;
 	}
 
 	private ComboBox getNatureza() {
@@ -494,7 +527,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 		// filtro
 		int id = UtilClient.getSelecionado(lista.getPanel());
 		FiltroObjeto filtro = new FiltroObjeto("comVenda", ECompara.IGUAL, new ComVenda(id));
-		
+
 		ExpListagem<ComVendaProduto> produtos = new ExpListagem<ComVendaProduto>();
 		produtos.setClasse(venProd);
 		produtos.setMetadados(metadados);

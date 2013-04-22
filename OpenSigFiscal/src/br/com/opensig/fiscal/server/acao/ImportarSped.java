@@ -52,18 +52,21 @@ public class ImportarSped implements IImportacao<FisSped> {
 			String ano = nome.substring(nome.length() - 6, nome.length() - 2);
 			String mes = nome.substring(nome.length() - 2);
 			FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Integer.valueOf(auth.getEmpresa()[0])));
-			FiltroTexto ft = new FiltroTexto("fisSpedFiscalTipo", ECompara.IGUAL, tipo);
-			FiltroNumero fn1 = new FiltroNumero("fisSpedFiscalAno", ECompara.IGUAL, ano);
-			FiltroNumero fn2 = new FiltroNumero("fisSpedFiscalMes", ECompara.IGUAL, mes);
+			FiltroTexto ft = new FiltroTexto("fisSpedTipo", ECompara.IGUAL, tipo);
+			FiltroNumero fn1 = new FiltroNumero("fisSpedAno", ECompara.IGUAL, ano);
+			FiltroNumero fn2 = new FiltroNumero("fisSpedMes", ECompara.IGUAL, mes);
 			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, ft, fn1, fn2 });
 			// parametros
 			GrupoParametro gp = new GrupoParametro();
-			ParametroData pd = new ParametroData("fisSpedFiscalData", new Date());
+			ParametroData pd = new ParametroData("fisSpedData", new Date());
 			gp.add(pd);
-			ParametroBinario pb = new ParametroBinario("fisSpedFiscalAtivo", 1);
+			ParametroBinario pb = new ParametroBinario("fisSpedAtivo", 1);
 			gp.add(pb);
-			if (modo.getSisExpImpExtensoes().equalsIgnoreCase("REC")) {
-				ParametroTexto pt = new ParametroTexto("fisSpedFiscalProtocolo", "RECEBIDO");
+			if (modo.getSisExpImpExtensoes().equalsIgnoreCase("ZIP")) {
+				ParametroTexto pt = new ParametroTexto("fisSpedProtocolo", "ASSINADO");
+				gp.add(pt);
+			} else {
+				ParametroTexto pt = new ParametroTexto("fisSpedProtocolo", "RECIBO");
 				gp.add(pt);
 			}
 

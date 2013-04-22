@@ -104,7 +104,7 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 		hdnEntidade = new Hidden("empEntidade.empEntidadeId", "0");
 		add(hdnEntidade);
 
-		txtNfe = new NumberField(OpenSigCore.i18n.txtNota(), nomes.get("nota"), 80);
+		txtNfe = new NumberField(OpenSigCore.i18n.txtDocumento(), nomes.get("nota"), 80);
 		txtNfe.setAllowBlank(false);
 		txtNfe.setAllowNegative(false);
 		txtNfe.setAllowDecimals(false);

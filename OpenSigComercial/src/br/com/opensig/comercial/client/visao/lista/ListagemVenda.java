@@ -83,8 +83,9 @@ public class ListagemVenda extends AListagem<ComVenda> {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comVendaId"), new IntegerFieldDef("empCliente.empClienteId"), new IntegerFieldDef("empCliente.empEntidade.empEntidadeId"),
 				new StringFieldDef("empCliente.empEntidade.empEntidadeNome1"), new IntegerFieldDef("empEmpresa.empEmpresaId"), new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"),
-				new IntegerFieldDef("sisUsuario.sisUsuarioId"), new StringFieldDef("sisUsuario.sisUsuarioLogin"), new DateFieldDef("comVendaData"), new FloatFieldDef("comVendaValorBruto"),
-				new FloatFieldDef("comVendaValorLiquido"), new IntegerFieldDef("comNatureza.comNaturezaId"), new StringFieldDef("comNatureza.comNaturezaNome"), new BooleanFieldDef("comVendaFechada"),
+				new IntegerFieldDef("sisUsuario.sisUsuarioId"), new StringFieldDef("sisUsuario.sisUsuarioLogin"), new IntegerFieldDef("sisVendedor.sisUsuarioId"),
+				new StringFieldDef("sisVendedor.sisUsuarioLogin"), new DateFieldDef("comVendaData"), new FloatFieldDef("comVendaValorBruto"), new FloatFieldDef("comVendaValorLiquido"),
+				new IntegerFieldDef("comNatureza.comNaturezaId"), new StringFieldDef("comNatureza.comNaturezaNome"), new BooleanFieldDef("comVendaFechada"),
 				new IntegerFieldDef("finReceber.finReceberId"), new BooleanFieldDef("comVendaRecebida"), new IntegerFieldDef("fisNotaSaida.fisNotaSaidaId"), new BooleanFieldDef("comVendaNfe"),
 				new BooleanFieldDef("comVendaCancelada"), new StringFieldDef("comVendaObservacao") };
 		campos = new RecordDef(fd);
@@ -103,6 +104,9 @@ public class ListagemVenda extends AListagem<ComVenda> {
 		ColumnConfig ccUsuarioId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtUsuario(), "sisUsuario.sisUsuarioId", 100, true);
 		ccUsuarioId.setHidden(true);
 		ColumnConfig ccLogin = new ColumnConfig(OpenSigCore.i18n.txtUsuario(), "sisUsuario.sisUsuarioLogin", 100, true);
+		ColumnConfig ccVendedorId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtVendedor(), "sisVendedor.sisUsuarioId", 100, true);
+		ccVendedorId.setHidden(true);
+		ColumnConfig ccVendedor = new ColumnConfig(OpenSigCore.i18n.txtVendedor(), "sisVendedor.sisUsuarioLogin", 100, true);
 		ColumnConfig ccNatureza = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtNatureza(), "comNatureza.comNaturezaId", 100, true);
 		ccNatureza.setHidden(true);
 		ColumnConfig ccNaturezaNome = new ColumnConfig(OpenSigCore.i18n.txtNatureza(), "comNatureza.comNaturezaNome", 100, true);
@@ -123,8 +127,8 @@ public class ListagemVenda extends AListagem<ComVenda> {
 		SummaryColumnConfig sumBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccBruto, DINHEIRO);
 		SummaryColumnConfig sumLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtLiquido(), "comVendaValorLiquido", 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccClienteId, ccEntidadeId, ccNome, ccEmpresaId, ccEmpresa, ccUsuarioId, ccLogin, ccData, sumBruto, sumLiquido, ccNatureza,
-				ccNaturezaNome, ccFechada, ccReceberId, ccRecebida, ccNfeId, ccNfe, ccCancelada, ccObs };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccClienteId, ccEntidadeId, ccNome, ccEmpresaId, ccEmpresa, ccUsuarioId, ccLogin, ccVendedorId, ccVendedor, ccData, sumBruto,
+				sumLiquido, ccNatureza, ccNaturezaNome, ccFechada, ccReceberId, ccRecebida, ccNfeId, ccNfe, ccCancelada, ccObs };
 		modelos = new ColumnModel(bcc);
 
 		// cancelando

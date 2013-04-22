@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.8.3
-Created-By: 1.6.0_37-b06-434-11M3909 (Apple Inc.)
+Created-By: 1.6.0_45-b06-451-11M4406 (Apple Inc.)
 Implementation-Title: OpenSigProduto
-Implementation-Version: 1.1.0-b88
+Implementation-Version: 1.1.2-b101
 Implementation-Vendor: PhD - Systems Solutions
 Implementation-Url: http://phdss.com.br
 Built-By: Pedro H. Lira - opensig@phdss.com.br
-Built-Date: 21-02-2013 10:29:02
+Built-Date: 22-04-2013 08:08:17
 Main-Class: br.com.opensig.produto.client.OpenSigProduto
 

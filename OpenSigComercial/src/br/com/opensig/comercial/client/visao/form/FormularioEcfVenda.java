@@ -58,6 +58,8 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 	private Hidden hdnCod;
 	private Hidden hdnCliente;
 	private Hidden hdnUsuario;
+	private Hidden hdnVendedor;
+	private Hidden hdnGerente;
 	private Hidden hdnReceber;
 	private Hidden hdnEcf;
 	private Hidden hdnEcfZ;
@@ -95,10 +97,14 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 		add(hdnEcf);
 		hdnEcfZ = new Hidden("comEcfZ.comEcfZId", "0");
 		add(hdnEcfZ);
-		hdnUsuario = new Hidden("sisUsuario.sisUsuarioId", "0");
-		add(hdnUsuario);
 		hdnCliente = new Hidden("empCliente.empClienteId", "0");
 		add(hdnCliente);
+		hdnUsuario = new Hidden("sisUsuario.sisUsuarioId", "0");
+		add(hdnUsuario);
+		hdnVendedor = new Hidden("sisVendedor.sisUsuarioId", "0");
+		add(hdnVendedor);
+		hdnGerente = new Hidden("sisGerente.sisUsuarioId", "0");
+		add(hdnGerente);
 		hdnReceber = new Hidden("finReceber.finReceberId", "0");
 		add(hdnReceber);
 
@@ -153,38 +159,25 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 					reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
 				} else {
 					gridProdutos.stopEditing();
-					int pos;
-					for (pos = 0; pos < gridProdutos.getStore().getCount(); pos++) {
-						if (gridProdutos.getStore().getAt(pos).getAsInteger("prodProdutoId") == result.getAsInteger("prodProdutoId")) {
-							break;
-						}
-					}
-
-					if (pos == gridProdutos.getStore().getCount()) {
-						double bruto = result.getAsDouble("prodProdutoPreco");
-
-						Record reg = gridProdutos.getCampos().createRecord(new Object[gridProdutos.getCampos().getFields().length]);
-						reg.set("comEcfVendaProdutoId", 0);
-						reg.set("prodProdutoId", result.getAsInteger("prodProdutoId"));
-						reg.set("prodProduto.prodProdutoBarra", result.getAsString("prodProdutoBarra"));
-						reg.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
-						reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
-						reg.set("comEcfVendaProdutoQuantidade", 0);
-						reg.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
-						reg.set("prodEmbalagem.prodEmbalagemNome", result.getAsString("prodEmbalagem.prodEmbalagemNome"));
-						reg.set("comEcfVendaProdutoBruto", bruto);
-						reg.set("comEcfVendaProdutoDesconto", 0);
-						reg.set("comEcfVendaProdutoAcrescimo", 0);
-						reg.set("comEcfVendaProdutoLiquido", bruto);
-						reg.set("comEcfVendaProdutoTotal", 0);
-						gridProdutos.getStore().add(reg);
-					} else {
-						new ToastWindow(getTitle(), OpenSigCore.i18n.errExiste()).show();
-					}
+					Record reg = gridProdutos.getCampos().createRecord(new Object[gridProdutos.getCampos().getFields().length]);
+					reg.set("comEcfVendaProdutoId", 0);
+					reg.set("prodProdutoId", result.getAsInteger("prodProdutoId"));
+					reg.set("prodProduto.prodProdutoBarra", result.getAsString("prodProdutoBarra"));
+					reg.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
+					reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
+					reg.set("comEcfVendaProdutoQuantidade", 0);
+					reg.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
+					reg.set("prodEmbalagem.prodEmbalagemNome", result.getAsString("prodEmbalagem.prodEmbalagemNome"));
+					reg.set("comEcfVendaProdutoBruto", result.getAsDouble("prodProdutoPreco"));
+					reg.set("comEcfVendaProdutoDesconto", 0);
+					reg.set("comEcfVendaProdutoAcrescimo", 0);
+					reg.set("comEcfVendaProdutoLiquido", result.getAsDouble("prodProdutoPreco"));
+					reg.set("comEcfVendaProdutoTotal", 0);
+					gridProdutos.getStore().add(reg);
 
 					for (int col = 0; col < gridProdutos.getModelos().getColumnCount(); col++) {
 						if (gridProdutos.getModelos().getDataIndex(col).equals("comEcfVendaProdutoQuantidade")) {
-							gridProdutos.startEditing(pos, col);
+							gridProdutos.startEditing(gridProdutos.getStore().getCount(), col);
 							break;
 						}
 					}
@@ -217,7 +210,7 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 		gridProdutos.getTopToolbar().addElement(lblRegistros.getElement());
 		gridProdutos.getTopToolbar().addSpacer();
 		add(gridProdutos);
-		
+
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), "comEcfVendaObservacao");
 		txtObservacao.setMaxLength(255);
 		txtObservacao.setWidth("95%");
@@ -349,6 +342,16 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 		classe.setComEcf(new ComEcf(Integer.valueOf(hdnEcf.getValueAsString())));
 		classe.setComEcfZ(new ComEcfZ(Integer.valueOf(hdnEcfZ.getValueAsString())));
 		classe.setSisUsuario(new SisUsuario(Integer.valueOf(hdnUsuario.getValueAsString())));
+		if (hdnVendedor.getValueAsString().equals("0")) {
+			classe.setSisVendedor(null);
+		} else {
+			classe.setSisVendedor(new SisUsuario(Integer.valueOf(hdnVendedor.getValueAsString())));
+		}
+		if (hdnGerente.getValueAsString().equals("0")) {
+			classe.setSisGerente(null);
+		} else {
+			classe.setSisGerente(new SisUsuario(Integer.valueOf(hdnGerente.getValueAsString())));
+		}
 		classe.setComEcfVendaCcf(txtCcf.getValue().intValue());
 		classe.setComEcfVendaCoo(txtCoo.getValue().intValue());
 		classe.setComEcfVendaData(dtData.getValue());
@@ -474,6 +477,70 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 
 	public void setHdnUsuario(Hidden hdnUsuario) {
 		this.hdnUsuario = hdnUsuario;
+	}
+
+	public Hidden getHdnVendedor() {
+		return hdnVendedor;
+	}
+
+	public void setHdnVendedor(Hidden hdnVendedor) {
+		this.hdnVendedor = hdnVendedor;
+	}
+
+	public Hidden getHdnGerente() {
+		return hdnGerente;
+	}
+
+	public void setHdnGerente(Hidden hdnGerente) {
+		this.hdnGerente = hdnGerente;
+	}
+
+	public boolean isAutorizado() {
+		return autorizado;
+	}
+
+	public void setAutorizado(boolean autorizado) {
+		this.autorizado = autorizado;
+	}
+
+	public boolean isAutosave() {
+		return autosave;
+	}
+
+	public void setAutosave(boolean autosave) {
+		this.autosave = autosave;
+	}
+
+	public boolean isImportada() {
+		return importada;
+	}
+
+	public void setImportada(boolean importada) {
+		this.importada = importada;
+	}
+
+	public AsyncCallback getAsyncSalvar() {
+		return asyncSalvar;
+	}
+
+	public void setAsyncSalvar(AsyncCallback asyncSalvar) {
+		this.asyncSalvar = asyncSalvar;
+	}
+
+	public AsyncCallback<ILogin> getAsyncLogin() {
+		return asyncLogin;
+	}
+
+	public void setAsyncLogin(AsyncCallback<ILogin> asyncLogin) {
+		this.asyncLogin = asyncLogin;
+	}
+
+	public ComandoPesquisa getCmdPesquisa() {
+		return cmdPesquisa;
+	}
+
+	public void setCmdPesquisa(ComandoPesquisa cmdPesquisa) {
+		this.cmdPesquisa = cmdPesquisa;
 	}
 
 	public Label getLblRegistros() {

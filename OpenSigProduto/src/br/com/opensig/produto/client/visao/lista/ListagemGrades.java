@@ -159,7 +159,6 @@ public class ListagemGrades extends AListagemEditor<ProdGrade> {
 		cmbTipo.setValueField("prodGradeTipoNome");
 		cmbTipo.setForceSelection(true);
 		cmbTipo.setListWidth(150);
-		cmbTipo.setEditable(false);
 		return cmbTipo;
 	}
 

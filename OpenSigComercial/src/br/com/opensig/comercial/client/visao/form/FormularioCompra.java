@@ -229,43 +229,30 @@ public class FormularioCompra extends AFormulario<ComCompra> {
 
 			public void onSuccess(Record result) {
 				gridProdutos.stopEditing();
-				int pos;
-
-				for (pos = 0; pos < gridProdutos.getStore().getCount(); pos++) {
-					if (gridProdutos.getStore().getAt(pos).getAsInteger("prodProdutoId") == result.getAsInteger("prodProdutoId")) {
-						break;
-					}
-				}
-
-				if (pos == gridProdutos.getStore().getCount()) {
-					Record reg = gridProdutos.getCampos().createRecord(new Object[gridProdutos.getCampos().getFields().length]);
-					reg.set("comCompraProdutoId", 0);
-					reg.set("prodProdutoId", result.getAsInteger("prodProdutoId"));
-					reg.set("prodProduto.prodProdutoBarra", result.getAsString("prodProdutoBarra"));
-					reg.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
-					reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
-					reg.set("prodTributacaoDentro", result.getAsInteger("prodTributacao.prodTributacaoDentro"));
-					reg.set("prodTributacaoCst", result.getAsString("prodTributacao.prodTributacaoCst"));
-					reg.set("comCompraProdutoQuantidade", 0);
-					reg.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
-					reg.set("comCompraProdutoValor", result.getAsDouble("prodProdutoCusto"));
-					reg.set("comCompraProdutoTotal", 0);
-					reg.set("comCompraProdutoCfop", txtPadraoCfop.getValueAsString());
-					reg.set("comCompraProdutoIcms", txtPadraoIcms.getValueAsString());
-					reg.set("comCompraProdutoIpi", txtPadraoIpi.getValueAsString());
-					reg.set("comCompraProdutoPreco", result.getAsDouble("prodProdutoPreco"));
-					gridProdutos.getStore().add(reg);
-				} else {
-					new ToastWindow(getTitle(), OpenSigCore.i18n.errExiste()).show();
-				}
+				Record reg = gridProdutos.getCampos().createRecord(new Object[gridProdutos.getCampos().getFields().length]);
+				reg.set("comCompraProdutoId", 0);
+				reg.set("prodProdutoId", result.getAsInteger("prodProdutoId"));
+				reg.set("prodProduto.prodProdutoBarra", result.getAsString("prodProdutoBarra"));
+				reg.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
+				reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
+				reg.set("prodTributacaoDentro", result.getAsInteger("prodTributacao.prodTributacaoDentro"));
+				reg.set("prodTributacaoCst", result.getAsString("prodTributacao.prodTributacaoCst"));
+				reg.set("comCompraProdutoQuantidade", 0);
+				reg.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
+				reg.set("comCompraProdutoValor", result.getAsDouble("prodProdutoCusto"));
+				reg.set("comCompraProdutoTotal", 0);
+				reg.set("comCompraProdutoCfop", txtPadraoCfop.getValueAsString());
+				reg.set("comCompraProdutoIcms", txtPadraoIcms.getValueAsString());
+				reg.set("comCompraProdutoIpi", txtPadraoIpi.getValueAsString());
+				reg.set("comCompraProdutoPreco", result.getAsDouble("prodProdutoPreco"));
+				gridProdutos.getStore().add(reg);
 
 				for (int col = 0; col < gridProdutos.getModelos().getColumnCount(); col++) {
 					if (gridProdutos.getModelos().getDataIndex(col).equals("comCompraProdutoQuantidade")) {
-						gridProdutos.startEditing(pos, col);
+						gridProdutos.startEditing(gridProdutos.getStore().getCount() - 1, col);
 						break;
 					}
 				}
-
 				txtValorProduto.setValue(totalizar());
 			}
 		};

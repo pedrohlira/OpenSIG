@@ -503,7 +503,7 @@ public class GerarNfeSaida extends Chain {
 			// cfop
 			prod.setCFOP(getCfop(pp));
 			// unidade
-			prod.setUCom(pp.getProdEmbalagem().getProdEmbalagemNome());
+			prod.setUCom(venProd.getProdEmbalagem().getProdEmbalagemNome());
 			// quantidde
 			prod.setQCom(UtilServer.formataNumero(venProd.getComVendaProdutoQuantidade(), 1, 4, false).replace(",", "."));
 			// valor unitario
@@ -515,7 +515,7 @@ public class GerarNfeSaida extends Chain {
 			// barra do tributo
 			prod.setCEANTrib(pp.getProdProdutoBarra() == null ? "" : pp.getProdProdutoBarra());
 			// unidade do tributo
-			prod.setUTrib(pp.getProdEmbalagem().getProdEmbalagemNome());
+			prod.setUTrib(venProd.getProdEmbalagem().getProdEmbalagemNome());
 			// quantidde do tributo
 			prod.setQTrib(UtilServer.formataNumero(venProd.getComVendaProdutoQuantidade(), 1, 4, false).replace(",", "."));
 			// valor unitario
@@ -525,7 +525,7 @@ public class GerarNfeSaida extends Chain {
 			// setando o produto
 			det.setProd(prod);
 			// setando os impostos
-			det.setImposto(getImposto(venProd, pp));
+			det.setImposto(getImposto(venProd));
 			// adiciona a lista
 			dets.add(det);
 
@@ -550,7 +550,7 @@ public class GerarNfeSaida extends Chain {
 		return cfop + "";
 	}
 
-	public Imposto getImposto(ComVendaProduto venProd, ProdProduto prod) {
+	public Imposto getImposto(ComVendaProduto venProd) {
 		Imposto imposto = new Imposto();
 
 		// icms

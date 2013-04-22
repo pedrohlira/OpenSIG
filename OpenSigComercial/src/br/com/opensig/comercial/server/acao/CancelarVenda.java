@@ -32,7 +32,6 @@ import br.com.opensig.financeiro.shared.modelo.FinRecebimento;
 import br.com.opensig.fiscal.server.acao.GerarNfeCanceladaSaida;
 import br.com.opensig.fiscal.server.acao.GerarNfeInutilizadaSaida;
 import br.com.opensig.fiscal.shared.modelo.ENotaStatus;
-import br.com.opensig.fiscal.shared.modelo.FisNotaSaida;
 import br.com.opensig.produto.shared.modelo.ProdComposicao;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
 import br.com.opensig.produto.shared.modelo.ProdEstoqueGrade;
@@ -48,21 +47,24 @@ public class CancelarVenda extends Chain {
 	public CancelarVenda(Chain next, CoreServiceImpl servico, ComVenda venda, Autenticacao auth) throws OpenSigException {
 		super(null);
 		this.servico = servico;
-		this.venda = venda;
 		this.auth = auth;
 		this.impl = new ComercialServiceImpl();
 
-		FiltroNumero fn = new FiltroNumero("fisNotaSaidaId", ECompara.IGUAL, venda.getFisNotaSaida().getId());
-		FisNotaSaida saida = (FisNotaSaida) servico.selecionar(venda.getFisNotaSaida(), fn, false);
-
+		// seta a venda
+		FiltroNumero fn = new FiltroNumero("comVendaId", ECompara.IGUAL, venda.getId());
+		String motivo = venda.getComVendaObservacao();
+		venda = (ComVenda) servico.selecionar(venda, fn, false);
+		venda.setComVendaObservacao(motivo);
+		this.venda = venda;
+		
 		// atualiza venda
 		AtualizarVenda atuVenda = new AtualizarVenda(next);
-		if (saida != null) {
-			if (saida.getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId()) {
+		if (venda.getFisNotaSaida() != null) {
+			if (venda.getFisNotaSaida().getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId()) {
 				// valida se a data da nota ainda pode ser cancelada
 				int dias = Integer.valueOf(auth.getConf().get("nfe.tempo_cancela"));
 				Calendar cal = Calendar.getInstance();
-				cal.setTime(saida.getFisNotaSaidaData());
+				cal.setTime(venda.getFisNotaSaida().getFisNotaSaidaData());
 				cal.add(Calendar.DATE, dias);
 
 				Date hoje = new Date();
@@ -71,12 +73,12 @@ public class CancelarVenda extends Chain {
 				}
 
 				// cancela nota
-				GerarNfeCanceladaSaida canNota = new GerarNfeCanceladaSaida(next, servico, saida, venda.getComVendaObservacao(), auth);
+				GerarNfeCanceladaSaida canNota = new GerarNfeCanceladaSaida(next, servico, venda.getFisNotaSaida(), venda.getComVendaObservacao(), auth);
 				atuVenda.setNext(canNota);
 			} else {
 				// inutiliza nota
 				int num = venda.getFisNotaSaida().getFisNotaSaidaNumero();
-				GerarNfeInutilizadaSaida inuNota = new GerarNfeInutilizadaSaida(next, servico, saida, venda.getComVendaObservacao(), num, num, auth);
+				GerarNfeInutilizadaSaida inuNota = new GerarNfeInutilizadaSaida(next, servico, venda.getFisNotaSaida(), venda.getComVendaObservacao(), num, num, auth);
 				atuVenda.setNext(inuNota);
 			}
 		}
@@ -95,12 +97,6 @@ public class CancelarVenda extends Chain {
 
 	@Override
 	public void execute() throws OpenSigException {
-		// seta a venda
-		FiltroNumero fn = new FiltroNumero("comVendaId", ECompara.IGUAL, venda.getId());
-		String motivo = venda.getComVendaObservacao();
-		venda = (ComVenda) servico.selecionar(venda, fn, false);
-		venda.setComVendaObservacao(motivo);
-
 		// verifica se tem produtos com composicoes
 		List<ComVendaProduto> auxProdutos = new ArrayList<ComVendaProduto>();
 		for (ComVendaProduto venProd : venda.getComVendaProdutos()) {

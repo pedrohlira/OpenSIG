@@ -11,6 +11,9 @@ public class DadosC170 extends Bean {
 	private String unid;
 	private Double vl_item;
 	private Double vl_desc;
+	private Double vl_frete;
+	private Double vl_seguro;
+	private Double vl_outros;
 	private String ind_mov;
 	private String cst_icms;
 	private int cfop;
@@ -99,6 +102,30 @@ public class DadosC170 extends Bean {
 
 	public void setVl_desc(Double vl_desc) {
 		this.vl_desc = vl_desc;
+	}
+
+	public Double getVl_frete() {
+		return vl_frete;
+	}
+
+	public void setVl_frete(Double vl_frete) {
+		this.vl_frete = vl_frete;
+	}
+
+	public Double getVl_seguro() {
+		return vl_seguro;
+	}
+
+	public void setVl_seguro(Double vl_seguro) {
+		this.vl_seguro = vl_seguro;
+	}
+
+	public Double getVl_outros() {
+		return vl_outros;
+	}
+
+	public void setVl_outros(Double vl_outros) {
+		this.vl_outros = vl_outros;
 	}
 
 	public String getInd_mov() {

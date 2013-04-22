@@ -8,7 +8,6 @@ import org.beanio.StreamFactory;
 
 import br.com.opensig.comercial.shared.modelo.ComCompra;
 import br.com.opensig.comercial.shared.modelo.ComConsumo;
-import br.com.opensig.comercial.shared.modelo.ComEcfNota;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
 import br.com.opensig.core.server.UtilServer;
@@ -62,14 +61,6 @@ public class Registro0150 extends ARegistro<Dados0150, EmpEntidade> {
 					entidades.add(consumo.getEmpFornecedor().getEmpEntidade().getEmpEntidadeId());
 				}
 			}
-			// notas
-			for (ComEcfNota nota : notas) {
-				if (!entidades.contains(nota.getEmpCliente().getEmpEntidade().getEmpEntidadeId())) {
-					out.write(getDados(nota.getEmpCliente().getEmpEntidade()));
-					out.flush();
-					entidades.add(nota.getEmpCliente().getEmpEntidade().getEmpEntidadeId());
-				}
-			}
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro na geracao do Registro -> " + bean, e);
 		}
@@ -86,7 +77,7 @@ public class Registro0150 extends ARegistro<Dados0150, EmpEntidade> {
 		} else {
 			d.setCpf(ent.getEmpEntidadeDocumento1().replaceAll("\\D", ""));
 		}
-		d.setSuframa(auth.getConf().get("sped.fiscal.0000.suframa"));
+		d.setSuframa(auth.getConf().get("sped.0000.suframa"));
 
 		for (EmpEndereco end : ent.getEmpEnderecos()) {
 			d.setEnd(end.getEmpEnderecoLogradouro());

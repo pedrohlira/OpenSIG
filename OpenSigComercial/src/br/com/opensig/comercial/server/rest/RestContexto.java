@@ -14,11 +14,14 @@ import br.com.opensig.financeiro.shared.modelo.FinForma;
 import br.com.opensig.permissao.shared.modelo.SisUsuario;
 import br.com.opensig.produto.shared.modelo.ProdComposicao;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
+import br.com.opensig.produto.shared.modelo.ProdGrade;
+import br.com.opensig.produto.shared.modelo.ProdGradeTipo;
 import br.com.opensig.produto.shared.modelo.ProdPreco;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 /**
- * Classe que habilita o contexto do JAXB usando a implementacao do EclipseLink moxy.
+ * Classe que habilita o contexto do JAXB usando a implementacao do EclipseLink
+ * moxy.
  * 
  * @author Pedro H. Lira
  */
@@ -26,8 +29,8 @@ import br.com.opensig.produto.shared.modelo.ProdProduto;
 public class RestContexto extends MOXyJsonProvider implements ContextResolver<JAXBContext> {
 
 	private JAXBContext context;
-	private Class[] types = { EmpEstado.class, EmpMunicipio.class, SisUsuario.class, ProdEmbalagem.class, ProdProduto.class, ProdPreco.class, ProdComposicao.class, ComEcf.class,
-			FinForma.class, String.class };
+	private Class[] types = { EmpEstado.class, EmpMunicipio.class, SisUsuario.class, ProdEmbalagem.class, ProdProduto.class, ProdPreco.class, ProdComposicao.class, ProdGrade.class,
+			ProdGradeTipo.class, ComEcf.class, FinForma.class, String.class };
 
 	/**
 	 * Construtor padrao.

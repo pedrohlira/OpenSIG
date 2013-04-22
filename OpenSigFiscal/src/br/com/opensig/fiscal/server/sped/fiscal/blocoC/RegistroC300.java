@@ -22,48 +22,51 @@ public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 
 	@Override
 	public void executar() {
-		try {
-			StreamFactory factory = StreamFactory.newInstance();
-			factory.load(getClass().getResourceAsStream(bean));
-			BeanWriter out = factory.createWriter("EFD", escritor);
+		// executa para perfil diferente de A
+		if (!auth.getConf().get("sped.fiscal.0000.ind_perfil").equals("A")) {
+			try {
+				StreamFactory factory = StreamFactory.newInstance();
+				factory.load(getClass().getResourceAsStream(bean));
+				BeanWriter out = factory.createWriter("EFD", escritor);
 
-			// agrupando as notas por dia+serie+subserie
-			Map<String, List<ComEcfNota>> grupo = new HashMap<String, List<ComEcfNota>>();
-			for (ComEcfNota nota : notas) {
-				String chave = UtilServer.formataData(nota.getComEcfNotaData(), "ddMMyyyy") + nota.getComEcfNotaSerie() + nota.getComEcfNotaSubserie();
-				List<ComEcfNota> lista = grupo.get(chave);
-				if (lista == null) {
-					lista = new ArrayList<ComEcfNota>();
-					lista.add(nota);
-					grupo.put(chave, lista);
-				} else {
-					lista.add(nota);
-				}
-			}
-
-			RegistroC310 r310 = new RegistroC310();
-			for (Entry<String, List<ComEcfNota>> entry : grupo.entrySet()) {
-				// resumo diario
-				bloco = getDados(entry.getValue());
-				out.write(bloco);
-				out.flush();
-
-				// cancelados
-				if (!lc310.isEmpty()) {
-					for (DadosC310 d : lc310) {
-						r310.setDados(d);
-						r310.executar();
-						qtdLinhas += r310.getQtdLinhas();
+				// agrupando as notas por dia+serie+subserie
+				Map<String, List<ComEcfNota>> grupo = new HashMap<String, List<ComEcfNota>>();
+				for (ComEcfNota nota : notas) {
+					String chave = UtilServer.formataData(nota.getComEcfNotaData(), "ddMMyyyy") + nota.getComEcfNotaSerie() + nota.getComEcfNotaSubserie();
+					List<ComEcfNota> lista = grupo.get(chave);
+					if (lista == null) {
+						lista = new ArrayList<ComEcfNota>();
+						lista.add(nota);
+						grupo.put(chave, lista);
+					} else {
+						lista.add(nota);
 					}
 				}
 
-				// analitico diario
-				getAnalitico();
-			}
+				RegistroC310 r310 = new RegistroC310();
+				for (Entry<String, List<ComEcfNota>> entry : grupo.entrySet()) {
+					// resumo diario
+					bloco = getDados(entry.getValue());
+					out.write(bloco);
+					out.flush();
 
-		} catch (Exception e) {
-			qtdLinhas = 0;
-			UtilServer.LOG.error("Erro na geracao do Registro -> " + bean, e);
+					// cancelados
+					if (!lc310.isEmpty()) {
+						for (DadosC310 d : lc310) {
+							r310.setDados(d);
+							r310.executar();
+							qtdLinhas += r310.getQtdLinhas();
+						}
+					}
+
+					// analitico diario
+					getAnalitico();
+				}
+
+			} catch (Exception e) {
+				qtdLinhas = 0;
+				UtilServer.LOG.error("Erro na geracao do Registro -> " + bean, e);
+			}
 		}
 	}
 

@@ -16,7 +16,6 @@ import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
 import br.com.opensig.empresa.client.controlador.comando.ComandoFornecedor;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.produto.client.visao.form.FormularioProduto;
-import br.com.opensig.produto.shared.modelo.ProdCategoria;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdIpi;
 import br.com.opensig.produto.shared.modelo.ProdOrigem;
@@ -144,17 +143,6 @@ public class ListagemProduto extends AListagem<ProdProduto> {
 		for (Entry<String, GridFilter> entry : filtros.entrySet()) {
 			if (entry.getKey().equals("prodProdutoAtivo")) {
 				((GridBooleanFilter) entry.getValue()).setValue(true);
-			} else if (entry.getKey().equals("prodProdutoCategoria")) {
-				// categoria
-				FieldDef[] fdCategoria = new FieldDef[] { new IntegerFieldDef("prodCategoriaId"), new StringFieldDef("prodCategoriaDescricao") };
-				CoreProxy<ProdCategoria> proxy = new CoreProxy<ProdCategoria>(new ProdCategoria());
-				Store storeCategoria = new Store(proxy, new ArrayReader(new RecordDef(fdCategoria)), true);
-
-				GridListFilter fCategoria = new GridListFilter("prodProdutoCategoria", storeCategoria);
-				fCategoria.setLabelField("prodCategoriaDescricao");
-				fCategoria.setLabelValue("prodCategoriaDescricao");
-				fCategoria.setLoadingText(OpenSigCore.i18n.txtAguarde());
-				entry.setValue(fCategoria);
 			} else if (entry.getKey().equals("prodTributacao.prodTributacaoNome")) {
 				// tributacao
 				FieldDef[] fdTributacao = new FieldDef[] { new IntegerFieldDef("prodTributacaoId"), new StringFieldDef("prodTributacaoNome") };

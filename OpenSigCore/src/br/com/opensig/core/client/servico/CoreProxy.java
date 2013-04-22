@@ -195,9 +195,15 @@ public class CoreProxy<E extends Dados> extends GWTProxy implements CoreServiceA
 						if (baseParams[i].getName().endsWith("[type]")) {
 							IFiltro fil = null;
 
-							if (baseParams[i].getValue().equals("string")) {
-								String valor = baseParams[i + 1].getValue();
-								fil = new FiltroTexto(baseParams[i - 1].getValue(), ECompara.CONTEM, valor);
+							if (baseParams[i].getValue().equals("string") || baseParams[i].getValue().equals("list")) {
+								String[] valores = baseParams[i + 1].getValue().split(",");
+								GrupoFiltro lista = new GrupoFiltro();
+
+								for (String valor : valores) {
+									FiltroTexto ft = new FiltroTexto(baseParams[i - 1].getValue(), ECompara.CONTEM, valor);
+									lista.add(ft, EJuncao.OU);
+								}
+								fil = lista;
 							} else if (baseParams[i].getValue().equals("numeric")) {
 								double valor = Double.valueOf(baseParams[i + 2].getValue());
 								String campo = baseParams[i - 1].getValue();
@@ -224,15 +230,6 @@ public class CoreProxy<E extends Dados> extends GWTProxy implements CoreServiceA
 							} else if (baseParams[i].getValue().equals("boolean")) {
 								int valor = Boolean.valueOf(baseParams[i + 1].getValue()) ? 1 : 0;
 								fil = new FiltroBinario(baseParams[i - 1].getValue(), ECompara.IGUAL, valor);
-							} else if (baseParams[i].getValue().equals("list")) {
-								String[] valores = baseParams[i + 1].getValue().split(",");
-								GrupoFiltro lista = new GrupoFiltro();
-
-								for (String valor : valores) {
-									FiltroTexto ft = new FiltroTexto(baseParams[i - 1].getValue(), ECompara.CONTEM, valor);
-									lista.add(ft, EJuncao.OU);
-								}
-								fil = lista;
 							}
 
 							filtroAtual.add(fil, EJuncao.E);

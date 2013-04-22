@@ -75,9 +75,9 @@ public class AListagemFinanciado<E extends Dados> extends AListagem<E> {
 		ColumnConfig ccEmpresa = new ColumnConfig(OpenSigCore.i18n.txtEmpresa(), nomes.get("financeiroEmpresa") + ".empEntidade.empEntidadeNome1", 100, true);
 		ccEmpresa.setHidden(true);
 		ColumnConfig ccNome = new ColumnConfig(OpenSigCore.i18n.txtEntidade(), nomes.get("financeiroNome"), 200, true);
-		ColumnConfig ccContaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtConta(), nomes.get("finConta.finContaId"), 100, true);
+		ColumnConfig ccContaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtConta(), "finConta.finContaId", 100, true);
 		ccContaId.setHidden(true);
-		ColumnConfig ccContaNome = new ColumnConfig(OpenSigCore.i18n.txtConta(), nomes.get("finConta.finContaNome"), 100, true);
+		ColumnConfig ccContaNome = new ColumnConfig(OpenSigCore.i18n.txtConta(), "finConta.finContaNome", 100, true);
 		ccContaNome.setHidden(true);
 		ColumnConfig ccFormaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtTipo(), "finForma.finFormaId", 100, true);
 		ccFormaId.setHidden(true);

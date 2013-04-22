@@ -29,6 +29,9 @@ public class RegistroC170 extends ARegistro<DadosC170, Det> {
 		d.setUnid(produto.getProdEmbalagem().getProdEmbalagemNome());
 		d.setVl_item(Double.valueOf(prod.getVProd()));
 		d.setVl_desc(prod.getVDesc() == null ? 0.00 : Double.valueOf(prod.getVDesc()));
+		d.setVl_frete(prod.getVFrete() == null ? 0.00 : Double.valueOf(prod.getVFrete()));
+		d.setVl_seguro(prod.getVSeg() == null ? 0.00 : Double.valueOf(prod.getVSeg()));
+		d.setVl_outros(prod.getVOutro() == null ? 0.00 : Double.valueOf(prod.getVOutro()));
 		d.setInd_mov("0");
 		int cfop = Integer.valueOf(prod.getCFOP());
 		// adaptacao do cfop das compras

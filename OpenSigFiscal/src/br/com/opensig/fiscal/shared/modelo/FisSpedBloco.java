@@ -31,14 +31,8 @@ public class FisSpedBloco extends Dados implements Serializable {
 	@Column(name = "fis_sped_bloco_classe")
 	private String fisSpedBlocoClasse;
 
-	@Column(name = "fis_sped_bloco_descricao")
-	private String fisSpedBlocoDescricao;
-
 	@Column(name = "fis_sped_bloco_letra")
 	private String fisSpedBlocoLetra;
-
-	@Column(name = "fis_sped_bloco_obrigatorio")
-	private int fisSpedBlocoObrigatorio;
 
 	@Column(name = "fis_sped_bloco_ordem")
 	private int fisSpedBlocoOrdem;
@@ -82,28 +76,12 @@ public class FisSpedBloco extends Dados implements Serializable {
 		this.fisSpedBlocoClasse = fisSpedBlocoClasse;
 	}
 
-	public String getFisSpedBlocoDescricao() {
-		return fisSpedBlocoDescricao;
-	}
-
-	public void setFisSpedBlocoDescricao(String fisSpedBlocoDescricao) {
-		this.fisSpedBlocoDescricao = fisSpedBlocoDescricao;
-	}
-
 	public String getFisSpedBlocoLetra() {
 		return fisSpedBlocoLetra;
 	}
 
 	public void setFisSpedBlocoLetra(String fisSpedBlocoLetra) {
 		this.fisSpedBlocoLetra = fisSpedBlocoLetra;
-	}
-
-	public boolean getFisSpedBlocoObrigatorio() {
-		return fisSpedBlocoObrigatorio == 0 ? false : true;
-	}
-
-	public void setFisSpedBlocoObrigatorio(boolean fisSpedBlocoObrigatorio) {
-		this.fisSpedBlocoObrigatorio = fisSpedBlocoObrigatorio == false ? 0 : 1;
 	}
 
 	public int getFisSpedBlocoOrdem() {

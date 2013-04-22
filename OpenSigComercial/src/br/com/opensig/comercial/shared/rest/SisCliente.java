@@ -60,24 +60,29 @@ public class SisCliente extends Dados implements Serializable {
 	public SisCliente(EmpCliente cli) {
 		super("", "", "");
 		EmpEntidade ent = cli.getEmpEntidade();
-		EmpEndereco ende = ent.getEmpEnderecos().get(0);
-
 		sisClienteId = cli.getEmpClienteId();
 		sisClienteDoc = ent.getEmpEntidadeDocumento1();
 		sisClienteDoc1 = ent.getEmpEntidadeDocumento2();
 		sisClienteNome = ent.getEmpEntidadeNome1();
-		sisClienteEndereco = ende.getEmpEnderecoLogradouro();
-		sisClienteNumero = ende.getEmpEnderecoNumero();
-		sisClienteComplemento = ende.getEmpEnderecoComplemento();
-		sisClienteBairro = ende.getEmpEnderecoBairro();
-		sisClienteCep = ende.getEmpEnderecoCep();
 		sisClienteData = ent.getEmpEntidadeData();
-		sisMunicipio = new SisMunicipio(ende.getEmpMunicipio());
-		for (EmpContato cont : ent.getEmpContatos()) {
-			if (cont.getEmpContatoDescricao().contains("@")) {
-				sisClienteEmail = cont.getEmpContatoDescricao();
-			} else {
-				sisClienteTelefone = cont.getEmpContatoDescricao();
+
+		if (ent.getEmpEnderecos().size() > 0) {
+			EmpEndereco ende = ent.getEmpEnderecos().get(0);
+			sisClienteEndereco = ende.getEmpEnderecoLogradouro();
+			sisClienteNumero = ende.getEmpEnderecoNumero();
+			sisClienteComplemento = ende.getEmpEnderecoComplemento();
+			sisClienteBairro = ende.getEmpEnderecoBairro();
+			sisClienteCep = ende.getEmpEnderecoCep();
+			sisMunicipio = new SisMunicipio(ende.getEmpMunicipio());
+		}
+
+		if (ent.getEmpContatos().size() > 0) {
+			for (EmpContato cont : ent.getEmpContatos()) {
+				if (cont.getEmpContatoDescricao().contains("@")) {
+					sisClienteEmail = cont.getEmpContatoDescricao();
+				} else {
+					sisClienteTelefone = cont.getEmpContatoDescricao();
+				}
 			}
 		}
 	}

@@ -16,7 +16,7 @@ public class DadosF550 extends Bean {
 	private Double aliq_cofins;
 	private Double vl_cofins;
 	private String cod_mod;
-	private int cfop;
+	private Integer cfop;
 	private String cod_cta;
 	private String info_compl;
 
@@ -120,11 +120,11 @@ public class DadosF550 extends Bean {
 		this.cod_mod = cod_mod;
 	}
 
-	public int getCfop() {
+	public Integer getCfop() {
 		return cfop;
 	}
 
-	public void setCfop(int cfop) {
+	public void setCfop(Integer cfop) {
 		this.cfop = cfop;
 	}
 

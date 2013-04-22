@@ -1,6 +1,7 @@
 package br.com.opensig.financeiro.client.controlador.comando.financeiro;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import br.com.opensig.core.client.controlador.parametro.GrupoParametro;
 import br.com.opensig.core.client.controlador.parametro.IParametro;
 import br.com.opensig.core.client.controlador.parametro.ParametroData;
 import br.com.opensig.core.client.controlador.parametro.ParametroFormula;
+import br.com.opensig.core.client.controlador.parametro.ParametroObjeto;
 import br.com.opensig.core.client.controlador.parametro.ParametroTexto;
 import br.com.opensig.core.client.servico.CoreProxy;
 import br.com.opensig.core.shared.modelo.EComando;
@@ -48,9 +50,6 @@ public class ComandoConciliarRecebimento extends ComandoAcao<FinRecebimento> {
 
 	private Record[] recs;
 	private IComando validaConciliar;
-	private DateField data;
-	private ComboBox conta;
-	private double valor;
 
 	public ComandoConciliarRecebimento() {
 		// finaliza e libera
@@ -63,7 +62,7 @@ public class ComandoConciliarRecebimento extends ComandoAcao<FinRecebimento> {
 					int row = LISTA.getPanel().getStore().indexOf(rec);
 					LISTA.getPanel().getSelectionModel().deselectRow(row);
 					rec.set("finRecebimentoStatus", OpenSigCore.i18n.txtConciliado().toUpperCase());
-					rec.set("finRecebimentoConciliado", data.getValue());
+					rec.set("finRecebimentoConciliado", (Date) contexto.get("data"));
 				}
 			}
 		};
@@ -75,7 +74,9 @@ public class ComandoConciliarRecebimento extends ComandoAcao<FinRecebimento> {
 				// variaveis usadas
 				GrupoFiltro gf = new GrupoFiltro();
 				List<Sql> sqls = new ArrayList<Sql>();
-				
+				FinConta conta = new FinConta(Integer.valueOf(contexto.get("conta").toString()));
+				double valor = 0.00;
+
 				for (Record rec : recs) {
 					valor += rec.getAsDouble("finRecebimentoValor");
 					FiltroNumero fn = new FiltroNumero("finRecebimentoId", ECompara.IGUAL, rec.getAsInteger("finRecebimentoId"));
@@ -84,15 +85,16 @@ public class ComandoConciliarRecebimento extends ComandoAcao<FinRecebimento> {
 
 				// atualizando recebimento
 				ParametroTexto pt = new ParametroTexto("finRecebimentoStatus", OpenSigCore.i18n.txtConciliado().toUpperCase());
-				ParametroData pd = new ParametroData("finRecebimentoConciliado", data.getValue());
-				GrupoParametro gp = new GrupoParametro(new IParametro[] { pt, pd });
+				ParametroData pd = new ParametroData("finRecebimentoConciliado", (Date) contexto.get("data"));
+				ParametroObjeto po = new ParametroObjeto("finConta", conta);
+				GrupoParametro gp = new GrupoParametro(new IParametro[] { pt, pd, po });
 				Sql sqlForma = new Sql(new FinRecebimento(), EComando.ATUALIZAR, gf, gp);
 				sqls.add(sqlForma);
 
 				// atualizando a conta
 				ParametroFormula pf = new ParametroFormula("finContaSaldo", valor);
-				FiltroNumero fn = new FiltroNumero("finContaId", ECompara.IGUAL, conta.getValue());
-				Sql sqlConta = new Sql(new FinConta(), EComando.ATUALIZAR, fn, pf);
+				FiltroNumero fn = new FiltroNumero("finContaId", ECompara.IGUAL, conta.getFinContaId());
+				Sql sqlConta = new Sql(conta, EComando.ATUALIZAR, fn, pf);
 				sqls.add(sqlConta);
 
 				setSqls(sqls.toArray(new Sql[] {}));
@@ -123,6 +125,10 @@ public class ComandoConciliarRecebimento extends ComandoAcao<FinRecebimento> {
 					frm.setPaddings(5);
 					frm.setMargins(1);
 
+					final ComboBox conta = getConta();
+					final DateField data = new DateField(OpenSigCore.i18n.txtData(), "data", 100);
+					data.setAllowBlank(false);
+
 					MultiFieldPanel linha1 = new MultiFieldPanel();
 					linha1.setBorder(false);
 					linha1.addToRow(conta, 150);
@@ -134,6 +140,8 @@ public class ComandoConciliarRecebimento extends ComandoAcao<FinRecebimento> {
 					btn.addListener(new ButtonListenerAdapter() {
 						public void onClick(Button button, EventObject e) {
 							if (frm.getForm().isValid()) {
+								contexto.put("data", data.getValue());
+								contexto.put("conta", conta.getValue());
 								comando.execute(contexto);
 								wnd.close();
 							}
@@ -159,9 +167,6 @@ public class ComandoConciliarRecebimento extends ComandoAcao<FinRecebimento> {
 	public void execute(final Map contexto) {
 		super.execute(contexto, new AsyncCallback() {
 			public void onSuccess(Object result) {
-				data = new DateField(OpenSigCore.i18n.txtData(), "data", 100);
-				data.setAllowBlank(false);
-				getConta();
 				validaConciliar.execute(contexto);
 			}
 
@@ -170,13 +175,13 @@ public class ComandoConciliarRecebimento extends ComandoAcao<FinRecebimento> {
 		});
 	}
 
-	private void getConta() {
+	private ComboBox getConta() {
 		FieldDef[] fdConta = new FieldDef[] { new IntegerFieldDef("finContaId"), new IntegerFieldDef("finBancoId"), new StringFieldDef("finBanco"), new StringFieldDef("finContaNome") };
 		CoreProxy<FinConta> proxy = new CoreProxy<FinConta>(new FinConta());
 		Store stConta = new Store(proxy, new ArrayReader(new RecordDef(fdConta)), false);
 		stConta.load();
 
-		conta = new ComboBox(OpenSigCore.i18n.txtConta(), "conta", 130);
+		ComboBox conta = new ComboBox(OpenSigCore.i18n.txtConta(), "conta", 130);
 		conta.setListWidth(200);
 		conta.setAllowBlank(false);
 		conta.setStore(stConta);
@@ -186,5 +191,7 @@ public class ComandoConciliarRecebimento extends ComandoAcao<FinRecebimento> {
 		conta.setValueField("finContaId");
 		conta.setForceSelection(true);
 		conta.setEditable(false);
+		
+		return conta;
 	}
 }

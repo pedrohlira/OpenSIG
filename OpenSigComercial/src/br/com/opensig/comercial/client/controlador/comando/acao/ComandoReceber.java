@@ -121,12 +121,12 @@ public class ComandoReceber extends ComandoAcao<ComVenda> {
 				formReceber.getHdnEntidade().setValue(rec.getAsString("empCliente.empEntidade.empEntidadeId"));
 				formReceber.getCmbEntidade().setValue(rec.getAsString("empCliente.empEntidade.empEntidadeNome1"));
 				formReceber.getCmbEntidade().disable();
+				formReceber.getTxtNfe().setValue(rec.getAsInteger("comVendaId"));
 				formReceber.getTxtValor().setValue(rec.getAsDouble("comVendaValorLiquido"));
 				String data = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM).format(rec.getAsDate("comVendaData"));
 				formReceber.getDtCadastro().setValue(data);
 				formReceber.getDtCadastro().disable();
 				formReceber.mostrarDados();
-				formReceber.getGridFormas().setHeight(260);
 
 				Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
 					public boolean execute() {

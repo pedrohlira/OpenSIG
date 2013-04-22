@@ -13,7 +13,7 @@ public class Dados1900 extends Bean {
 	private int quant_doc;
 	private String cst_pis;
 	private String cst_cofins;
-	private int cfop;
+	private Integer cfop;
 	private String inf_compl;
 	private String cod_cta;
 
@@ -93,11 +93,11 @@ public class Dados1900 extends Bean {
 		this.cst_cofins = cst_cofins;
 	}
 
-	public int getCfop() {
+	public Integer getCfop() {
 		return cfop;
 	}
 
-	public void setCfop(int cfop) {
+	public void setCfop(Integer cfop) {
 		this.cfop = cfop;
 	}
 

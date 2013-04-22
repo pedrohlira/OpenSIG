@@ -32,7 +32,6 @@ import com.gwtext.client.widgets.ToolbarButton;
 import com.gwtext.client.widgets.Window;
 import com.gwtext.client.widgets.event.ButtonListenerAdapter;
 import com.gwtext.client.widgets.event.KeyListener;
-import com.gwtext.client.widgets.form.Checkbox;
 import com.gwtext.client.widgets.form.TextField;
 import com.gwtext.client.widgets.grid.GridPanel;
 import com.gwtext.client.widgets.grid.event.GridListenerAdapter;
@@ -46,12 +45,6 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 	private ListagemPreco gridPrecos;
 	private ListagemGrades gridGrades;
 	private TextField txtBusca;
-	private Checkbox chkCod;
-	private Checkbox chkBarra;
-	private Checkbox chkDescricao;
-	private Checkbox chkRef;
-	private Checkbox chkFornecedor;
-	private ToolbarButton btnPesquisar;
 	private AsyncCallback<Record> asyncResultado;
 	private Window wnd;
 
@@ -172,31 +165,14 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 		enable();
 
 		// montando os filtros de busca
-		txtBusca = new TextField("", "txtBusca", 300);
+		txtBusca = new TextField("", "txtBusca");
+		txtBusca.setWidth(Ext.getBody().getWidth() - 300);
 		txtBusca.setAllowBlank(false);
 		txtBusca.setTitle(OpenSigCore.i18n.msgPesquisar());
 		txtBusca.setMaxLength(100);
 		txtBusca.setSelectOnFocus(true);
 		txtBusca.addKeyListener(EventObject.ENTER, new KeyListener() {
 			public void onKey(int key, EventObject e) {
-				pesquisar();
-			}
-		});
-
-		chkCod = new Checkbox(OpenSigCore.i18n.txtCod());
-		chkCod.setChecked(true);
-		chkBarra = new Checkbox(OpenSigCore.i18n.txtBarra());
-		chkBarra.setChecked(true);
-		chkDescricao = new Checkbox(OpenSigCore.i18n.txtDescricao());
-		chkDescricao.setChecked(true);
-		chkRef = new Checkbox(OpenSigCore.i18n.txtRef());
-		chkFornecedor = new Checkbox(OpenSigCore.i18n.txtFornecedor());
-
-		btnPesquisar = new ToolbarButton(OpenSigCore.i18n.txtPesquisar());
-		btnPesquisar.setIconCls("icon-pesquisa");
-		btnPesquisar.setTitle(OpenSigCore.i18n.msgPesquisar());
-		btnPesquisar.addListener(new ButtonListenerAdapter() {
-			public void onClick(Button button, EventObject e) {
 				pesquisar();
 			}
 		});
@@ -235,23 +211,6 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 		tool.addSeparator();
 		tool.addText(OpenSigCore.i18n.txtPesquisar() + ":");
 		tool.addField(txtBusca);
-		tool.addSeparator();
-		tool.addText(OpenSigCore.i18n.txtFiltros() + ": ");
-		tool.addField(chkCod);
-		tool.addSpacer();
-		tool.addSpacer();
-		tool.addField(chkBarra);
-		tool.addSpacer();
-		tool.addSpacer();
-		tool.addField(chkDescricao);
-		tool.addSpacer();
-		tool.addSpacer();
-		tool.addField(chkRef);
-		tool.addSpacer();
-		tool.addSpacer();
-		tool.addField(chkFornecedor);
-		tool.addSeparator();
-		tool.addButton(btnPesquisar);
 		setTlbAcao(tool);
 	}
 
@@ -310,61 +269,70 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 	}
 
 	private void pesquisar() {
-		if (!txtBusca.getValueAsString().isEmpty() && (chkCod.getValue() || chkBarra.getValue() || chkDescricao.getValue() || chkRef.getValue() || chkFornecedor.getValue())) {
-			GrupoFiltro gf = new GrupoFiltro();
-
-			if (chkCod.getValue()) {
-				// codigo
-				try {
-					FiltroNumero fn = new FiltroNumero("prodProdutoId", ECompara.IGUAL, txtBusca.getValueAsString());
-					gf.add(fn, EJuncao.OU);
-				} catch (Exception e) {
-					FiltroNumero fn = new FiltroNumero("prodProdutoId", ECompara.IGUAL, 0);
-					gf.add(fn, EJuncao.OU);
-				}
-			}
-
-			if (chkBarra.getValue()) {
-				try {
-					// barra
-					FiltroTexto ft = new FiltroTexto("prodProdutoBarra", ECompara.IGUAL, txtBusca.getValueAsString());
-					gf.add(ft, EJuncao.OU);
-					// barra do preco
-					FiltroTexto ft1 = new FiltroTexto("prodPrecoBarra", ECompara.IGUAL, txtBusca.getValueAsString());
-					ft1.setCampoPrefixo("t2.");
-					gf.add(ft1, EJuncao.OU);
-					// barra da grade
-					FiltroTexto ft2 = new FiltroTexto("prodGradeBarra", ECompara.IGUAL, txtBusca.getValueAsString());
-					ft2.setCampoPrefixo("t3.");
-					gf.add(ft2, EJuncao.OU);
-				} catch (Exception e) {
-					FiltroTexto ft = new FiltroTexto("prodProdutoBarra", ECompara.IGUAL, "");
-					gf.add(ft, EJuncao.OU);
-				}
-			}
-
-			if (chkDescricao.getValue()) {
-				// descricao
-				FiltroTexto ft = new FiltroTexto("prodProdutoDescricao", ECompara.CONTEM, txtBusca.getValueAsString());
-				gf.add(ft, EJuncao.OU);
-			}
-
-			if (chkRef.getValue()) {
-				// referencia
-				FiltroTexto ft3 = new FiltroTexto("prodProdutoReferencia", ECompara.CONTEM, txtBusca.getValueAsString());
-				gf.add(ft3, EJuncao.OU);
-			}
-
-			if (chkFornecedor.getValue()) {
-				// fornecedor
-				FiltroTexto ft2 = new FiltroTexto("empFornecedor.empEntidade.empEntidadeNome1", ECompara.CONTEM, txtBusca.getValueAsString());
-				gf.add(ft2, EJuncao.OU);
-			}
-
+		if (!txtBusca.getValueAsString().isEmpty()) {
+			String texto = txtBusca.getValueAsString();
+			GrupoFiltro filtro = new GrupoFiltro();
 			FiltroBinario fb = new FiltroBinario("prodProdutoAtivo", ECompara.IGUAL, 1);
-			GrupoFiltro padrao = new GrupoFiltro(EJuncao.E, new IFiltro[] { fb, gf });
+			filtro.add(fb, EJuncao.E);
+			ECompara compara;
 
-			gridProdutos.getProxy().setFiltroPadrao(padrao);
+			// verifica se e longo
+			try {
+				long valor = Long.valueOf(texto);
+				if (texto.length() <= 6) {
+					// codigo
+					FiltroNumero fn = new FiltroNumero("prodProdutoId", ECompara.IGUAL, valor);
+					// barra do preco
+					FiltroTexto ft1 = new FiltroTexto("prodPrecoBarra", ECompara.IGUAL, texto);
+					ft1.setCampoPrefixo("t2.");
+					// barra da grade
+					FiltroTexto ft2 = new FiltroTexto("prodGradeBarra", ECompara.IGUAL, texto);
+					ft2.setCampoPrefixo("t3.");
+					// referencia
+					FiltroTexto ft3 = new FiltroTexto("prodProdutoReferencia", ECompara.CONTEM, texto);
+					filtro.add(new GrupoFiltro(EJuncao.OU, new IFiltro[] { fn, ft1, ft2, ft3 }));
+				} else {
+					// barra
+					FiltroTexto ft = new FiltroTexto("prodProdutoBarra", ECompara.IGUAL, texto);
+					// barra do preco
+					FiltroTexto ft1 = new FiltroTexto("prodPrecoBarra", ECompara.IGUAL, texto);
+					ft1.setCampoPrefixo("t2.");
+					// barra da grade
+					FiltroTexto ft2 = new FiltroTexto("prodGradeBarra", ECompara.IGUAL, texto);
+					ft2.setCampoPrefixo("t3.");
+					// referencia
+					FiltroTexto ft3 = new FiltroTexto("prodProdutoReferencia", ECompara.CONTEM, texto);
+					filtro.add(new GrupoFiltro(EJuncao.OU, new IFiltro[] { ft, ft1, ft2, ft3 }));
+				}
+			} catch (NumberFormatException ex) {
+				// verifica se e decimal
+				try {
+					double valor = Double.valueOf(texto.replace(",", "."));
+					// preco
+					FiltroNumero fn2 = new FiltroNumero("prodProdutoPreco", ECompara.IGUAL, valor);
+					// estoque
+					FiltroNumero fn3 = new FiltroNumero("prodEstoqueQuantidade", ECompara.IGUAL, valor);
+					fn3.setCampoPrefixo("t1.");
+					filtro.add(new GrupoFiltro(EJuncao.OU, new IFiltro[] { fn2, fn3 }));
+				} catch (NumberFormatException ex1) {
+					if (texto.startsWith("%")) {
+						compara = ECompara.CONTEM_FIM;
+					} else if (texto.endsWith("%")) {
+						compara = ECompara.CONTEM_INICIO;
+					} else {
+						compara = ECompara.CONTEM;
+					}
+					// descricao
+					FiltroTexto ft1 = new FiltroTexto("prodProdutoDescricao", compara, texto);
+					// referencia
+					FiltroTexto ft2 = new FiltroTexto("prodProdutoReferencia", compara, texto);
+					// fornecedor
+					FiltroTexto ft3 = new FiltroTexto("empFornecedor.empEntidade.empEntidadeNome1", ECompara.CONTEM, texto);
+					filtro.add(new GrupoFiltro(EJuncao.OU, new IFiltro[] { ft1, ft2, ft3 }));
+				}
+			}
+
+			gridProdutos.getProxy().setFiltroPadrao(filtro);
 			gridProdutos.getStore().load(0, gridProdutos.getPaginador().getPageSize());
 		}
 	}
@@ -389,56 +357,8 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 		return txtBusca;
 	}
 
-	public Checkbox getChkCod() {
-		return chkCod;
-	}
-
-	public void setChkCod(Checkbox chkCod) {
-		this.chkCod = chkCod;
-	}
-
-	public Checkbox getChkBarra() {
-		return chkBarra;
-	}
-
-	public void setChkBarra(Checkbox chkBarra) {
-		this.chkBarra = chkBarra;
-	}
-
-	public Checkbox getChkDescricao() {
-		return chkDescricao;
-	}
-
-	public void setChkDescricao(Checkbox chkDescricao) {
-		this.chkDescricao = chkDescricao;
-	}
-
-	public Checkbox getChkRef() {
-		return chkRef;
-	}
-
-	public void setChkRef(Checkbox chkRef) {
-		this.chkRef = chkRef;
-	}
-
-	public Checkbox getChkFornecedor() {
-		return chkFornecedor;
-	}
-
-	public void setChkFornecedor(Checkbox chkFornecedor) {
-		this.chkFornecedor = chkFornecedor;
-	}
-
 	public void setTxtBusca(TextField txtBusca) {
 		this.txtBusca = txtBusca;
-	}
-
-	public ToolbarButton getBtnPesquisar() {
-		return btnPesquisar;
-	}
-
-	public void setBtnPesquisar(ToolbarButton btnPesquisar) {
-		this.btnPesquisar = btnPesquisar;
 	}
 
 	public AsyncCallback<Record> getAsyncResultado() {

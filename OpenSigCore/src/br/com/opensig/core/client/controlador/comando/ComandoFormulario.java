@@ -19,7 +19,6 @@ import com.gwtext.client.widgets.layout.FitLayout;
  * listagem.
  * 
  * @author Pedro H. Lira
- * @version 1.0
  */
 public class ComandoFormulario extends ComandoFuncao {
 
@@ -90,8 +89,8 @@ public class ComandoFormulario extends ComandoFuncao {
 		wnd.setLayout(new FitLayout());
 		wnd.setModal(true);
 		wnd.setClosable(false);
-		wnd.setWidth(700);
-		wnd.setHeight(550);
+		wnd.setWidth(830);
+		wnd.setHeight(600);
 		wnd.setTitle(FORM.getPanel().getTitle(), FORM.getPanel().getIconCls());
 		wnd.add(FORM.getPanel());
 		wnd.show();

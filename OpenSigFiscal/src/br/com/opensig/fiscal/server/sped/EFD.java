@@ -84,6 +84,14 @@ public class EFD implements Runnable {
 			FiltroNumero fn = new FiltroNumero("empEmpresaId", ECompara.IGUAL, sped.getEmpEmpresa().getEmpEmpresaId());
 			EmpEmpresa emp = (EmpEmpresa) service.selecionar(new EmpEmpresa(), fn, false);
 			sped.setEmpEmpresa(emp);
+			// gerando o filtro empresa, para contribuicao se for filiais
+			IFiltro filtroEmpresa;
+			if (sped.getFisSpedTipo().equalsIgnoreCase("CONTRIBUICOES")) {
+				String cnpjBase = emp.getEmpEntidade().getEmpEntidadeDocumento1().substring(0, 10);
+				filtroEmpresa = new FiltroTexto("empEmpresa.empEntidade.empEntidadeDocumento1", ECompara.CONTEM_INICIO, cnpjBase);
+			} else {
+				filtroEmpresa = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
+			}
 			// datas
 			inicio = new SimpleDateFormat("ddMMyyyy").parse("01" + (sped.getFisSpedMes() > 9 ? sped.getFisSpedMes() : "0" + sped.getFisSpedMes()) + sped.getFisSpedAno());
 			Calendar cal = Calendar.getInstance();
@@ -92,15 +100,15 @@ public class EFD implements Runnable {
 			fim = cal.getTime();
 			// prepara os dados
 			blocos = getBlocos();
-			compras = getCompras();
-			fretes = getFretes();
-			vendas = getVendas();
-			inutilizadas = getInutilizadas();
-			notas = getNotas();
-			zs = getZs();
-			estoque = getEstoque();
-			consumos = getConsumos();
-			setPisCofins();
+			compras = getCompras(filtroEmpresa);
+			fretes = getFretes(filtroEmpresa);
+			vendas = getVendas(filtroEmpresa);
+			inutilizadas = getInutilizadas(filtroEmpresa);
+			notas = getNotas(filtroEmpresa);
+			zs = getZs(filtroEmpresa);
+			estoque = getEstoque(filtroEmpresa);
+			consumos = getConsumos(filtroEmpresa);
+			setPisCofins(filtroEmpresa);
 			// lendo dados do arquivo
 			escreverRegistros();
 			InputStream is = new FileInputStream(arquivo);
@@ -132,36 +140,30 @@ public class EFD implements Runnable {
 	// metodo que recupera os blocos
 	private List<FisSpedBloco> getBlocos() throws Exception {
 		// monta o filtro
-		GrupoFiltro gf = new GrupoFiltro();
 		FiltroTexto ft = new FiltroTexto("fisSpedBlocoTipo", ECompara.IGUAL, sped.getFisSpedTipo());
-		gf.add(ft, EJuncao.E);
-		FiltroTexto ft1 = new FiltroTexto("fisSpedBlocoClasse", ECompara.DIFERENTE, "NULL");
-		gf.add(ft1);
-		return service.selecionar(new FisSpedBloco(), 0, 0, gf, false).getLista();
+		return service.selecionar(new FisSpedBloco(), 0, 0, ft, false).getLista();
 	}
 
 	// metodo que recupera as compras
-	private List<ComCompra> getCompras() throws Exception {
+	private List<ComCompra> getCompras(IFiltro filtroEmpresa) throws Exception {
 		// monta o filtro
 		GrupoFiltro gf = new GrupoFiltro();
-		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
-		gf.add(fo, EJuncao.E);
+		gf.add(filtroEmpresa, EJuncao.E);
 		FiltroBinario fb = new FiltroBinario("comCompraNfe", ECompara.IGUAL, 1);
 		gf.add(fb, EJuncao.E);
-		FiltroData fdInicio = new FiltroData("fisNotaEntrada.fisNotaEntradaCadastro", ECompara.MAIOR_IGUAL, inicio);
+		FiltroData fdInicio = new FiltroData("comCompraRecebimento", ECompara.MAIOR_IGUAL, inicio);
 		gf.add(fdInicio, EJuncao.E);
-		FiltroData fdFim = new FiltroData("fisNotaEntrada.fisNotaEntradaCadastro", ECompara.MENOR_IGUAL, fim);
+		FiltroData fdFim = new FiltroData("comCompraRecebimento", ECompara.MENOR_IGUAL, fim);
 		gf.add(fdFim);
 		// seleciona as compras
 		return service.selecionar(new ComCompra(), 0, 0, gf, false).getLista();
 	}
 
 	// metodo que recupera os fretes
-	private List<ComFrete> getFretes() throws Exception {
+	private List<ComFrete> getFretes(IFiltro filtroEmpresa) throws Exception {
 		// monta o filtro
 		GrupoFiltro gf = new GrupoFiltro();
-		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
-		gf.add(fo, EJuncao.E);
+		gf.add(filtroEmpresa, EJuncao.E);
 		FiltroBinario fb = new FiltroBinario("comFreteFechada", ECompara.IGUAL, 1);
 		gf.add(fb, EJuncao.E);
 		FiltroData fdInicio = new FiltroData("comFreteRecebimento", ECompara.MAIOR_IGUAL, inicio);
@@ -173,11 +175,10 @@ public class EFD implements Runnable {
 	}
 
 	// metodo que recupera as vendas
-	private List<ComVenda> getVendas() throws Exception {
+	private List<ComVenda> getVendas(IFiltro filtroEmpresa) throws Exception {
 		// monta o filtro
 		GrupoFiltro gf = new GrupoFiltro();
-		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
-		gf.add(fo, EJuncao.E);
+		gf.add(filtroEmpresa, EJuncao.E);
 		FiltroBinario fb = new FiltroBinario("comVendaNfe", ECompara.IGUAL, 1);
 		gf.add(fb, EJuncao.E);
 		FiltroData fdInicio = new FiltroData("fisNotaSaida.fisNotaSaidaData", ECompara.MAIOR_IGUAL, inicio);
@@ -189,14 +190,13 @@ public class EFD implements Runnable {
 	}
 
 	// metodo que recupera as NFe inutilizadas de entrada/saida
-	private List<String> getInutilizadas() throws Exception {
+	private List<String> getInutilizadas(IFiltro filtroEmpresa) throws Exception {
 		List<String> inutilizadas = new ArrayList<String>();
 		FisNotaStatus status = new FisNotaStatus(ENotaStatus.INUTILIZADO);
 
 		// monta o filtro entrada
 		GrupoFiltro gfEntrada = new GrupoFiltro();
-		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
-		gfEntrada.add(fo, EJuncao.E);
+		gfEntrada.add(filtroEmpresa, EJuncao.E);
 		FiltroObjeto fo1 = new FiltroObjeto("fisNotaStatus", ECompara.IGUAL, status);
 		gfEntrada.add(fo1, EJuncao.E);
 		FiltroData fdInicio = new FiltroData("fisNotaEntradaData", ECompara.MAIOR_IGUAL, inicio);
@@ -211,7 +211,7 @@ public class EFD implements Runnable {
 
 		// monta o filtro saida
 		GrupoFiltro gfSaida = new GrupoFiltro();
-		gfSaida.add(fo, EJuncao.E);
+		gfSaida.add(filtroEmpresa, EJuncao.E);
 		gfSaida.add(fo1, EJuncao.E);
 		fdInicio.setCampo("fisNotaSaidaData");
 		gfSaida.add(fdInicio, EJuncao.E);
@@ -227,11 +227,10 @@ public class EFD implements Runnable {
 	}
 
 	// metodo que recupera as notas do consumidor
-	private List<ComEcfNota> getNotas() throws Exception {
+	private List<ComEcfNota> getNotas(IFiltro filtroEmpresa) throws Exception {
 		// monta o filtro
 		GrupoFiltro gf = new GrupoFiltro();
-		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
-		gf.add(fo, EJuncao.E);
+		gf.add(filtroEmpresa, EJuncao.E);
 		FiltroData fdInicio = new FiltroData("comEcfNotaData", ECompara.MAIOR_IGUAL, inicio);
 		gf.add(fdInicio, EJuncao.E);
 		FiltroData fdFim = new FiltroData("comEcfNotaData", ECompara.MENOR_IGUAL, fim);
@@ -241,11 +240,11 @@ public class EFD implements Runnable {
 	}
 
 	// metodo que recupera as leituras Zs
-	private List<ComEcfZ> getZs() throws Exception {
+	private List<ComEcfZ> getZs(IFiltro filtroEmpresa) throws Exception {
 		// monta o filtro
 		GrupoFiltro gf = new GrupoFiltro();
-		FiltroObjeto fo = new FiltroObjeto("comEcf.empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
-		gf.add(fo, EJuncao.E);
+		filtroEmpresa.setCampoPrefixo("t.comEcf.");
+		gf.add(filtroEmpresa, EJuncao.E);
 		FiltroBinario fb = new FiltroBinario("comEcf.comEcfAtivo", ECompara.IGUAL, 1);
 		gf.add(fb, EJuncao.E);
 		FiltroData fd1 = new FiltroData("comEcfZMovimento", ECompara.MAIOR_IGUAL, inicio);
@@ -259,25 +258,27 @@ public class EFD implements Runnable {
 		z.setOrdemDirecao(EDirecao.ASC);
 
 		// seleciona todos as vendas da ecf
-		return service.selecionar(z, 0, 0, gf, false).getLista();
+		Lista<ComEcfZ> lista = service.selecionar(z, 0, 0, gf, false);
+		filtroEmpresa.setCampoPrefixo("t.");
+		return lista.getLista();
 	}
 
 	// metodo que recupera os produtos do estoque
-	private List<ProdProduto> getEstoque() throws Exception {
+	private List<ProdProduto> getEstoque(IFiltro filtroEmpresa) throws Exception {
 		// seleciona todos os produtos com estoque maior que ZERO
-		FiltroObjeto fo = new FiltroObjeto("t1.empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
+		filtroEmpresa.setCampoPrefixo("t1.");
 		FiltroNumero fn = new FiltroNumero("t1.prodEstoqueQuantidade", ECompara.MAIOR, 0);
-		GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fn });
+		GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { filtroEmpresa, fn });
 		Lista<ProdProduto> lista = service.selecionar(new ProdProduto(), 0, 0, gf, false);
+		filtroEmpresa.setCampoPrefixo("t.");
 		return lista.getLista();
 	}
 
 	// metodo que recupera os consumos
-	private List<ComConsumo> getConsumos() throws Exception {
+	private List<ComConsumo> getConsumos(IFiltro filtroEmpresa) throws Exception {
 		// monta o filtro
 		GrupoFiltro gf = new GrupoFiltro();
-		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
-		gf.add(fo, EJuncao.E);
+		gf.add(filtroEmpresa, EJuncao.E);
 		FiltroBinario fb = new FiltroBinario("comConsumoFechada", ECompara.IGUAL, 1);
 		gf.add(fb, EJuncao.E);
 		FiltroData fd1 = new FiltroData("comConsumoData", ECompara.MAIOR_IGUAL, inicio);
@@ -289,20 +290,24 @@ public class EFD implements Runnable {
 	}
 
 	// metodo que recupera o pis e cofins da natureza de venda padrao
-	private void setPisCofins() throws Exception {
+	private void setPisCofins(IFiltro filtroEmpresa) throws Exception {
 		// monta o filtro
 		GrupoFiltro gf = new GrupoFiltro();
-		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, sped.getEmpEmpresa());
-		gf.add(fo, EJuncao.E);
+		gf.add(filtroEmpresa, EJuncao.E);
 		GrupoFiltro gf1 = new GrupoFiltro();
 		FiltroNumero fn1 = new FiltroNumero("comNaturezaCfopTrib", ECompara.IGUAL, 5101);
 		gf1.add(fn1, EJuncao.OU);
 		FiltroNumero fn2 = new FiltroNumero("comNaturezaCfopTrib", ECompara.IGUAL, 5102);
 		gf1.add(fn2);
 		gf.add(gf1);
-		ComNatureza nat = (ComNatureza) service.selecionar(new ComNatureza(), gf, true);
-		pis = nat.getComNaturezaPis();
-		cofins = nat.getComNaturezaCofins();
+		List<ComNatureza> nats = service.selecionar(new ComNatureza(), 0, 0, gf, false).getLista();
+		if (nats == null || nats.size() == 0) {
+			pis = 0.00;
+			pis = 0.00;
+		} else {
+			pis = nats.get(0).getComNaturezaPis();
+			cofins = nats.get(0).getComNaturezaCofins();
+		}
 	}
 
 	// Metodo que recupera os registros selecionados e executa cada um

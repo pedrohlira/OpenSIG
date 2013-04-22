@@ -78,7 +78,7 @@ public class FormularioEcf extends AFormulario<ComEcf> {
 
 		txtSerie = new TextField(OpenSigCore.i18n.txtSerie(), "comEcfSerie", 150);
 		txtSerie.setAllowBlank(false);
-		txtSerie.setMinLength(20);
+		txtSerie.setMinLength(18);
 		txtSerie.setMaxLength(20);
 
 		txtCaixa = new NumberField(OpenSigCore.i18n.txtCaixa(), "comEcfCaixa", 50);

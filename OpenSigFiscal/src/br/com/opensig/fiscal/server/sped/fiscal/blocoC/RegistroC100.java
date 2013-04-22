@@ -36,7 +36,6 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 			TNFe nfe = null;
 
 			// processa as entradas / compras
-			RegistroC110 r110 = new RegistroC110();
 			RegistroC170 r170 = new RegistroC170();
 			for (ComCompra compra : compras) {
 				// pega a NFe
@@ -45,7 +44,7 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 				int F = xml.indexOf("</NFe>") + 6;
 				String texto = "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
 				nfe = UtilServer.xmlToObj(texto, "br.com.opensig.nfe");
-				DadosC100 obj = getDados(nfe, "00", compra.getFisNotaEntrada().getFisNotaEntradaCadastro());
+				DadosC100 obj = getDados(nfe, "00", compra.getComCompraRecebimento());
 
 				// seta os dados padrao
 				obj.setInd_oper("0");
@@ -53,13 +52,6 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 				obj.setCod_part(compra.getEmpFornecedor().getEmpEntidade().getEmpEntidadeId() + "");
 				out.write(obj);
 				out.flush();
-
-				// informacoes da nota
-				if (!compra.getComCompraObservacao().equals("")) {
-					r110.setDados(compra.getComCompraObservacao());
-					r110.executar();
-					qtdLinhas += r110.getQtdLinhas();
-				}
 
 				// produtos
 				r170.setNatId(compra.getComNatureza().getComNaturezaId());
@@ -106,13 +98,6 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 
 				// so para vendas nao canceladas
 				if (!venda.getComVendaCancelada()) {
-					// informacoes da nota
-					if (!venda.getComVendaObservacao().equals("")) {
-						r110.setDados(venda.getComVendaObservacao());
-						r110.executar();
-						qtdLinhas += r110.getQtdLinhas();
-					}
-
 					// produtos
 					r170.setNatId(venda.getComNatureza().getComNaturezaId());
 					r170.setVenda(true);

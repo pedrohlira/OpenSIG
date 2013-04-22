@@ -5,7 +5,7 @@ import br.com.opensig.fiscal.server.sped.Bean;
 public class Dados0110 extends Bean {
 
 	private int cod_inc_trib;
-	private int ind_apro_cred;
+	private Integer ind_apro_cred;
 	private int cod_tipo_cont;
 	private int ind_reg_cum;
 
@@ -21,11 +21,11 @@ public class Dados0110 extends Bean {
 		this.cod_inc_trib = cod_inc_trib;
 	}
 
-	public int getInd_apro_cred() {
+	public Integer getInd_apro_cred() {
 		return ind_apro_cred;
 	}
 
-	public void setInd_apro_cred(int ind_apro_cred) {
+	public void setInd_apro_cred(Integer ind_apro_cred) {
 		this.ind_apro_cred = ind_apro_cred;
 	}
 

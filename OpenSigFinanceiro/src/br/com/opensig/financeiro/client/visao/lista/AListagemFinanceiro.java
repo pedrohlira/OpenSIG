@@ -25,7 +25,6 @@ import br.com.opensig.core.shared.modelo.Lista;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.financeiro.client.servico.FinanceiroProxy;
 import br.com.opensig.financeiro.client.visao.form.AFormularioFinanceiro;
-import br.com.opensig.financeiro.shared.modelo.FinCategoria;
 import br.com.opensig.financeiro.shared.modelo.FinPagamento;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -80,7 +79,7 @@ public abstract class AListagemFinanceiro<E extends Dados, T extends Dados> exte
 		ColumnConfig ccNome = new ColumnConfig(OpenSigCore.i18n.txtEntidade(), "empEntidade.empEntidadeNome1", 200, true);
 		ColumnConfig ccCadastro = new ColumnConfig(OpenSigCore.i18n.txtCadastro(), nomes.get("cadastro"), 75, true, DATA);
 		ColumnConfig ccCategoria = new ColumnConfig(OpenSigCore.i18n.txtCategoria(), nomes.get("categoria"), 100, true);
-		ColumnConfig ccNota = new ColumnConfig(OpenSigCore.i18n.txtNota(), nomes.get("nota"), 75, true);
+		ColumnConfig ccNota = new ColumnConfig(OpenSigCore.i18n.txtDocumento(), nomes.get("nota"), 75, true);
 		ColumnConfig ccObservacao = new ColumnConfig(OpenSigCore.i18n.txtObservacao(), nomes.get("observacao"), 200, true);
 
 		// sumarios
@@ -153,17 +152,6 @@ public abstract class AListagemFinanceiro<E extends Dados, T extends Dados> exte
 				fEmpresa.setLabelValue("empEntidade.empEntidadeNome1");
 				fEmpresa.setLoadingText(OpenSigCore.i18n.txtAguarde());
 				entry.setValue(fEmpresa);
-			} else if (entry.getKey().equals(nomes.get("categoria"))) {
-				// categoria
-				FieldDef[] fdCategoria = new FieldDef[] { new IntegerFieldDef("finCategoriaId"), new StringFieldDef("finCategoriaDescricao") };
-				CoreProxy<FinCategoria> proxy = new CoreProxy<FinCategoria>(new FinCategoria());
-				Store storeCategoria = new Store(proxy, new ArrayReader(new RecordDef(fdCategoria)), true);
-
-				GridListFilter fCategoria = new GridListFilter(nomes.get("categoria"), storeCategoria);
-				fCategoria.setLabelField("finCategoriaDescricao");
-				fCategoria.setLabelValue("finCategoriaDescricao");
-				fCategoria.setLoadingText(OpenSigCore.i18n.txtAguarde());
-				entry.setValue(fCategoria);
 			}
 		}
 	}

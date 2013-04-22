@@ -12,7 +12,7 @@
 			<field name="ser" type="string" length="4" trim="true" />
 			<field name="sub_ser" type="int" length="20" />
 			<field name="cod_sit" type="string" length="2" trim="true" />
-			<field name="vl_tot_rec" type="double" format="##0,00" />
+			<field name="vl_tot_rec" type="double" format="##0.00" />
 			<field name="quant_doc" type="int" />
 			<field name="cst_pis" type="string" length="2" trim="true" />
 			<field name="cst_cofins" type="string" length="2" trim="true" />

@@ -154,7 +154,7 @@ public class ImportarCompra extends ImportarNFe<ComCompra> {
 			compra.setComCompraValorNota(Double.valueOf(tot.getVNF()));
 			compra.setComCompraPaga(nfe.getInfNFe().getCobr() != null);
 			compra.setFinPagar(getPagar());
-			compra.setComCompraObservacao(nfe.getInfNFe().getInfAdic().getInfCpl() == null ? "" : nfe.getInfNFe().getInfAdic().getInfCpl());
+			compra.setComCompraObservacao("");
 		}
 	}
 

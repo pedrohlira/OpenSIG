@@ -17,7 +17,6 @@
 			<field name="cnpj" type="string" length="14" trim="true" default="" />
 			<field name="uf" type="string" length="2" trim="true"/>
 			<field name="cod_mun" type="int" length="7" justify="right" padding="0"/>
-			<field name="im" type="string" length="255" trim="true" default="" />
 			<field name="suframa" type="string" length="9" trim="true" default="" />
 			<field name="ind_nat_pj" type="int" length="2" justify="right" padding="0"/>
 			<field name="ind_ativ" type="int" length="1"/>

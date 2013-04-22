@@ -12,7 +12,7 @@ public class Registro0100 extends ARegistro<Dados0100, Dados> {
 
 	@Override
 	protected Dados0100 getDados(Dados dados) throws Exception {
-		FiltroNumero fn = new FiltroNumero("empFuncionarioId", ECompara.IGUAL, auth.getConf().get("sped.fiscal.0100.id_funcionario"));
+		FiltroNumero fn = new FiltroNumero("empFuncionarioId", ECompara.IGUAL, auth.getConf().get("sped.0100.id_funcionario"));
 		EmpFuncionario fun = (EmpFuncionario) service.selecionar(new EmpFuncionario(), fn, false);
 
 		Dados0100 d = new Dados0100();

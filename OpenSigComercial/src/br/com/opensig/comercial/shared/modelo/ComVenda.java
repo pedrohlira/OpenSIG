@@ -62,13 +62,17 @@ public class ComVenda extends Dados implements Serializable {
 
 	@Column(name = "com_venda_cancelada")
 	private int comVendaCancelada;
-	
+
 	@Column(name = "com_venda_observacao")
 	private String comVendaObservacao;
 
 	@JoinColumn(name = "sis_usuario_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private SisUsuario sisUsuario;
+
+	@JoinColumn(name = "sis_vendedor_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private SisUsuario sisVendedor;
 
 	@JoinColumn(name = "emp_cliente_id")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -173,13 +177,21 @@ public class ComVenda extends Dados implements Serializable {
 	public void setComVendaCancelada(boolean comVendaCancelada) {
 		this.comVendaCancelada = comVendaCancelada == false ? 0 : 1;
 	}
-	
+
 	public SisUsuario getSisUsuario() {
 		return sisUsuario;
 	}
 
 	public void setSisUsuario(SisUsuario sisUsuario) {
 		this.sisUsuario = sisUsuario;
+	}
+
+	public SisUsuario getSisVendedor() {
+		return sisVendedor;
+	}
+
+	public void setSisVendedor(SisUsuario sisVendedor) {
+		this.sisVendedor = sisVendedor;
 	}
 
 	public EmpCliente getEmpCliente() {
@@ -244,12 +256,13 @@ public class ComVenda extends Dados implements Serializable {
 
 		return new String[] { comVendaId + "", empCliente.getEmpClienteId() + "", empCliente.getEmpEntidade().getEmpEntidadeId() + "", empCliente.getEmpEntidade().getEmpEntidadeNome1(),
 				empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), sisUsuario.getSisUsuarioId() + "", sisUsuario.getSisUsuarioLogin(),
-				UtilClient.getDataHoraGrid(comVendaData), comVendaValorBruto.toString(), comVendaValorLiquido.toString(), comNatureza.getComNaturezaId() + "", comNatureza.getComNaturezaNome(),
-				getComVendaFechada() + "", receberId + "", getComVendaRecebida() + "", nfeId + "", getComVendaNfe() + "", getComVendaCancelada() + "", comVendaObservacao };
+				sisVendedor.getSisUsuarioId() + "", sisVendedor.getSisUsuarioLogin(), UtilClient.getDataHoraGrid(comVendaData), comVendaValorBruto.toString(), comVendaValorLiquido.toString(),
+				comNatureza.getComNaturezaId() + "", comNatureza.getComNaturezaNome(), getComVendaFechada() + "", receberId + "", getComVendaRecebida() + "", nfeId + "", getComVendaNfe() + "",
+				getComVendaCancelada() + "", comVendaObservacao };
 	}
 
 	public Dados getObjeto(String campo) {
-		if (campo.startsWith("sisUsuario")) {
+		if (campo.startsWith("sisUsuario") || campo.startsWith("sisVendedor")) {
 			return new SisUsuario();
 		} else if (campo.startsWith("empCliente")) {
 			return new EmpCliente();
@@ -268,6 +281,7 @@ public class ComVenda extends Dados implements Serializable {
 
 	public void anularDependencia() {
 		sisUsuario = null;
+		sisVendedor = null;
 		empCliente = null;
 		empEmpresa = null;
 		comNatureza = null;
