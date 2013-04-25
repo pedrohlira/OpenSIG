@@ -7,42 +7,48 @@
 		<classe>br.com.opensig.core.client.OpenSigCore</classe>
 		<nome>Sistema</nome>
 		<descricao>Módulo que permite gerenciar configuracoes, exportacoes e
-			plugins.</descricao>
+			plugins.
+		</descricao>
 		<imagem>icon-core</imagem>
 	</modulo>
 	<modulo>
 		<classe>br.com.opensig.permissao.client.OpenSigPermissao</classe>
 		<nome>Permissões</nome>
 		<descricao>Módulo que permite gerenciar usuários, grupos e permissões
-			para os mesmos.</descricao>
+			para os mesmos.
+		</descricao>
 		<imagem>icon-permissao</imagem>
 	</modulo>
 	<modulo>
 		<classe>br.com.opensig.empresa.client.OpenSigEmpresa</classe>
 		<nome>Empresa</nome>
 		<descricao>Módulo que permite gerenciar clientes, fornecedores e todos
-			cadastros referentes a empresa.</descricao>
+			cadastros referentes a empresa.
+		</descricao>
 		<imagem>icon-empresa</imagem>
 	</modulo>
 	<modulo>
 		<classe>br.com.opensig.produto.client.OpenSigProduto</classe>
 		<nome>Produto</nome>
 		<descricao>Módulo que permite gerenciar os produtos e todos cadastros
-			referentes ao produto.</descricao>
+			referentes ao produto.
+		</descricao>
 		<imagem>icon-produto</imagem>
 	</modulo>
 	<modulo>
 		<classe>br.com.opensig.comercial.client.OpenSigComercial</classe>
 		<nome>Comercial</nome>
 		<descricao>Módulo que permite gerenciar as operações comerciais
-			realizadas na empresa.</descricao>
+			realizadas na empresa.
+		</descricao>
 		<imagem>icon-comercial</imagem>
 	</modulo>
 	<modulo>
 		<classe>br.com.opensig.fiscal.client.OpenSigFiscal</classe>
 		<nome>Fiscal</nome>
 		<descricao>Módulo que permite gerenciar as operações fiscais
-			realizadas na empresa.</descricao>
+			realizadas na empresa.
+		</descricao>
 		<imagem>icon-fiscal</imagem>
 	</modulo>
 	<modulo>
@@ -174,15 +180,36 @@
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoTributacao
 		</classe>
 		<nome>Tributação</nome>
-		<descricao>Administrar as tributações dos produtos.</descricao>
+		<descricao>Administrar as Tributações dos produtos.</descricao>
 		<imagem>icon-tributacao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoIcms
+		</classe>
+		<nome>ICMS</nome>
+		<descricao>Administrar os ICMSs dos produtos.</descricao>
+		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoIpi
 		</classe>
 		<nome>IPI</nome>
 		<descricao>Administrar os IPIs dos produtos.</descricao>
-		<imagem>icon-ipi</imagem>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoPis
+		</classe>
+		<nome>PIS</nome>
+		<descricao>Administrar os PISs dos produtos.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoCofins
+		</classe>
+		<nome>COFINS</nome>
+		<descricao>Administrar os COFINSs dos produtos.</descricao>
+		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoGrade
@@ -210,7 +237,7 @@
 		</classe>
 		<nome>Embalagens</nome>
 		<descricao>Administrar as embalagens.</descricao>
-		<imagem>icon-embalagem</imagem>
+		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoTipo
@@ -245,7 +272,8 @@
 		</classe>
 		<nome>Compra Produtos</nome>
 		<descricao>Administrar os produtos comercializados pelas compras na
-			empresa.</descricao>
+			empresa.
+		</descricao>
 		<imagem>icon-produtocompra</imagem>
 	</funcao>
 	<funcao>
@@ -253,7 +281,8 @@
 		</classe>
 		<nome>Venda Produtos</nome>
 		<descricao>Administrar os produtos comercializados pelas vendas na
-			empresa.</descricao>
+			empresa.
+		</descricao>
 		<imagem>icon-produtovenda</imagem>
 	</funcao>
 	<funcao>
@@ -302,7 +331,8 @@
 		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcfNotaProduto
 		</classe>
 		<nome>ECF - Nota Produtos</nome>
-		<descricao>Produtos das Notas de consumidor realizadas no ECF.</descricao>
+		<descricao>Produtos das Notas de consumidor realizadas no ECF.
+		</descricao>
 		<imagem>icon-produtovenda</imagem>
 	</funcao>
 	<funcao>
@@ -549,7 +579,8 @@
 		</classe>
 		<nome>Receber</nome>
 		<descricao>Realiza o processo de recebimento dos valores referente a
-			venda.</descricao>
+			venda.
+		</descricao>
 		<imagem>icon-receber</imagem>
 	</acao>
 	<acao>
@@ -557,7 +588,8 @@
 		</classe>
 		<nome>Pagar</nome>
 		<descricao>Realiza o processo de pagamento dos valores referente a
-			compra.</descricao>
+			compra.
+		</descricao>
 		<imagem>icon-pagar</imagem>
 	</acao>
 	<acao>
@@ -565,7 +597,8 @@
 		</classe>
 		<nome>Pagar</nome>
 		<descricao>Realiza o processo de pagamento dos valores referente ao
-			frete.</descricao>
+			frete.
+		</descricao>
 		<imagem>icon-pagar</imagem>
 	</acao>
 	<acao>
@@ -573,7 +606,8 @@
 		</classe>
 		<nome>Pagar</nome>
 		<descricao>Realiza o processo de pagamento dos valores referente ao
-			consumo.</descricao>
+			consumo.
+		</descricao>
 		<imagem>icon-pagar</imagem>
 	</acao>
 	<acao>
@@ -671,7 +705,8 @@
 		<classe>br.com.opensig.financeiro.client.controlador.comando.financeiro.ComandoConciliarRecebimento
 		</classe>
 		<nome>Conciliar</nome>
-		<descricao>Realiza a conciliação do recebimento com o banco.</descricao>
+		<descricao>Realiza a conciliação do recebimento com o banco.
+		</descricao>
 		<imagem>icon-conciliar</imagem>
 	</acao>
 	<acao>

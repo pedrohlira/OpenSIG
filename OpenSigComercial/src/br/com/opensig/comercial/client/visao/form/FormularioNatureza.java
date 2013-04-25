@@ -24,8 +24,8 @@ public class FormularioNatureza extends AFormulario<ComNatureza> {
 	private NumberField txtSub;
 	private Checkbox chkIcms;
 	private Checkbox chkIpi;
-	private NumberField txtPis;
-	private NumberField txtCofins;
+	private Checkbox chkPis;
+	private Checkbox chkCofins;
 
 	public FormularioNatureza(SisFuncao funcao) {
 		super(new ComNatureza(), funcao);
@@ -69,20 +69,9 @@ public class FormularioNatureza extends AFormulario<ComNatureza> {
 		txtSub.setMinLength(4);
 
 		chkIcms = new Checkbox(OpenSigCore.i18n.txtIcms(), "comNaturezaIcms");
-
 		chkIpi = new Checkbox(OpenSigCore.i18n.txtIpi(), "comNaturezaIpi");
-
-		txtPis = new NumberField(OpenSigCore.i18n.txtPis() + " %", "comNaturezaPis", 50);
-		txtPis.setAllowBlank(false);
-		txtPis.setAllowNegative(false);
-		txtPis.setDecimalPrecision(2);
-		txtPis.setMaxLength(5);
-
-		txtCofins = new NumberField(OpenSigCore.i18n.txtCofins() + " %", "comNaturezaCofins", 50);
-		txtCofins.setAllowBlank(false);
-		txtCofins.setAllowNegative(false);
-		txtCofins.setDecimalPrecision(2);
-		txtCofins.setMaxLength(5);
+		chkPis = new Checkbox(OpenSigCore.i18n.txtPis(), "comNaturezaPis");
+		chkCofins = new Checkbox(OpenSigCore.i18n.txtCofins(), "comNaturezaCofins");
 
 		MultiFieldPanel linha2 = new MultiFieldPanel();
 		linha2.setBorder(false);
@@ -90,8 +79,8 @@ public class FormularioNatureza extends AFormulario<ComNatureza> {
 		linha2.addToRow(txtSub, 100);
 		linha2.addToRow(chkIcms, 70);
 		linha2.addToRow(chkIpi, 70);
-		linha2.addToRow(txtPis, 100);
-		linha2.addToRow(txtCofins, 100);
+		linha2.addToRow(chkPis, 70);
+		linha2.addToRow(chkCofins, 70);
 		add(linha2);
 	}
 
@@ -107,12 +96,8 @@ public class FormularioNatureza extends AFormulario<ComNatureza> {
 		}
 		classe.setComNaturezaIcms(chkIcms.getValue());
 		classe.setComNaturezaIpi(chkIpi.getValue());
-		if (txtPis.getValue() != null) {
-			classe.setComNaturezaPis(txtPis.getValue().doubleValue());
-		}
-		if (txtCofins.getValue() != null) {
-			classe.setComNaturezaCofins(txtCofins.getValue().doubleValue());
-		}
+		classe.setComNaturezaPis(chkPis.getValue());
+		classe.setComNaturezaCofins(chkCofins.getValue());
 		if (hdnEmpresa.getValueAsString().equals("0")) {
 			classe.setEmpEmpresa(new EmpEmpresa(Ponte.getLogin().getEmpresaId()));
 		} else {
@@ -207,20 +192,20 @@ public class FormularioNatureza extends AFormulario<ComNatureza> {
 		this.chkIpi = chkIpi;
 	}
 
-	public NumberField getTxtPis() {
-		return txtPis;
+	public Checkbox getChkPis() {
+		return chkPis;
 	}
 
-	public void setTxtPis(NumberField txtPis) {
-		this.txtPis = txtPis;
+	public void setChkPis(Checkbox chkPis) {
+		this.chkPis = chkPis;
 	}
 
-	public NumberField getTxtCofins() {
-		return txtCofins;
+	public Checkbox getChkCofins() {
+		return chkCofins;
 	}
 
-	public void setTxtCofins(NumberField txtCofins) {
-		this.txtCofins = txtCofins;
+	public void setChkCofins(Checkbox chkCofins) {
+		this.chkCofins = chkCofins;
 	}
-	
+
 }

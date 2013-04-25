@@ -34,11 +34,29 @@ public class ComCompraProduto extends Dados implements Serializable {
 	@Column(name = "com_compra_produto_cfop")
 	private int comCompraProdutoCfop;
 
+	@Column(name = "com_compra_produto_icms_cst")
+	private String comCompraProdutoIcmsCst;
+
 	@Column(name = "com_compra_produto_icms")
 	private Double comCompraProdutoIcms;
 
+	@Column(name = "com_compra_produto_ipi_cst")
+	private String comCompraProdutoIpiCst;
+
 	@Column(name = "com_compra_produto_ipi")
 	private Double comCompraProdutoIpi;
+
+	@Column(name = "com_compra_produto_pis_cst")
+	private String comCompraProdutoPisCst;
+
+	@Column(name = "com_compra_produto_pis")
+	private Double comCompraProdutoPis;
+
+	@Column(name = "com_compra_produto_cofins_cst")
+	private String comCompraProdutoCofinsCst;
+
+	@Column(name = "com_compra_produto_cofins")
+	private Double comCompraProdutoCofins;
 
 	@Column(name = "com_compra_produto_preco")
 	private Double comCompraProdutoPreco;
@@ -106,6 +124,54 @@ public class ComCompraProduto extends Dados implements Serializable {
 
 	public void setComCompraProdutoCfop(int comCompraProdutoCfop) {
 		this.comCompraProdutoCfop = comCompraProdutoCfop;
+	}
+
+	public String getComCompraProdutoIcmsCst() {
+		return comCompraProdutoIcmsCst;
+	}
+
+	public void setComCompraProdutoIcmsCst(String comCompraProdutoIcmsCst) {
+		this.comCompraProdutoIcmsCst = comCompraProdutoIcmsCst;
+	}
+
+	public String getComCompraProdutoIpiCst() {
+		return comCompraProdutoIpiCst;
+	}
+
+	public void setComCompraProdutoIpiCst(String comCompraProdutoIpiCst) {
+		this.comCompraProdutoIpiCst = comCompraProdutoIpiCst;
+	}
+
+	public String getComCompraProdutoPisCst() {
+		return comCompraProdutoPisCst;
+	}
+
+	public void setComCompraProdutoPisCst(String comCompraProdutoPisCst) {
+		this.comCompraProdutoPisCst = comCompraProdutoPisCst;
+	}
+
+	public Double getComCompraProdutoPis() {
+		return comCompraProdutoPis;
+	}
+
+	public void setComCompraProdutoPis(Double comCompraProdutoPis) {
+		this.comCompraProdutoPis = comCompraProdutoPis;
+	}
+
+	public String getComCompraProdutoCofinsCst() {
+		return comCompraProdutoCofinsCst;
+	}
+
+	public void setComCompraProdutoCofinsCst(String comCompraProdutoCofinsCst) {
+		this.comCompraProdutoCofinsCst = comCompraProdutoCofinsCst;
+	}
+
+	public Double getComCompraProdutoCofins() {
+		return comCompraProdutoCofins;
+	}
+
+	public void setComCompraProdutoCofins(Double comCompraProdutoCofins) {
+		this.comCompraProdutoCofins = comCompraProdutoCofins;
 	}
 
 	public double getComCompraProdutoPreco() {
@@ -183,10 +249,10 @@ public class ComCompraProduto extends Dados implements Serializable {
 	public String[] toArray() {
 		return new String[] { comCompraProdutoId + "", comCompra.getComCompraId() + "", comCompra.getEmpEmpresa().getEmpEmpresaId() + "",
 				comCompra.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getEmpFornecedor().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getProdProdutoId() + "",
-				prodProduto.getProdProdutoBarra(), prodProduto.getProdProdutoDescricao(), prodProduto.getProdProdutoReferencia(), prodProduto.getProdTributacao().getProdTributacaoDentro() + "",
-				prodProduto.getProdTributacao().getProdTributacaoCst(), UtilClient.getDataGrid(comCompra.getComCompraRecebimento()), comCompraProdutoQuantidade + "",
-				prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), comCompraProdutoValor.toString(), comCompraProdutoTotal.toString(), comCompraProdutoCfop + "",
-				comCompraProdutoIcms + "", comCompraProdutoIpi + "", comCompraProdutoPreco.toString(), comCompraProdutoOrdem + "" };
+				prodProduto.getProdProdutoBarra(), prodProduto.getProdProdutoDescricao(), prodProduto.getProdProdutoReferencia(), UtilClient.getDataGrid(comCompra.getComCompraRecebimento()),
+				comCompraProdutoQuantidade + "", prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), comCompraProdutoValor.toString(), comCompraProdutoTotal.toString(),
+				comCompraProdutoCfop + "", comCompraProdutoIcmsCst, comCompraProdutoIcms.toString(), comCompraProdutoIpiCst, comCompraProdutoIpi.toString(), comCompraProdutoPisCst,
+				comCompraProdutoPis.toString(), comCompraProdutoCofinsCst, comCompraProdutoCofins.toString(), comCompraProdutoPreco.toString(), comCompraProdutoOrdem + "" };
 	}
 
 	public Dados getObjeto(String campo) {

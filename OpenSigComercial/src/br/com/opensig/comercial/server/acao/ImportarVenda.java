@@ -12,6 +12,7 @@ import org.w3c.dom.Document;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.server.ComercialServiceImpl;
+import br.com.opensig.comercial.server.MyIcms;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
 import br.com.opensig.comercial.shared.modelo.ComVendaProduto;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
@@ -42,14 +43,17 @@ import br.com.opensig.nfe.TEndereco;
 import br.com.opensig.nfe.TNFe.InfNFe.Cobr.Dup;
 import br.com.opensig.nfe.TNFe.InfNFe.Dest;
 import br.com.opensig.nfe.TNFe.InfNFe.Det;
+import br.com.opensig.nfe.TNFe.InfNFe.Det.Prod;
 import br.com.opensig.nfe.TNFe.InfNFe.Ide;
 import br.com.opensig.nfe.TNFe.InfNFe.Total.ICMSTot;
 import br.com.opensig.permissao.shared.modelo.SisUsuario;
+import br.com.opensig.produto.shared.modelo.ProdCofins;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdIpi;
 import br.com.opensig.produto.shared.modelo.ProdOrigem;
+import br.com.opensig.produto.shared.modelo.ProdPis;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
-import br.com.opensig.produto.shared.modelo.ProdTributacao;
+import br.com.opensig.produto.shared.modelo.ProdIcms;
 
 public class ImportarVenda extends ImportarNFe<ComVenda> {
 
@@ -124,7 +128,7 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 		FiltroNumero fn = new FiltroNumero("fisNotaSaida.fisNotaSaidaNumero", ECompara.IGUAL, ide.getNNF());
 		GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, ft, fn });
 		venda = (ComVenda) servico.selecionar(new ComVenda(), gf, false);
-		
+
 		if (venda != null) {
 			throw new ComercialException("A venda já existe!");
 		} else {
@@ -139,6 +143,7 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 
 			venda = new ComVenda();
 			venda.setSisUsuario(new SisUsuario(Integer.valueOf(auth.getUsuario()[0])));
+			venda.setSisVendedor(venda.getSisUsuario());
 			venda.setComVendaData(dtData);
 			venda.setComVendaValorBruto(Double.valueOf(tot.getVProd()));
 			venda.setComVendaValorLiquido(Double.valueOf(tot.getVNF()));
@@ -273,9 +278,11 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 	private void validarProduto() throws OpenSigException {
 		// pega os dados auxiliares
 		origens = servico.selecionar(new ProdOrigem(), 0, 0, null, false).getLista();
-		tributacao = servico.selecionar(new ProdTributacao(), 0, 0, null, false).getLista();
-		ipis = servico.selecionar(new ProdIpi(), 0, 0, null, false).getLista();
 		embalagem = servico.selecionar(new ProdEmbalagem(), 0, 0, null, false).getLista();
+		icmss = servico.selecionar(new ProdIcms(), 0, 0, null, false).getLista();
+		ipis = servico.selecionar(new ProdIpi(), 0, 0, null, false).getLista();
+		piss = servico.selecionar(new ProdPis(), 0, 0, null, false).getLista();
+		cofinss = servico.selecionar(new ProdCofins(), 0, 0, null, false).getLista();
 
 		// o fornecedor padrao, para caso nao ache do produto
 		FiltroNumero fn = new FiltroNumero("empFornecedorId", ECompara.IGUAL, 1);
@@ -285,7 +292,8 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 		// seta os tipos
 		venProdutos = new ArrayList<ComVendaProduto>();
 		for (Det det : nfe.getInfNFe().getDet()) {
-			MyIcms myicms = getIcms(det.getImposto().getICMS());
+			MyIcms myicms = new MyIcms(det.getImposto().getICMS());
+			// ipi
 			String ipi = "";
 			String pIpi = "";
 			try {
@@ -298,24 +306,52 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 				ipi = "99";
 				pIpi = "0.00";
 			}
+			// pis
+			String pis = "";
+			String pPis = "";
+			try {
+				pis = det.getImposto().getPIS().getPISAliq().getCST();
+				pPis = det.getImposto().getPIS().getPISAliq().getPPIS();
+			} catch (Exception e) {
+				pis = "49";
+				pPis = "0.00";
+			}
+			// cofins
+			String cofins = "";
+			String pCofins = "";
+			try {
+				cofins = det.getImposto().getCOFINS().getCOFINSAliq().getCST();
+				pCofins = det.getImposto().getCOFINS().getCOFINSAliq().getPCOFINS();
+			} catch (Exception e) {
+				cofins = "49";
+				pCofins = "0.00";
+			}
 
 			// setando o produto da venda
-			ComVendaProduto venProd = new ComVendaProduto();
-			ProdProduto prod = getProduto(forne, det.getProd(), myicms, ipi);
-			venProd.setProdProduto(prod);
-			venProd.setProdEmbalagem(prod.getProdEmbalagem());
-			venProd.setComVenda(venda);
-			venProd.setComVendaProdutoIcms(Double.valueOf(myicms.getAliquota()));
-			venProd.setComVendaProdutoIpi(Double.valueOf(pIpi));
-			venProd.setComVendaProdutoQuantidade(Double.valueOf(det.getProd().getQCom()));
-			venProd.setComVendaProdutoBruto(Double.valueOf(det.getProd().getVUnCom()));
-			venProd.setComVendaProdutoDesconto(det.getProd().getVDesc() == null ? 0.00 : Double.valueOf(det.getProd().getVDesc()));
-			venProd.setComVendaProdutoLiquido(venProd.getComVendaProdutoBruto() - venProd.getComVendaProdutoDesconto());
-			venProd.setComVendaProdutoTotalBruto(venProd.getComVendaProdutoQuantidade() * venProd.getComVendaProdutoBruto());
-			venProd.setComVendaProdutoTotalLiquido(venProd.getComVendaProdutoQuantidade() * venProd.getComVendaProdutoLiquido());
-			venProd.setComVendaProdutoBarra(prod.getProdProdutoBarra());
-			venProd.setComVendaProdutoOrdem(Integer.valueOf(det.getNItem()));
-			venProdutos.add(venProd);
+			ComVendaProduto vp = new ComVendaProduto();
+			Prod prod = det.getProd();
+			ProdProduto pp = getProduto(forne, prod, myicms);
+			vp.setProdProduto(pp);
+			vp.setProdEmbalagem(pp.getProdEmbalagem());
+			vp.setComVenda(venda);
+			vp.setComVendaProdutoCfop(Integer.valueOf(prod.getCFOP()));
+			vp.setComVendaProdutoIcmsCst(myicms.getCst());
+			vp.setComVendaProdutoIcms(Double.valueOf(myicms.getAliquota()));
+			vp.setComVendaProdutoIpiCst(ipi);
+			vp.setComVendaProdutoIpi(Double.valueOf(pIpi));
+			vp.setComVendaProdutoPisCst(pis);
+			vp.setComVendaProdutoPis(Double.valueOf(pPis));
+			vp.setComVendaProdutoCofinsCst(cofins);
+			vp.setComVendaProdutoCofins(Double.valueOf(pCofins));
+			vp.setComVendaProdutoQuantidade(Double.valueOf(prod.getQCom()));
+			vp.setComVendaProdutoBruto(Double.valueOf(prod.getVUnCom()));
+			vp.setComVendaProdutoDesconto(prod.getVDesc() == null ? 0.00 : Double.valueOf(prod.getVDesc()));
+			vp.setComVendaProdutoLiquido(vp.getComVendaProdutoBruto() - vp.getComVendaProdutoDesconto());
+			vp.setComVendaProdutoTotalBruto(vp.getComVendaProdutoQuantidade() * vp.getComVendaProdutoBruto());
+			vp.setComVendaProdutoTotalLiquido(vp.getComVendaProdutoQuantidade() * vp.getComVendaProdutoLiquido());
+			vp.setComVendaProdutoBarra(pp.getProdProdutoBarra());
+			vp.setComVendaProdutoOrdem(Integer.valueOf(det.getNItem()));
+			venProdutos.add(vp);
 		}
 	}
 

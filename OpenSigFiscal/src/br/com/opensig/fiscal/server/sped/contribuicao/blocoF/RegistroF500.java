@@ -25,7 +25,7 @@ public class RegistroF500 extends ARegistro<DadosF500, EmpEmpresa> {
 		for (ComEcfZ z : zs) {
 			if (z.getComEcf().getEmpEmpresa().getEmpEmpresaId() == dados.getEmpEmpresaId()) {
 				bruto += z.getComEcfZBruto();
-				// pegando as cancelads
+				// pegando as canceladas
 				for (ComEcfZTotais zt : z.getComEcfZTotais()) {
 					if (zt.getComEcfZTotaisCodigo().startsWith("D")) {
 						desc += zt.getComEcfZTotaisValor();

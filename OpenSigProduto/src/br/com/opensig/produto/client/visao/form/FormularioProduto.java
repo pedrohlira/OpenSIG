@@ -32,16 +32,18 @@ import br.com.opensig.produto.client.visao.lista.ListagemComposicao;
 import br.com.opensig.produto.client.visao.lista.ListagemGrades;
 import br.com.opensig.produto.client.visao.lista.ListagemPreco;
 import br.com.opensig.produto.shared.modelo.ProdCategoria;
+import br.com.opensig.produto.shared.modelo.ProdCofins;
 import br.com.opensig.produto.shared.modelo.ProdComposicao;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
 import br.com.opensig.produto.shared.modelo.ProdGrade;
 import br.com.opensig.produto.shared.modelo.ProdIpi;
 import br.com.opensig.produto.shared.modelo.ProdOrigem;
+import br.com.opensig.produto.shared.modelo.ProdPis;
 import br.com.opensig.produto.shared.modelo.ProdPreco;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 import br.com.opensig.produto.shared.modelo.ProdTipo;
-import br.com.opensig.produto.shared.modelo.ProdTributacao;
+import br.com.opensig.produto.shared.modelo.ProdIcms;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtext.client.data.ArrayReader;
@@ -86,8 +88,10 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 	private TextField txtBarra;
 	private ComboBox cmbFornecedor;
 	private ComboBox cmbFabricante;
-	private ComboBox cmbTributacao;
+	private ComboBox cmbIcms;
 	private ComboBox cmbIpi;
+	private ComboBox cmbPis;
+	private ComboBox cmbCofins;
 	private ComboBox cmbTipo;
 	private ComboBox cmbOrigem;
 	private ComboBox cmbEmbalagem;
@@ -177,20 +181,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		txtDescricao.setAllowBlank(false);
 		txtDescricao.setMaxLength(100);
 
-		MultiFieldPanel linha2 = new MultiFieldPanel();
-		linha2.setBorder(false);
-		linha2.addToRow(txtReferencia, 100);
-		linha2.addToRow(txtDescricao, 340);
-		linha2.addToRow(getOrigem(), 150);
-		coluna1.add(linha2);
-
-		MultiFieldPanel linha3 = new MultiFieldPanel();
-		linha3.setBorder(false);
-		linha3.addToRow(getFornecedor(), 310);
-		linha3.addToRow(getTributacao(), 140);
-		linha3.addToRow(getIpi(), 140);
-		coluna1.add(linha3);
-
 		txtEstoque = new NumberField(OpenSigCore.i18n.txtEstoque(), "t1.prodEstoqueQuantidade", 50);
 		txtEstoque.setAllowBlank(false);
 		txtEstoque.setAllowNegative(false);
@@ -200,13 +190,33 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		chkAtivo = new Checkbox(OpenSigCore.i18n.txtAtivo(), "prodProdutoAtivo");
 		chkAtivo.setChecked(true);
 
+		MultiFieldPanel linha2 = new MultiFieldPanel();
+		linha2.setBorder(false);
+		linha2.addToRow(txtReferencia, 100);
+		linha2.addToRow(txtDescricao, 340);
+		linha2.addToRow(txtEstoque, 70);
+		linha2.addToRow(chkAtivo, 50);
+		coluna1.add(linha2);
+
+		MultiFieldPanel linha3 = new MultiFieldPanel();
+		linha3.setBorder(false);
+		linha3.addToRow(getFornecedor(), 290);
+		linha3.addToRow(getFabricante(), 290);
+		coluna1.add(linha3);
+
 		MultiFieldPanel linha4 = new MultiFieldPanel();
 		linha4.setBorder(false);
-		linha4.addToRow(getFabricante(), 310);
-		linha4.addToRow(getTipo(), 140);
-		linha4.addToRow(txtEstoque, 70);
-		linha4.addToRow(chkAtivo, 50);
+		linha4.addToRow(getOrigem(), 190);
+		linha4.addToRow(getIcms(), 190);
+		linha4.addToRow(getIpi(), 190);
 		coluna1.add(linha4);
+
+		MultiFieldPanel linha5 = new MultiFieldPanel();
+		linha5.setBorder(false);
+		linha5.addToRow(getTipo(), 190);
+		linha5.addToRow(getPis(), 190);
+		linha5.addToRow(getCofins(), 190);
+		coluna1.add(linha5);
 
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), "prodProdutoObservacao");
 		txtObservacao.setMaxLength(255);
@@ -380,24 +390,16 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		} else {
 			classe.setEmpFabricante(null);
 		}
-		ProdTributacao tributacao = new ProdTributacao(Integer.valueOf(cmbTributacao.getValue()));
-		classe.setProdTributacao(tributacao);
-		ProdIpi ipi = new ProdIpi(Integer.valueOf(cmbIpi.getValue()));
-		classe.setProdIpi(ipi);
+		classe.setProdIcms(new ProdIcms(Integer.valueOf(cmbIcms.getValue())));
+		classe.setProdIpi(new ProdIpi(Integer.valueOf(cmbIpi.getValue())));
+		classe.setProdPis(new ProdPis(Integer.valueOf(cmbPis.getValue())));
+		classe.setProdCofins(new ProdCofins(Integer.valueOf(cmbCofins.getValue())));
 		classe.setProdProdutoCategoria(strCategorias);
-		if (classe.getProdProdutoId() == 0) {
-			classe.setProdProdutoCadastrado(new Date());
-			classe.setProdProdutoAlterado(new Date());
-		} else {
-			classe.setProdProdutoCadastrado(dtCadastro);
-			classe.setProdProdutoAlterado(new Date());
-		}
-		ProdOrigem origem = new ProdOrigem(Integer.valueOf(cmbOrigem.getValue()));
-		classe.setProdOrigem(origem);
-		ProdEmbalagem volume = new ProdEmbalagem(Integer.valueOf(cmbEmbalagem.getValue()));
-		classe.setProdEmbalagem(volume);
-		ProdTipo tipo = new ProdTipo(Integer.valueOf(cmbTipo.getValue()));
-		classe.setProdTipo(tipo);
+		classe.setProdProdutoCadastrado(classe.getProdProdutoId() == 0 ? new Date() : dtCadastro);
+		classe.setProdProdutoAlterado(new Date());
+		classe.setProdOrigem(new ProdOrigem(Integer.valueOf(cmbOrigem.getValue())));
+		classe.setProdEmbalagem(new ProdEmbalagem(Integer.valueOf(cmbEmbalagem.getValue())));
+		classe.setProdTipo(new ProdTipo(Integer.valueOf(cmbTipo.getValue())));
 		if (txtEstoque.getValue() != null) {
 			ProdEstoque estoque = new ProdEstoque();
 			estoque.setProdEstoqueQuantidade(txtEstoque.getValue().doubleValue());
@@ -430,10 +432,10 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 	}
 
 	public void mostrarDados() {
-		if (cmbOrigem.getStore().getRecords().length == 0) {
-			cmbOrigem.getStore().load();
+		if (cmbEmbalagem.getStore().getRecords().length == 0) {
+			cmbEmbalagem.getStore().load();
 		} else {
-			cmbTipo.getStore().reload();
+			cmbCofins.getStore().reload();
 		}
 	}
 
@@ -462,11 +464,13 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 			String[] objs = rec.getAsString("prodProdutoCategoria").split("::");
 			treeCategoria.selecionar(objs);
 		} else {
-			cmbOrigem.setValue("1");
-			cmbTributacao.setValue("1");
-			cmbIpi.setValue("7");
 			cmbEmbalagem.setValue("1");
+			cmbOrigem.setValue("1");
+			cmbIcms.setValue("1");
+			cmbIpi.setValue(UtilClient.CONF.get("sped.fiscal.0000.ind_ativ").equals("0") ? "1" : "7");
 			cmbTipo.setValue("1");
+			cmbPis.setValue(UtilClient.CONF.get("nfe.crt").equals("3") ? "1" : "10");
+			cmbCofins.setValue(UtilClient.CONF.get("nfe.crt").equals("3") ? "1" : "10");
 			treeCategoria.selecionar(null);
 		}
 		txtNcm.focus(true);
@@ -479,7 +483,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 	private ComboBox getFornecedor() {
 		cmbFornecedor = UtilClient.getComboEntidade(new ComboEntidade(new EmpFornecedor()));
-		cmbFornecedor.setWidth(280);
+		cmbFornecedor.setWidth(260);
 		cmbFornecedor.setName("empFornecedor.empEntidade.empEntidadeNome1");
 		cmbFornecedor.setLabel(OpenSigCore.i18n.txtFornecedor());
 		cmbFornecedor.addListener(new ComboBoxListenerAdapter() {
@@ -499,7 +503,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 	private ComboBox getFabricante() {
 		cmbFabricante = UtilClient.getComboEntidade(new ComboEntidade(new EmpFornecedor()));
-		cmbFabricante.setWidth(280);
+		cmbFabricante.setWidth(260);
 		cmbFabricante.setName("empFabricante.empEntidade.empEntidadeNome1");
 		cmbFabricante.setLabel(OpenSigCore.i18n.txtFabricante());
 		cmbFabricante.addListener(new ComboBoxListenerAdapter() {
@@ -517,41 +521,6 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		return cmbFabricante;
 	}
 
-	private ComboBox getOrigem() {
-		FieldDef[] fdOrigem = new FieldDef[] { new IntegerFieldDef("prodOrigemId"), new IntegerFieldDef("prodOrigemValor"), new StringFieldDef("prodOrigemDescricao") };
-		CoreProxy<ProdOrigem> proxy = new CoreProxy<ProdOrigem>(new ProdOrigem());
-		final Store storeOrigem = new Store(proxy, new ArrayReader(new RecordDef(fdOrigem)), true);
-		storeOrigem.addStoreListener(new StoreListenerAdapter() {
-			public void onLoad(Store store, Record[] records) {
-				cmbEmbalagem.getStore().load();
-			}
-
-			public void onLoadException(Throwable error) {
-				MessageBox.confirm(OpenSigCore.i18n.txtOrigem(), OpenSigCore.i18n.msgRecarregar(), new ConfirmCallback() {
-					public void execute(String btnID) {
-						if (btnID.equalsIgnoreCase("yes")) {
-							storeOrigem.load();
-						}
-					}
-				});
-			}
-		});
-
-		cmbOrigem = new ComboBox(OpenSigCore.i18n.txtOrigem(), "prodOrigem.prodOrigemId", 130);
-		cmbOrigem.setAllowBlank(false);
-		cmbOrigem.setStore(storeOrigem);
-		cmbOrigem.setTriggerAction(ComboBox.ALL);
-		cmbOrigem.setMode(ComboBox.LOCAL);
-		cmbOrigem.setDisplayField("prodOrigemDescricao");
-		cmbOrigem.setValueField("prodOrigemId");
-		cmbOrigem.setTpl("<div class=\"x-combo-list-item\"><b>{prodOrigemValor}</b> - <i>[{prodOrigemDescricao}]</i></div>");
-		cmbOrigem.setForceSelection(true);
-		cmbOrigem.setListWidth(500);
-		cmbOrigem.setEditable(false);
-
-		return cmbOrigem;
-	}
-
 	private ComboBox getEmbalagem() {
 		FieldDef[] fdEmbalagem = new FieldDef[] { new IntegerFieldDef("prodEmbalagemId"), new StringFieldDef("prodEmbalagemNome"), new IntegerFieldDef("prodEmbalagemUnidade"),
 				new StringFieldDef("prodEmbalagemDescricao") };
@@ -559,7 +528,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		final Store storeEmbalagem = new Store(proxy, new ArrayReader(new RecordDef(fdEmbalagem)), true);
 		storeEmbalagem.addStoreListener(new StoreListenerAdapter() {
 			public void onLoad(Store store, Record[] records) {
-				cmbTributacao.getStore().load();
+				cmbOrigem.getStore().load();
 			}
 
 			public void onLoadException(Throwable error) {
@@ -587,42 +556,77 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 		return cmbEmbalagem;
 	}
-
-	private ComboBox getTributacao() {
-		FieldDef[] fdTributacao = new FieldDef[] { new IntegerFieldDef("prodTributacaoId"), new StringFieldDef("prodTributacaoNome"), new StringFieldDef("prodTributacaoCst"),
-				new StringFieldDef("prodTributacaoCson"), new IntegerFieldDef("prodTributacaoCfop") };
-		CoreProxy<ProdTributacao> proxy = new CoreProxy<ProdTributacao>(new ProdTributacao());
-		final Store storeTributacao = new Store(proxy, new ArrayReader(new RecordDef(fdTributacao)), false);
-		storeTributacao.addStoreListener(new StoreListenerAdapter() {
+	
+	private ComboBox getOrigem() {
+		FieldDef[] fdOrigem = new FieldDef[] { new IntegerFieldDef("prodOrigemId"), new IntegerFieldDef("prodOrigemValor"), new StringFieldDef("prodOrigemDescricao") };
+		CoreProxy<ProdOrigem> proxy = new CoreProxy<ProdOrigem>(new ProdOrigem());
+		final Store storeOrigem = new Store(proxy, new ArrayReader(new RecordDef(fdOrigem)), true);
+		storeOrigem.addStoreListener(new StoreListenerAdapter() {
 			public void onLoad(Store store, Record[] records) {
-				cmbIpi.getStore().load();
+				cmbIcms.getStore().load();
 			}
 
 			public void onLoadException(Throwable error) {
-				MessageBox.confirm(OpenSigCore.i18n.txtTributacao(), OpenSigCore.i18n.msgRecarregar(), new ConfirmCallback() {
+				MessageBox.confirm(OpenSigCore.i18n.txtOrigem(), OpenSigCore.i18n.msgRecarregar(), new ConfirmCallback() {
 					public void execute(String btnID) {
 						if (btnID.equalsIgnoreCase("yes")) {
-							storeTributacao.load();
+							storeOrigem.load();
 						}
 					}
 				});
 			}
 		});
 
-		cmbTributacao = new ComboBox(OpenSigCore.i18n.txtTributacao(), "prodTributacao.prodTributacaoId", 110);
-		cmbTributacao.setAllowBlank(false);
-		cmbTributacao.setStore(storeTributacao);
-		cmbTributacao.setTriggerAction(ComboBox.ALL);
-		cmbTributacao.setMode(ComboBox.LOCAL);
-		cmbTributacao.setDisplayField("prodTributacaoNome");
-		cmbTributacao.setValueField("prodTributacaoId");
-		cmbTributacao.setTpl("<div class=\"x-combo-list-item\"><b>{prodTributacaoNome}</b> - <i>" + OpenSigCore.i18n.txtCfop() + " [{prodTributacaoCfop}], " + OpenSigCore.i18n.txtCst()
-				+ " [{prodTributacaoCst}], " + OpenSigCore.i18n.txtCson() + " [{prodTributacaoCson}]</i></div>");
-		cmbTributacao.setForceSelection(true);
-		cmbTributacao.setListWidth(500);
-		cmbTributacao.setEditable(false);
+		cmbOrigem = new ComboBox(OpenSigCore.i18n.txtOrigem(), "prodOrigem.prodOrigemId", 160);
+		cmbOrigem.setAllowBlank(false);
+		cmbOrigem.setStore(storeOrigem);
+		cmbOrigem.setTriggerAction(ComboBox.ALL);
+		cmbOrigem.setMode(ComboBox.LOCAL);
+		cmbOrigem.setDisplayField("prodOrigemDescricao");
+		cmbOrigem.setValueField("prodOrigemId");
+		cmbOrigem.setTpl("<div class=\"x-combo-list-item\"><b>{prodOrigemValor}</b> - <i>[{prodOrigemDescricao}]</i></div>");
+		cmbOrigem.setForceSelection(true);
+		cmbOrigem.setListWidth(500);
+		cmbOrigem.setEditable(false);
 
-		return cmbTributacao;
+		return cmbOrigem;
+	}
+
+	private ComboBox getIcms() {
+		FieldDef[] fdIcms = new FieldDef[] { new IntegerFieldDef("prodIcmsId"), new StringFieldDef("prodIcmsNome"), new StringFieldDef("prodIcmsCst"),
+				new StringFieldDef("prodIcmsCson"), new IntegerFieldDef("prodIcmsCfop") };
+		CoreProxy<ProdIcms> proxy = new CoreProxy<ProdIcms>(new ProdIcms());
+		final Store storeIcms = new Store(proxy, new ArrayReader(new RecordDef(fdIcms)), false);
+		storeIcms.addStoreListener(new StoreListenerAdapter() {
+			public void onLoad(Store store, Record[] records) {
+				cmbIpi.getStore().load();
+			}
+
+			public void onLoadException(Throwable error) {
+				MessageBox.confirm(OpenSigCore.i18n.txtIcms(), OpenSigCore.i18n.msgRecarregar(), new ConfirmCallback() {
+					public void execute(String btnID) {
+						if (btnID.equalsIgnoreCase("yes")) {
+							storeIcms.load();
+						}
+					}
+				});
+			}
+		});
+
+		cmbIcms = new ComboBox(OpenSigCore.i18n.txtIcms(), "prodIcms.prodIcmsId", 160);
+		cmbIcms.setAllowBlank(false);
+		cmbIcms.setStore(storeIcms);
+		cmbIcms.setTriggerAction(ComboBox.ALL);
+		cmbIcms.setMode(ComboBox.LOCAL);
+		cmbIcms.setDisplayField("prodIcmsNome");
+		cmbIcms.setValueField("prodIcmsId");
+		cmbIcms.setTpl("<div class=\"x-combo-list-item\"><b>{prodIcmsNome}</b> - <i>" + OpenSigCore.i18n.txtCfop() + " [{prodIcmsCfop}], " + OpenSigCore.i18n.txtCst()
+				+ " [{prodIcmsCst}], " + OpenSigCore.i18n.txtCson() + " [{prodIcmsCson}]</i></div>");
+		cmbIcms.setForceSelection(true);
+		cmbIcms.setListWidth(500);
+		cmbIcms.setEditable(false);
+
+		return cmbIcms;
 	}
 
 	private ComboBox getIpi() {
@@ -646,7 +650,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 			}
 		});
 
-		cmbIpi = new ComboBox(OpenSigCore.i18n.txtIpi(), "prodIpi.prodIpiId", 120);
+		cmbIpi = new ComboBox(OpenSigCore.i18n.txtIpi(), "prodIpi.prodIpiId", 160);
 		cmbIpi.setAllowBlank(false);
 		cmbIpi.setStore(storeIpi);
 		cmbIpi.setTriggerAction(ComboBox.ALL);
@@ -668,6 +672,79 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		final Store storeTipo = new Store(proxy, new ArrayReader(new RecordDef(fdTipo)), false);
 		storeTipo.addStoreListener(new StoreListenerAdapter() {
 			public void onLoad(Store store, Record[] records) {
+				cmbPis.getStore().load();
+			}
+			
+			public void onLoadException(Throwable error) {
+				MessageBox.confirm(OpenSigCore.i18n.txtIpi(), OpenSigCore.i18n.msgRecarregar(), new ConfirmCallback() {
+					public void execute(String btnID) {
+						if (btnID.equalsIgnoreCase("yes")) {
+							storeTipo.load();
+						}
+					}
+				});
+			}
+		});
+
+		cmbTipo = new ComboBox(OpenSigCore.i18n.txtTipo(), "prodTipo.prodTipoId", 160);
+		cmbTipo.setAllowBlank(false);
+		cmbTipo.setStore(storeTipo);
+		cmbTipo.setTriggerAction(ComboBox.ALL);
+		cmbTipo.setMode(ComboBox.LOCAL);
+		cmbTipo.setDisplayField("prodTipoDescricao");
+		cmbTipo.setValueField("prodTipoId");
+		cmbTipo.setTpl("<div class=\"x-combo-list-item\"><b>{prodTipoValor}</b> - <i>[{prodTipoDescricao}]</i></div>");
+		cmbTipo.setForceSelection(true);
+		cmbTipo.setListWidth(300);
+		cmbTipo.setEditable(false);
+
+		return cmbTipo;
+	}
+	
+	private ComboBox getPis() {
+		FieldDef[] fdPis = new FieldDef[] { new IntegerFieldDef("prodPisId"), new StringFieldDef("prodPisNome"), new StringFieldDef("prodPisCstEntrada"), new StringFieldDef("prodPisCstSaida"),
+				new IntegerFieldDef("prodPisAliquota") };
+		CoreProxy<ProdPis> proxy = new CoreProxy<ProdPis>(new ProdPis());
+		final Store storePis = new Store(proxy, new ArrayReader(new RecordDef(fdPis)), false);
+		storePis.addStoreListener(new StoreListenerAdapter() {
+			public void onLoad(Store store, Record[] records) {
+				cmbCofins.getStore().load();
+			}
+
+			public void onLoadException(Throwable error) {
+				MessageBox.confirm(OpenSigCore.i18n.txtPis(), OpenSigCore.i18n.msgRecarregar(), new ConfirmCallback() {
+					public void execute(String btnID) {
+						if (btnID.equalsIgnoreCase("yes")) {
+							storePis.load();
+						}
+					}
+				});
+			}
+		});
+
+		cmbPis = new ComboBox(OpenSigCore.i18n.txtPis(), "prodPis.prodPisId", 160);
+		cmbPis.setAllowBlank(false);
+		cmbPis.setStore(storePis);
+		cmbPis.setTriggerAction(ComboBox.ALL);
+		cmbPis.setMode(ComboBox.LOCAL);
+		cmbPis.setDisplayField("prodPisNome");
+		cmbPis.setValueField("prodPisId");
+		cmbPis.setTpl("<div class=\"x-combo-list-item\"><b>{prodPisNome}</b> - <i>" + OpenSigCore.i18n.txtAliquota() + " [{prodPisAliquota}], " + OpenSigCore.i18n.txtCst()
+				+ " [{prodPisCstEntrada} / {prodPisCstSaida}]</i></div>");
+		cmbPis.setForceSelection(true);
+		cmbPis.setListWidth(500);
+		cmbPis.setEditable(false);
+
+		return cmbPis;
+	}
+
+	private ComboBox getCofins() {
+		FieldDef[] fdCofins = new FieldDef[] { new IntegerFieldDef("prodCofinsId"), new StringFieldDef("prodCofinsNome"), new StringFieldDef("prodCofinsCstEntrada"),
+				new StringFieldDef("prodCofinsCstSaida"), new IntegerFieldDef("prodCofinsAliquota") };
+		CoreProxy<ProdCofins> proxy = new CoreProxy<ProdCofins>(new ProdCofins());
+		final Store storeCofins = new Store(proxy, new ArrayReader(new RecordDef(fdCofins)), false);
+		storeCofins.addStoreListener(new StoreListenerAdapter() {
+			public void onLoad(Store store, Record[] records) {
 				treeCategoria.limpar();
 				treeCategoria.carregar(null, new AsyncCallback<Lista<ProdCategoria>>() {
 
@@ -682,29 +759,30 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 			}
 
 			public void onLoadException(Throwable error) {
-				MessageBox.confirm(OpenSigCore.i18n.txtIpi(), OpenSigCore.i18n.msgRecarregar(), new ConfirmCallback() {
+				MessageBox.confirm(OpenSigCore.i18n.txtCofins(), OpenSigCore.i18n.msgRecarregar(), new ConfirmCallback() {
 					public void execute(String btnID) {
 						if (btnID.equalsIgnoreCase("yes")) {
-							storeTipo.load();
+							storeCofins.load();
 						}
 					}
 				});
 			}
 		});
 
-		cmbTipo = new ComboBox(OpenSigCore.i18n.txtTipo(), "prodTipo.prodTipoId", 110);
-		cmbTipo.setAllowBlank(false);
-		cmbTipo.setStore(storeTipo);
-		cmbTipo.setTriggerAction(ComboBox.ALL);
-		cmbTipo.setMode(ComboBox.LOCAL);
-		cmbTipo.setDisplayField("prodTipoDescricao");
-		cmbTipo.setValueField("prodTipoId");
-		cmbTipo.setTpl("<div class=\"x-combo-list-item\"><b>{prodTipoValor}</b> - <i>[{prodTipoDescricao}]</i></div>");
-		cmbTipo.setForceSelection(true);
-		cmbTipo.setListWidth(300);
-		cmbTipo.setEditable(false);
+		cmbCofins = new ComboBox(OpenSigCore.i18n.txtCofins(), "prodCofins.prodCofinsId", 160);
+		cmbCofins.setAllowBlank(false);
+		cmbCofins.setStore(storeCofins);
+		cmbCofins.setTriggerAction(ComboBox.ALL);
+		cmbCofins.setMode(ComboBox.LOCAL);
+		cmbCofins.setDisplayField("prodCofinsNome");
+		cmbCofins.setValueField("prodCofinsId");
+		cmbCofins.setTpl("<div class=\"x-combo-list-item\"><b>{prodCofinsNome}</b> - <i>" + OpenSigCore.i18n.txtAliquota() + " [{prodCofinsAliquota}], " + OpenSigCore.i18n.txtCst()
+				+ " [{prodCofinsCstEntrada} / {prodCofinsCstSaida}]</i></div>");
+		cmbCofins.setForceSelection(true);
+		cmbCofins.setListWidth(500);
+		cmbCofins.setEditable(false);
 
-		return cmbTipo;
+		return cmbCofins;
 	}
 
 	private Arvore getCategoria() {
@@ -714,7 +792,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		treeCategoria.setFiltrar(true);
 		treeCategoria.setEditar(true);
 		treeCategoria.setWidth(200);
-		treeCategoria.setHeight(230);
+		treeCategoria.setHeight(290);
 		treeCategoria.setBodyBorder(true);
 		treeCategoria.inicializar();
 		treeCategoria.getTxtFiltro().setMaxLength(20);
@@ -907,12 +985,12 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		this.cmbFornecedor = cmbFornecedor;
 	}
 
-	public ComboBox getCmbTributacao() {
-		return cmbTributacao;
+	public ComboBox getCmbIcms() {
+		return cmbIcms;
 	}
 
-	public void setCmbTributacao(ComboBox cmbTributacao) {
-		this.cmbTributacao = cmbTributacao;
+	public void setCmbIcms(ComboBox cmbIcms) {
+		this.cmbIcms = cmbIcms;
 	}
 
 	public ComboBox getCmbIpi() {

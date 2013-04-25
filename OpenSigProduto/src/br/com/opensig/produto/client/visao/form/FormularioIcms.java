@@ -3,7 +3,7 @@ package br.com.opensig.produto.client.visao.form;
 import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.visao.abstrato.AFormulario;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
-import br.com.opensig.produto.shared.modelo.ProdTributacao;
+import br.com.opensig.produto.shared.modelo.ProdIcms;
 
 import com.gwtext.client.data.Record;
 import com.gwtext.client.widgets.form.Hidden;
@@ -12,7 +12,7 @@ import com.gwtext.client.widgets.form.NumberField;
 import com.gwtext.client.widgets.form.TextArea;
 import com.gwtext.client.widgets.form.TextField;
 
-public class FormularioTributacao extends AFormulario<ProdTributacao> {
+public class FormularioIcms extends AFormulario<ProdIcms> {
 
 	private Hidden hdnCod;
 	private TextField txtNome;
@@ -24,52 +24,52 @@ public class FormularioTributacao extends AFormulario<ProdTributacao> {
 	private NumberField txtFora;
 	private TextArea txtDecreto;
 
-	public FormularioTributacao(SisFuncao funcao) {
-		super(new ProdTributacao(), funcao);
+	public FormularioIcms(SisFuncao funcao) {
+		super(new ProdIcms(), funcao);
 		inicializar();
 	}
 
 	public void inicializar() {
 		super.inicializar();
 
-		hdnCod = new Hidden("prodTributacaoId", "0");
+		hdnCod = new Hidden("prodIcmsId", "0");
 		add(hdnCod);
 
-		txtNome = new TextField(OpenSigCore.i18n.txtNome(), "prodTributacaoNome", 250);
+		txtNome = new TextField(OpenSigCore.i18n.txtNome(), "prodIcmsNome", 250);
 		txtNome.setAllowBlank(false);
 		txtNome.setMaxLength(100);
 		txtNome.focus();
 
-		txtCst = new TextField(OpenSigCore.i18n.txtCst(), "prodTributacaoCst", 50);
+		txtCst = new TextField(OpenSigCore.i18n.txtCst(), "prodIcmsCst", 50);
 		txtCst.setAllowBlank(false);
 		txtCst.setRegex("\\d{2}");
 		txtCst.setMinLength(2);
 		txtCst.setMaxLength(2);
 
-		txtCson = new TextField(OpenSigCore.i18n.txtCson(), "prodTributacaoCson", 50);
+		txtCson = new TextField(OpenSigCore.i18n.txtCson(), "prodIcmsCson", 50);
 		txtCson.setAllowBlank(false);
 		txtCson.setRegex("\\d{3}");
 		txtCson.setMinLength(3);
 		txtCson.setMaxLength(3);
 
-		txtCfop = new NumberField(OpenSigCore.i18n.txtCfop(), "prodTributacaoCfop", 50);
+		txtCfop = new NumberField(OpenSigCore.i18n.txtCfop(), "prodIcmsCfop", 50);
 		txtCfop.setAllowBlank(false);
 		txtCfop.setAllowDecimals(false);
 		txtCfop.setAllowNegative(false);
 		txtCfop.setMinLength(4);
 		txtCfop.setMaxLength(4);
 
-		txtEcf = new TextField(OpenSigCore.i18n.txtEcf(), "prodTributacaoEcf", 50);
+		txtEcf = new TextField(OpenSigCore.i18n.txtEcf(), "prodIcmsEcf", 50);
 		txtEcf.setMinLength(2);
 		txtEcf.setMaxLength(7);
 
-		txtDentro = new NumberField(OpenSigCore.i18n.txtDentro() + " %", "prodTributacaoDentro", 50);
+		txtDentro = new NumberField(OpenSigCore.i18n.txtDentro() + " %", "prodIcmsDentro", 50);
 		txtDentro.setAllowBlank(false);
 		txtDentro.setAllowNegative(false);
 		txtDentro.setDecimalPrecision(2);
 		txtDentro.setMaxLength(5);
 
-		txtFora = new NumberField(OpenSigCore.i18n.txtFora() + " %", "prodTributacaoFora", 50);
+		txtFora = new NumberField(OpenSigCore.i18n.txtFora() + " %", "prodIcmsFora", 50);
 		txtFora.setAllowBlank(false);
 		txtFora.setAllowNegative(false);
 		txtFora.setDecimalPrecision(2);
@@ -86,28 +86,28 @@ public class FormularioTributacao extends AFormulario<ProdTributacao> {
 		linha1.addToRow(txtFora, 70);
 		add(linha1);
 
-		txtDecreto = new TextArea(OpenSigCore.i18n.txtDecreto(), "prodTributacaoDecreto");
+		txtDecreto = new TextArea(OpenSigCore.i18n.txtDecreto(), "prodIcmsDecreto");
 		txtDecreto.setMaxLength(1000);
 		txtDecreto.setWidth("95%");
 		add(txtDecreto);
 	}
 
 	public boolean setDados() {
-		classe.setProdTributacaoId(Integer.valueOf(hdnCod.getValueAsString()));
-		classe.setProdTributacaoNome(txtNome.getValueAsString());
-		classe.setProdTributacaoCst(txtCst.getValueAsString());
-		classe.setProdTributacaoCson(txtCson.getValueAsString());
-		classe.setProdTributacaoEcf(txtEcf.getValueAsString());
+		classe.setProdIcmsId(Integer.valueOf(hdnCod.getValueAsString()));
+		classe.setProdIcmsNome(txtNome.getValueAsString());
+		classe.setProdIcmsCst(txtCst.getValueAsString());
+		classe.setProdIcmsCson(txtCson.getValueAsString());
+		classe.setProdIcmsEcf(txtEcf.getValueAsString());
 		if (txtCfop.getValue() != null) {
-			classe.setProdTributacaoCfop(txtCfop.getValue().intValue());
+			classe.setProdIcmsCfop(txtCfop.getValue().intValue());
 		}
 		if (txtDentro.getValue() != null) {
-			classe.setProdTributacaoDentro(txtDentro.getValue().doubleValue());
+			classe.setProdIcmsDentro(txtDentro.getValue().doubleValue());
 		}
 		if (txtFora.getValue() != null) {
-			classe.setProdTributacaoFora(txtFora.getValue().doubleValue());
+			classe.setProdIcmsFora(txtFora.getValue().doubleValue());
 		}
-		classe.setProdTributacaoDecreto(txtDecreto.getValueAsString() == null ? "" : txtDecreto.getValueAsString());
+		classe.setProdIcmsDecreto(txtDecreto.getValueAsString() == null ? "" : txtDecreto.getValueAsString());
 		return true;
 	}
 

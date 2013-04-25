@@ -173,15 +173,36 @@
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoTributacao
 		</classe>
 		<nome>Taxation</nome>
-		<descricao>Administers the taxation of products.</descricao>
+		<descricao>Administers the Taxations of products.</descricao>
 		<imagem>icon-tributacao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoIcms
+		</classe>
+		<nome>ICMS</nome>
+		<descricao>Administers the ICMSs of products.</descricao>
+		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoIpi
 		</classe>
 		<nome>IPI</nome>
 		<descricao>Administers the IPIs of products.</descricao>
-		<imagem>icon-ipi</imagem>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoPis
+		</classe>
+		<nome>PIS</nome>
+		<descricao>Administers the PISs of products.</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.produto.client.controlador.comando.ComandoCofins
+		</classe>
+		<nome>COFINS</nome>
+		<descricao>Administers the COFINSs of products.</descricao>
+		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoGrade
@@ -209,7 +230,7 @@
 		</classe>
 		<nome>Package</nome>
 		<descricao>Administers the packaging.</descricao>
-		<imagem>icon-embalagem</imagem>
+		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
 		<classe>br.com.opensig.produto.client.controlador.comando.ComandoTipo

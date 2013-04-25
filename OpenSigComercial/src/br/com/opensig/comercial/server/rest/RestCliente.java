@@ -342,23 +342,23 @@ public class RestCliente extends ARest {
 			produto.setProdProdutoIppt('T');
 			// verifica se a empresa e simples
 			if (config.getSisConfiguracaoValor().equals("1")) {
-				produto.setProdProdutoCstCson(produto.getProdTributacao().getProdTributacaoCson());
+				produto.setProdProdutoCstCson(produto.getProdIcms().getProdIcmsCson());
 			} else {
-				produto.setProdProdutoCstCson(produto.getProdTributacao().getProdTributacaoCst());
+				produto.setProdProdutoCstCson(produto.getProdIcms().getProdIcmsCst());
 			}
-			// verifica a tributacao do produto na ecf
-			if (produto.getProdTributacao().getProdTributacaoEcf().length() > 2) {
-				produto.setProdProdutoTributacao(produto.getProdTributacao().getProdTributacaoEcf().charAt(2));
+			// verifica o icms do produto na ecf
+			if (produto.getProdIcms().getProdIcmsEcf().length() > 2) {
+				produto.setProdProdutoTributacao(produto.getProdIcms().getProdIcmsEcf().charAt(2));
 			} else {
-				produto.setProdProdutoTributacao(produto.getProdTributacao().getProdTributacaoEcf().charAt(0));
+				produto.setProdProdutoTributacao(produto.getProdIcms().getProdIcmsEcf().charAt(0));
 			}
 			// icms ou issqn
 			if (produto.getProdProdutoTributacao() == 'S') {
-				produto.setProdProdutoIssqn(produto.getProdTributacao().getProdTributacaoDentro());
+				produto.setProdProdutoIssqn(produto.getProdIcms().getProdIcmsDentro());
 				produto.setProdProdutoIcms(0.00);
 			} else {
 				produto.setProdProdutoIssqn(0.00);
-				produto.setProdProdutoIcms(produto.getProdTributacao().getProdTributacaoDentro());
+				produto.setProdProdutoIcms(produto.getProdIcms().getProdIcmsDentro());
 			}
 			// estoque do produto nesta empresa
 			for (ProdEstoque est : produto.getProdEstoques()) {

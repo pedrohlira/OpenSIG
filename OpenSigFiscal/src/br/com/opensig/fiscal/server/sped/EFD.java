@@ -303,10 +303,11 @@ public class EFD implements Runnable {
 		List<ComNatureza> nats = service.selecionar(new ComNatureza(), 0, 0, gf, false).getLista();
 		if (nats == null || nats.size() == 0) {
 			pis = 0.00;
-			pis = 0.00;
+			cofins = 0.00;
 		} else {
-			pis = nats.get(0).getComNaturezaPis();
-			cofins = nats.get(0).getComNaturezaCofins();
+			// valores fixos para empresa que nao sao lucro real
+			pis = nats.get(0).getComNaturezaPis() ? 0.65 : 0.00;
+			cofins = nats.get(0).getComNaturezaCofins() ? 3.00 : 0.00;
 		}
 	}
 

@@ -1267,11 +1267,11 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtCodigo();
 
   /**
-   * Translated "Cofins".
+   * Translated "COFINS".
    * 
-   * @return translated "Cofins"
+   * @return translated "COFINS"
    */
-  @DefaultMessage("Cofins")
+  @DefaultMessage("COFINS")
   @Key("txtCofins")
   String txtCofins();
 

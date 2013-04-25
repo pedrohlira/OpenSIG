@@ -3,8 +3,10 @@
 	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="pu_produto" transaction-type="RESOURCE_LOCAL">
-		<class>br.com.opensig.produto.shared.modelo.ProdTributacao</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdIcms</class>
 		<class>br.com.opensig.produto.shared.modelo.ProdIpi</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdPis</class>
+		<class>br.com.opensig.produto.shared.modelo.ProdCofins</class>
 		<class>br.com.opensig.produto.shared.modelo.ProdTipo</class>
 		<class>br.com.opensig.produto.shared.modelo.ProdProduto</class>
 		<class>br.com.opensig.produto.shared.modelo.ProdEmbalagem</class>

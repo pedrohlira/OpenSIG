@@ -301,8 +301,8 @@ public class ListagemValidarCompra {
 			}
 		}
 
-		for (ComCompraProduto cProd : compra.getComCompraProdutos()) {
-			ProdProduto prod = cProd.getProdProduto();
+		for (ComCompraProduto cp : compra.getComCompraProdutos()) {
+			ProdProduto prod = cp.getProdProduto();
 			if (prod.getProdProdutoId() == 0) {
 				prod.setProdProdutoCategoria(cmbCategoria.getValue());
 			}
@@ -324,8 +324,8 @@ public class ListagemValidarCompra {
 
 	private void atualizaItem(Record rec, int row) {
 		// recupera
-		ComCompraProduto comPro = compra.getComCompraProdutos().get(row);
-		ProdProduto prod = comPro.getProdProduto();
+		ComCompraProduto cp = compra.getComCompraProdutos().get(row);
+		ProdProduto prod = cp.getProdProduto();
 		// altera
 		prod.setProdProdutoId(rec.getAsInteger("prodProdutoId"));
 		prod.setProdProdutoBarra("".equals(rec.getAsString("prodProduto.prodProdutoBarra")) ? null : rec.getAsString("prodProduto.prodProdutoBarra"));
@@ -334,10 +334,10 @@ public class ListagemValidarCompra {
 		prod.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
 
 		// seta
-		comPro.setProdProduto(prod);
-		comPro.setComCompraProdutoPreco(rec.getAsDouble("comCompraProdutoPreco"));
-		comPro.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
-		compra.getComCompraProdutos().set(row, comPro);
+		cp.setProdProduto(prod);
+		cp.setComCompraProdutoPreco(rec.getAsDouble("comCompraProdutoPreco"));
+		cp.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
+		compra.getComCompraProdutos().set(row, cp);
 	}
 
 	private void gerarPreco() {

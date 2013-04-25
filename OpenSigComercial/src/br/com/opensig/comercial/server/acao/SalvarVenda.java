@@ -56,8 +56,8 @@ public class SalvarVenda extends Chain {
 			servico.salvar(em, venda);
 
 			// insere
-			for (ComVendaProduto comProd : produtos) {
-				comProd.setComVenda(venda);
+			for (ComVendaProduto vp : produtos) {
+				vp.setComVenda(venda);
 			}
 			servico.salvar(em, produtos);
 
@@ -81,8 +81,8 @@ public class SalvarVenda extends Chain {
 	private void validarProduto() throws ComercialException {
 		try {
 			// salva os produtos novos
-			for (ComVendaProduto venProd : venda.getComVendaProdutos()) {
-				ProdProduto prod = venProd.getProdProduto();
+			for (ComVendaProduto vp : venda.getComVendaProdutos()) {
+				ProdProduto prod = vp.getProdProduto();
 				if (prod.getProdProdutoId() == 0) {
 					SalvarProduto salProduto = new SalvarProduto(null, servico, prod, null);
 					salProduto.execute();

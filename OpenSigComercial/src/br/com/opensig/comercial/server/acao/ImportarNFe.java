@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
+import br.com.opensig.comercial.server.MyIcms;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
@@ -19,13 +20,14 @@ import br.com.opensig.empresa.shared.modelo.EmpEntidade;
 import br.com.opensig.empresa.shared.modelo.EmpFornecedor;
 import br.com.opensig.nfe.TNFe;
 import br.com.opensig.nfe.TNFe.InfNFe.Det.Prod;
-import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.ICMS;
+import br.com.opensig.produto.shared.modelo.ProdCofins;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
+import br.com.opensig.produto.shared.modelo.ProdIcms;
 import br.com.opensig.produto.shared.modelo.ProdIpi;
 import br.com.opensig.produto.shared.modelo.ProdOrigem;
+import br.com.opensig.produto.shared.modelo.ProdPis;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 import br.com.opensig.produto.shared.modelo.ProdTipo;
-import br.com.opensig.produto.shared.modelo.ProdTributacao;
 
 public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 
@@ -33,8 +35,10 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 	protected EmpEmpresa empresa;
 	protected Autenticacao auth;
 	protected List<ProdOrigem> origens;
-	protected List<ProdTributacao> tributacao;
+	protected List<ProdIcms> icmss;
 	protected List<ProdIpi> ipis;
+	protected List<ProdPis> piss;
+	protected List<ProdCofins> cofinss;
 	protected List<ProdEmbalagem> embalagem;
 	protected TNFe nfe;
 
@@ -55,77 +59,8 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 		}
 	}
 
-	protected MyIcms getIcms(ICMS icms) {
-		MyIcms myicms = new MyIcms();
 
-		// normal
-		if (icms.getICMS00() != null) {
-			myicms.setAliquota(icms.getICMS00().getPICMS());
-			myicms.setCst(icms.getICMS00().getCST());
-			myicms.setOrigem(icms.getICMS00().getOrig());
-		} else if (icms.getICMS10() != null) {
-			myicms.setAliquota(icms.getICMS10().getPICMS());
-			myicms.setCst(icms.getICMS10().getCST());
-			myicms.setOrigem(icms.getICMS10().getOrig());
-		} else if (icms.getICMS20() != null) {
-			myicms.setAliquota(icms.getICMS20().getPICMS());
-			myicms.setCst(icms.getICMS20().getCST());
-			myicms.setOrigem(icms.getICMS20().getOrig());
-		} else if (icms.getICMS30() != null) {
-			myicms.setAliquota("0");
-			myicms.setCst(icms.getICMS30().getCST());
-			myicms.setOrigem(icms.getICMS30().getOrig());
-		} else if (icms.getICMS40() != null) {
-			myicms.setAliquota("0");
-			myicms.setCst(icms.getICMS40().getCST());
-			myicms.setOrigem(icms.getICMS40().getOrig());
-		} else if (icms.getICMS51() != null) {
-			myicms.setAliquota(icms.getICMS51().getPICMS());
-			myicms.setCst(icms.getICMS51().getCST());
-			myicms.setOrigem(icms.getICMS51().getOrig());
-		} else if (icms.getICMS60() != null) {
-			myicms.setAliquota("0");
-			myicms.setCst(icms.getICMS60().getCST());
-			myicms.setOrigem(icms.getICMS60().getOrig());
-		} else if (icms.getICMS70() != null) {
-			myicms.setAliquota(icms.getICMS70().getPICMS());
-			myicms.setCst(icms.getICMS70().getCST());
-			myicms.setOrigem(icms.getICMS70().getOrig());
-		} else if (icms.getICMS90() != null) {
-			myicms.setAliquota(icms.getICMS90().getPICMS());
-			myicms.setCst(icms.getICMS90().getCST());
-			myicms.setOrigem(icms.getICMS90().getOrig());
-			// simples
-		} else if (icms.getICMSSN101() != null) {
-			myicms.setAliquota("0");
-			myicms.setCst(icms.getICMSSN101().getCSOSN());
-			myicms.setOrigem(icms.getICMSSN101().getOrig());
-		} else if (icms.getICMSSN102() != null) {
-			myicms.setAliquota("0");
-			myicms.setCst(icms.getICMSSN102().getCSOSN());
-			myicms.setOrigem(icms.getICMSSN102().getOrig());
-		} else if (icms.getICMSSN201() != null) {
-			myicms.setAliquota("0");
-			myicms.setCst(icms.getICMSSN201().getCSOSN());
-			myicms.setOrigem(icms.getICMSSN201().getOrig());
-		} else if (icms.getICMSSN202() != null) {
-			myicms.setAliquota("0");
-			myicms.setCst(icms.getICMSSN202().getCSOSN());
-			myicms.setOrigem(icms.getICMSSN202().getOrig());
-		} else if (icms.getICMSSN500() != null) {
-			myicms.setAliquota("0");
-			myicms.setCst(icms.getICMSSN500().getCSOSN());
-			myicms.setOrigem(icms.getICMSSN500().getOrig());
-		} else if (icms.getICMSSN900() != null) {
-			myicms.setAliquota("0");
-			myicms.setCst(icms.getICMSSN900().getCSOSN());
-			myicms.setOrigem(icms.getICMSSN900().getOrig());
-		}
-
-		return myicms;
-	}
-
-	protected ProdProduto getProduto(EmpFornecedor fornecedor, Prod prod, MyIcms icms, String ipi) throws OpenSigException {
+	protected ProdProduto getProduto(EmpFornecedor fornecedor, Prod prod, MyIcms icms) throws OpenSigException {
 		String ean = prod.getCEAN();
 		String ref = prod.getCProd();
 		GrupoFiltro filtro = new GrupoFiltro();
@@ -157,13 +92,7 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 			fornecedor = produto.getEmpFornecedor();
 			fornecedor.anularDependencia();
 			produto.anularDependencia();
-			produto.setProdEmbalagem(getEmbalagem(prod.getUCom()));
-			produto.setProdTipo(new ProdTipo(1));
-			produto.setProdIpi(getIpi(ipi));
-			produto.setProdOrigem(getOrigem(icms.getOrigem()));
-			produto.setEmpFornecedor(fornecedor);
-			produto.setEmpFabricante(fornecedor);
-			produto.setProdTributacao(getTributacao(icms.getCst()));
+
 			// caso nao acha cria um novo para confirmar
 		} else {
 			produto.setProdProdutoNcm(prod.getNCM());
@@ -174,14 +103,7 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 				produto.setProdProdutoReferencia(ref);
 			}
 			produto.setProdProdutoDescricao(prod.getXProd());
-			produto.setProdEmbalagem(getEmbalagem("UND"));
-			produto.setProdTipo(new ProdTipo(1));
 			produto.setProdProdutoVolume(1);
-			produto.setProdOrigem(getOrigem(icms.getOrigem()));
-			produto.setEmpFornecedor(fornecedor);
-			produto.setEmpFabricante(fornecedor);
-			produto.setProdTributacao(getTributacao(icms.getCst()));
-			produto.setProdIpi(getIpi(ipi));
 			produto.setProdProdutoAtivo(true);
 			produto.setProdProdutoCategoria(auth.getConf().get("categoria.padrao") + "::");
 			produto.setProdProdutoCadastrado(new Date());
@@ -189,7 +111,16 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 			produto.setProdProdutoPreco(0.00);
 			produto.setProdProdutoObservacao("");
 		}
-
+		produto.setProdEmbalagem(getEmbalagem(prod.getUCom()));
+		produto.setProdTipo(new ProdTipo(1));
+		produto.setProdOrigem(getOrigem(icms.getOrigem()));
+		produto.setProdIcms(getIcms(icms.getCst()));
+		produto.setProdIpi(getIpi());
+		produto.setProdPis(getPis());
+		produto.setProdCofins(getCofins());
+		produto.setEmpFornecedor(fornecedor);
+		produto.setEmpFabricante(fornecedor);
+		
 		return produto;
 	}
 
@@ -202,7 +133,7 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 			if (emb.getProdEmbalagemNome().equalsIgnoreCase(nome)) {
 				resp = emb;
 				break;
-			} else if (emb.getProdEmbalagemId() == 1) {
+			} else if (emb.getProdEmbalagemNome().equalsIgnoreCase("UND")) {
 				resp = emb;
 			}
 		}
@@ -227,36 +158,35 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 		return resp;
 	}
 
-	protected ProdTributacao getTributacao(String cst) {
+	protected ProdIcms getIcms(String cst) {
 		// se nao achar colocar a padrao 00
-		ProdTributacao resp = null;
+		ProdIcms resp = null;
 
-		// percorre as tributacoes
-		for (ProdTributacao trib : tributacao) {
-			if (cst.length() == 2 && trib.getProdTributacaoCst().equals(cst)) {
-				resp = trib;
+		// percorre os icms
+		for (ProdIcms icms : icmss) {
+			if (cst.length() == 2 && icms.getProdIcmsCst().equals(cst)) {
+				resp = icms;
 				break;
-			} else if (cst.length() == 3 && trib.getProdTributacaoCson().equals(cst)) {
-				resp = trib;
+			} else if (cst.length() == 3 && icms.getProdIcmsCson().equals(cst)) {
+				resp = icms;
 				break;
-			} else if (trib.getProdTributacaoCst().equals("00")) {
-				resp = trib;
+			} else if (icms.getProdIcmsCst().equals("00")) {
+				resp = icms;
 			}
 		}
 
 		return resp;
 	}
 
-	protected ProdIpi getIpi(String cst) {
-		// se nao achar colocar a padrao 00
+	protected ProdIpi getIpi() {
 		ProdIpi resp = null;
+		String cst = auth.getConf().get("sped.fiscal.0000.ind_ativ").equals("0") ? "50" : "99";
 
-		// percorre as tributacoes
 		for (ProdIpi ipi : ipis) {
 			if (ipi.getProdIpiCstSaida().equals(cst)) {
 				resp = ipi;
 				break;
-			} else if (ipi.getProdIpiId() == 1) {
+			} else if (ipi.getProdIpiCstSaida().equals("50")) {
 				resp = ipi;
 			}
 		}
@@ -264,38 +194,36 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 		return resp;
 	}
 
-	protected class MyIcms {
+	protected ProdPis getPis() {
+		ProdPis resp = null;
+		String cst = auth.getConf().get("nfe.crt").equals("3") ? "01" : "49";
 
-		private String aliquota;
-		private String origem;
-		private String cst;
-
-		public MyIcms() {
+		for (ProdPis pis : piss) {
+			if (pis.getProdPisCstSaida().equals(cst)) {
+				resp = pis;
+				break;
+			} else if (pis.getProdPisCstSaida().equals("01")) {
+				resp = pis;
+			}
 		}
 
-		public String getAliquota() {
-			return aliquota;
+		return resp;
+	}
+
+	protected ProdCofins getCofins() {
+		ProdCofins resp = null;
+		String cst = auth.getConf().get("nfe.crt").equals("3") ? "01" : "49";
+
+		for (ProdCofins cofins : cofinss) {
+			if (cofins.getProdCofinsCstSaida().equals(cst)) {
+				resp = cofins;
+				break;
+			} else if (cofins.getProdCofinsCstSaida().equals("01")) {
+				resp = cofins;
+			}
 		}
 
-		public void setAliquota(String aliquota) {
-			this.aliquota = aliquota;
-		}
-
-		public String getOrigem() {
-			return origem;
-		}
-
-		public void setOrigem(String origem) {
-			this.origem = origem;
-		}
-
-		public String getCst() {
-			return cst;
-		}
-
-		public void setCst(String cst) {
-			this.cst = cst;
-		}
+		return resp;
 	}
 
 }

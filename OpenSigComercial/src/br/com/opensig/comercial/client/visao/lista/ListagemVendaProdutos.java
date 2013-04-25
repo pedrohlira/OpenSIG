@@ -22,6 +22,7 @@ import com.gwtext.client.data.Record;
 import com.gwtext.client.data.RecordDef;
 import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.widgets.form.NumberField;
+import com.gwtext.client.widgets.form.TextField;
 import com.gwtext.client.widgets.grid.BaseColumnConfig;
 import com.gwtext.client.widgets.grid.ColumnConfig;
 import com.gwtext.client.widgets.grid.ColumnModel;
@@ -36,8 +37,15 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 	private NumberField txtQuantidade;
 	private NumberField txtDesconto;
 	private NumberField txtLiquido;
+	private NumberField txtCfop;
+	private TextField txtIcmsCst;
 	private NumberField txtIcms;
+	private TextField txtIpiCst;
 	private NumberField txtIpi;
+	private TextField txtPisCst;
+	private NumberField txtPis;
+	private TextField txtCofinsCst;
+	private NumberField txtCofins;
 
 	public ListagemVendaProdutos(boolean barraTarefa) {
 		super(new ComVendaProduto(), barraTarefa);
@@ -53,7 +61,9 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 				new FloatFieldDef("comVendaProdutoQuantidade"), new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"),
 				new FloatFieldDef("comVendaProdutoBruto"), new FloatFieldDef("comVendaProdutoDesconto"), new FloatFieldDef("comVendaProdutoLiquido"), new FloatFieldDef("comVendaProdutoTotalBruto"),
 				new FloatFieldDef("comVendaProdutoTotalLiquido"), new IntegerFieldDef("comVendaProdutoEstoque"), new IntegerFieldDef("comVendaProdutoOrigem"),
-				new FloatFieldDef("comVendaProdutoIcms"), new FloatFieldDef("comVendaProdutoIpi"), new IntegerFieldDef("comVendaProdutoOrdem") };
+				new IntegerFieldDef("comVendaProdutoCfop"), new StringFieldDef("comVendaProdutoIcmsCst"), new FloatFieldDef("comVendaProdutoIcms"), new StringFieldDef("comVendaProdutoIpiCst"),
+				new FloatFieldDef("comVendaProdutoIpi"), new StringFieldDef("comVendaProdutoPisCst"), new FloatFieldDef("comVendaProdutoPis"), new StringFieldDef("comVendaProdutoCofinsCst"),
+				new FloatFieldDef("comVendaProdutoCofins"), new IntegerFieldDef("comVendaProdutoOrdem") };
 		campos = new RecordDef(fd);
 
 		// editores
@@ -75,6 +85,18 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		txtLiquido.setSelectOnFocus(true);
 		txtLiquido.setMaxLength(13);
 
+		txtCfop = new NumberField();
+		txtCfop.setAllowNegative(false);
+		txtCfop.setAllowBlank(false);
+		txtCfop.setAllowDecimals(false);
+		txtCfop.setSelectOnFocus(true);
+		txtCfop.setMinLength(4);
+		txtCfop.setMaxLength(4);
+		txtCfop.setMinValue(4000);
+
+		txtIcmsCst = new TextField();
+		txtIcmsCst.setRegex("^(\\d{2}|\\d{3})$");
+
 		txtIcms = new NumberField();
 		txtIcms.setAllowNegative(false);
 		txtIcms.setAllowBlank(false);
@@ -82,12 +104,35 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		txtIcms.setDecimalPrecision(2);
 		txtIcms.setMaxLength(5);
 
+		txtIpiCst = new TextField();
+		txtIpiCst.setRegex("^(\\d{2})$");
+
 		txtIpi = new NumberField();
 		txtIpi.setAllowNegative(false);
 		txtIpi.setAllowBlank(false);
 		txtIpi.setSelectOnFocus(true);
 		txtIpi.setDecimalPrecision(2);
 		txtIpi.setMaxLength(5);
+
+		txtPisCst = new TextField();
+		txtPisCst.setRegex("^(\\d{2})$");
+
+		txtPis = new NumberField();
+		txtPis.setAllowNegative(false);
+		txtPis.setAllowBlank(false);
+		txtPis.setSelectOnFocus(true);
+		txtPis.setDecimalPrecision(2);
+		txtPis.setMaxLength(5);
+
+		txtCofinsCst = new TextField();
+		txtCofinsCst.setRegex("^(\\d{2})$");
+
+		txtCofins = new NumberField();
+		txtCofins.setAllowNegative(false);
+		txtCofins.setAllowBlank(false);
+		txtCofins.setSelectOnFocus(true);
+		txtCofins.setDecimalPrecision(2);
+		txtCofins.setMaxLength(5);
 
 		// colunas
 		ColumnConfig ccId = new ColumnConfig("", "comVendaProdutoId", 10, true);
@@ -154,13 +199,41 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		ccOrigem.setHidden(true);
 		ccOrigem.setFixed(true);
 
+		ColumnConfig ccCfop = new ColumnConfig(OpenSigCore.i18n.txtCfop(), "comVendaProdutoCfop", 75, true, IListagem.NUMERO);
+		ccCfop.setEditor(new GridEditor(txtCfop));
+		ccCfop.setHidden(true);
+
+		ColumnConfig ccIcmsCst = new ColumnConfig(OpenSigCore.i18n.txtIcms() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoIcmsCst", 100, true);
+		ccIcmsCst.setEditor(new GridEditor(txtIcmsCst));
+		ccIcmsCst.setHidden(true);
+
 		ColumnConfig ccIcms = new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comVendaProdutoIcms", 75, true, IListagem.PORCENTAGEM);
 		ccIcms.setEditor(new GridEditor(txtIcms));
 		ccIcms.setHidden(true);
 
+		ColumnConfig ccIpiCst = new ColumnConfig(OpenSigCore.i18n.txtIpi() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoIpiCst", 100, true);
+		ccIpiCst.setEditor(new GridEditor(txtIpiCst));
+		ccIpiCst.setHidden(true);
+
 		ColumnConfig ccIpi = new ColumnConfig(OpenSigCore.i18n.txtIpi(), "comVendaProdutoIpi", 75, true, IListagem.PORCENTAGEM);
 		ccIpi.setEditor(new GridEditor(txtIpi));
 		ccIpi.setHidden(true);
+
+		ColumnConfig ccPisCst = new ColumnConfig(OpenSigCore.i18n.txtPis() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoPisCst", 100, true);
+		ccPisCst.setEditor(new GridEditor(txtPisCst));
+		ccPisCst.setHidden(true);
+
+		ColumnConfig ccPis = new ColumnConfig(OpenSigCore.i18n.txtPis(), "comVendaProdutoPis", 75, true, IListagem.PORCENTAGEM);
+		ccPis.setEditor(new GridEditor(txtPis));
+		ccPis.setHidden(true);
+
+		ColumnConfig ccCofinsCst = new ColumnConfig(OpenSigCore.i18n.txtCofins() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoCofinsCst", 100, true);
+		ccCofinsCst.setEditor(new GridEditor(txtCofinsCst));
+		ccCofinsCst.setHidden(true);
+
+		ColumnConfig ccCofins = new ColumnConfig(OpenSigCore.i18n.txtCofins(), "comVendaProdutoCofins", 75, true, IListagem.PORCENTAGEM);
+		ccCofins.setEditor(new GridEditor(txtCofins));
+		ccCofins.setHidden(true);
 
 		ColumnConfig ccOrdem = new ColumnConfig(OpenSigCore.i18n.txtOrdem(), "comVendaProdutoOrdem", 100, true);
 		ccOrdem.setHidden(true);
@@ -174,7 +247,8 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		SummaryColumnConfig sumLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccTatalLiquido, IListagem.DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccVendaId, ccEmpresaId, ccEmpresa, ccCliente, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccData, ccQuantidade,
-				ccEmbalagemId, ccEmbalagem, ccBruto, ccDesconto, ccLiquido, sumBruto, sumLiquido, ccEstoque, ccOrigem, ccIcms, ccIpi, ccOrdem };
+				ccEmbalagemId, ccEmbalagem, ccBruto, ccDesconto, ccLiquido, sumBruto, sumLiquido, ccEstoque, ccOrigem, ccCfop, ccIcmsCst, ccIcms, ccIpiCst, ccIpi, ccPisCst, ccPis, ccCofinsCst,
+				ccCofins, ccOrdem };
 		modelos = new ColumnModel(bcc);
 
 		// configurações padrão e carrega dados
@@ -234,27 +308,41 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 				double liquido = rec.getAsDouble("comVendaProdutoLiquido");
 				double totBruto = rec.getAsDouble("comVendaProdutoTotalBruto");
 				double totLiquido = rec.getAsDouble("comVendaProdutoTotalLiquido");
+				int cfop = rec.getAsInteger("comVendaProdutoCfop");
+				String icmsCst = rec.getAsString("comVendaProdutoIcmsCst");
 				double icms = rec.getAsDouble("comVendaProdutoIcms");
+				String ipiCst = rec.getAsString("comVendaProdutoIpiCst");
 				double ipi = rec.getAsDouble("comVendaProdutoIpi");
+				String pisCst = rec.getAsString("comVendaProdutoPisCst");
+				double pis = rec.getAsDouble("comVendaProdutoPis");
+				String cofinsCst = rec.getAsString("comVendaProdutoCofinsCst");
+				double cofins = rec.getAsDouble("comVendaProdutoCofins");
 
 				if ((estoque != 0 && quantidade > estoque) || quantidade < 1 || desconto > 100.00 || liquido < 0.01) {
 					throw new Exception();
 				}
 
-				ComVendaProduto venProduto = new ComVendaProduto();
-				venProduto.setProdProduto(new ProdProduto(prodId));
-				venProduto.setComVendaProdutoBarra(barra);
-				venProduto.setComVendaProdutoQuantidade(quantidade);
-				venProduto.setProdEmbalagem(new ProdEmbalagem(embalagemId));
-				venProduto.setComVendaProdutoBruto(bruto);
-				venProduto.setComVendaProdutoDesconto(desconto);
-				venProduto.setComVendaProdutoLiquido(liquido);
-				venProduto.setComVendaProdutoTotalBruto(totBruto);
-				venProduto.setComVendaProdutoTotalLiquido(totLiquido);
-				venProduto.setComVendaProdutoIcms(icms);
-				venProduto.setComVendaProdutoIpi(ipi);
-				venProduto.setComVendaProdutoOrdem(ordem);
-				lista.add(venProduto);
+				ComVendaProduto vp = new ComVendaProduto();
+				vp.setProdProduto(new ProdProduto(prodId));
+				vp.setComVendaProdutoBarra(barra);
+				vp.setComVendaProdutoQuantidade(quantidade);
+				vp.setProdEmbalagem(new ProdEmbalagem(embalagemId));
+				vp.setComVendaProdutoBruto(bruto);
+				vp.setComVendaProdutoDesconto(desconto);
+				vp.setComVendaProdutoLiquido(liquido);
+				vp.setComVendaProdutoTotalBruto(totBruto);
+				vp.setComVendaProdutoTotalLiquido(totLiquido);
+				vp.setComVendaProdutoCfop(cfop);
+				vp.setComVendaProdutoIcmsCst(icmsCst == null ? "" : icmsCst);
+				vp.setComVendaProdutoIcms(icms);
+				vp.setComVendaProdutoIpiCst(ipiCst == null ? "" : ipiCst);
+				vp.setComVendaProdutoIpi(ipi);
+				vp.setComVendaProdutoPisCst(pisCst == null ? "" : pisCst);
+				vp.setComVendaProdutoPis(pis);
+				vp.setComVendaProdutoCofinsCst(cofinsCst == null ? "" : cofinsCst);
+				vp.setComVendaProdutoCofins(cofins);
+				vp.setComVendaProdutoOrdem(ordem);
+				lista.add(vp);
 				ordem++;
 			} catch (Exception ex) {
 				valida = false;
@@ -305,4 +393,61 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 	public void setTxtIpi(NumberField txtIpi) {
 		this.txtIpi = txtIpi;
 	}
+
+	public NumberField getTxtCfop() {
+		return txtCfop;
+	}
+
+	public void setTxtCfop(NumberField txtCfop) {
+		this.txtCfop = txtCfop;
+	}
+
+	public TextField getTxtIcmsCst() {
+		return txtIcmsCst;
+	}
+
+	public void setTxtIcmsCst(TextField txtIcmsCst) {
+		this.txtIcmsCst = txtIcmsCst;
+	}
+
+	public TextField getTxtIpiCst() {
+		return txtIpiCst;
+	}
+
+	public void setTxtIpiCst(TextField txtIpiCst) {
+		this.txtIpiCst = txtIpiCst;
+	}
+
+	public TextField getTxtPisCst() {
+		return txtPisCst;
+	}
+
+	public void setTxtPisCst(TextField txtPisCst) {
+		this.txtPisCst = txtPisCst;
+	}
+
+	public NumberField getTxtPis() {
+		return txtPis;
+	}
+
+	public void setTxtPis(NumberField txtPis) {
+		this.txtPis = txtPis;
+	}
+
+	public TextField getTxtCofinsCst() {
+		return txtCofinsCst;
+	}
+
+	public void setTxtCofinsCst(TextField txtCofinsCst) {
+		this.txtCofinsCst = txtCofinsCst;
+	}
+
+	public NumberField getTxtCofins() {
+		return txtCofins;
+	}
+
+	public void setTxtCofins(NumberField txtCofins) {
+		this.txtCofins = txtCofins;
+	}
+
 }

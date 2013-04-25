@@ -13,7 +13,7 @@ import br.com.opensig.comercial.shared.modelo.ComEcfNota;
 import br.com.opensig.comercial.shared.modelo.ComEcfNotaProduto;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.fiscal.server.sped.ARegistro;
-import br.com.opensig.produto.shared.modelo.ProdTributacao;
+import br.com.opensig.produto.shared.modelo.ProdIcms;
 
 public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 
@@ -107,9 +107,9 @@ public class RegistroC300 extends ARegistro<DadosC300, List<ComEcfNota>> {
 	}
 
 	private void setAnalitico(ComEcfNotaProduto d) {
-		ProdTributacao pt = d.getProdProduto().getProdTributacao();
-		String cstCson = auth.getConf().get("nfe.crt").equals("1") ? pt.getProdTributacaoCson() : pt.getProdTributacaoCst();
-		String chave = cstCson + pt.getProdTributacaoCfop() + pt.getProdTributacaoDentro();
+		ProdIcms icms = d.getProdProduto().getProdIcms();
+		String cstCson = auth.getConf().get("nfe.crt").equals("1") ? icms.getProdIcmsCson() : icms.getProdIcmsCst();
+		String chave = cstCson + icms.getProdIcmsCfop() + icms.getProdIcmsDentro();
 		List<ComEcfNotaProduto> lista = analitico.get(chave);
 		if (lista == null) {
 			lista = new ArrayList<ComEcfNotaProduto>();

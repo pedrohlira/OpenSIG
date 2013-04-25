@@ -161,8 +161,15 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 				reg.set("comVendaProdutoLiquido", liquido);
 				reg.set("comVendaProdutoTotalBruto", 0);
 				reg.set("comVendaProdutoTotalLiquido", 0);
+				reg.set("comVendaProdutoCfop", 0);
+				reg.set("comVendaProdutoIcmsCst", "");
 				reg.set("comVendaProdutoIcms", 0);
-				reg.set("comVendaProdutoIpi", result.getAsDouble("prodIpi.prodIpiAliquota"));
+				reg.set("comVendaProdutoIpiCst", "");
+				reg.set("comVendaProdutoIpi", 0);
+				reg.set("comVendaProdutoPisCst", "");
+				reg.set("comVendaProdutoPis", 0);
+				reg.set("comVendaProdutoCofinsCst", "");
+				reg.set("comVendaProdutoCofins", 0);
 				reg.set("comVendaProdutoEstoque", result.getAsInteger("t1.prodEstoqueQuantidade"));
 
 				if (reg.getAsInteger("comVendaProdutoEstoque") > 0 || !UtilClient.CONF.get("estoque.ativo").equalsIgnoreCase("sim")) {

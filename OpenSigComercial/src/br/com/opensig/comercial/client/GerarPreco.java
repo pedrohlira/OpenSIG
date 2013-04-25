@@ -92,17 +92,17 @@ public class GerarPreco {
 		double dentro, icms, ipi;
 
 		// faz o loop em todos os registros
-		for (ComCompraProduto comProd : compra.getComCompraProdutos()) {
-			if (comProd.getComCompraProdutoPreco() == 0.00) {
+		for (ComCompraProduto cp : compra.getComCompraProdutos()) {
+			if (cp.getComCompraProdutoPreco() == 0.00) {
 				try {
-					recProd = getValorProduto(comProd.getComCompraProdutoId(), compra.getEmpFornecedor().getEmpFornecedorId());
+					recProd = getValorProduto(cp.getComCompraProdutoId(), compra.getEmpFornecedor().getEmpFornecedorId());
 
 					// recupera os valores individuais de cada produto
-					valor = comProd.getComCompraProdutoValor() + "";
-					dentro = comProd.getProdProduto().getProdTributacao().getProdTributacaoDentro();
-					cst = comProd.getProdProduto().getProdTributacao().getProdTributacaoCst();
-					icms = comProd.getComCompraProdutoIcms();
-					ipi = comProd.getComCompraProdutoIpi();
+					valor = cp.getComCompraProdutoValor() + "";
+					dentro = cp.getProdProduto().getProdIcms().getProdIcmsDentro();
+					cst = cp.getProdProduto().getProdIcms().getProdIcmsCst();
+					icms = cp.getComCompraProdutoIcms();
+					ipi = cp.getComCompraProdutoIpi();
 					despesa = recProd.getAsString("comValorProdutoDespesa");
 					markup = recProd.getAsString("comValorProdutoMarkup");
 
@@ -111,7 +111,7 @@ public class GerarPreco {
 					vars.put("DESPESA", despesa.length() == 1 ? "0" + despesa.replace(".", "") : despesa.replace(".", ""));
 					vars.put("MARKUP", markup.length() == 1 ? "0" + markup.replace(".", "") : markup.replace(".", ""));
 
-					// verifica a tributacao pelo cst
+					// verifica o icms pelo cst
 					if (cst.equals("00")) { // tributado integral
 						vars.put("ICMS", (dentro - icms) >= 10 ? "" + (dentro - icms) : "0" + (dentro - icms));
 					} else if (cst.equals("10") || cst.equals("30") || cst.equals("40") || cst.equals("41") || cst.equals("60")) { // isento-substituicao
@@ -122,9 +122,9 @@ public class GerarPreco {
 					double preco = executarFormula(recProd.getAsString("comValorProdutoFormula"), vars);
 					// arredonda
 					preco = arredondar(preco, storeArredonda);
-					comProd.setComCompraProdutoPreco(preco);
+					cp.setComCompraProdutoPreco(preco);
 				} catch (Exception ex) {
-					comProd.setComCompraProdutoPreco(0.00);
+					cp.setComCompraProdutoPreco(0.00);
 					new ToastWindow(OpenSigCore.i18n.txtIcms(), OpenSigCore.i18n.errIcms()).show();
 				}
 			}

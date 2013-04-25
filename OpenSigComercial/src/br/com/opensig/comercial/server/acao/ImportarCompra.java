@@ -12,6 +12,7 @@ import org.w3c.dom.Document;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.server.ComercialServiceImpl;
+import br.com.opensig.comercial.server.MyIcms;
 import br.com.opensig.comercial.shared.modelo.ComCompra;
 import br.com.opensig.comercial.shared.modelo.ComCompraProduto;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
@@ -44,11 +45,13 @@ import br.com.opensig.nfe.TNFe.InfNFe.Det;
 import br.com.opensig.nfe.TNFe.InfNFe.Emit;
 import br.com.opensig.nfe.TNFe.InfNFe.Ide;
 import br.com.opensig.nfe.TNFe.InfNFe.Total.ICMSTot;
+import br.com.opensig.produto.shared.modelo.ProdCofins;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdIpi;
 import br.com.opensig.produto.shared.modelo.ProdOrigem;
+import br.com.opensig.produto.shared.modelo.ProdPis;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
-import br.com.opensig.produto.shared.modelo.ProdTributacao;
+import br.com.opensig.produto.shared.modelo.ProdIcms;
 
 public class ImportarCompra extends ImportarNFe<ComCompra> {
 
@@ -122,7 +125,7 @@ public class ImportarCompra extends ImportarNFe<ComCompra> {
 		FiltroNumero fn = new FiltroNumero("comCompraNumero", ECompara.IGUAL, ide.getNNF());
 		GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, ft, fn });
 		compra = (ComCompra) servico.selecionar(new ComCompra(), gf, false);
-		
+
 		if (compra != null) {
 			throw new ComercialException("A compra já existe!");
 		} else {
@@ -289,14 +292,17 @@ public class ImportarCompra extends ImportarNFe<ComCompra> {
 	private void validarProduto() throws OpenSigException {
 		// pega os dados auxiliares
 		origens = servico.selecionar(new ProdOrigem(), 0, 0, null, false).getLista();
-		tributacao = servico.selecionar(new ProdTributacao(), 0, 0, null, false).getLista();
-		ipis = servico.selecionar(new ProdIpi(), 0, 0, null, false).getLista();
 		embalagem = servico.selecionar(new ProdEmbalagem(), 0, 0, null, false).getLista();
+		icmss = servico.selecionar(new ProdIcms(), 0, 0, null, false).getLista();
+		ipis = servico.selecionar(new ProdIpi(), 0, 0, null, false).getLista();
+		piss = servico.selecionar(new ProdPis(), 0, 0, null, false).getLista();
+		cofinss = servico.selecionar(new ProdCofins(), 0, 0, null, false).getLista();
 
 		// seta os tipos
 		comProdutos = new ArrayList<ComCompraProduto>();
 		for (Det det : nfe.getInfNFe().getDet()) {
-			MyIcms myicms = getIcms(det.getImposto().getICMS());
+			MyIcms myicms = new MyIcms(det.getImposto().getICMS());
+			// ipi
 			String ipi = "";
 			String pIpi = "";
 			try {
@@ -309,23 +315,49 @@ public class ImportarCompra extends ImportarNFe<ComCompra> {
 				ipi = "99";
 				pIpi = "0.00";
 			}
+			// pis
+			String pis = "";
+			String pPis = "";
+			try {
+				pis = det.getImposto().getPIS().getPISAliq().getCST();
+				pPis = det.getImposto().getPIS().getPISAliq().getPPIS();
+			} catch (Exception e) {
+				pis = "49";
+				pPis = "0.00";
+			}
+			// cofins
+			String cofins = "";
+			String pCofins = "";
+			try {
+				cofins = det.getImposto().getCOFINS().getCOFINSAliq().getCST();
+				pCofins = det.getImposto().getCOFINS().getCOFINSAliq().getPCOFINS();
+			} catch (Exception e) {
+				cofins = "49";
+				pCofins = "0.00";
+			}
 
 			// setando o produto da compra
-			ComCompraProduto comProd = new ComCompraProduto();
-			ProdProduto prod = getProduto(fornecedor, det.getProd(), myicms, ipi);
-			comProd.setProdProduto(prod);
-			comProd.setProdEmbalagem(prod.getProdEmbalagem());
+			ComCompraProduto cp = new ComCompraProduto();
+			ProdProduto pp = getProduto(fornecedor, det.getProd(), myicms);
+			cp.setProdProduto(pp);
+			cp.setProdEmbalagem(pp.getProdEmbalagem());
+			cp.setComCompra(compra);
 			int cfop = Integer.valueOf(det.getProd().getCFOP());
-			comProd.setComCompraProdutoCfop(cfop >= 5000 ? cfop - 4000 : cfop);
-			comProd.setComCompraProdutoIcms(Double.valueOf(myicms.getAliquota()));
-			comProd.setComCompraProdutoIpi(Double.valueOf(pIpi));
-			comProd.setComCompraProdutoQuantidade(Double.valueOf(det.getProd().getQCom()));
-			comProd.setComCompraProdutoValor(Double.valueOf(det.getProd().getVUnCom()));
-			comProd.setComCompraProdutoTotal(Double.valueOf(det.getProd().getVProd()));
-			comProd.setComCompraProdutoPreco(prod.getProdProdutoPreco());
-			comProd.setComCompraProdutoOrdem(Integer.valueOf(det.getNItem()));
-			comProd.setComCompra(compra);
-			comProdutos.add(comProd);
+			cp.setComCompraProdutoCfop(cfop >= 5000 ? cfop - 4000 : cfop);
+			cp.setComCompraProdutoIcmsCst(myicms.getCst());
+			cp.setComCompraProdutoIcms(Double.valueOf(myicms.getAliquota()));
+			cp.setComCompraProdutoIpiCst(ipi);
+			cp.setComCompraProdutoIpi(Double.valueOf(pIpi));
+			cp.setComCompraProdutoPisCst(pis);
+			cp.setComCompraProdutoPis(Double.valueOf(pPis));
+			cp.setComCompraProdutoCofinsCst(cofins);
+			cp.setComCompraProdutoCofins(Double.valueOf(pCofins));
+			cp.setComCompraProdutoQuantidade(Double.valueOf(det.getProd().getQCom()));
+			cp.setComCompraProdutoValor(Double.valueOf(det.getProd().getVUnCom()));
+			cp.setComCompraProdutoTotal(Double.valueOf(det.getProd().getVProd()));
+			cp.setComCompraProdutoPreco(pp.getProdProdutoPreco());
+			cp.setComCompraProdutoOrdem(Integer.valueOf(det.getNItem()));
+			comProdutos.add(cp);
 		}
 	}
 

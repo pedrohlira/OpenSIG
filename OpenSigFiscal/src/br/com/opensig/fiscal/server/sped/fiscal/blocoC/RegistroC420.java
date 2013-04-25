@@ -28,7 +28,7 @@ public class RegistroC420 extends ARegistro<DadosC420, ComEcfZTotais> {
 			for (ComEcfVenda venda : dados.getComEcfZ().getComEcfVendas()) {
 				if (venda.getComEcfVendaFechada() && !venda.getComEcfVendaCancelada()) {
 					for (ComEcfVendaProduto pv : venda.getComEcfVendaProdutos()) {
-						if (pv.getProdProduto().getProdTributacao().getProdTributacaoEcf().equals(dados.getComEcfZTotaisCodigo())) {
+						if (pv.getProdProduto().getProdIcms().getProdIcmsEcf().equals(dados.getComEcfZTotaisCodigo())) {
 							ComEcfVendaProduto vp = produtos.get(pv.getProdProduto().getProdProdutoId());
 							if (vp == null) {
 								produtos.put(pv.getProdProduto().getProdProdutoId(), pv);
@@ -49,7 +49,7 @@ public class RegistroC420 extends ARegistro<DadosC420, ComEcfZTotais> {
 			if (auth.getConf().get("sped.fiscal.0000.ind_perfil").equals("B")) {
 				RegistroC425 r425 = new RegistroC425();
 				for (Entry<Integer, ComEcfVendaProduto> vp : produtos.entrySet()) {
-					if (vp.getValue().getProdProduto().getProdTributacao().getProdTributacaoEcf().equals(dados.getComEcfZTotaisCodigo())) {
+					if (vp.getValue().getProdProduto().getProdIcms().getProdIcmsEcf().equals(dados.getComEcfZTotaisCodigo())) {
 						r425.setDados(vp.getValue());
 						r425.executar();
 						qtdLinhas += r425.getQtdLinhas();

@@ -63,7 +63,9 @@ public class ListagemVendaProduto extends AListagem<ComVendaProduto> {
 				new FloatFieldDef("comVendaProdutoQuantidade"), new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"),
 				new FloatFieldDef("comVendaProdutoBruto"), new FloatFieldDef("comVendaProdutoDesconto"), new FloatFieldDef("comVendaProdutoLiquido"), new FloatFieldDef("comVendaProdutoTotalBruto"),
 				new FloatFieldDef("comVendaProdutoTotalLiquido"), new IntegerFieldDef("comVendaProdutoEstoque"), new IntegerFieldDef("comVendaProdutoOrigem"),
-				new FloatFieldDef("comVendaProdutoIcms"), new FloatFieldDef("comVendaProdutoIpi"), new IntegerFieldDef("comVendaProdutoOrdem") };
+				new IntegerFieldDef("comVendaProdutoCfop"), new StringFieldDef("comVendaProdutoIcmsCst"), new FloatFieldDef("comVendaProdutoIcms"), new StringFieldDef("comVendaProdutoIpiCst"),
+				new FloatFieldDef("comVendaProdutoIpi"), new StringFieldDef("comVendaProdutoPisCst"), new FloatFieldDef("comVendaProdutoPis"), new StringFieldDef("comVendaProdutoCofinsCst"),
+				new FloatFieldDef("comVendaProdutoCofins"), new IntegerFieldDef("comVendaProdutoOrdem") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -92,10 +94,24 @@ public class ListagemVendaProduto extends AListagem<ComVendaProduto> {
 		ColumnConfig ccOrigem = new ColumnConfig("", "comVendaProdutoOrigem", 0, false);
 		ccOrigem.setHidden(true);
 		ccOrigem.setFixed(true);
+		ColumnConfig ccCfop = new ColumnConfig(OpenSigCore.i18n.txtCfop(), "comVendaProdutoCfop", 75, true, NUMERO);
+		ccCfop.setHidden(true);
+		ColumnConfig ccIcmsCst = new ColumnConfig(OpenSigCore.i18n.txtIcms() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoIcmsCst", 100, true);
+		ccIcmsCst.setHidden(true);
 		ColumnConfig ccIcms = new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comVendaProdutoIcms", 75, true, PORCENTAGEM);
 		ccIcms.setHidden(true);
+		ColumnConfig ccIpiCst = new ColumnConfig(OpenSigCore.i18n.txtIpi() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoIpiCst", 100, true);
+		ccIpiCst.setHidden(true);
 		ColumnConfig ccIpi = new ColumnConfig(OpenSigCore.i18n.txtIpi(), "comVendaProdutoIpi", 75, true, PORCENTAGEM);
 		ccIpi.setHidden(true);
+		ColumnConfig ccPisCst = new ColumnConfig(OpenSigCore.i18n.txtPis() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoPisCst", 100, true);
+		ccPisCst.setHidden(true);
+		ColumnConfig ccPis = new ColumnConfig(OpenSigCore.i18n.txtPis(), "comVendaProdutoPis", 75, true, PORCENTAGEM);
+		ccPis.setHidden(true);
+		ColumnConfig ccCofinsCst = new ColumnConfig(OpenSigCore.i18n.txtCofins() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoCofinsCst", 100, true);
+		ccCofinsCst.setHidden(true);
+		ColumnConfig ccCofins = new ColumnConfig(OpenSigCore.i18n.txtCofins(), "comVendaProdutoCofins", 75, true, PORCENTAGEM);
+		ccCofins.setHidden(true);
 		ColumnConfig ccDesconto = new ColumnConfig(OpenSigCore.i18n.txtDesconto(), "comVendaProdutoDesconto", 50, true, PORCENTAGEM);
 		ColumnConfig ccOrdem = new ColumnConfig(OpenSigCore.i18n.txtOrdem(), "comVendaProdutoOrdem", 100, true);
 		ccOrdem.setHidden(true);
@@ -109,8 +125,9 @@ public class ListagemVendaProduto extends AListagem<ComVendaProduto> {
 		SummaryColumnConfig ccTatalLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtTotal() + " " + OpenSigCore.i18n.txtLiquido(),
 				"comVendaProdutoTotalLiquido", 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccVendaId, ccEmpresaId, ccEmpresa, ccCliente, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccData, ccQuantidade, ccEmbalagemId, ccEmbalagem, ccBruto,
-				ccDesconto, ccLiquido, ccTotalBruto, ccTatalLiquido, ccEstoque, ccOrigem, ccIcms, ccIpi, ccOrdem };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccVendaId, ccEmpresaId, ccEmpresa, ccCliente, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccData, ccQuantidade,
+				ccEmbalagemId, ccEmbalagem, ccBruto, ccDesconto, ccLiquido, ccTotalBruto, ccTatalLiquido, ccEstoque, ccOrigem, ccCfop, ccIcmsCst, ccIcms, ccIpiCst, ccIpi, ccPisCst, ccPis,
+				ccCofinsCst, ccCofins, ccOrdem };
 		modelos = new ColumnModel(bcc);
 
 		GrupoFiltro gf = new GrupoFiltro();
@@ -176,25 +193,25 @@ public class ListagemVendaProduto extends AListagem<ComVendaProduto> {
 		filtros.get("comVenda.empEmpresa.empEmpresaId").setActive(false, true);
 		super.setFavorito(favorito);
 	}
-	
+
 	@Override
 	public void irPara() {
 		Menu mnuContexto = new Menu();
-		
+
 		// venda
 		SisFuncao venda = UtilClient.getFuncaoPermitida(ComandoVenda.class);
 		MenuItem itemVenda = gerarFuncao(venda, "comVendaId", "comVenda.comVendaId");
 		if (itemVenda != null) {
 			mnuContexto.addItem(itemVenda);
 		}
-		
+
 		// produto
 		SisFuncao produto = UtilClient.getFuncaoPermitida(ComandoProduto.class);
 		MenuItem itemProduto = gerarFuncao(produto, "prodProdutoId", "prodProduto.prodProdutoId");
 		if (itemProduto != null) {
 			mnuContexto.addItem(itemProduto);
 		}
-		
+
 		if (mnuContexto.getItems().length > 0) {
 			MenuItem mnuItem = getIrPara();
 			mnuItem.setMenu(mnuContexto);

@@ -100,14 +100,24 @@ public class ProdProduto extends Dados implements Serializable {
 	private List<ProdGrade> prodGrades;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "prod_tributacao_id")
+	@JoinColumn(name = "prod_icms_id")
 	@XmlTransient
-	private ProdTributacao prodTributacao;
+	private ProdIcms prodIcms;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "prod_ipi_id")
 	@XmlTransient
 	private ProdIpi prodIpi;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "prod_pis_id")
+	@XmlTransient
+	private ProdPis prodPis;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "prod_cofins_id")
+	@XmlTransient
+	private ProdCofins prodCofins;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "prod_tipo_id")
@@ -311,12 +321,12 @@ public class ProdProduto extends Dados implements Serializable {
 		this.prodEstoques = prodEstoques;
 	}
 
-	public ProdTributacao getProdTributacao() {
-		return this.prodTributacao;
+	public ProdIcms getProdIcms() {
+		return this.prodIcms;
 	}
 
-	public void setProdTributacao(ProdTributacao prodTributacao) {
-		this.prodTributacao = prodTributacao;
+	public void setProdIcms(ProdIcms prodIcms) {
+		this.prodIcms = prodIcms;
 	}
 
 	public ProdIpi getProdIpi() {
@@ -325,6 +335,22 @@ public class ProdProduto extends Dados implements Serializable {
 
 	public void setProdIpi(ProdIpi prodIpi) {
 		this.prodIpi = prodIpi;
+	}
+
+	public ProdPis getProdPis() {
+		return prodPis;
+	}
+
+	public void setProdPis(ProdPis prodPis) {
+		this.prodPis = prodPis;
+	}
+
+	public ProdCofins getProdCofins() {
+		return prodCofins;
+	}
+
+	public void setProdCofins(ProdCofins prodCofins) {
+		this.prodCofins = prodCofins;
 	}
 
 	public ProdTipo getProdTipo() {
@@ -432,20 +458,23 @@ public class ProdProduto extends Dados implements Serializable {
 		}
 
 		return new String[] { prodProdutoId + "", prodProdutoNcm, prodProdutoBarra, prodProdutoDescricao, prodProdutoReferencia, prodProdutoCusto + "", prodProdutoPreco + "",
-				prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), prodProdutoVolume + "", prodProdutoEstoque + "", prodProdutoCategoria, empFornecedor.getEmpFornecedorId() + "",
-				empFornecedor.getEmpEntidade().getEmpEntidadeNome1(), empFabricante.getEmpFornecedorId() + "", empFabricante.getEmpEntidade().getEmpEntidadeNome1(),
-				prodTributacao.getProdTributacaoId() + "", prodTributacao.getProdTributacaoNome(), prodTributacao.getProdTributacaoCst(), prodTributacao.getProdTributacaoCfop() + "",
-				prodTributacao.getProdTributacaoDentro() + "", prodTributacao.getProdTributacaoFora() + "", prodTributacao.getProdTributacaoDecreto(), prodIpi.getProdIpiId() + "",
-				prodIpi.getProdIpiNome(), prodIpi.getProdIpiAliquota() + "", prodTipo.getProdTipoId() + "", prodTipo.getProdTipoDescricao(), prodOrigem.getProdOrigemId() + "",
-				prodOrigem.getProdOrigemDescricao(), UtilClient.getDataHoraGrid(prodProdutoCadastrado), UtilClient.getDataHoraGrid(prodProdutoAlterado), getProdProdutoAtivo() + "",
-				prodProdutoObservacao };
+				prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), prodProdutoVolume + "", prodProdutoEstoque + "", prodProdutoCategoria,
+				empFornecedor.getEmpFornecedorId() + "", empFornecedor.getEmpEntidade().getEmpEntidadeNome1(), empFabricante.getEmpFornecedorId() + "",
+				empFabricante.getEmpEntidade().getEmpEntidadeNome1(), prodIcms.getProdIcmsId() + "", prodIcms.getProdIcmsNome(), prodIpi.getProdIpiId() + "",
+				prodIpi.getProdIpiNome(), prodPis.getProdPisId() + "", prodPis.getProdPisNome(), prodCofins.getProdCofinsId() + "", prodCofins.getProdCofinsNome(), prodTipo.getProdTipoId() + "",
+				prodTipo.getProdTipoDescricao(), prodOrigem.getProdOrigemId() + "", prodOrigem.getProdOrigemDescricao(), UtilClient.getDataHoraGrid(prodProdutoCadastrado),
+				UtilClient.getDataHoraGrid(prodProdutoAlterado), getProdProdutoAtivo() + "", prodProdutoObservacao };
 	}
 
 	public Dados getObjeto(String campo) {
-		if (campo.startsWith("prodTributacao")) {
-			return new ProdTributacao();
+		if (campo.startsWith("prodIcms")) {
+			return new ProdIcms();
 		} else if (campo.startsWith("prodIpi")) {
 			return new ProdIpi();
+		} else if (campo.startsWith("prodPis")) {
+			return new ProdPis();
+		} else if (campo.startsWith("prodCofins")) {
+			return new ProdCofins();
 		} else if (campo.startsWith("prodTipo")) {
 			return new ProdTipo();
 		} else if (campo.startsWith("empFornecedor")) {
@@ -466,8 +495,10 @@ public class ProdProduto extends Dados implements Serializable {
 		prodComposicoes = null;
 		prodEstoques = null;
 		prodGrades = null;
-		prodTributacao = null;
+		prodIcms = null;
 		prodIpi = null;
+		prodPis = null;
+		prodCofins = null;
 		prodTipo = null;
 		empFornecedor = null;
 		empFabricante = null;

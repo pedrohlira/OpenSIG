@@ -48,8 +48,8 @@ public class RegistroC320 extends ARegistro<DadosC320, List<ComEcfNotaProduto>> 
 		DadosC320 d = new DadosC320();
 		for (ComEcfNotaProduto np : dados) {
 			ProdProduto prod = np.getProdProduto();
-			d.setCst_icms(auth.getConf().get("nfe.crt").equals("1") ? prod.getProdTributacao().getProdTributacaoCson() : prod.getProdTributacao().getProdTributacaoCst());
-			d.setCfop(prod.getProdTributacao().getProdTributacaoCfop());
+			d.setCst_icms(auth.getConf().get("nfe.crt").equals("1") ? prod.getProdIcms().getProdIcmsCson() : prod.getProdIcms().getProdIcmsCst());
+			d.setCfop(prod.getProdIcms().getProdIcmsCfop());
 			d.setAliq_icms(np.getComEcfNotaProdutoIcms());
 			d.setVl_opr(somarDoubles(d.getVl_opr() , np.getComEcfNotaProdutoLiquido()));
 			d.setCod_obs("");

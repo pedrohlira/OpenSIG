@@ -64,8 +64,8 @@ public class RegistroD500 extends ARegistro<DadosD500, ComConsumo> {
 		d.setVl_bc_icms(dados.getComConsumoBase());
 		d.setVl_icms(dados.getComConsumoIcms());
 		d.setCod_inf("");
-		d.setVl_pis(dados.getComConsumoValor() * pis / 100);
-		d.setVl_cofins(dados.getComConsumoValor() * cofins / 100);
+		d.setVl_pis(0.00);
+		d.setVl_cofins(0.00);
 		d.setCod_cta("");
 		d.setTp_assinante(1);
 		

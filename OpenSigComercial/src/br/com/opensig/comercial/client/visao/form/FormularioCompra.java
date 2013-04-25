@@ -84,9 +84,6 @@ public class FormularioCompra extends AFormulario<ComCompra> {
 	private NumberField txtIpi;
 	private NumberField txtOutros;
 	private NumberField txtValorNota;
-	private NumberField txtPadraoCfop;
-	private NumberField txtPadraoIcms;
-	private NumberField txtPadraoIpi;
 	private Label lblRegistros;
 	private TextArea txtObservacao;
 	private ListagemCompraProdutos gridProdutos;
@@ -235,15 +232,19 @@ public class FormularioCompra extends AFormulario<ComCompra> {
 				reg.set("prodProduto.prodProdutoBarra", result.getAsString("prodProdutoBarra"));
 				reg.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
 				reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
-				reg.set("prodTributacaoDentro", result.getAsInteger("prodTributacao.prodTributacaoDentro"));
-				reg.set("prodTributacaoCst", result.getAsString("prodTributacao.prodTributacaoCst"));
 				reg.set("comCompraProdutoQuantidade", 0);
 				reg.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
 				reg.set("comCompraProdutoValor", result.getAsDouble("prodProdutoCusto"));
 				reg.set("comCompraProdutoTotal", 0);
-				reg.set("comCompraProdutoCfop", txtPadraoCfop.getValueAsString());
-				reg.set("comCompraProdutoIcms", txtPadraoIcms.getValueAsString());
-				reg.set("comCompraProdutoIpi", txtPadraoIpi.getValueAsString());
+				reg.set("comCompraProdutoCfop", "0000");
+				reg.set("comCompraProdutoIcmsCst", "");
+				reg.set("comCompraProdutoIcms", "0");
+				reg.set("comCompraProdutoIpiCst", "");
+				reg.set("comCompraProdutoIpi", "0");
+				reg.set("comCompraProdutoPisCst", "");
+				reg.set("comCompraProdutoPis", 0);
+				reg.set("comCompraProdutoCofinsCst", "");
+				reg.set("comCompraProdutoCofins", 0);
 				reg.set("comCompraProdutoPreco", result.getAsDouble("prodProdutoPreco"));
 				gridProdutos.getStore().add(reg);
 
@@ -288,35 +289,6 @@ public class FormularioCompra extends AFormulario<ComCompra> {
 			}
 		});
 
-		txtPadraoCfop = new NumberField("", "padraoCfop", 50);
-		txtPadraoCfop.setAllowNegative(false);
-		txtPadraoCfop.setAllowDecimals(false);
-		txtPadraoCfop.setMinLength(4);
-		txtPadraoCfop.setMaxLength(4);
-		txtPadraoCfop.setMaxValue(4000);
-		gridProdutos.getTopToolbar().addText(OpenSigCore.i18n.txtPadrao() + "-" + OpenSigCore.i18n.txtCfop());
-		gridProdutos.getTopToolbar().addField(txtPadraoCfop);
-		gridProdutos.getTopToolbar().addSpacer();
-
-		txtPadraoIcms = new NumberField("", "padraoIcms", 50);
-		txtPadraoIcms.setAllowNegative(false);
-		txtPadraoIcms.setAllowDecimals(false);
-		txtPadraoIcms.setMinLength(1);
-		txtPadraoIcms.setMaxLength(2);
-		gridProdutos.getTopToolbar().addText(OpenSigCore.i18n.txtPadrao() + "-" + OpenSigCore.i18n.txtIcms());
-		gridProdutos.getTopToolbar().addField(txtPadraoIcms);
-		gridProdutos.getTopToolbar().addSpacer();
-
-		txtPadraoIpi = new NumberField("", "padraoIpi", 50);
-		txtPadraoIpi.setAllowNegative(false);
-		txtPadraoIpi.setAllowDecimals(false);
-		txtPadraoIpi.setMinLength(1);
-		txtPadraoIpi.setMaxLength(2);
-		gridProdutos.getTopToolbar().addText(OpenSigCore.i18n.txtPadrao() + "-" + OpenSigCore.i18n.txtIpi());
-		gridProdutos.getTopToolbar().addField(txtPadraoIpi);
-		gridProdutos.getTopToolbar().addSpacer();
-
-		gridProdutos.getTopToolbar().addSeparator();
 		gridProdutos.getTopToolbar().addText(OpenSigCore.i18n.txtRegistro() + ": ");
 		gridProdutos.getTopToolbar().addElement(lblRegistros.getElement());
 		gridProdutos.getTopToolbar().addSpacer();
@@ -862,30 +834,6 @@ public class FormularioCompra extends AFormulario<ComCompra> {
 
 	public void setCmbEstado(ComboBox cmbEstado) {
 		this.cmbEstado = cmbEstado;
-	}
-
-	public NumberField getTxtPadraoCfop() {
-		return txtPadraoCfop;
-	}
-
-	public void setTxtPadraoCfop(NumberField txtPadraoCfop) {
-		this.txtPadraoCfop = txtPadraoCfop;
-	}
-
-	public NumberField getTxtPadraoIcms() {
-		return txtPadraoIcms;
-	}
-
-	public void setTxtPadraoIcms(NumberField txtPadraoIcms) {
-		this.txtPadraoIcms = txtPadraoIcms;
-	}
-
-	public NumberField getTxtPadraoIpi() {
-		return txtPadraoIpi;
-	}
-
-	public void setTxtPadraoIpi(NumberField txtPadraoIpi) {
-		this.txtPadraoIpi = txtPadraoIpi;
 	}
 
 	public Label getLblRegistros() {

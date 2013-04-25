@@ -266,8 +266,8 @@ public class ListagemValidarVenda {
 			}
 		}
 
-		for (ComVendaProduto vProd : venda.getComVendaProdutos()) {
-			ProdProduto prod = vProd.getProdProduto();
+		for (ComVendaProduto vp : venda.getComVendaProdutos()) {
+			ProdProduto prod = vp.getProdProduto();
 			if (prod.getProdProdutoId() == 0) {
 				prod.setProdProdutoCategoria(cmbCategoria.getValue());
 			}
@@ -287,8 +287,8 @@ public class ListagemValidarVenda {
 
 	private void atualizaItem(Record rec, int row) {
 		// recupera
-		ComVendaProduto venPro = venda.getComVendaProdutos().get(row);
-		ProdProduto prod = venPro.getProdProduto();
+		ComVendaProduto vp = venda.getComVendaProdutos().get(row);
+		ProdProduto prod = vp.getProdProduto();
 		// altera
 		prod.setProdProdutoId(rec.getAsInteger("prodProdutoId"));
 		prod.setProdProdutoBarra("".equals(rec.getAsString("comVendaProdutoBarra")) ? null : rec.getAsString("comVendaProdutoBarra"));
@@ -297,9 +297,9 @@ public class ListagemValidarVenda {
 		prod.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
 
 		// seta
-		venPro.setProdProduto(prod);
-		venPro.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
-		venda.getComVendaProdutos().set(row, venPro);
+		vp.setProdProduto(prod);
+		vp.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
+		venda.getComVendaProdutos().set(row, vp);
 	}
 
 	private void enviar() {

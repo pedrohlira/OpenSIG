@@ -84,17 +84,17 @@ public class ExcluirCompra extends Chain {
 				em.getTransaction().begin();
 
 				if (compra.getComCompraFechada()) {
-					for (ComCompraProduto comProd : compra.getComCompraProdutos()) {
+					for (ComCompraProduto cp : compra.getComCompraProdutos()) {
 						// fatorando a quantida no estoque
-						double qtd = comProd.getComCompraProdutoQuantidade();
-						if (comProd.getProdEmbalagem().getProdEmbalagemId() != comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
-							qtd *= impl.getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
-							qtd /= impl.getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+						double qtd = cp.getComCompraProdutoQuantidade();
+						if (cp.getProdEmbalagem().getProdEmbalagemId() != cp.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
+							qtd *= impl.getQtdEmbalagem(cp.getProdEmbalagem().getProdEmbalagemId());
+							qtd /= impl.getQtdEmbalagem(cp.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 						}
 						// formando os parametros
 						ParametroFormula pn1 = new ParametroFormula("prodEstoqueQuantidade", -1 * qtd);
 						// formando o filtro
-						FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, comProd.getProdProduto());
+						FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, cp.getProdProduto());
 						GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
 						// busca o item
 						ProdEstoque est = new ProdEstoque();

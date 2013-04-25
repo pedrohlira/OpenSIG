@@ -49,11 +49,32 @@ public class ComVendaProduto extends Dados implements Serializable {
 	@Column(name = "com_venda_produto_total_liquido")
 	private Double comVendaProdutoTotalLiquido;
 
+	@Column(name = "com_venda_produto_cfop")
+	private int comVendaProdutoCfop;
+
+	@Column(name = "com_venda_produto_icms_cst")
+	private String comVendaProdutoIcmsCst;
+
 	@Column(name = "com_venda_produto_icms")
 	private Double comVendaProdutoIcms;
 
+	@Column(name = "com_venda_produto_ipi_cst")
+	private String comVendaProdutoIpiCst;
+
 	@Column(name = "com_venda_produto_ipi")
 	private Double comVendaProdutoIpi;
+
+	@Column(name = "com_venda_produto_pis_cst")
+	private String comVendaProdutoPisCst;
+
+	@Column(name = "com_venda_produto_pis")
+	private Double comVendaProdutoPis;
+
+	@Column(name = "com_venda_produto_cofins_cst")
+	private String comVendaProdutoCofinsCst;
+
+	@Column(name = "com_venda_produto_cofins")
+	private Double comVendaProdutoCofins;
 
 	@Column(name = "com_venda_produto_ordem")
 	private int comVendaProdutoOrdem;
@@ -194,6 +215,62 @@ public class ComVendaProduto extends Dados implements Serializable {
 		this.comVendaProdutoBarra = comVendaProdutoBarra;
 	}
 
+	public int getComVendaProdutoCfop() {
+		return comVendaProdutoCfop;
+	}
+
+	public void setComVendaProdutoCfop(int comVendaProdutoCfop) {
+		this.comVendaProdutoCfop = comVendaProdutoCfop;
+	}
+
+	public String getComVendaProdutoIcmsCst() {
+		return comVendaProdutoIcmsCst;
+	}
+
+	public void setComVendaProdutoIcmsCst(String comVendaProdutoIcmsCst) {
+		this.comVendaProdutoIcmsCst = comVendaProdutoIcmsCst;
+	}
+
+	public String getComVendaProdutoIpiCst() {
+		return comVendaProdutoIpiCst;
+	}
+
+	public void setComVendaProdutoIpiCst(String comVendaProdutoIpiCst) {
+		this.comVendaProdutoIpiCst = comVendaProdutoIpiCst;
+	}
+
+	public String getComVendaProdutoPisCst() {
+		return comVendaProdutoPisCst;
+	}
+
+	public void setComVendaProdutoPisCst(String comVendaProdutoPisCst) {
+		this.comVendaProdutoPisCst = comVendaProdutoPisCst;
+	}
+
+	public Double getComVendaProdutoPis() {
+		return comVendaProdutoPis;
+	}
+
+	public void setComVendaProdutoPis(Double comVendaProdutoPis) {
+		this.comVendaProdutoPis = comVendaProdutoPis;
+	}
+
+	public String getComVendaProdutoCofinsCst() {
+		return comVendaProdutoCofinsCst;
+	}
+
+	public void setComVendaProdutoCofinsCst(String comVendaProdutoCofinsCst) {
+		this.comVendaProdutoCofinsCst = comVendaProdutoCofinsCst;
+	}
+
+	public Double getComVendaProdutoCofins() {
+		return comVendaProdutoCofins;
+	}
+
+	public void setComVendaProdutoCofins(Double comVendaProdutoCofins) {
+		this.comVendaProdutoCofins = comVendaProdutoCofins;
+	}
+
 	public Number getId() {
 		return comVendaProdutoId;
 	}
@@ -208,7 +285,8 @@ public class ComVendaProduto extends Dados implements Serializable {
 				comVendaProdutoBarra, prodProduto.getProdProdutoDescricao(), prodProduto.getProdProdutoReferencia(), UtilClient.getDataGrid(comVenda.getComVendaData()),
 				comVendaProdutoQuantidade + "", prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), comVendaProdutoBruto.toString(), comVendaProdutoDesconto.toString(),
 				comVendaProdutoLiquido.toString(), comVendaProdutoTotalBruto.toString(), comVendaProdutoTotalLiquido.toString(), "0", prodProduto.getProdOrigem().getProdOrigemId() + "",
-				comVendaProdutoIcms + "", comVendaProdutoIpi + "", comVendaProdutoOrdem + "" };
+				comVendaProdutoCfop + "", comVendaProdutoIcmsCst, comVendaProdutoIcms.toString(), comVendaProdutoIpiCst, comVendaProdutoIpi.toString(), comVendaProdutoPisCst,
+				comVendaProdutoPis.toString(), comVendaProdutoCofinsCst, comVendaProdutoCofins.toString(), comVendaProdutoOrdem + "" };
 	}
 
 	public Dados getObjeto(String campo) {

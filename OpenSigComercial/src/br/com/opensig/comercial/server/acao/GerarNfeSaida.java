@@ -113,7 +113,7 @@ public class GerarNfeSaida extends Chain {
 
 	private boolean dentro;
 	private ComNatureza comNatureza;
-	private Map<Integer, String> infos;
+	private Map<String, String> infos;
 
 	private double valorProd;
 	private double baseICMS;
@@ -130,7 +130,7 @@ public class GerarNfeSaida extends Chain {
 		this.venda = venda;
 		this.frete = frete;
 		this.data = new Date();
-		this.infos = new HashMap<Integer, String>();
+		this.infos = new HashMap<String, String>();
 		this.auth = auth;
 	}
 
@@ -453,36 +453,36 @@ public class GerarNfeSaida extends Chain {
 
 		// verifica se tem produtos com composicoes
 		List<ComVendaProduto> auxProdutos = new ArrayList<ComVendaProduto>();
-		for (ComVendaProduto venProd : produtos.getLista()) {
-			if (venProd.getProdProduto().getProdComposicoes().size() == 0) {
-				auxProdutos.add(venProd);
+		for (ComVendaProduto vp : produtos.getLista()) {
+			if (vp.getProdProduto().getProdComposicoes().size() == 0) {
+				auxProdutos.add(vp);
 			} else {
-				for (ProdComposicao comp : venProd.getProdProduto().getProdComposicoes()) {
+				for (ProdComposicao comp : vp.getProdProduto().getProdComposicoes()) {
 					ComVendaProduto auxVenProd = new ComVendaProduto();
-					auxVenProd.setComVenda(venProd.getComVenda());
+					auxVenProd.setComVenda(vp.getComVenda());
 					auxVenProd.setProdProduto(comp.getProdProduto());
 					auxVenProd.setProdEmbalagem(comp.getProdEmbalagem());
-					double qtd = venProd.getComVendaProdutoQuantidade() * comp.getProdComposicaoQuantidade();
+					double qtd = vp.getComVendaProdutoQuantidade() * comp.getProdComposicaoQuantidade();
 					auxVenProd.setComVendaProdutoQuantidade(qtd);
 					double bruto = comp.getProdComposicaoValor() / comp.getProdComposicaoQuantidade();
 					auxVenProd.setComVendaProdutoBruto(bruto);
 					double totBruto = bruto * qtd;
 					auxVenProd.setComVendaProdutoTotalBruto(totBruto);
-					double desc = venProd.getComVendaProdutoDesconto();
+					double desc = vp.getComVendaProdutoDesconto();
 					double liquido = bruto - (bruto * desc / 100);
 					auxVenProd.setComVendaProdutoLiquido(liquido);
 					double totLiquido = qtd * liquido;
 					auxVenProd.setComVendaProdutoTotalLiquido(totLiquido);
-					auxVenProd.setComVendaProdutoIcms(venProd.getComVendaProdutoIcms());
-					auxVenProd.setComVendaProdutoIpi(venProd.getComVendaProdutoIpi());
+					auxVenProd.setComVendaProdutoIcms(vp.getComVendaProdutoIcms());
+					auxVenProd.setComVendaProdutoIpi(vp.getComVendaProdutoIpi());
 					auxProdutos.add(auxVenProd);
 				}
 			}
 		}
-		
+
 		int i = 1;
-		for (ComVendaProduto venProd : auxProdutos) {
-			ProdProduto pp = venProd.getProdProduto();
+		for (ComVendaProduto vp : auxProdutos) {
+			ProdProduto pp = vp.getProdProduto();
 
 			// setando o item
 			Det det = new Det();
@@ -503,41 +503,53 @@ public class GerarNfeSaida extends Chain {
 			// cfop
 			prod.setCFOP(getCfop(pp));
 			// unidade
-			prod.setUCom(venProd.getProdEmbalagem().getProdEmbalagemNome());
+			prod.setUCom(vp.getProdEmbalagem().getProdEmbalagemNome());
 			// quantidde
-			prod.setQCom(UtilServer.formataNumero(venProd.getComVendaProdutoQuantidade(), 1, 4, false).replace(",", "."));
+			prod.setQCom(UtilServer.formataNumero(vp.getComVendaProdutoQuantidade(), 1, 4, false).replace(",", "."));
 			// valor unitario
-			prod.setVUnCom(UtilServer.formataNumero(venProd.getComVendaProdutoLiquido(), 1, 4, false).replace(",", "."));
+			prod.setVUnCom(UtilServer.formataNumero(vp.getComVendaProdutoLiquido(), 1, 4, false).replace(",", "."));
 			// valor produto
-			String strProd = getValorNfe(venProd.getComVendaProdutoTotalLiquido());
+			String strProd = getValorNfe(vp.getComVendaProdutoTotalLiquido());
 			valorProd += Double.valueOf(strProd);
 			prod.setVProd(strProd);
 			// barra do tributo
 			prod.setCEANTrib(pp.getProdProdutoBarra() == null ? "" : pp.getProdProdutoBarra());
 			// unidade do tributo
-			prod.setUTrib(venProd.getProdEmbalagem().getProdEmbalagemNome());
+			prod.setUTrib(vp.getProdEmbalagem().getProdEmbalagemNome());
 			// quantidde do tributo
-			prod.setQTrib(UtilServer.formataNumero(venProd.getComVendaProdutoQuantidade(), 1, 4, false).replace(",", "."));
+			prod.setQTrib(UtilServer.formataNumero(vp.getComVendaProdutoQuantidade(), 1, 4, false).replace(",", "."));
 			// valor unitario
-			prod.setVUnTrib(UtilServer.formataNumero(venProd.getComVendaProdutoLiquido(), 1, 4, false).replace(",", "."));
+			prod.setVUnTrib(UtilServer.formataNumero(vp.getComVendaProdutoLiquido(), 1, 4, false).replace(",", "."));
 			// total da NF
 			prod.setIndTot("1");
 			// setando o produto
 			det.setProd(prod);
 			// setando os impostos
-			det.setImposto(getImposto(venProd));
+			det.setImposto(getImposto(vp));
 			// adiciona a lista
 			dets.add(det);
 
-			// verifica se tem algum decreto
-			if (pp.getProdTributacao().getProdTributacaoDecreto() != null && !pp.getProdTributacao().getProdTributacaoDecreto().equals("")) {
-				infos.put(pp.getProdTributacao().getProdTributacaoId(), pp.getProdTributacao().getProdTributacaoDecreto());
+			// verifica se tem algum decreto de icms
+			if (!pp.getProdIcms().getProdIcmsDecreto().equals("")) {
+				infos.put("ICMS" + pp.getProdIcms().getProdIcmsId(), pp.getProdIcms().getProdIcmsDecreto());
+			}
+			// verifica se tem algum decreto de ipi
+			if (!pp.getProdIpi().getProdIpiDecreto().equals("")) {
+				infos.put("IPI" + pp.getProdIpi().getProdIpiId(), pp.getProdIpi().getProdIpiDecreto());
+			}
+			// verifica se tem algum decreto de pis
+			if (!pp.getProdPis().getProdPisDecreto().equals("")) {
+				infos.put("PIS" + pp.getProdPis().getProdPisId(), pp.getProdPis().getProdPisDecreto());
+			}
+			// verifica se tem algum decreto de cofins
+			if (!pp.getProdCofins().getProdCofinsDecreto().equals("")) {
+				infos.put("COFINS" + pp.getProdCofins().getProdCofinsId(), pp.getProdCofins().getProdCofinsDecreto());
 			}
 		}
 	}
 
 	public String getCfop(ProdProduto prod) {
-		String cst = prod.getProdTributacao().getProdTributacaoCst();
+		String cst = prod.getProdIcms().getProdIcmsCst();
 		int cfop = dentro ? 0 : 1000;
 
 		// verifica se é substituicao
@@ -550,37 +562,38 @@ public class GerarNfeSaida extends Chain {
 		return cfop + "";
 	}
 
-	public Imposto getImposto(ComVendaProduto venProd) {
+	public Imposto getImposto(ComVendaProduto vp) {
 		Imposto imposto = new Imposto();
+		String cst = vp.getComVendaProdutoIcmsCst();
 
 		// icms
-		if (auth.getConf().get("nfe.crt").equals("1")) {
-			imposto.setICMS(getSimples(venProd));
+		if ((auth.getConf().get("nfe.crt").equals("1") && cst.equals("")) || cst.length() == 3) {
+			imposto.setICMS(getSimples(vp));
 		} else {
-			imposto.setICMS(getNormal(venProd));
+			imposto.setICMS(getNormal(vp));
 		}
 		// ipi
-		imposto.setIPI(getIpi(venProd));
+		imposto.setIPI(getIPI(vp));
 		// pis
-		imposto.setPIS(getPIS(venProd));
+		imposto.setPIS(getPIS(vp));
 		// confins
-		imposto.setCOFINS(getCOFINS(venProd));
+		imposto.setCOFINS(getCOFINS(vp));
 
 		return imposto;
 	}
 
-	public ICMS getSimples(ComVendaProduto venProd) {
+	public ICMS getSimples(ComVendaProduto vp) {
 		ICMS icms = new ICMS();
-		String cson = venProd.getProdProduto().getProdTributacao().getProdTributacaoCson();
-		String origem = String.valueOf(venProd.getProdProduto().getProdOrigem().getProdOrigemId() - 1);
+		String cson = vp.getComVendaProdutoIcmsCst().equals("") ? vp.getProdProduto().getProdIcms().getProdIcmsCson() : vp.getComVendaProdutoIcmsCst();
+		String origem = String.valueOf(vp.getProdProduto().getProdOrigem().getProdOrigemValor());
 
 		if (cson.equals("101")) {
 			ICMSSN101 icmssn101 = new ICMSSN101();
 			icmssn101.setOrig(origem);
 			icmssn101.setCSOSN(cson);
-			double porcento = Double.valueOf(auth.getConf().get("nfe.cson"));
+			double porcento = vp.getComVendaProdutoIcms() == 0.00 ? Double.valueOf(auth.getConf().get("nfe.cson")) : vp.getComVendaProdutoIcms();
 			icmssn101.setPCredSN(getValorNfe(porcento));
-			double valor = venProd.getComVendaProdutoTotalLiquido() * porcento / 100;
+			double valor = vp.getComVendaProdutoTotalLiquido() * porcento / 100;
 			icmssn101.setVCredICMSSN(getValorNfe(valor));
 			icms.setICMSSN101(icmssn101);
 		} else if (cson.equals("102")) {
@@ -625,10 +638,10 @@ public class GerarNfeSaida extends Chain {
 		return icms;
 	}
 
-	public ICMS getNormal(ComVendaProduto venProd) {
+	public ICMS getNormal(ComVendaProduto vp) {
 		ICMS icms = new ICMS();
-		String cst = venProd.getProdProduto().getProdTributacao().getProdTributacaoCst();
-		String origem = String.valueOf(venProd.getProdProduto().getProdOrigem().getProdOrigemId() - 1);
+		String cst = vp.getComVendaProdutoIcmsCst().equals("") ? vp.getProdProduto().getProdIcms().getProdIcmsCst() : vp.getComVendaProdutoIcmsCst();
+		String origem = String.valueOf(vp.getProdProduto().getProdOrigem().getProdOrigemValor());
 
 		// se é 10 e muda pra 60
 		if (cst.equals("10")) {
@@ -647,14 +660,14 @@ public class GerarNfeSaida extends Chain {
 			// porcentagem icms
 			double porcento = 0.00;
 			if (comNatureza.getComNaturezaIcms()) {
-				if (venProd.getComVendaProdutoIcms() > 0) {
-					porcento = venProd.getComVendaProdutoIcms();
+				if (vp.getComVendaProdutoIcms() > 0) {
+					porcento = vp.getComVendaProdutoIcms();
 				} else {
-					porcento = dentro ? venProd.getProdProduto().getProdTributacao().getProdTributacaoDentro() : venProd.getProdProduto().getProdTributacao().getProdTributacaoFora();
+					porcento = dentro ? vp.getProdProduto().getProdIcms().getProdIcmsDentro() : vp.getProdProduto().getProdIcms().getProdIcmsFora();
 				}
 			}
 			// valor da base de calculo
-			String strBase = porcento == 0.00 ? "0.00" : getValorNfe(venProd.getComVendaProdutoTotalLiquido());
+			String strBase = porcento == 0.00 ? "0.00" : getValorNfe(vp.getComVendaProdutoTotalLiquido());
 			double base = Double.valueOf(strBase);
 			icms00.setVBC(strBase);
 			icms00.setPICMS(getValorNfe(porcento));
@@ -697,21 +710,22 @@ public class GerarNfeSaida extends Chain {
 		return icms;
 	}
 
-	public IPI getIpi(ComVendaProduto venProd) {
+	public IPI getIPI(ComVendaProduto vp) {
 		IPI ipi = new IPI();
+		String cst = vp.getComVendaProdutoIpiCst().equals("") ? vp.getProdProduto().getProdIpi().getProdIpiCstSaida() : vp.getComVendaProdutoIpiCst();
 
 		// identifica pela natureza se cobra IPI
 		double porcento = 0.00;
 		if (comNatureza.getComNaturezaIpi()) {
-			if (venProd.getComVendaProdutoIpi() > 0) {
-				porcento = venProd.getComVendaProdutoIpi();
+			if (vp.getComVendaProdutoIpi() > 0) {
+				porcento = vp.getComVendaProdutoIpi();
 			} else {
-				porcento = venProd.getProdProduto().getProdIpi().getProdIpiAliquota();
+				porcento = vp.getProdProduto().getProdIpi().getProdIpiAliquota();
 			}
 		}
 
 		// faz o calculo do valor e seta o tipo do cst
-		double valor = venProd.getComVendaProdutoTotalLiquido() * porcento / 100;
+		double valor = vp.getComVendaProdutoTotalLiquido() * porcento / 100;
 		String strValor = getValorNfe(valor);
 		valorIpi += Double.valueOf(strValor);
 
@@ -722,38 +736,49 @@ public class GerarNfeSaida extends Chain {
 			trib.setPIPI("0.00");
 			trib.setVIPI("0.00");
 		} else {
-			trib.setCST(venProd.getProdProduto().getProdIpi().getProdIpiCstSaida());
-			trib.setVBC(getValorNfe(trib.getCST().equals("50") ? venProd.getComVendaProdutoTotalLiquido() : 0.00));
+			trib.setCST(cst);
+			trib.setVBC(getValorNfe(vp.getComVendaProdutoTotalLiquido()));
 			trib.setPIPI(getValorNfe(porcento));
 			trib.setVIPI(strValor);
 		}
+		
 		ipi.setIPITrib(trib);
-
-		// enquadramento
-		ipi.setCEnq(venProd.getProdProduto().getProdIpi().getProdIpiEnq());
+		ipi.setCEnq(vp.getProdProduto().getProdIpi().getProdIpiEnq());
 		return ipi;
 	}
 
-	public PIS getPIS(ComVendaProduto venProd) {
+	public PIS getPIS(ComVendaProduto vp) {
 		PIS pis = new PIS();
+		String cst = vp.getComVendaProdutoPisCst().equals("") ? vp.getProdProduto().getProdPis().getProdPisCstSaida() : vp.getComVendaProdutoPisCst();
+
+		// identifica pela natureza se cobra PIS
+		double porcento = 0.00;
+		if (comNatureza.getComNaturezaPis()) {
+			if (vp.getComVendaProdutoPis() > 0) {
+				porcento = vp.getComVendaProdutoPis();
+			} else {
+				porcento = vp.getProdProduto().getProdPis().getProdPisAliquota();
+			}
+		}
+
 		// faz o calculo do valor e define
-		double valor = venProd.getComVendaProdutoTotalLiquido() * comNatureza.getComNaturezaPis() / 100;
+		double valor = vp.getComVendaProdutoTotalLiquido() * porcento / 100;
 		String strValor = getValorNfe(valor);
 		valorPis += Double.valueOf(strValor);
 
 		// isento ou simples nacional
-		if (comNatureza.getComNaturezaPis() == 0.00) {
+		if (porcento == 0.00) {
 			PISOutr outr = new PISOutr();
-			outr.setCST("99");
+			outr.setCST("49");
 			outr.setVBC("0.00");
 			outr.setPPIS("0.00");
 			outr.setVPIS("0.00");
 			pis.setPISOutr(outr);
 		} else {
 			PISAliq aliq = new PISAliq();
-			aliq.setCST("01");
-			aliq.setVBC(getValorNfe(venProd.getComVendaProdutoTotalLiquido()));
-			aliq.setPPIS(getValorNfe(comNatureza.getComNaturezaPis()));
+			aliq.setCST(cst);
+			aliq.setVBC(getValorNfe(vp.getComVendaProdutoTotalLiquido()));
+			aliq.setPPIS(getValorNfe(porcento));
 			aliq.setVPIS(strValor);
 			pis.setPISAliq(aliq);
 		}
@@ -761,26 +786,38 @@ public class GerarNfeSaida extends Chain {
 		return pis;
 	}
 
-	public COFINS getCOFINS(ComVendaProduto venProd) {
+	public COFINS getCOFINS(ComVendaProduto vp) {
 		COFINS cofins = new COFINS();
+		String cst = vp.getComVendaProdutoCofinsCst().equals("") ? vp.getProdProduto().getProdCofins().getProdCofinsCstSaida() : vp.getComVendaProdutoCofinsCst();
+		
+		// identifica pela natureza se cobra PIS
+		double porcento = 0.00;
+		if (comNatureza.getComNaturezaCofins()) {
+			if (vp.getComVendaProdutoCofins() > 0) {
+				porcento = vp.getComVendaProdutoCofins();
+			} else {
+				porcento = vp.getProdProduto().getProdCofins().getProdCofinsAliquota();
+			}
+		}
+		
 		// faz o calculo do valor e define
-		double valor = venProd.getComVendaProdutoTotalLiquido() * comNatureza.getComNaturezaCofins() / 100;
+		double valor = vp.getComVendaProdutoTotalLiquido() * porcento / 100;
 		String strValor = getValorNfe(valor);
 		valorCofins += Double.valueOf(strValor);
 
 		// isento ou simples nacional
-		if (comNatureza.getComNaturezaCofins() == 0.00) {
+		if (porcento == 0.00) {
 			COFINSOutr outr = new COFINSOutr();
-			outr.setCST("99");
+			outr.setCST("49");
 			outr.setVBC("0.00");
 			outr.setPCOFINS("0.00");
 			outr.setVCOFINS("0.00");
 			cofins.setCOFINSOutr(outr);
 		} else {
 			COFINSAliq aliq = new COFINSAliq();
-			aliq.setCST("01");
-			aliq.setVBC(getValorNfe(venProd.getComVendaProdutoTotalLiquido()));
-			aliq.setPCOFINS(getValorNfe(comNatureza.getComNaturezaCofins()));
+			aliq.setCST(cst);
+			aliq.setVBC(getValorNfe(vp.getComVendaProdutoTotalLiquido()));
+			aliq.setPCOFINS(getValorNfe(porcento));
 			aliq.setVCOFINS(strValor);
 			cofins.setCOFINSAliq(aliq);
 		}
@@ -891,7 +928,7 @@ public class GerarNfeSaida extends Chain {
 	public InfAdic getInformacoes() {
 		StringBuffer sb = new StringBuffer();
 		// adiciona as informacoes necessarias de decretos
-		for (Entry<Integer, String> info : infos.entrySet()) {
+		for (Entry<String, String> info : infos.entrySet()) {
 			sb.append(info.getValue() + "#");
 		}
 		// adiciona o pedido da venda

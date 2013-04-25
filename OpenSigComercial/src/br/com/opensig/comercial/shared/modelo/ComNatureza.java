@@ -45,10 +45,10 @@ public class ComNatureza extends Dados implements Serializable {
 	private int comNaturezaIpi;
 
 	@Column(name = "com_natureza_pis")
-	private Double comNaturezaPis;
+	private int comNaturezaPis;
 
 	@Column(name = "com_natureza_cofins")
-	private Double comNaturezaCofins;
+	private int comNaturezaCofins;
 
 	@JoinColumn(name = "emp_empresa_id")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -119,20 +119,20 @@ public class ComNatureza extends Dados implements Serializable {
 		this.comNaturezaIpi = comNaturezaIpi == false ? 0 : 1;
 	}
 
-	public Double getComNaturezaPis() {
-		return comNaturezaPis;
+	public boolean getComNaturezaPis() {
+		return comNaturezaPis == 0 ? false : true;
 	}
 
-	public void setComNaturezaPis(Double comNaturezaPis) {
-		this.comNaturezaPis = comNaturezaPis;
+	public void setComNaturezaPis(boolean comNaturezaPis) {
+		this.comNaturezaPis = comNaturezaPis == false ? 0 : 1;
 	}
 
-	public Double getComNaturezaCofins() {
-		return comNaturezaCofins;
+	public boolean getComNaturezaCofins() {
+		return comNaturezaCofins == 0 ? false : true;
 	}
 
-	public void setComNaturezaCofins(Double comNaturezaCofins) {
-		this.comNaturezaCofins = comNaturezaCofins;
+	public void setComNaturezaCofins(boolean comNaturezaCofins) {
+		this.comNaturezaCofins = comNaturezaCofins == false ? 0 : 1;
 	}
 
 	public EmpEmpresa getEmpEmpresa() {
@@ -153,7 +153,7 @@ public class ComNatureza extends Dados implements Serializable {
 
 	public String[] toArray() {
 		return new String[] { comNaturezaId + "", empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), comNaturezaNome, comNaturezaDescricao,
-				comNaturezaCfopTrib + "", comNaturezaCfopSub + "", getComNaturezaIcms() + "", getComNaturezaIpi() + "", comNaturezaPis.toString(), comNaturezaCofins.toString() };
+				comNaturezaCfopTrib + "", comNaturezaCfopSub + "", getComNaturezaIcms() + "", getComNaturezaIpi() + "", getComNaturezaPis() + "", getComNaturezaCofins() + "" };
 	}
 
 	public Dados getObjeto(String campo) {

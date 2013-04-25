@@ -57,11 +57,11 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comCompraProdutoId"), new IntegerFieldDef("comCompra.comCompraId"), new IntegerFieldDef("comCompra.empEmpresa.empEmpresaId"),
 				new StringFieldDef("comCompra.empEmpresa.empEntidade.empEntidadeNome1"), new StringFieldDef("prodProduto.empFornecedor.empEntidade.empEntidadeNome1"),
 				new IntegerFieldDef("prodProduto.prodProdutoId"), new StringFieldDef("prodProduto.prodProdutoBarra"), new StringFieldDef("prodProduto.prodProdutoDescricao"),
-				new StringFieldDef("prodProduto.prodProdutoReferencia"), new IntegerFieldDef("prodProduto.prodTributacao.prodTributacaoDentro"),
-				new StringFieldDef("prodProduto.prodTributacao.prodTributacaoCst"), new DateFieldDef("comCompra.comCompraRecebimento"), new FloatFieldDef("comCompraProdutoQuantidade"),
+				new StringFieldDef("prodProduto.prodProdutoReferencia"), new DateFieldDef("comCompra.comCompraRecebimento"), new FloatFieldDef("comCompraProdutoQuantidade"),
 				new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"), new FloatFieldDef("comCompraProdutoValor"),
-				new FloatFieldDef("comCompraProdutoTotal"), new IntegerFieldDef("comCompraProdutoCfop"), new FloatFieldDef("comCompraProdutoIcms"), new FloatFieldDef("comCompraProdutoIpi"),
-				new FloatFieldDef("comCompraProdutoPreco"), new IntegerFieldDef("comCompraProdutoOrdem") };
+				new FloatFieldDef("comCompraProdutoTotal"), new IntegerFieldDef("comCompraProdutoCfop"), new StringFieldDef("comCompraProdutoIcmsCst"), new FloatFieldDef("comCompraProdutoIcms"),
+				new StringFieldDef("comCompraProdutoIpiCst"), new FloatFieldDef("comCompraProdutoIpi"), new StringFieldDef("comCompraProdutoPisCst"), new FloatFieldDef("comCompraProdutoPis"),
+				new StringFieldDef("comCompraProdutoCofinsCst"), new FloatFieldDef("comCompraProdutoCofins"), new FloatFieldDef("comCompraProdutoPreco"), new IntegerFieldDef("comCompraProdutoOrdem") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -78,16 +78,20 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "prodProduto.prodProdutoBarra", 100, true);
 		ColumnConfig ccProduto = new ColumnConfig(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoDescricao", 250, true);
 		ColumnConfig ccReferencia = new ColumnConfig(OpenSigCore.i18n.txtRef(), "prodProduto.prodProdutoReferencia", 100, true);
-		ColumnConfig ccTributacao = new ColumnConfig(OpenSigCore.i18n.txtDentro(), "prodProduto.prodTributacao.prodTributacaoDentro", 50, true, PORCENTAGEM);
-		ColumnConfig ccCst = new ColumnConfig(OpenSigCore.i18n.txtCst(), "prodProduto.prodTributacao.prodTributacaoCst", 50, true);
 		ColumnConfig ccRecebimento = new ColumnConfig(OpenSigCore.i18n.txtData(), "comCompra.comCompraRecebimento", 75, true, DATA);
 		ColumnConfig ccEmbalagemId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemId", 100, true);
 		ccEmbalagemId.setHidden(true);
 		ccEmbalagemId.setFixed(true);
 		ColumnConfig ccEmbalagem = new ColumnConfig(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemNome", 75, true);
-		ColumnConfig ccCfop = new ColumnConfig(OpenSigCore.i18n.txtCfop(), "comCompraProdutoCfop", 50, true, NUMERO);
-		ColumnConfig ccIcms = new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comCompraProdutoIcms", 50, true, PORCENTAGEM);
-		ColumnConfig ccIpi = new ColumnConfig(OpenSigCore.i18n.txtIpi(), "comCompraProdutoIpi", 50, true, PORCENTAGEM);
+		ColumnConfig ccCfop = new ColumnConfig(OpenSigCore.i18n.txtCfop(), "comCompraProdutoCfop", 75, true, NUMERO);
+		ColumnConfig ccIcmsCst = new ColumnConfig(OpenSigCore.i18n.txtIcms() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoIcmsCst", 100, true);
+		ColumnConfig ccIcms = new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comCompraProdutoIcms", 75, true, PORCENTAGEM);
+		ColumnConfig ccIpiCst = new ColumnConfig(OpenSigCore.i18n.txtIpi() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoIpiCst", 100, true);
+		ColumnConfig ccIpi = new ColumnConfig(OpenSigCore.i18n.txtIpi(), "comCompraProdutoIpi", 75, true, PORCENTAGEM);
+		ColumnConfig ccPisCst = new ColumnConfig(OpenSigCore.i18n.txtPis() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoPisCst", 100, true);
+		ColumnConfig ccPis = new ColumnConfig(OpenSigCore.i18n.txtPis(), "comCompraProdutoPis", 75, true, PORCENTAGEM);
+		ColumnConfig ccCofinsCst = new ColumnConfig(OpenSigCore.i18n.txtCofins() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoCofinsCst", 100, true);
+		ColumnConfig ccCofins = new ColumnConfig(OpenSigCore.i18n.txtCofins(), "comCompraProdutoCofins", 75, true, PORCENTAGEM);
 		ColumnConfig ccOrdem = new ColumnConfig(OpenSigCore.i18n.txtOrdem(), "comCompraProdutoOrdem", 100, true);
 		ccOrdem.setHidden(true);
 
@@ -97,8 +101,8 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 		SummaryColumnConfig ccTotal = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comCompraProdutoTotal", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig ccPreco = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtPreco(), "comCompraProdutoPreco", 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccCompraId, ccEmpresaId, ccEmpresa, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccTributacao, ccCst, ccRecebimento, ccQuantidade, ccEmbalagemId, ccEmbalagem,
-				ccValor, ccTotal, ccCfop, ccIcms, ccIpi, ccPreco };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccCompraId, ccEmpresaId, ccEmpresa, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccRecebimento, ccQuantidade,
+				ccEmbalagemId, ccEmbalagem, ccValor, ccTotal, ccCfop, ccIcmsCst, ccIcms, ccIpiCst, ccIpi, ccPisCst, ccPis, ccCofinsCst, ccCofins, ccPreco };
 		modelos = new ColumnModel(bcc);
 
 		GrupoFiltro gf = new GrupoFiltro();
@@ -108,7 +112,7 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 		}
 		FiltroBinario fb = new FiltroBinario("comCompra.comCompraFechada", ECompara.IGUAL, 1);
 		gf.add(fb);
-		
+
 		filtroPadrao = gf;
 		super.inicializar();
 	}
@@ -157,25 +161,25 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 		filtros.get("comCompra.empEmpresa.empEmpresaId").setActive(false, true);
 		super.setFavorito(favorito);
 	}
-	
+
 	@Override
 	public void irPara() {
 		Menu mnuContexto = new Menu();
-		
+
 		// compra
 		SisFuncao compra = UtilClient.getFuncaoPermitida(ComandoCompra.class);
 		MenuItem itemCompra = gerarFuncao(compra, "comCompraId", "comCompra.comCompraId");
 		if (itemCompra != null) {
 			mnuContexto.addItem(itemCompra);
 		}
-		
+
 		// produto
 		SisFuncao produto = UtilClient.getFuncaoPermitida(ComandoProduto.class);
 		MenuItem itemProduto = gerarFuncao(produto, "prodProdutoId", "prodProduto.prodProdutoId");
 		if (itemProduto != null) {
 			mnuContexto.addItem(itemProduto);
 		}
-		
+
 		if (mnuContexto.getItems().length > 0) {
 			MenuItem mnuItem = getIrPara();
 			mnuItem.setMenu(mnuContexto);

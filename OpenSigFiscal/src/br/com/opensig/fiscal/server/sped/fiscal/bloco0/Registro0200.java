@@ -96,7 +96,7 @@ public class Registro0200 extends ARegistro<Dados0200, ProdProduto> {
 			d.setCod_gen(prod.getProdProdutoNcm());
 		}
 		d.setEx_ipi("");
-		d.setAliq_icms(prod.getProdTributacao().getProdTributacaoDentro());
+		d.setAliq_icms(prod.getProdIcms().getProdIcmsDentro());
 
 		normalizar(d);
 		qtdLinhas++;

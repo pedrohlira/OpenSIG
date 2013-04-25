@@ -85,16 +85,16 @@ public class FecharCompra extends Chain {
 				em = emf.createEntityManager();
 				em.getTransaction().begin();
 
-				for (ComCompraProduto comProd : compra.getComCompraProdutos()) {
+				for (ComCompraProduto cp : compra.getComCompraProdutos()) {
 					// formando o filtro
-					FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, comProd.getProdProduto());
+					FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, cp.getProdProduto());
 					GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
 
 					// fatorando a quantida no estoque
-					double qtd = comProd.getComCompraProdutoQuantidade();
-					if (comProd.getProdEmbalagem().getProdEmbalagemId() != comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
-						qtd *= impl.getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
-						qtd /= impl.getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+					double qtd = cp.getComCompraProdutoQuantidade();
+					if (cp.getProdEmbalagem().getProdEmbalagemId() != cp.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
+						qtd *= impl.getQtdEmbalagem(cp.getProdEmbalagem().getProdEmbalagemId());
+						qtd /= impl.getQtdEmbalagem(cp.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 					}
 
 					// formando o sql
@@ -139,15 +139,15 @@ public class FecharCompra extends Chain {
 				em = emf.createEntityManager();
 				em.getTransaction().begin();
 
-				for (ComCompraProduto comProd : compra.getComCompraProdutos()) {
+				for (ComCompraProduto cp : compra.getComCompraProdutos()) {
 					// fatorando pela embalagem
-					double custo = comProd.getComCompraProdutoValor();
-					double preco = comProd.getComCompraProdutoPreco();
-					if (comProd.getProdEmbalagem().getProdEmbalagemId() != comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
-						custo /= impl.getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
-						custo *= impl.getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
-						preco /= impl.getQtdEmbalagem(comProd.getProdEmbalagem().getProdEmbalagemId());
-						preco *= impl.getQtdEmbalagem(comProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+					double custo = cp.getComCompraProdutoValor();
+					double preco = cp.getComCompraProdutoPreco();
+					if (cp.getProdEmbalagem().getProdEmbalagemId() != cp.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
+						custo /= impl.getQtdEmbalagem(cp.getProdEmbalagem().getProdEmbalagemId());
+						custo *= impl.getQtdEmbalagem(cp.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+						preco /= impl.getQtdEmbalagem(cp.getProdEmbalagem().getProdEmbalagemId());
+						preco *= impl.getQtdEmbalagem(cp.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 					}
 					// formando os parametros
 					ParametroNumero pn1 = new ParametroNumero("prodProdutoCusto", custo);
@@ -155,7 +155,7 @@ public class FecharCompra extends Chain {
 					ParametroData pd = new ParametroData("prodProdutoAlterado", new Date());
 					GrupoParametro gp = new GrupoParametro(new IParametro[] { pn1, pn2, pd });
 					// formando o filtro
-					FiltroNumero fn = new FiltroNumero("prodProdutoId", ECompara.IGUAL, comProd.getProdProduto().getId());
+					FiltroNumero fn = new FiltroNumero("prodProdutoId", ECompara.IGUAL, cp.getProdProduto().getId());
 					// formando o sql
 					Sql sql = new Sql(prod, EComando.ATUALIZAR, fn, gp);
 					servico.executar(em, sql);

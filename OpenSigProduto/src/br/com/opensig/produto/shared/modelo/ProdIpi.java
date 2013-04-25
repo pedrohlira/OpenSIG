@@ -50,7 +50,7 @@ public class ProdIpi extends Dados implements Serializable {
 	}
 
 	public ProdIpi(int prodIpiId) {
-		super("pu_produto", "ProdIpi", "prodIpiId", "prodIpiNome");
+		super("pu_produto", "ProdIpi", "prodIpiId", "prodIpiCstEntrada");
 		this.prodIpiId = prodIpiId;
 	}
 

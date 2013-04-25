@@ -20,9 +20,10 @@ public class RegistroC321 extends ARegistro<DadosC321, List<ComEcfNotaProduto>> 
 				d.setVl_bc_icms(d.getVl_item());
 				d.setVl_icms(d.getVl_item() * np.getComEcfNotaProdutoIcms() / 100);
 			}
+			d.setVl_pis(d.getVl_item() * np.getProdProduto().getProdPis().getProdPisAliquota() / 100);
+			d.setVl_cofins(d.getVl_item() * np.getProdProduto().getProdCofins().getProdCofinsAliquota() / 100);
 		}
-		d.setVl_pis(d.getVl_item() * pis / 100);
-		d.setVl_cofins(d.getVl_item() * cofins / 100);
+		
 		return d;
 	}
 }

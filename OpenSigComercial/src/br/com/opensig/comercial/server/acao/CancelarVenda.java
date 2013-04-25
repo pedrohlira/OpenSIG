@@ -99,13 +99,13 @@ public class CancelarVenda extends Chain {
 	public void execute() throws OpenSigException {
 		// verifica se tem produtos com composicoes
 		List<ComVendaProduto> auxProdutos = new ArrayList<ComVendaProduto>();
-		for (ComVendaProduto venProd : venda.getComVendaProdutos()) {
-			auxProdutos.add(venProd);
-			for (ProdComposicao comp : venProd.getProdProduto().getProdComposicoes()) {
+		for (ComVendaProduto vp : venda.getComVendaProdutos()) {
+			auxProdutos.add(vp);
+			for (ProdComposicao comp : vp.getProdProduto().getProdComposicoes()) {
 				ComVendaProduto auxVenProd = new ComVendaProduto();
 				auxVenProd.setProdProduto(comp.getProdProduto());
 				auxVenProd.setProdEmbalagem(comp.getProdEmbalagem());
-				double qtd = venProd.getComVendaProdutoQuantidade() * comp.getProdComposicaoQuantidade();
+				double qtd = vp.getComVendaProdutoQuantidade() * comp.getProdComposicaoQuantidade();
 				auxVenProd.setComVendaProdutoQuantidade(qtd);
 				auxProdutos.add(auxVenProd);
 			}
@@ -135,17 +135,17 @@ public class CancelarVenda extends Chain {
 				em = emf.createEntityManager();
 				em.getTransaction().begin();
 
-				for (ComVendaProduto venProd : venda.getComVendaProdutos()) {
+				for (ComVendaProduto vp : venda.getComVendaProdutos()) {
 					// fatorando a quantida no estoque
-					double qtd = venProd.getComVendaProdutoQuantidade();
-					if (venProd.getProdEmbalagem().getProdEmbalagemId() != venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
-						qtd *= impl.getQtdEmbalagem(venProd.getProdEmbalagem().getProdEmbalagemId());
-						qtd /= impl.getQtdEmbalagem(venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+					double qtd = vp.getComVendaProdutoQuantidade();
+					if (vp.getProdEmbalagem().getProdEmbalagemId() != vp.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
+						qtd *= impl.getQtdEmbalagem(vp.getProdEmbalagem().getProdEmbalagemId());
+						qtd /= impl.getQtdEmbalagem(vp.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 					}
 					// formando os parametros
 					ParametroFormula pn1 = new ParametroFormula("prodEstoqueQuantidade", qtd);
 					// formando o filtro
-					FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, venProd.getProdProduto());
+					FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, vp.getProdProduto());
 					GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
 					// busca o item
 					ProdEstoque est = new ProdEstoque();
@@ -154,8 +154,8 @@ public class CancelarVenda extends Chain {
 					servico.executar(em, sql);
 
 					// remove estoque da grade caso o produto tenha
-					for (ProdGrade grade : venProd.getProdProduto().getProdGrades()) {
-						if (grade.getProdGradeBarra().equals(venProd.getComVendaProdutoBarra())) {
+					for (ProdGrade grade : vp.getProdProduto().getProdGrades()) {
+						if (grade.getProdGradeBarra().equals(vp.getComVendaProdutoBarra())) {
 							// formando os parametros
 							ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", qtd);
 							// formando o filtro

@@ -81,8 +81,8 @@ public class SalvarCompra extends Chain {
 	private void validarProduto() throws ComercialException {
 		try {
 			// salva os produtos novos
-			for (ComCompraProduto comProd : compra.getComCompraProdutos()) {
-				ProdProduto prod = comProd.getProdProduto();
+			for (ComCompraProduto cp : compra.getComCompraProdutos()) {
+				ProdProduto prod = cp.getProdProduto();
 				if (prod.getProdProdutoId() == 0) {
 					SalvarProduto salProduto = new SalvarProduto(null, servico, prod, null);
 					salProduto.execute();

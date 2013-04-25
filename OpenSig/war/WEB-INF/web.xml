@@ -16,7 +16,7 @@
 		<init-param>
 			<description>url</description>
 			<param-name>eclipselink.jdbc.url</param-name>
-			<param-value>jdbc:mysql://localhost/opensig</param-value>
+			<param-value>jdbc:mysql://localhost/opensig_at</param-value>
 		</init-param>
 		<init-param>
 			<description>driver</description>

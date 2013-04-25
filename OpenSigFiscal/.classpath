@@ -24,8 +24,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/NFE"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JAXB"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/REST"/>
-	<classpathentry kind="lib" path="/OpenSigComercial/dist/OpenSigComercial.jar"/>
 	<classpathentry kind="lib" path="/OpenSigFinanceiro/dist/OpenSigFinanceiro.jar"/>
 	<classpathentry kind="lib" path="/OpenSigProduto/dist/OpenSigProduto.jar"/>
+	<classpathentry kind="lib" path="/OpenSigComercial/dist/OpenSigComercial.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
