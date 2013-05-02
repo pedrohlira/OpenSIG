@@ -10,6 +10,7 @@ import br.com.opensig.core.client.controlador.comando.IComando;
 import br.com.opensig.core.client.controlador.comando.lista.ComandoExcluir;
 import br.com.opensig.core.client.visao.abstrato.IFormulario;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
+import br.com.opensig.fiscal.client.controlador.comando.acao.ComandoCartaSaida;
 import br.com.opensig.fiscal.client.servico.FiscalProxy;
 import br.com.opensig.fiscal.client.visao.form.FormularioErro;
 import br.com.opensig.fiscal.shared.modelo.ENotaStatus;
@@ -27,6 +28,7 @@ import com.gwtextux.client.widgets.window.ToastWindow;
 public class ListagemSaida extends AListagemNota<FisNotaSaida> {
 
 	private IComando cmdCancelar;
+	private IComando cmdCarta;
 	private String motivo;
 
 	public ListagemSaida(IFormulario<FisNotaSaida> formulario) {
@@ -41,10 +43,13 @@ public class ListagemSaida extends AListagemNota<FisNotaSaida> {
 		nomes.put("ipi", "fisNotaSaidaIpi");
 		nomes.put("pis", "fisNotaSaidaPis");
 		nomes.put("cofins", "fisNotaSaidaCofins");
+		nomes.put("evento", "fisNotaSaidaEvento");
 		nomes.put("protocolo", "fisNotaSaidaProtocolo");
 		nomes.put("xml", "fisNotaSaidaXml");
 		nomes.put("protocoloCancelado", "fisNotaSaidaProtocoloCancelado");
 		nomes.put("xmlCancelado", "fisNotaSaidaXmlCancelado");
+		nomes.put("protocoloCarta", "fisNotaSaidaProtocoloCarta");
+		nomes.put("xmlCarta", "fisNotaSaidaXmlCarta");
 		nomes.put("recibo", "fisNotaSaidaRecibo");
 		nomes.put("erro", "fisNotaSaidaErro");
 		inicializar();
@@ -60,20 +65,34 @@ public class ListagemSaida extends AListagemNota<FisNotaSaida> {
 				proxy.cancelarSaida(classe, motivo, new AsyncCallback<Map<String, String>>() {
 					public void onFailure(Throwable caught) {
 						getPanel().getEl().unmask();
-						MessageBox.alert(OpenSigCore.i18n.txtCancelar(), OpenSigCore.i18n.errExcluir());
+						MessageBox.alert(OpenSigCore.i18n.txtCancelar(), caught.getMessage());
 					};
 
 					public void onSuccess(Map<String, String> result) {
 						getPanel().getEl().unmask();
-						Record rec = getSelectionModel().getSelected();
+						getStore().reload();
+					};
+				});
+			}
+		};
 
-						ENotaStatus status = ENotaStatus.valueOf(result.get("status"));
-						rec.set("fisNotaStatus.fisNotaStatusId", status.getId());
-						rec.set("fisNotaStatus.fisNotaStatusDescricao", status.toString());
-						rec.set("fisNotaSaidaErro", result.get("msg").toString());
+		// carta
+		cmdCarta = new AComando() {
+			public void execute(Map contexto) {
+				super.execute(contexto);
+				int id = UtilClient.getSelecionado(getPanel());
+				classe.setId(id);
 
-						String msg = status == ENotaStatus.ERRO ? OpenSigCore.i18n.errExcluir() : OpenSigCore.i18n.msgExcluirOK();
-						new ToastWindow(OpenSigCore.i18n.txtCancelar(), msg).show();
+				FiscalProxy<FisNotaSaida> proxy = new FiscalProxy<FisNotaSaida>();
+				proxy.cartaSaida(classe, motivo, new AsyncCallback<Map<String, String>>() {
+					public void onFailure(Throwable caught) {
+						getPanel().getEl().unmask();
+						MessageBox.alert(OpenSigCore.i18n.txtCarta(), caught.getMessage());
+					};
+
+					public void onSuccess(Map<String, String> result) {
+						getPanel().getEl().unmask();
+						getStore().reload();
 					};
 				});
 			}
@@ -88,6 +107,10 @@ public class ListagemSaida extends AListagemNota<FisNotaSaida> {
 		return result.getFisNotaSaidaXmlCancelado();
 	};
 
+	protected String getXmlCarta(FisNotaSaida result) {
+		return result.getFisNotaSaidaXmlCarta();
+	}
+
 	protected String getChave(FisNotaSaida result) {
 		return result.getFisNotaSaidaChave();
 	}
@@ -95,7 +118,7 @@ public class ListagemSaida extends AListagemNota<FisNotaSaida> {
 	protected String getErro(FisNotaSaida result) {
 		return result.getFisNotaSaidaErro();
 	}
-	
+
 	protected void mostrarErro(FisNotaSaida result) {
 		Window wnd = new Window(OpenSigCore.i18n.txtErro(), 800, 600, true, false);
 		FormularioErro<FisNotaSaida> frmErro = new FormularioErro<FisNotaSaida>(result, getFuncao(), wnd);
@@ -116,16 +139,36 @@ public class ListagemSaida extends AListagemNota<FisNotaSaida> {
 				MessageBox.prompt(OpenSigCore.i18n.txtCancelar(), OpenSigCore.i18n.msgConfirma(), new PromptCallback() {
 					public void execute(String btnID, String text) {
 						if (btnID.equalsIgnoreCase("ok")) {
-							if (text == null) {
+							if (text == null || text.trim().length() < 1) {
 								new ToastWindow(OpenSigCore.i18n.txtCancelar(), OpenSigCore.i18n.errInvalido()).show();
 							} else {
 								getPanel().getEl().mask(OpenSigCore.i18n.txtAguarde());
-								motivo = text;
+								motivo = text.trim();
 								cmdCancelar.execute(contexto);
 							}
 						}
 					}
 				}, true);
+			} else {
+				MessageBox.alert(OpenSigCore.i18n.txtCancelar(), OpenSigCore.i18n.errSelecionar());
+			}
+		} else if (comando instanceof ComandoCartaSaida) {
+			if (rec != null && rec.getAsInteger("fisNotaStatus.fisNotaStatusId") == ENotaStatus.AUTORIZADO.getId()) {
+				MessageBox.prompt(OpenSigCore.i18n.txtCarta(), "Texto de correcao completo. (min=15 max=1000)", new PromptCallback() {
+					public void execute(String btnID, String text) {
+						if (btnID.equalsIgnoreCase("ok")) {
+							if (text == null || text.trim().length() < 15 || text.trim().length() > 1000) {
+								new ToastWindow(OpenSigCore.i18n.txtCarta(), OpenSigCore.i18n.errInvalido()).show();
+							} else {
+								getPanel().getEl().mask(OpenSigCore.i18n.txtAguarde());
+								motivo = text.trim();
+								cmdCarta.execute(contexto);
+							}
+						}
+					}
+				}, true);
+			} else {
+				MessageBox.alert(OpenSigCore.i18n.txtCarta(), OpenSigCore.i18n.errSelecionar());
 			}
 		}
 

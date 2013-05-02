@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-	<display-name>OpenSIG - Sistemas Integrados Gerenciáveis Open Source</display-name>
+	<display-name>OpenSIG - Sistema Integrado de Gestão Open Source</display-name>
 	<description>Plataforma modular, expansível e acessível.</description>
 	<!-- Listener -->
 	<listener>
@@ -16,7 +16,7 @@
 		<init-param>
 			<description>url</description>
 			<param-name>eclipselink.jdbc.url</param-name>
-			<param-value>jdbc:mysql://localhost/opensig_at</param-value>
+			<param-value>jdbc:mysql://localhost/opensig</param-value>
 		</init-param>
 		<init-param>
 			<description>driver</description>

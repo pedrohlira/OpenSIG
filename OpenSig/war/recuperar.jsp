@@ -33,7 +33,7 @@
 	}
 </script>
 
-<title>OpenSIG - Sistemas Integrados Gerenci&aacute;veis Open Source</title>
+<title>OpenSIG - Sistema Integrado de Gest&atilde;o Open Source</title>
 </head>
 <body onload="javascript:document.nfe.chave.focus();">
 	<div id="stylized" class="myform">
@@ -51,11 +51,13 @@
 
 			<div class="spacer"></div>
 			<button type="button" style="margin-left: 50px;"
-				onclick="validar(2);">NFe</button>
+				onclick="validar('nfe');">NFe</button>
+			<button type="button" style="margin-left: 20px;width: 125px;"
+				onclick="validar('cancelada');">Cancelada</button>
 			<button type="button" style="margin-left: 20px;"
-				onclick="validar(4);">Cancelada</button>
+				onclick="validar('carta');">CCe</button>
 			<button type="button" style="margin-left: 20px;"
-				onclick="validar(0);">Danfe</button>
+				onclick="validar('danfe');">Danfe</button>
 
 			<div class="spacer"></div><br/>
 			<p>Caso deseje mais informa&ccedil;&otilde;s entre em contato conosco. <a href="mailto:opensig@phdss.com.br">opensig@phdss.com.br</a></p>

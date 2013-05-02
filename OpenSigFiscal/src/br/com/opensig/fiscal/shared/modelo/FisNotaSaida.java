@@ -60,6 +60,10 @@ public class FisNotaSaida extends Dados implements Serializable {
 	@XmlElement(name = "ecfNotaEletronicaNumero")
 	private int fisNotaSaidaNumero;
 
+	@Column(name = "fis_nota_saida_evento")
+	@XmlElement(name = "ecfNotaEletronicaEvento")
+	private int fisNotaSaidaEvento;
+
 	@Column(name = "fis_nota_saida_protocolo")
 	@XmlElement(name = "ecfNotaEletronicaProtocolo")
 	private String fisNotaSaidaProtocolo;
@@ -71,6 +75,10 @@ public class FisNotaSaida extends Dados implements Serializable {
 	@Column(name = "fis_nota_saida_protocolo_cancelado")
 	@XmlElement(name = "ecfNotaEletronicaProtocoloCancelado")
 	private String fisNotaSaidaProtocoloCancelado;
+
+	@Column(name = "fis_nota_saida_protocolo_carta")
+	@XmlElement(name = "ecfNotaEletronicaProtocoloCarta")
+	private String fisNotaSaidaProtocoloCarta;
 
 	@Column(name = "fis_nota_saida_valor")
 	@XmlElement(name = "ecfNotaEletronicaValor")
@@ -101,6 +109,11 @@ public class FisNotaSaida extends Dados implements Serializable {
 	@Column(name = "fis_nota_saida_xml_cancelado")
 	@XmlElement(name = "ecfNotaEletronicaXmlCancelado")
 	private String fisNotaSaidaXmlCancelado;
+
+	@Lob()
+	@Column(name = "fis_nota_saida_xml_carta")
+	@XmlElement(name = "ecfNotaEletronicaXmlCarta")
+	private String fisNotaSaidaXmlCarta;
 
 	@Lob()
 	@Column(name = "fis_nota_saida_erro")
@@ -290,11 +303,35 @@ public class FisNotaSaida extends Dados implements Serializable {
 		this.ecfNotaEletronicaStatus = ecfNotaEletronicaStatus;
 	}
 
+	public int getFisNotaSaidaEvento() {
+		return fisNotaSaidaEvento;
+	}
+
+	public void setFisNotaSaidaEvento(int fisNotaSaidaEvento) {
+		this.fisNotaSaidaEvento = fisNotaSaidaEvento;
+	}
+
+	public String getFisNotaSaidaProtocoloCarta() {
+		return fisNotaSaidaProtocoloCarta;
+	}
+
+	public void setFisNotaSaidaProtocoloCarta(String fisNotaSaidaProtocoloCarta) {
+		this.fisNotaSaidaProtocoloCarta = fisNotaSaidaProtocoloCarta;
+	}
+
+	public String getFisNotaSaidaXmlCarta() {
+		return fisNotaSaidaXmlCarta;
+	}
+
+	public void setFisNotaSaidaXmlCarta(String fisNotaSaidaXmlCarta) {
+		this.fisNotaSaidaXmlCarta = fisNotaSaidaXmlCarta;
+	}
+
 	public String[] toArray() {
 		return new String[] { fisNotaSaidaId + "", empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), fisNotaStatus.getFisNotaStatusId() + " ",
 				fisNotaStatus.getFisNotaStatusDescricao(), UtilClient.getDataGrid(fisNotaSaidaCadastro), fisNotaSaidaNumero + "", UtilClient.getDataGrid(fisNotaSaidaData),
 				fisNotaSaidaValor.toString(), fisNotaSaidaChave, fisNotaSaidaIcms.toString(), fisNotaSaidaIpi.toString(), fisNotaSaidaPis.toString(), fisNotaSaidaCofins.toString(),
-				fisNotaSaidaProtocolo, "xml", "danfe", fisNotaSaidaProtocoloCancelado, "cancelada", fisNotaSaidaRecibo, "*" };
+				fisNotaSaidaEvento + "", fisNotaSaidaProtocolo, "xml", "danfe", fisNotaSaidaProtocoloCancelado, "cancelada", fisNotaSaidaProtocoloCarta, "cc-e", fisNotaSaidaRecibo, "*" };
 	}
 
 	public Dados getObjeto(String campo) {

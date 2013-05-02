@@ -33,19 +33,23 @@ public interface FiscalService<E extends Dados> extends CoreService<E> {
 
 	public String receberNFe(String xml, String recibo) throws FiscalException;
 
-	public String cancelar(String xml) throws FiscalException;
+	public String evento(String xml) throws FiscalException;
 
 	public String inutilizar(String xml) throws FiscalException;
-
+	
 	public Map<String, String> salvarSaida(String xml, FisNotaStatus status) throws FiscalException;
 	
 	public Map<String, String> cancelarSaida(FisNotaSaida saida, String motivo) throws FiscalException;
+	
+	public Map<String, String> cartaSaida(FisNotaSaida saida, String motivo) throws FiscalException;
 	
 	public Map<String, String> inutilizarSaida(String motivo, int ini, int fim) throws FiscalException;
 
 	public Map<String, String> salvarEntrada(String xml, FisNotaStatus status) throws FiscalException;
 	
 	public Map<String, String> cancelarEntrada(FisNotaEntrada entrada, String motivo) throws FiscalException;
+	
+	public Map<String, String> cartaEntrada(FisNotaEntrada entrada, String motivo) throws FiscalException;
 	
 	public Map<String, String> inutilizarEntrada(String motivo, int ini, int fim) throws FiscalException;
 	

@@ -96,8 +96,7 @@
 	
 </script>
 
-<title>OpenSIG - Sistemas Integrados Gerenci&aacute;veis Open
-	Source</title>
+<title>OpenSIG - Sistema Integrado de Gest&atilde;o Open Source</title>
 </head>
 <body onload="javascript:document.senha.nova.focus();">
 	<div id="stylized" class="myform" style="height: 350px">
@@ -105,17 +104,20 @@
 		<form id="senha" name="senha" method="post"
 			action="novasenha.jsp?email=<%=email%>&id=<%=id%>"
 			onsubmit="return validar();">
-			<a href="/" title="P&aacutegina Inicial"><img src="img/logo.png" width="32px" height="32px" /> </a>
+			<a href="/" title="P&aacutegina Inicial"><img src="img/logo.png"
+				width="32px" height="32px" /> </a>
 			<h1>Alterar Senha</h1>
 			<p>Este formulário &eacute; usado para alterar a senha no
 				sistema.</p>
-			<label>Nova Senha <span class="small">Digite senha</span> </label> <input
-				type="password" name="nova" id="nova" maxlength="40" /> <label>Confirmar
-				Senha <span class="small">Confirme a senha</span> </label> <input
-				type="password" name="confirma" id="confirma" maxlength="40" /> <label>Segurança
-				<span class="small">Veja a imagem</span> </label> <img src="<%=url%>" /> <label>Código
-				<span class="small">Digite o código</span> </label> <input type="text"
-				name="captcha" id="captcha" maxlength="5" class="small" />
+			<label>Nova Senha <span class="small">Digite senha</span>
+			</label> <input type="password" name="nova" id="nova" maxlength="40" /> <label>Confirmar
+				Senha <span class="small">Confirme a senha</span>
+			</label> <input type="password" name="confirma" id="confirma" maxlength="40" />
+			<label>Segurança <span class="small">Veja a imagem</span>
+			</label> <img src="<%=url%>" /> <label>Código <span class="small">Digite
+					o código</span>
+			</label> <input type="text" name="captcha" id="captcha" maxlength="5"
+				class="small" />
 
 			<div class="spacer"></div>
 			<button type="submit" style="margin-left: 190px;">Salvar</button>
@@ -127,8 +129,7 @@
 				<a href="mailto:opensig@phdss.com.br">opensig@phdss.com.br</a>
 			</p>
 			&copy; <a href="http://phdss.com.br"><i>PhD - Systems
-					Solutions</i>
-			</a>
+					Solutions</i> </a>
 		</form>
 	</div>
 </body>

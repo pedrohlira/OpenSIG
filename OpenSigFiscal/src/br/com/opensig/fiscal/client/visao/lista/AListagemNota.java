@@ -71,8 +71,9 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 				new IntegerFieldDef("fisNotaStatus.fisNotaStatusId"), new StringFieldDef("fisNotaStatus.fisNotaStatusDescricao"), new DateFieldDef(nomes.get("cadastro")),
 				new IntegerFieldDef(nomes.get("numero")), new DateFieldDef(nomes.get("data")), new FloatFieldDef(nomes.get("valor")), new StringFieldDef(nomes.get("chave")),
 				new FloatFieldDef(nomes.get("icms")), new FloatFieldDef(nomes.get("ipi")), new FloatFieldDef(nomes.get("pis")), new FloatFieldDef(nomes.get("cofins")),
-				new StringFieldDef(nomes.get("protocolo")), new StringFieldDef(nomes.get("xml")), new StringFieldDef("danfe"), new StringFieldDef(nomes.get("protocoloCancelado")),
-				new StringFieldDef(nomes.get("xmlCancelado")), new StringFieldDef(nomes.get("recibo")), new StringFieldDef(nomes.get("erro")) };
+				new IntegerFieldDef(nomes.get("evento")), new StringFieldDef(nomes.get("protocolo")), new StringFieldDef(nomes.get("xml")), new StringFieldDef("danfe"),
+				new StringFieldDef(nomes.get("protocoloCancelado")), new StringFieldDef(nomes.get("xmlCancelado")), new StringFieldDef(nomes.get("protocoloCarta")),
+				new StringFieldDef(nomes.get("xmlCarta")), new StringFieldDef(nomes.get("recibo")), new StringFieldDef(nomes.get("erro")) };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -89,9 +90,14 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 		ColumnConfig ccNumero = new ColumnConfig(OpenSigCore.i18n.txtNumero(), nomes.get("numero"), 50, true);
 		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), nomes.get("data"), 75, true, DATA);
 		ColumnConfig ccChave = new ColumnConfig(OpenSigCore.i18n.txtChave(), nomes.get("chave"), 250, true);
+		ColumnConfig ccEvento = new ColumnConfig(OpenSigCore.i18n.txtEvento(), nomes.get("evento"), 50, true);
+		ccEvento.setHidden(true);
 		ColumnConfig ccProtocolo = new ColumnConfig(OpenSigCore.i18n.txtProtocolo(), nomes.get("protocolo"), 100, true);
+		ccProtocolo.setHidden(true);
 		ColumnConfig ccProtocoloCancelado = new ColumnConfig(OpenSigCore.i18n.txtProtocolo() + " - " + OpenSigCore.i18n.txtCancelada(), nomes.get("protocoloCancelado"), 100, true);
 		ccProtocoloCancelado.setHidden(true);
+		ColumnConfig ccProtocoloCarta = new ColumnConfig(OpenSigCore.i18n.txtProtocolo() + " - " + OpenSigCore.i18n.txtCarta(), nomes.get("protocoloCarta"), 100, true);
+		ccProtocoloCarta.setHidden(true);
 		ColumnConfig ccRecibo = new ColumnConfig(OpenSigCore.i18n.txtRecibo(), nomes.get("recibo"), 100, true);
 		ccRecibo.setHidden(true);
 		// sumarios
@@ -108,7 +114,7 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 
 				if (status == ENotaStatus.AUTORIZANDO.getId() || status == ENotaStatus.AUTORIZADO.getId() || status == ENotaStatus.INUTILIZANDO.getId() || status == ENotaStatus.INUTILIZADO.getId()
 						|| status == ENotaStatus.CANCELADO.getId() || status == ENotaStatus.CANCELANDO.getId()) {
-					baixarArquivo("xml", false, id);
+					baixarArquivo("xml", "nfe", id);
 				} else {
 					new ToastWindow(OpenSigCore.i18n.txtNfe(), OpenSigCore.i18n.errRegistro()).show();
 				}
@@ -125,7 +131,7 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 				int id = record.getAsInteger(nomes.get("id"));
 
 				if (status != ENotaStatus.INUTILIZANDO.getId() && status != ENotaStatus.INUTILIZADO.getId() && status != ENotaStatus.ERRO.getId()) {
-					baixarArquivo("pdf", false, id);
+					baixarArquivo("pdf", "nfe", id);
 				} else {
 					new ToastWindow(OpenSigCore.i18n.txtDanfe(), OpenSigCore.i18n.errRegistro()).show();
 				}
@@ -142,7 +148,7 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 				int id = record.getAsInteger(nomes.get("id"));
 
 				if (status == ENotaStatus.CANCELANDO.getId() || status == ENotaStatus.CANCELADO.getId()) {
-					baixarArquivo("xml", true, id);
+					baixarArquivo("xml", "cancelada", id);
 				} else {
 					new ToastWindow(OpenSigCore.i18n.txtCancelada(), OpenSigCore.i18n.errRegistro()).show();
 				}
@@ -152,6 +158,24 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 		ColumnWithCellActionsConfig ccXmlCancelado = new ColumnWithCellActionsConfig(OpenSigCore.i18n.txtCancelada(), nomes.get("xmlCancelado"), 60);
 		ccXmlCancelado.setMenuDisabled(true);
 		ccXmlCancelado.setCellActions(new GridCellAction[] { celXmlCancelado });
+
+		GridCellAction celXmlCarta = new GridCellAction("icon-carta", OpenSigCore.i18n.txtCarta(), new GridCellActionListener() {
+			public boolean execute(GridPanel grid, final Record record, String action, Object value, String dataIndex, int rowIndex, int colIndex) {
+				int status = record.getAsInteger("fisNotaStatus.fisNotaStatusId");
+				int evento = record.getAsInteger(nomes.get("evento"));
+				int id = record.getAsInteger(nomes.get("id"));
+
+				if (status == ENotaStatus.AUTORIZADO.getId() && evento > 0) {
+					baixarArquivo("xml", "carta", id);
+				} else {
+					new ToastWindow(OpenSigCore.i18n.txtCarta(), OpenSigCore.i18n.errRegistro()).show();
+				}
+				return true;
+			}
+		});
+		ColumnWithCellActionsConfig ccXmlCarta = new ColumnWithCellActionsConfig(OpenSigCore.i18n.txtCarta(), nomes.get("xmlCarta"), 60);
+		ccXmlCarta.setMenuDisabled(true);
+		ccXmlCarta.setCellActions(new GridCellAction[] { celXmlCarta });
 
 		GridCellAction cellErro = new GridCellAction("icon-analisar", OpenSigCore.i18n.txtErro(), new GridCellActionListener() {
 			public boolean execute(GridPanel grid, final Record record, String action, Object value, String dataIndex, int rowIndex, int colIndex) {
@@ -186,7 +210,7 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 		ccErro.setCellActions(new GridCellAction[] { cellErro });
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccEmpresaId, ccEmpresa, ccStatusId, ccStatus, ccCadastro, ccNumero, ccData, sumValor, ccChave, sumIcms, sumIpi, sumPis, sumCofins,
-				ccProtocolo, ccXml, ccDanfe, ccProtocoloCancelado, ccXmlCancelado, ccRecibo, ccErro };
+				ccEvento, ccProtocolo, ccXml, ccDanfe, ccProtocoloCancelado, ccXmlCancelado, ccProtocoloCarta, ccXmlCarta, ccRecibo, ccErro };
 		modelos = new ColumnModel(bcc);
 
 		if (UtilClient.getAcaoPermitida(funcao, ComandoPermiteEmpresa.class) == null) {
@@ -197,7 +221,7 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 		super.inicializar();
 	}
 
-	private void baixarArquivo(final String extensao, final boolean cancelado, int id) {
+	private void baixarArquivo(final String extensao, final String tipo, int id) {
 		MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtArquivo());
 		CoreProxy<E> proxy = new CoreProxy<E>(classe);
 		proxy.selecionar(id, new AsyncCallback<E>() {
@@ -210,14 +234,21 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 			public void onSuccess(E result) {
 				classe = result;
 				String arquivo;
-				if (cancelado) {
+				String nome;
+				if (tipo.equals("cancelada")) {
 					arquivo = OpenSigCoreJS.base64encode(getXmlCancelado(result));
+					nome = "NFeCancelada_";
+				} else if(tipo.equals("carta")) {
+					arquivo = OpenSigCoreJS.base64encode(getXmlCarta(result));
+					nome = "CCe_";
 				} else {
 					arquivo = OpenSigCoreJS.base64encode(getXml(result));
+					nome = extensao.equals("xml") ? "NFe_" : "Danfe_";
 				}
+				nome += getChave(result);
 
 				FiscalProxy<E> fiscal = new FiscalProxy<E>();
-				fiscal.exportar(arquivo, getChave(result), extensao, new AsyncCallback<String>() {
+				fiscal.exportar(arquivo, nome, extensao, new AsyncCallback<String>() {
 					public void onSuccess(String result) {
 						MessageBox.hide();
 						UtilClient.exportar("ExportacaoService?id=" + result);
@@ -303,7 +334,7 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 					janela.getOks().clear();
 					janela.getErros().clear();
 					MessageBox.hide();
-					
+
 					if (result.size() == 0) {
 						new ToastWindow(OpenSigCore.i18n.txtNfe(), OpenSigCore.i18n.msgImportarOK()).show();
 					} else {
@@ -326,11 +357,13 @@ public abstract class AListagemNota<E extends Dados> extends AListagem<E> {
 	protected abstract String getXml(E result);
 
 	protected abstract String getXmlCancelado(E result);
+	
+	protected abstract String getXmlCarta(E result);
 
 	protected abstract String getChave(E result);
 
 	protected abstract String getErro(E result);
-	
+
 	protected abstract void mostrarErro(E result);
 
 	public Map<String, String> getNomes() {

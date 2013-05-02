@@ -60,6 +60,7 @@ public class EnviarNfeSaida extends Chain {
 			if (ret.getCStat().equals("103")) {
 				saida.setFisNotaSaidaXml(xml);
 				saida.setFisNotaSaidaRecibo(ret.getInfRec().getNRec());
+				saida.setFisNotaSaidaErro("");
 			} else {
 				saida.setFisNotaStatus(new FisNotaStatus(ENotaStatus.ERRO));
 				saida.setFisNotaSaidaErro(ret.getXMotivo());

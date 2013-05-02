@@ -32,6 +32,10 @@
 	background: url(../img/inutilizar.png) no-repeat center left !important;
 }
 
+.icon-carta {
+	background: url(../img/carta.png) no-repeat center left !important;
+}
+
 .icon-sefaz {
 	background: url(../img/sefaz.png) no-repeat center left !important;
 }

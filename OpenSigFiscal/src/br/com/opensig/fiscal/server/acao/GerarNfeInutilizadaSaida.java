@@ -38,7 +38,7 @@ public class GerarNfeInutilizadaSaida extends Chain {
 	public void execute() throws OpenSigException {
 		// seleciona a nota
 		FiltroNumero fn = new FiltroNumero("fisNotaSaidaId", ECompara.IGUAL, saida.getId());
-		saida = (FisNotaSaida) servico.selecionar(saida, fn, false);
+		saida = (FisNotaSaida) servico.selecionar(new FisNotaSaida(), fn, false);
 		// cria o xml
 		String xml = getXml(saida, motivo, ini, fim);
 		// salva o registro

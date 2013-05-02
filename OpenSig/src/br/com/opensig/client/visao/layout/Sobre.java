@@ -113,7 +113,7 @@ public class Sobre {
 		col2.setBorder(false);
 		col2.setLayout(new VerticalLayout(5));
 
-		Label sistema = new Label("OpenSIG - Sistemas Integrados Gerenciáveis Open Source");
+		Label sistema = new Label("OpenSIG - Sistema Integrado de Gestão Open Source");
 		sistema.setStyle("font-weight: bold");
 		col2.add(sistema);
 

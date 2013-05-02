@@ -50,12 +50,18 @@ public class FisNotaEntrada extends Dados implements Serializable {
 	@Column(name = "fis_nota_entrada_numero")
 	private int fisNotaEntradaNumero;
 
+	@Column(name = "fis_nota_entrada_evento")
+	private int fisNotaEntradaEvento;
+	
 	@Column(name = "fis_nota_entrada_protocolo")
 	private String fisNotaEntradaProtocolo;
 
 	@Column(name = "fis_nota_entrada_protocolo_cancelado")
 	private String fisNotaEntradaProtocoloCancelado;
 
+	@Column(name = "fis_nota_entrada_protocolo_carta")
+	private String fisNotaEntradaProtocoloCarta;
+	
 	@Column(name = "fis_nota_entrada_recibo")
 	private String fisNotaEntradaRecibo;
 
@@ -82,6 +88,10 @@ public class FisNotaEntrada extends Dados implements Serializable {
 	@Column(name = "fis_nota_entrada_xml_cancelado")
 	private String fisNotaEntradaXmlCancelado;
 
+	@Lob()
+	@Column(name = "fis_nota_entrada_xml_carta")
+	private String fisNotaEntradaXmlCarta;
+	
 	@Lob()
 	@Column(name = "fis_nota_entrada_erro")
 	private String fisNotaEntradaErro;
@@ -256,11 +266,35 @@ public class FisNotaEntrada extends Dados implements Serializable {
 		this.fisNotaEntradaXmlCancelado = fisNotaEntradaXmlCancelado;
 	}
 
+	public int getFisNotaEntradaEvento() {
+		return fisNotaEntradaEvento;
+	}
+
+	public void setFisNotaEntradaEvento(int fisNotaEntradaEvento) {
+		this.fisNotaEntradaEvento = fisNotaEntradaEvento;
+	}
+
+	public String getFisNotaEntradaProtocoloCarta() {
+		return fisNotaEntradaProtocoloCarta;
+	}
+
+	public void setFisNotaEntradaProtocoloCarta(String fisNotaEntradaProtocoloCarta) {
+		this.fisNotaEntradaProtocoloCarta = fisNotaEntradaProtocoloCarta;
+	}
+
+	public String getFisNotaEntradaXmlCarta() {
+		return fisNotaEntradaXmlCarta;
+	}
+
+	public void setFisNotaEntradaXmlCarta(String fisNotaEntradaXmlCarta) {
+		this.fisNotaEntradaXmlCarta = fisNotaEntradaXmlCarta;
+	}
+
 	public String[] toArray() {
 		return new String[] { fisNotaEntradaId + "", empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), fisNotaStatus.getFisNotaStatusId() + " ",
 				fisNotaStatus.getFisNotaStatusDescricao(), UtilClient.getDataGrid(fisNotaEntradaCadastro), fisNotaEntradaNumero + "", UtilClient.getDataGrid(fisNotaEntradaData),
 				fisNotaEntradaValor.toString(), fisNotaEntradaChave, fisNotaEntradaIcms.toString(), fisNotaEntradaIpi.toString(), fisNotaEntradaPis.toString(), fisNotaEntradaCofins.toString(),
-				fisNotaEntradaProtocolo, "xml", "danfe", fisNotaEntradaProtocoloCancelado, "cancelada", fisNotaEntradaRecibo, "*" };
+				fisNotaEntradaEvento + "", fisNotaEntradaProtocolo, "xml", "danfe", fisNotaEntradaProtocoloCancelado, "cancelada", fisNotaEntradaProtocoloCarta, "cc-e", fisNotaEntradaRecibo, "*" };
 	}
 
 	public Dados getObjeto(String campo) {

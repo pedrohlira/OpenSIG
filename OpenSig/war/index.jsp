@@ -23,7 +23,7 @@
 <link rel="stylesheet" type="text/css" href="css/OpenSig.css" />
 <link rel="stylesheet" type="text/css" href="" id="estilo" />
 
-<title>OpenSIG - Sistemas Integrados Gerenci&aacute;veis Open Source</title>
+<title>OpenSIG - Sistema Integrado de Gest&atilde;o Open Source</title>
 
 </head>
 <body>

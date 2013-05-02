@@ -1141,6 +1141,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtCarregar();
 
   /**
+   * Translated "Carta".
+   * 
+   * @return translated "Carta"
+   */
+  @DefaultMessage("Carta")
+  @Key("txtCarta")
+  String txtCarta();
+
+  /**
    * Translated "Carteira".
    * 
    * @return translated "Carteira"
@@ -1823,6 +1832,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Estornar")
   @Key("txtEstornar")
   String txtEstornar();
+
+  /**
+   * Translated "Evento".
+   * 
+   * @return translated "Evento"
+   */
+  @DefaultMessage("Evento")
+  @Key("txtEvento")
+  String txtEvento();
 
   /**
    * Translated "Excedente".

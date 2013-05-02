@@ -40,14 +40,15 @@ public class EnviarNfeInutilizadaSaida extends Chain {
 			String xsd = UtilServer.getRealPath(auth.getConf().get("nfe.xsd_inutilizando"));
 			NFe.validarXML(xml, xsd);
 			// envia para sefaz
-			String inut = servico.inutilizar(xml);
+			String proc = servico.inutilizar(xml);
 			// analisa o retorno e seta os status
-			TRetInutNFe ret = UtilServer.xmlToObj(inut, "br.com.opensig.retinutnfe");
+			TRetInutNFe ret = UtilServer.xmlToObj(proc, "br.com.opensig.retinutnfe");
 			// verifica se sucesso
 			if (ret.getInfInut().getCStat().equals("102")) {
 				saida.setFisNotaStatus(new FisNotaStatus(ENotaStatus.INUTILIZADO));
 				saida.setFisNotaSaidaProtocolo(ret.getInfInut().getNProt());
-				saida.setFisNotaSaidaXml(montaProcInutNfe(saida.getFisNotaSaidaXml(), inut, auth.getConf().get("nfe.versao")));
+				saida.setFisNotaSaidaXml(montaProcInutNfe(saida.getFisNotaSaidaXml(), proc, auth.getConf().get("nfe.versao")));
+				saida.setFisNotaSaidaErro("");
 				servico.salvar(saida, false);
 			} else {
 				throw new OpenSigException(ret.getInfInut().getXMotivo());

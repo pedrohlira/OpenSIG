@@ -60,6 +60,7 @@ public class EnviarNfeEntrada extends Chain {
 			if (ret.getCStat().equals("103")) {
 				entrada.setFisNotaEntradaXml(xml);
 				entrada.setFisNotaEntradaRecibo(ret.getInfRec().getNRec());
+				entrada.setFisNotaEntradaErro("");
 			} else {
 				entrada.setFisNotaStatus(new FisNotaStatus(ENotaStatus.ERRO));
 				entrada.setFisNotaEntradaErro(ret.getXMotivo());

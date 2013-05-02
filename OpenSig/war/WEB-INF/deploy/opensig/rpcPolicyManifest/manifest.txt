@@ -1,11 +1,2 @@
 # Module opensig
 # RPC service class, partial path of RPC policy file
-br.com.opensig.fiscal.client.servico.FiscalService, EE265795050668557C5D41C8D9EB9C49.gwt.rpc
-br.com.opensig.permissao.client.servico.PermissaoService, 10AE07DB8BFDD78ADABA5413138E3869.gwt.rpc
-br.com.opensig.core.client.servico.CoreService, ADA2CC29FF753F95BFE165C7325B0574.gwt.rpc
-br.com.opensig.comercial.client.servico.ComercialService, D201E1CF218EA01FD69F392CFBFAA236.gwt.rpc
-br.com.opensig.core.client.servico.ImportacaoService, 501541842374314106CC324317912F67.gwt.rpc
-br.com.opensig.financeiro.client.servico.FinanceiroService, 087F70ACB72321EC47DEA5DAB508D7EF.gwt.rpc
-br.com.opensig.core.client.servico.ExportacaoService, 4DD72CC94631D477809B15BA47C1D1EB.gwt.rpc
-br.com.opensig.empresa.client.servico.EmpresaService, A11F9484302E421B500187CFD696F5DC.gwt.rpc
-br.com.opensig.produto.client.servico.ProdutoService, 83F28818863AC09EB9A10F57470E12F4.gwt.rpc

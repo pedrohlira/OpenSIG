@@ -62,10 +62,13 @@ public class NFe {
 
 			// chaves
 			String tag = null;
+			String raiz = null;
 			if (status == ENotaStatus.AUTORIZANDO) {
-				tag = "NFe";
-			} else if (status == ENotaStatus.CANCELANDO) {
-				tag = "infCanc";
+				tag = "infNFe";
+				raiz = "NFe";
+			} else if (status == ENotaStatus.CANCELANDO || status == ENotaStatus.AUTORIZADO) {
+				tag = "infEvento";
+				raiz = "evento";
 			} else if (status == ENotaStatus.INUTILIZANDO) {
 				tag = "infInut";
 			} else {
@@ -85,7 +88,7 @@ public class NFe {
 			KeyInfo ki = (KeyInfo) chaves[1];
 
 			// parse no xml e pega o id
-			Element ele = (Element) doc.getElementsByTagName(status == ENotaStatus.AUTORIZANDO ? "infNFe" : tag).item(0);
+			Element ele = (Element) doc.getElementsByTagName(tag).item(0);
 			String id = ele.getAttribute("Id");
 			// adiciona a referencia
 			Reference ref = fac.newReference("#" + id, fac.newDigestMethod(DigestMethod.SHA1, null), transformList, null, null);
@@ -94,7 +97,7 @@ public class NFe {
 					Collections.singletonList(ref));
 			// adiciona a assinatura
 			XMLSignature signature = fac.newXMLSignature(si, ki);
-			DOMSignContext dsc = new DOMSignContext(pk, status == ENotaStatus.AUTORIZANDO ? doc.getElementsByTagName(tag).item(0) : doc.getFirstChild());
+			DOMSignContext dsc = new DOMSignContext(pk, raiz != null ? doc.getElementsByTagName(raiz).item(0) : doc.getFirstChild());
 			signature.sign(dsc);
 
 			return UtilServer.getXml(doc);
@@ -171,7 +174,7 @@ public class NFe {
 			status = recibo == null ? ENotaStatus.AUTORIZANDO : ENotaStatus.AUTORIZADO;
 		} else {
 			// verifica se é um cancelamento
-			root = doc.getElementsByTagName("infCanc").item(0);
+			root = doc.getElementsByTagName("infEvento").item(0);
 			if (root != null) {
 				status = recibo == null ? ENotaStatus.CANCELANDO : ENotaStatus.CANCELADO;
 			} else {

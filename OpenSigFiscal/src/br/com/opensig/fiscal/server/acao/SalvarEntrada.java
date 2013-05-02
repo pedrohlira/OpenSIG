@@ -201,6 +201,8 @@ public class SalvarEntrada extends Chain {
 			nota.setFisNotaEntradaXml(xml);
 			nota.setFisNotaEntradaProtocoloCancelado("");
 			nota.setFisNotaEntradaXmlCancelado("");
+			nota.setFisNotaEntradaProtocoloCarta("");
+			nota.setFisNotaEntradaXmlCarta("");
 			nota.setFisNotaEntradaRecibo("");
 			nota.setFisNotaEntradaErro("");
 
@@ -316,6 +318,8 @@ public class SalvarEntrada extends Chain {
 			nota.setFisNotaEntradaXml(xml);
 			nota.setFisNotaEntradaProtocoloCancelado("");
 			nota.setFisNotaEntradaXmlCancelado("");
+			nota.setFisNotaEntradaProtocoloCarta("");
+			nota.setFisNotaEntradaXmlCarta("");
 			nota.setFisNotaEntradaRecibo("");
 			nota.setFisNotaEntradaErro("");
 

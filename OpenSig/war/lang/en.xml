@@ -777,4 +777,18 @@
 		<descricao>Discard NFe In.</descricao>
 		<imagem>icon-inutilizar</imagem>
 	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoCartaSaida
+		</classe>
+		<nome>CCe</nome>
+		<descricao>Make CCe In.</descricao>
+		<imagem>icon-carta</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.fiscal.client.controlador.comando.acao.ComandoCartaEntrada
+		</classe>
+		<nome>CCe</nome>
+		<descricao>Make CCe Out.</descricao>
+		<imagem>icon-carta</imagem>
+	</acao>
 </opensig>

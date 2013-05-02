@@ -23,12 +23,12 @@ import br.com.opensig.core.shared.modelo.Autenticacao;
 import br.com.opensig.fiscal.client.servico.FiscalException;
 import br.com.opensig.fiscal.shared.modelo.FisCertificado;
 import br.inf.portalfiscal.www.nfe.wsdl.cadconsultacadastro2.CadConsultaCadastro2Stub;
-import br.inf.portalfiscal.www.nfe.wsdl.nfecancelamento2.NfeCancelamento2Stub;
 import br.inf.portalfiscal.www.nfe.wsdl.nfeconsulta2.NfeConsulta2Stub;
 import br.inf.portalfiscal.www.nfe.wsdl.nfeinutilizacao2.NfeInutilizacao2Stub;
 import br.inf.portalfiscal.www.nfe.wsdl.nferecepcao2.NfeRecepcao2Stub;
 import br.inf.portalfiscal.www.nfe.wsdl.nferetrecepcao2.NfeRetRecepcao2Stub;
 import br.inf.portalfiscal.www.nfe.wsdl.nfestatusservico2.NfeStatusServico2Stub;
+import br.inf.portalfiscal.www.nfe.wsdl.recepcaoevento.RecepcaoEventoStub;
 
 /**
  * Classe que realiza a comunicação com o WS da Sefaz
@@ -339,27 +339,27 @@ public class Sefaz {
 		}
 	}
 
-	public String cancelar(String xml) throws FiscalException {
+	public String evento(String xml) throws FiscalException {
 		try {
 			Document doc = UtilServer.getXml(xml);
 			String uf = UtilServer.getValorTag(doc.getDocumentElement(), "chNFe", false).substring(0, 2);
 			String ambiente = UtilServer.getValorTag(doc.getDocumentElement(), "tpAmb", false);
-			String url = identificaXml(uf, ambiente, "NfeCancelamento", false);
+			String url = identificaXml(uf, ambiente, "RecepcaoEvento", false);
 			String versao = doc.getDocumentElement().getAttribute("versao");
 			
 			OMElement ome = AXIOMUtil.stringToOM(xml);
-			NfeCancelamento2Stub.NfeDadosMsg dadosMsg = new NfeCancelamento2Stub.NfeDadosMsg();
+			RecepcaoEventoStub.NfeDadosMsg dadosMsg = new RecepcaoEventoStub.NfeDadosMsg();
 			dadosMsg.setExtraElement(ome);
 
-			NfeCancelamento2Stub.NfeCabecMsg nfeCabecMsg = new NfeCancelamento2Stub.NfeCabecMsg();
+			RecepcaoEventoStub.NfeCabecMsg nfeCabecMsg = new RecepcaoEventoStub.NfeCabecMsg();
 			nfeCabecMsg.setCUF(uf);
 			nfeCabecMsg.setVersaoDados(versao);
 
-			NfeCancelamento2Stub.NfeCabecMsgE nfeCabecMsgE = new NfeCancelamento2Stub.NfeCabecMsgE();
+			RecepcaoEventoStub.NfeCabecMsgE nfeCabecMsgE = new RecepcaoEventoStub.NfeCabecMsgE();
 			nfeCabecMsgE.setNfeCabecMsg(nfeCabecMsg);
 
-			NfeCancelamento2Stub stub = new NfeCancelamento2Stub(url);
-			NfeCancelamento2Stub.NfeCancelamentoNF2Result result = stub.nfeCancelamentoNF2(dadosMsg, nfeCabecMsgE);
+			RecepcaoEventoStub stub = new RecepcaoEventoStub(url);
+			RecepcaoEventoStub.NfeRecepcaoEventoResult result = stub.nfeRecepcaoEvento(dadosMsg, nfeCabecMsgE);
 
 			return result.getExtraElement().toString();
 		} catch (Exception e) {

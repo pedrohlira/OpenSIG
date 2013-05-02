@@ -62,6 +62,8 @@ import br.com.opensig.fiscal.client.servico.FiscalService;
 import br.com.opensig.fiscal.server.acao.EnviarEmail;
 import br.com.opensig.fiscal.server.acao.EnviarNfeCanceladaEntrada;
 import br.com.opensig.fiscal.server.acao.EnviarNfeCanceladaSaida;
+import br.com.opensig.fiscal.server.acao.GerarCartaEntrada;
+import br.com.opensig.fiscal.server.acao.GerarCartaSaida;
 import br.com.opensig.fiscal.server.acao.GerarNfeCanceladaEntrada;
 import br.com.opensig.fiscal.server.acao.GerarNfeCanceladaSaida;
 import br.com.opensig.fiscal.server.acao.GerarNfeInutilizadaEntrada;
@@ -78,7 +80,7 @@ import br.com.opensig.fiscal.shared.modelo.FisNotaSaida;
 import br.com.opensig.fiscal.shared.modelo.FisNotaStatus;
 import br.com.opensig.fiscal.shared.modelo.FisSped;
 import br.com.opensig.retconssitnfe.TProtNFe.InfProt;
-import br.com.opensig.retconssitnfe.TRetCancNFe.InfCanc;
+import br.com.opensig.retconssitnfe.TRetCancNFeV200107.InfCanc;
 import br.com.opensig.retconssitnfe.TRetConsSitNFe;
 
 public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> implements FiscalService<E> {
@@ -179,6 +181,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 				int notaId = 0;
 				String notaXml = "";
 				String notaXmlCan = "";
+				String notaXmlCce = "";
 
 				// busca na saida
 				FiltroTexto ft = new FiltroTexto("fisNotaSaidaChave", ECompara.IGUAL, chave);
@@ -187,6 +190,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 					notaId = saida.getFisNotaStatus().getFisNotaStatusId();
 					notaXml = saida.getFisNotaSaidaXml();
 					notaXmlCan = saida.getFisNotaSaidaXmlCancelado();
+					notaXmlCce = saida.getFisNotaSaidaXmlCarta();
 				} else {
 					// busca na entrada
 					ft = new FiltroTexto("fisNotaEntradaChave", ECompara.IGUAL, chave);
@@ -195,25 +199,33 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 						notaId = entrada.getFisNotaStatus().getFisNotaStatusId();
 						notaXml = entrada.getFisNotaEntradaXml();
 						notaXmlCan = entrada.getFisNotaEntradaXmlCancelado();
+						notaXmlCce = entrada.getFisNotaEntradaXmlCarta();
 					} else {
 						throw new Exception("Nao achou nenhuma NFe.");
 					}
 				}
 
 				if (notaId == ENotaStatus.AUTORIZADO.getId() || notaId == ENotaStatus.CANCELADO.getId()) {
-					if (opcao.equals("2")) {
+					if (opcao.equals("nfe")) {
 						obj = notaXml.getBytes();
-						nome = chave + "-procNFe.xml";
-					} else if (opcao.equals("4")) {
+						nome = "NFe_" + chave + "-procNFe.xml";
+					} else if (opcao.equals("cancelada")) {
 						if (!notaXmlCan.equals("")) {
 							obj = notaXmlCan.getBytes();
-							nome = chave + "-procCanNFe.xml";
+							nome = "Cancelada_" + chave + "-procCanNFe.xml";
 						} else {
 							throw new Exception("NFe nao esta cancelada.");
 						}
+					} else if (opcao.equals("carta")) {
+						if (!notaXmlCce.equals("")) {
+							obj = notaXmlCce.getBytes();
+							nome = "CCe_" + chave + "-procCCe.xml";
+						} else {
+							throw new Exception("Nao existe CCe para esta nota.");
+						}
 					} else {
 						obj = getDanfe(notaXml);
-						nome = chave + ".pdf";
+						nome = "Danfe_" + chave + ".pdf";
 					}
 					resp.addHeader("Content-Disposition", "attachment; filename=" + nome);
 					resp.addHeader("Pragma", "no-cache");
@@ -249,6 +261,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 			String chave = "";
 			String xml = "";
 			String cancelada = "";
+			String carta = "";
 
 			for (Dados d : lista.getLista()) {
 				if (d instanceof FisNotaSaida) {
@@ -256,17 +269,23 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 					chave = nota.getFisNotaSaidaChave();
 					xml = nota.getFisNotaSaidaXml();
 					cancelada = nota.getFisNotaSaidaXmlCancelado();
+					carta = nota.getFisNotaSaidaXmlCarta();
 				} else {
 					FisNotaEntrada nota = (FisNotaEntrada) d;
 					chave = nota.getFisNotaEntradaChave();
 					xml = nota.getFisNotaEntradaXml();
 					cancelada = nota.getFisNotaEntradaXmlCancelado();
+					carta = nota.getFisNotaEntradaXmlCarta();
 				}
 				// zipa o xml principal
 				arquivos.put(chave + ".xml", xml.getBytes());
 				// caso tenha o xml de cancelamento
 				if (!cancelada.equals("")) {
 					arquivos.put(chave + "_cancelada.xml", cancelada.getBytes());
+				}
+				// caso tenha o xml de carta de correcao
+				if (!carta.equals("")) {
+					arquivos.put(chave + "_carta.xml", carta.getBytes());
 				}
 			}
 			obj = UtilServer.getZIP(arquivos);
@@ -607,10 +626,50 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 		}
 	}
 
-	public String cancelar(String xml) throws FiscalException {
+	public Map<String, String> cartaSaida(FisNotaSaida saida, String motivo) throws FiscalException {
+		try {
+			GerarCartaSaida gerar = new GerarCartaSaida(null, this, saida, motivo, getAuth());
+			gerar.execute();
+			saida = gerar.getNota();
+
+			Map<String, String> resp = new HashMap<String, String>();
+			if (saida.getFisNotaSaidaErro().length() > 0) {
+				resp.put("status", ENotaStatus.ERRO.name());
+			} else {
+				resp.put("status", ENotaStatus.AUTORIZADO.name());
+			}
+			resp.put("msg", saida.getFisNotaSaidaErro());
+			return resp;
+		} catch (OpenSigException e) {
+			UtilServer.LOG.error("Erro na carta de saida.", e);
+			throw new FiscalException(e.getMessage());
+		}
+	}
+
+	public Map<String, String> cartaEntrada(FisNotaEntrada entrada, String motivo) throws FiscalException {
+		try {
+			GerarCartaEntrada gerar = new GerarCartaEntrada(null, this, entrada, motivo, getAuth());
+			gerar.execute();
+			entrada = gerar.getNota();
+
+			Map<String, String> resp = new HashMap<String, String>();
+			if (entrada.getFisNotaEntradaErro().length() > 0) {
+				resp.put("status", ENotaStatus.ERRO.name());
+			} else {
+				resp.put("status", ENotaStatus.AUTORIZADO.name());
+			}
+			resp.put("msg", entrada.getFisNotaEntradaErro());
+			return resp;
+		} catch (OpenSigException e) {
+			UtilServer.LOG.error("Erro na carta de saida.", e);
+			throw new FiscalException(e.getMessage());
+		}
+	}
+
+	public String evento(String xml) throws FiscalException {
 		// gerar o objeto
 		try {
-			return Sefaz.getInstancia(getAuth()).cancelar(xml);
+			return Sefaz.getInstancia(getAuth()).evento(xml);
 		} catch (Exception e) {
 			throw new FiscalException(e.getMessage());
 		}

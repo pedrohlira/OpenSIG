@@ -192,6 +192,8 @@ public class SalvarSaida extends Chain {
 			nota.setFisNotaSaidaXml(xml);
 			nota.setFisNotaSaidaProtocoloCancelado("");
 			nota.setFisNotaSaidaXmlCancelado("");
+			nota.setFisNotaSaidaProtocoloCarta("");
+			nota.setFisNotaSaidaXmlCarta("");
 			nota.setFisNotaSaidaRecibo("");
 			nota.setFisNotaSaidaErro("");
 
@@ -239,6 +241,8 @@ public class SalvarSaida extends Chain {
 			nota.setFisNotaSaidaXml(xml);
 			nota.setFisNotaSaidaProtocoloCancelado("");
 			nota.setFisNotaSaidaXmlCancelado("");
+			nota.setFisNotaSaidaProtocoloCarta("");
+			nota.setFisNotaSaidaXmlCarta("");
 			nota.setFisNotaSaidaRecibo("");
 			nota.setFisNotaSaidaErro("");
 

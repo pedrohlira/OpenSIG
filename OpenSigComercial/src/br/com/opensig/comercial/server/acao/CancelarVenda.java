@@ -1,8 +1,6 @@
 package br.com.opensig.comercial.server.acao;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -61,17 +59,6 @@ public class CancelarVenda extends Chain {
 		AtualizarVenda atuVenda = new AtualizarVenda(next);
 		if (venda.getFisNotaSaida() != null) {
 			if (venda.getFisNotaSaida().getFisNotaStatus().getFisNotaStatusId() == ENotaStatus.AUTORIZADO.getId()) {
-				// valida se a data da nota ainda pode ser cancelada
-				int dias = Integer.valueOf(auth.getConf().get("nfe.tempo_cancela"));
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(venda.getFisNotaSaida().getFisNotaSaidaData());
-				cal.add(Calendar.DATE, dias);
-
-				Date hoje = new Date();
-				if (hoje.compareTo(cal.getTime()) > 0) {
-					throw new OpenSigException("Data limite para cancelamento desta NFe era " + UtilServer.formataData(cal.getTime(), "dd/MM/yyyy"));
-				}
-
 				// cancela nota
 				GerarNfeCanceladaSaida canNota = new GerarNfeCanceladaSaida(next, servico, venda.getFisNotaSaida(), venda.getComVendaObservacao(), auth);
 				atuVenda.setNext(canNota);
