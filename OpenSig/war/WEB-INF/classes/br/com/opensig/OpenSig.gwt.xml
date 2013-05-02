@@ -25,10 +25,8 @@
 
 	<!-- Propriedades de localidade (idiomas) -->
 	<extend-property name="locale" values="pt_BR" />
-	
-	<!-- Navegadores suportados 	-->
-	<set-property name="user.agent" value="safari" /> 
-	
+	<extend-property name="locale" values="en" />
+
 	<!-- Classe de entrada -->
 	<entry-point class="br.com.opensig.client.OpenSig" />
 </module>
