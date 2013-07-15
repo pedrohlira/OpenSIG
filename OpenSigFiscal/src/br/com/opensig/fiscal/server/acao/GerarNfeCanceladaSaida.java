@@ -69,7 +69,7 @@ public class GerarNfeCanceladaSaida extends Chain {
 			String chave = saida.getFisNotaSaidaChave();
 			String uf = chave.substring(0, 2);
 			String cnpj = chave.substring(6, 20);
-			String data = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz").format(agora);
+			String data = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(agora) + "-03:00";
 			String tipo = "110111";
 			String versao = auth.getConf().get("nfe.evento");
 			String seq = "1";
@@ -81,7 +81,7 @@ public class GerarNfeCanceladaSaida extends Chain {
 			infEvento.setTpAmb(auth.getConf().get("nfe.tipoamb"));
 			infEvento.setCNPJ(cnpj);
 			infEvento.setChNFe(chave);
-			infEvento.setDhEvento(data.replace("GMT", ""));
+			infEvento.setDhEvento(data);
 			infEvento.setTpEvento(tipo);
 			infEvento.setNSeqEvento(seq);
 			infEvento.setVerEvento(versao);

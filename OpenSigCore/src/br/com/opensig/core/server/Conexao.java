@@ -13,35 +13,31 @@ import javax.servlet.http.HttpServlet;
  * Classe que representa a conexão com o banco de dados.
  * 
  * @author Pedro H. Lira
- * @version 1.0
  */
 public class Conexao extends HttpServlet {
 
 	private static Map<String, String> dados = new HashMap<String, String>();
+	public static final Map<String, EntityManagerFactory> EMFS = new HashMap<String, EntityManagerFactory>();
 
 	@Override
 	public void init() throws ServletException {
+		// recupera os dados de acesso ao banco
 		Enumeration<String> param = getInitParameterNames();
 		for (; param.hasMoreElements();) {
 			String nome = param.nextElement();
 			String valor = getInitParameter(nome);
 			dados.put(nome, valor);
 		}
+		// criar as conexoes para cada modulo
+		EMFS.put("pu_core", Persistence.createEntityManagerFactory("pu_core", dados));
+		EMFS.put("pu_comercial", Persistence.createEntityManagerFactory("pu_comercial", dados));
+		EMFS.put("pu_empresa", Persistence.createEntityManagerFactory("pu_empresa", dados));
+		EMFS.put("pu_financeiro", Persistence.createEntityManagerFactory("pu_financeiro", dados));
+		EMFS.put("pu_fiscal", Persistence.createEntityManagerFactory("pu_fiscal", dados));
+		EMFS.put("pu_permissao", Persistence.createEntityManagerFactory("pu_permissao", dados));
+		EMFS.put("pu_produto", Persistence.createEntityManagerFactory("pu_produto", dados));
 	}
 	
-	/**
-	 * Metodo que retorna uma instancia do manipulador de entidades.
-	 * 
-	 * @param pu
-	 *            o nome da unidade de persistência que deseja utilizar.
-	 * @return um objeto que manipula as entidades no banco de dados.
-	 * @throws NullPointerException
-	 *             pode ocorrer esta exceção caso o nome passado não exista.
-	 */
-	public static EntityManagerFactory getInstancia(String pu) throws NullPointerException {
-		return getInstancia(pu, dados);
-	}
-
 	/**
 	 * Metodo que retorna uma instancia do manipulador de entidades.
 	 * 

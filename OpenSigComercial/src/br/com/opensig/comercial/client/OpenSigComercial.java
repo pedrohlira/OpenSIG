@@ -15,6 +15,8 @@ import br.com.opensig.comercial.client.controlador.comando.ComandoEcfVendaProdut
 import br.com.opensig.comercial.client.controlador.comando.ComandoEcfZ;
 import br.com.opensig.comercial.client.controlador.comando.ComandoFrete;
 import br.com.opensig.comercial.client.controlador.comando.ComandoNatureza;
+import br.com.opensig.comercial.client.controlador.comando.ComandoTroca;
+import br.com.opensig.comercial.client.controlador.comando.ComandoTrocaProduto;
 import br.com.opensig.comercial.client.controlador.comando.ComandoValorProduto;
 import br.com.opensig.comercial.client.controlador.comando.ComandoVenda;
 import br.com.opensig.comercial.client.controlador.comando.ComandoVendaProduto;
@@ -23,6 +25,7 @@ import br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharCon
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharEcfVenda;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharFrete;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharVenda;
+import br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarCompra;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarNfeEntrada;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarNfeSaida;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagar;
@@ -88,6 +91,11 @@ public class OpenSigComercial implements EntryPoint {
 		fc.addComando(ComandoFecharConsumo.class.getName(), (IComando) GWT.create(ComandoFecharConsumo.class));
 		fc.addComando(ComandoPagarConsumo.class.getName(), (IComando) GWT.create(ComandoPagarConsumo.class));
 
+		// troca
+		fc.addComando(ComandoTroca.class.getName(), (IComando) GWT.create(ComandoTroca.class));
+		fc.addComando(ComandoTrocaProduto.class.getName(), (IComando) GWT.create(ComandoTrocaProduto.class));
+		fc.addComando(ComandoGerarCompra.class.getName(), (IComando) GWT.create(ComandoGerarCompra.class));
+		
 		// natureza
 		fc.addComando(ComandoValorProduto.class.getName(), (IComando) GWT.create(ComandoValorProduto.class));
 		fc.addComando(ComandoNatureza.class.getName(), (IComando) GWT.create(ComandoNatureza.class));
@@ -112,5 +120,6 @@ public class OpenSigComercial implements EntryPoint {
 		Ponte.setAcoesProibidas(ComandoVendaProduto.class.getName(), acoes2);
 		Ponte.setAcoesProibidas(ComandoEcfVendaProduto.class.getName(), acoes2);
 		Ponte.setAcoesProibidas(ComandoEcfNotaProduto.class.getName(), acoes2);
+		Ponte.setAcoesProibidas(ComandoTrocaProduto.class.getName(), acoes2);
 	}
 }

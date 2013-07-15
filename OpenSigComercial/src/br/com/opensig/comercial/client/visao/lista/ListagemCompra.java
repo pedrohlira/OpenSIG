@@ -158,6 +158,7 @@ public class ListagemCompra extends AListagem<ComCompra> {
 
 				ComercialProxy proxy = new ComercialProxy();
 				proxy.excluirCompra(classe, ASYNC);
+				new ToastWindow("Compra", "Lembre-se de excluir os estoques das grades, caso já tenha adicionado!").show();
 			}
 		};
 
@@ -222,7 +223,8 @@ public class ListagemCompra extends AListagem<ComCompra> {
 				// natureza
 				FieldDef[] fdNatureza = new FieldDef[] { new IntegerFieldDef("comNaturezaId"), new IntegerFieldDef("empEmpresa.empEmpresaId"),
 						new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"), new StringFieldDef("comNaturezaNome") };
-				CoreProxy<ComNatureza> proxy = new CoreProxy<ComNatureza>(new ComNatureza());
+				FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Ponte.getLogin().getEmpresaId()));
+				CoreProxy<ComNatureza> proxy = new CoreProxy<ComNatureza>(new ComNatureza(), fo);
 				Store storeNatureza = new Store(proxy, new ArrayReader(new RecordDef(fdNatureza)), true);
 
 				GridListFilter fNatureza = new GridListFilter("comNatureza.comNaturezaNome", storeNatureza);

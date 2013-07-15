@@ -13,7 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.servlet.http.HttpSession;
 
@@ -60,13 +59,11 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 		// mosta a instrução padrão
 		String sql = String.format("SELECT DISTINCT t FROM %s t ", classe.getTabela());
 		sql += getColecao(classe.getColecao());
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
 			// recupera uma instância do gerenciador de entidades
-			emf = Conexao.getInstancia(classe.getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(classe.getPu()).createEntityManager();
 
 			// caso tenha filtros, recupera no padrão sql e adiciona a instrução
 			if (filtro != null) {
@@ -152,9 +149,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			UtilServer.LOG.error("Erro ao selecionar", ex);
 			throw new CoreException(ex.getMessage());
 		} finally {
-			if (em != null && emf != null) {
+			if (em != null) {
 				em.close();
-				emf.close();
 			}
 		}
 	}
@@ -205,13 +201,11 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 		// sql principal
 		String sql = String.format("SELECT %s, %s, COUNT(%s), SUM(%s), AVG(%s) FROM %s t ", campoX, campoSubX, campoY, campoY, campoY, classe.getTabela());
 		sql += getColecao(classe.getColecao());
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
 			// recupera uma instância do gerenciador de entidades
-			emf = Conexao.getInstancia(classe.getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(classe.getPu()).createEntityManager();
 
 			// caso tenha filtros, recupera no padrão sql e adiciona a instrução
 			if (filtro != null) {
@@ -285,9 +279,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			UtilServer.LOG.error("Erro ao buscar", ex);
 			throw new CoreException(ex.getMessage());
 		} finally {
-			if (em != null && emf != null) {
+			if (em != null) {
 				em.close();
-				emf.close();
 			}
 		}
 	}
@@ -308,13 +301,11 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 	 *             ocorre em caso de filtro incorreto.
 	 */
 	public Object getResultado(String pu, String sql, IFiltro filtro) throws CoreException, ParametroException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
 			// recupera uma instância do gerenciador de entidades
-			emf = Conexao.getInstancia(pu);
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(pu).createEntityManager();
 
 			// caso tenha filtros, recupera no padrão sql e adiciona a instrução
 			if (filtro != null) {
@@ -354,9 +345,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			UtilServer.LOG.error("Erro ao pegar resultado", ex);
 			throw new CoreException(ex.getMessage());
 		} finally {
-			if (em != null && emf != null) {
+			if (em != null) {
 				em.close();
-				emf.close();
 			}
 		}
 	}
@@ -370,14 +360,12 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 	 * @see CoreService#salvar(Collection)
 	 */
 	public Collection<E> salvar(Collection<E> unidades, boolean removeDependencia) throws CoreException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
 			if (unidades != null && !unidades.isEmpty()) {
 				Dados[] d = unidades.toArray(new Dados[] {});
-				emf = Conexao.getInstancia(d[0].getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(d[0].getPu()).createEntityManager();
 				em.getTransaction().begin();
 				salvar(em, unidades);
 				em.getTransaction().commit();
@@ -396,9 +384,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 					unidade.anularDependencia();
 				}
 			}
-			if (em != null && emf != null) {
+			if (em != null) {
 				em.close();
-				emf.close();
 			}
 		}
 	}
@@ -430,12 +417,10 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 	 * @see CoreService#salvar(Dados)
 	 */
 	public E salvar(E unidade, boolean removeDependencia) throws CoreException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
-			emf = Conexao.getInstancia(unidade.getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(unidade.getPu()).createEntityManager();
 			em.getTransaction().begin();
 			salvar(em, unidade);
 			em.getTransaction().commit();
@@ -451,9 +436,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			if (removeDependencia) {
 				unidade.anularDependencia();
 			}
-			if (em != null && emf != null) {
+			if (em != null) {
 				em.close();
-				emf.close();
 			}
 		}
 	}
@@ -483,14 +467,12 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 
 	@Override
 	public void deletar(Collection<E> unidades) throws CoreException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
 			if (unidades != null && !unidades.isEmpty()) {
 				Dados[] d = unidades.toArray(new Dados[] {});
-				emf = Conexao.getInstancia(d[0].getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(d[0].getPu()).createEntityManager();
 				em.getTransaction().begin();
 
 				deletar(em, unidades);
@@ -504,9 +486,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			UtilServer.LOG.error("Erro ao deletar", ex);
 			throw new CoreException(ex.getMessage());
 		} finally {
-			if (em != null && emf != null) {
+			if (em != null) {
 				em.close();
-				emf.close();
 			}
 		}
 	}
@@ -529,12 +510,10 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 
 	@Override
 	public void deletar(E unidade) throws CoreException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
-			emf = Conexao.getInstancia(unidade.getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(unidade.getPu()).createEntityManager();
 			em.getTransaction().begin();
 
 			deletar(em, unidade);
@@ -547,9 +526,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			UtilServer.LOG.error("Erro ao deletar", ex);
 			throw new CoreException(ex.getMessage());
 		} finally {
-			if (em != null && emf != null) {
+			if (em != null) {
 				em.close();
-				emf.close();
 			}
 		}
 	}
@@ -571,7 +549,6 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 
 	@Override
 	public Integer[] executar(Sql[] sqls) throws CoreException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 		Integer[] resultado = null;
 		int pos = 0;
@@ -579,8 +556,7 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 		try {
 			if (sqls != null && sqls.length > 0) {
 				resultado = new Integer[sqls.length];
-				emf = Conexao.getInstancia(sqls[0].getClasse().getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(sqls[0].getClasse().getPu()).createEntityManager();
 				em.getTransaction().begin();
 
 				for (Sql sql : sqls) {
@@ -597,9 +573,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			UtilServer.LOG.error("Erro ao executar", ex);
 			throw new CoreException(ex.getMessage());
 		} finally {
-			if (em != null && emf != null) {
+			if (em != null) {
 				em.close();
-				emf.close();
 			}
 		}
 
@@ -608,14 +583,12 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 
 	@Override
 	public Integer executar(String sql) throws CoreException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 		Integer resultado = null;
 
 		try {
 			if (sql != null && !sql.equals("")) {
-				emf = Conexao.getInstancia("pu_core");
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get("pu_core").createEntityManager();
 				em.getTransaction().begin();
 				Query rs = em.createNativeQuery(sql);
 				resultado = rs.executeUpdate();
@@ -629,9 +602,8 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			UtilServer.LOG.error("Erro ao executar", ex);
 			throw new CoreException(ex.getMessage());
 		} finally {
-			if (em != null && emf != null) {
+			if (em != null) {
 				em.close();
-				emf.close();
 			}
 		}
 
@@ -819,8 +791,10 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			sMet.invoke(obj, new Object[] { (Date) sql.getParametro().getValor() });
 		} else if (gMet.getReturnType() == Character.class || gMet.getReturnType() == char.class) {
 			sMet.invoke(obj, new Object[] { valor.charAt(0) });
-		} else {
+		} else if (gMet.getReturnType() == String.class){
 			sMet.invoke(obj, new Object[] { valor });
+		} else {
+			sMet.invoke(obj, new Object[] { sql.getParametro().getValor() });
 		}
 	}
 

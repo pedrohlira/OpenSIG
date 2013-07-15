@@ -3,7 +3,6 @@ package br.com.opensig.comercial.client.controlador.comando.acao;
 import java.util.Map;
 
 import br.com.opensig.comercial.client.servico.ComercialProxy;
-import br.com.opensig.comercial.client.visao.lista.ListagemValidarEstoque;
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.controlador.comando.ComandoAcao;
@@ -33,21 +32,16 @@ public class ComandoFecharEcfVenda extends ComandoAcao {
 								ComEcfVenda venda = new ComEcfVenda(rec.getAsInteger("comEcfVendaId"));
 
 								ComercialProxy proxy = new ComercialProxy();
-								proxy.fecharEcfVenda(venda, new AsyncCallback<String[][]>() {
+								proxy.fecharEcfVenda(venda, new AsyncCallback() {
 									public void onFailure(Throwable caught) {
 										MessageBox.hide();
 										MessageBox.alert(OpenSigCore.i18n.txtFechar(), OpenSigCore.i18n.errSalvar());
 									};
 
-									public void onSuccess(String[][] result) {
+									public void onSuccess(Object result) {
 										MessageBox.hide();
-
-										if (result.length == 0) {
-											rec.set("comEcfVendaFechada", true);
-											new ToastWindow(OpenSigCore.i18n.txtFechar(), OpenSigCore.i18n.msgSalvarOK()).show();
-										} else {
-											validarEstoque(result);
-										}
+										rec.set("comEcfVendaFechada", true);
+										new ToastWindow(OpenSigCore.i18n.txtFechar(), OpenSigCore.i18n.msgSalvarOK()).show();
 									};
 								});
 							}
@@ -61,9 +55,5 @@ public class ComandoFecharEcfVenda extends ComandoAcao {
 			public void onFailure(Throwable caught) {
 			}
 		});
-	}
-
-	private void validarEstoque(String[][] result) {
-		new ListagemValidarEstoque(result, this, contexto);
 	}
 }

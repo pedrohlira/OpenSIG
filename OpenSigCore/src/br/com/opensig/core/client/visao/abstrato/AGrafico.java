@@ -14,11 +14,9 @@ import br.com.opensig.core.client.controlador.comando.FabricaComando;
 import br.com.opensig.core.client.controlador.comando.IComando;
 import br.com.opensig.core.client.controlador.comando.grafico.ComandoGrafico;
 import br.com.opensig.core.client.controlador.comando.grafico.ComandoGraficoImagem;
-import br.com.opensig.core.client.visao.grafico.AGraficoDados;
 import br.com.opensig.core.client.visao.grafico.GraficoBarra;
 import br.com.opensig.core.client.visao.grafico.GraficoLinha;
 import br.com.opensig.core.client.visao.grafico.GraficoPizza;
-import br.com.opensig.core.client.visao.grafico.IGraficoDados;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.core.shared.modelo.EBusca;
 import br.com.opensig.core.shared.modelo.EData;
@@ -206,17 +204,10 @@ public abstract class AGrafico<E extends Dados> extends Panel implements IGrafic
 			public void setData(ChartData data) {
 			}
 		};
-		dados.setLista(lista);
-
 		this.egrafico = EGrafico.PIZZA;
 		this.edata = EData.MES;
 		this.evalor = EBusca.SOMA;
 		this.eordem = EDirecao.ASC;
-
-		contexto = new HashMap();
-		contexto.put("dados", classe);
-		contexto.put("lista", lista);
-		contexto.put("grafico", this);
 
 		addListener(new PanelListenerAdapter() {
 			public void onActivate(Panel panel) {
@@ -227,6 +218,12 @@ public abstract class AGrafico<E extends Dados> extends Panel implements IGrafic
 
 	@Override
 	public void inicializar() {
+		dados.setLista(lista);
+		contexto = new HashMap();
+		contexto.put("dados", classe);
+		contexto.put("lista", lista);
+		contexto.put("grafico", this);
+		
 		// config padrao
 		setTitle(OpenSigCore.i18n.txtGrafico(), "icon-grafico");
 		setAutoScroll(true);

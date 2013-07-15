@@ -23,7 +23,7 @@ public class Registro0100 extends ARegistro<Dados0100, Dados> {
 		EmpEndereco end = fun.getEmpEntidade().getEmpEnderecos().get(0);
 		d.setCep(Integer.valueOf(end.getEmpEnderecoCep().replaceAll("\\D", "")));
 		d.setEnd(end.getEmpEnderecoLogradouro());
-		d.setNum(end.getEmpEnderecoNumero() + "");
+		d.setNum(end.getEmpEnderecoNumero());
 		d.setCompl(end.getEmpEnderecoComplemento());
 		d.setBairro(end.getEmpEnderecoBairro());
 		d.setCod_mun(end.getEmpMunicipio().getEmpMunicipioIbge());

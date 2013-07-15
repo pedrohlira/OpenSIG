@@ -3,7 +3,6 @@ package br.com.opensig.financeiro.server.acao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
@@ -34,13 +33,11 @@ public class SalvarReceber extends Chain {
 
 	@Override
 	public void execute() throws OpenSigException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
 			// recupera uma instância do gerenciador de entidades
-			emf = Conexao.getInstancia(receber.getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(receber.getPu()).createEntityManager();
 			em.getTransaction().begin();
 
 			List<FinRecebimento> recebimentos = receber.getFinRecebimentos();
@@ -79,8 +76,9 @@ public class SalvarReceber extends Chain {
 			UtilServer.LOG.error("Erro ao salvar receber", ex);
 			throw new FinanceiroException(ex.getMessage());
 		} finally {
-			em.close();
-			emf.close();
+			if (em != null) {
+				em.close();
+			}
 		}
 	}
 

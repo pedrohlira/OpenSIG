@@ -17,11 +17,13 @@ import br.com.opensig.comercial.server.acao.FecharConsumo;
 import br.com.opensig.comercial.server.acao.FecharEcfVenda;
 import br.com.opensig.comercial.server.acao.FecharFrete;
 import br.com.opensig.comercial.server.acao.FecharVenda;
+import br.com.opensig.comercial.server.acao.GerarCompra;
 import br.com.opensig.comercial.server.acao.GerarNfeEntrada;
 import br.com.opensig.comercial.server.acao.GerarNfeSaida;
 import br.com.opensig.comercial.server.acao.SalvarCompra;
 import br.com.opensig.comercial.server.acao.SalvarEcfVenda;
 import br.com.opensig.comercial.server.acao.SalvarEcfZ;
+import br.com.opensig.comercial.server.acao.SalvarTroca;
 import br.com.opensig.comercial.server.acao.SalvarValor;
 import br.com.opensig.comercial.server.acao.SalvarVenda;
 import br.com.opensig.comercial.shared.modelo.ComCompra;
@@ -29,8 +31,10 @@ import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
+import br.com.opensig.comercial.shared.modelo.ComTroca;
 import br.com.opensig.comercial.shared.modelo.ComValorProduto;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
+import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.server.CoreServiceImpl;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Autenticacao;
@@ -74,9 +78,9 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 	}
 
 	@Override
-	public FisNotaSaida gerarNfe(ComVenda venda, ComFrete frete) throws ComercialException {
+	public FisNotaSaida gerarNfe(ComVenda venda, ComFrete frete, String nfe, int[] cupom) throws ComercialException {
 		try {
-			GerarNfeSaida gerar = new GerarNfeSaida(null, this, venda, frete, getAuth());
+			GerarNfeSaida gerar = new GerarNfeSaida(null, this, venda, frete, nfe, cupom, getAuth());
 			gerar.execute();
 			return gerar.getNota();
 		} catch (Exception e) {
@@ -86,13 +90,24 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 	}
 
 	@Override
-	public FisNotaEntrada gerarNfe(ComCompra compra, ComFrete frete) throws ComercialException {
+	public FisNotaEntrada gerarNfe(ComCompra compra, ComFrete frete, String nfe) throws ComercialException {
 		try {
-			GerarNfeEntrada gerar = new GerarNfeEntrada(null, this, compra, frete, getAuth());
+			GerarNfeEntrada gerar = new GerarNfeEntrada(null, this, compra, frete, nfe, getAuth());
 			gerar.execute();
 			return gerar.getNota();
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro no comando gerarNfeEntrada.", e);
+			throw new ComercialException(e.getMessage());
+		}
+	}
+	
+	@Override
+	public void gerarCompra(IFiltro filtro) throws ComercialException {
+		try {
+			GerarCompra gerar = new GerarCompra(null, this, filtro, getAuth());
+			gerar.execute();
+		} catch (Exception e) {
+			UtilServer.LOG.error("Erro no comando gerarCompra.", e);
 			throw new ComercialException(e.getMessage());
 		}
 	}
@@ -230,6 +245,19 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 	}
 
 	@Override
+	public ComTroca salvarTroca(ComTroca troca) throws ComercialException {
+		try {
+			// salva a compra
+			new SalvarTroca(null, this, troca).execute();
+			troca.anularDependencia();
+			return troca;
+		} catch (Exception e) {
+			UtilServer.LOG.error("Erro no comando salvarTroca.", e);
+			throw new ComercialException(e.getMessage());
+		}
+	}
+	
+	@Override
 	public ComValorProduto salvarValor(ComValorProduto valor) throws ComercialException {
 		try {
 			new SalvarValor(null, this, valor).execute();
@@ -320,11 +348,9 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 	}
 
 	@Override
-	public String[][] fecharEcfVenda(ComEcfVenda venda) throws ComercialException {
+	public void fecharEcfVenda(ComEcfVenda venda) throws ComercialException {
 		try {
-			List<String[]> invalidos = new ArrayList<String[]>();
-			new FecharEcfVenda(null, this, venda, invalidos, getAuth()).execute();
-			return invalidos.toArray(new String[][] {});
+			new FecharEcfVenda(null, this, venda, getAuth()).execute();
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro no comando fecharEcfVenda.", e);
 			throw new ComercialException(e.getMessage());

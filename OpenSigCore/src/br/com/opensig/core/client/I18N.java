@@ -3274,6 +3274,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtTributacao();
 
   /**
+   * Translated "Troca".
+   * 
+   * @return translated "Troca"
+   */
+  @DefaultMessage("Troca")
+  @Key("txtTroca")
+  String txtTroca();
+
+  /**
    * Translated "Tudo".
    * 
    * @return translated "Tudo"

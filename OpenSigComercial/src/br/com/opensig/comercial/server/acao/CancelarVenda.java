@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.server.ComercialServiceImpl;
@@ -48,7 +47,7 @@ public class CancelarVenda extends Chain {
 		this.auth = auth;
 		this.impl = new ComercialServiceImpl();
 
-		// seta a venda
+		// seleciona a venda
 		FiltroNumero fn = new FiltroNumero("comVendaId", ECompara.IGUAL, venda.getId());
 		String motivo = venda.getComVendaObservacao();
 		venda = (ComVenda) servico.selecionar(venda, fn, false);
@@ -73,7 +72,7 @@ public class CancelarVenda extends Chain {
 		AtualizarEstoque atuEst = new AtualizarEstoque(atuVenda);
 		// valida os recebimentos
 		ValidarRecebimentos valReceber = new ValidarRecebimentos(null);
-		
+
 		if (!auth.getConf().get("estoque.ativo").equalsIgnoreCase("ignorar")) {
 			valReceber.setNext(atuEst);
 		} else {
@@ -112,14 +111,12 @@ public class CancelarVenda extends Chain {
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
 				FiltroObjeto fo1 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, venda.getEmpEmpresa());
-				emf = Conexao.getInstancia(new ProdEstoque().getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(new ProdEstoque().getPu()).createEntityManager();
 				em.getTransaction().begin();
 
 				for (ComVendaProduto vp : venda.getComVendaProdutos()) {
@@ -141,17 +138,19 @@ public class CancelarVenda extends Chain {
 					servico.executar(em, sql);
 
 					// remove estoque da grade caso o produto tenha
-					for (ProdGrade grade : vp.getProdProduto().getProdGrades()) {
-						if (grade.getProdGradeBarra().equals(vp.getComVendaProdutoBarra())) {
-							// formando os parametros
-							ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", qtd);
-							// formando o filtro
-							FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
-							GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
-							// busca o item
-							Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
-							servico.executar(em, sql1);
-							break;
+					if (vp.getProdProduto().getProdGrades() != null) {
+						for (ProdGrade grade : vp.getProdProduto().getProdGrades()) {
+							if (grade.getProdGradeBarra().equals(vp.getComVendaProdutoBarra())) {
+								// formando os parametros
+								ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", qtd);
+								// formando o filtro
+								FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
+								GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
+								// busca o item
+								Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
+								servico.executar(em, sql1);
+								break;
+							}
 						}
 					}
 				}
@@ -168,8 +167,9 @@ public class CancelarVenda extends Chain {
 				UtilServer.LOG.error("Erro ao atualizar o estoque.", ex);
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}
@@ -206,13 +206,11 @@ public class CancelarVenda extends Chain {
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
-				emf = Conexao.getInstancia(venda.getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(venda.getPu()).createEntityManager();
 				em.getTransaction().begin();
 				FinReceber receber = venda.getFinReceber();
 
@@ -236,26 +234,26 @@ public class CancelarVenda extends Chain {
 				UtilServer.LOG.error("Erro ao atualizar a venda.", ex);
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 
 		private void deletarReceber(FinReceber receber) {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
-				emf = Conexao.getInstancia(receber.getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(receber.getPu()).createEntityManager();
 				em.getTransaction().begin();
 				servico.deletar(receber);
 			} catch (Exception ex) {
 				UtilServer.LOG.error("Erro ao deletar o receber.", ex);
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}

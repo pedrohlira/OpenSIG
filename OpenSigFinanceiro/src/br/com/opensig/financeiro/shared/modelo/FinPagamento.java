@@ -220,7 +220,7 @@ public class FinPagamento extends Dados implements Serializable {
 
 		return new String[] { finPagamentoId + "", finPagar.getFinPagarId() + "", finPagar.getEmpEmpresa().getEmpEmpresaId() + "", finPagar.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(),
 				finPagar.getEmpEntidade().getEmpEntidadeNome1(), contaId + "", contaNome, finForma.getFinFormaId() + "", finForma.getFinFormaDescricao(), finPagamentoDocumento,
-				finPagamentoValor.toString(), finPagamentoParcela, UtilClient.getDataGrid(finPagamentoCadastro), UtilClient.getDataGrid(finPagamentoVencimento), finPagamentoStatus,
+				finPagamentoValor.toString(), finPagamentoParcela, finPagar.getFinPagarCategoria(), UtilClient.getDataGrid(finPagamentoCadastro), UtilClient.getDataGrid(finPagamentoVencimento), finPagamentoStatus,
 				UtilClient.getDataGrid(finPagamentoRealizado), UtilClient.getDataGrid(finPagamentoConciliado), finPagar.getFinPagarNfe() + "", finPagamentoObservacao };
 	}
 }

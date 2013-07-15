@@ -1,7 +1,6 @@
 package br.com.opensig.comercial.server.acao;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
@@ -21,7 +20,10 @@ public class ExcluirVenda extends Chain {
 	public ExcluirVenda(Chain next, CoreServiceImpl servico, ComVenda venda) throws OpenSigException {
 		super(null);
 		this.servico = servico;
-		this.venda = venda;
+
+		// seleciona a venda
+		FiltroNumero fn = new FiltroNumero("comVendaId", ECompara.IGUAL, venda.getId());
+		this.venda = (ComVenda) servico.selecionar(venda, fn, false);
 		
 		// atualiza venda
 		DeletarVenda delVen = new DeletarVenda(next);
@@ -31,8 +33,6 @@ public class ExcluirVenda extends Chain {
 
 	@Override
 	public void execute() throws OpenSigException {
-		FiltroNumero fn = new FiltroNumero("comVendaId", ECompara.IGUAL, venda.getId());
-		venda = (ComVenda) servico.selecionar(venda, fn, false);
 		if (next != null) {
 			next.execute();
 		}
@@ -46,13 +46,11 @@ public class ExcluirVenda extends Chain {
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
-				emf = Conexao.getInstancia(venda.getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(venda.getPu()).createEntityManager();
 				em.getTransaction().begin();
 				servico.deletar(em, venda);
 
@@ -68,8 +66,9 @@ public class ExcluirVenda extends Chain {
 				UtilServer.LOG.error("Erro ao excluir a venda.", ex);
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}

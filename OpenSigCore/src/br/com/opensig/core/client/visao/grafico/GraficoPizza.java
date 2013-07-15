@@ -1,5 +1,6 @@
 package br.com.opensig.core.client.visao.grafico;
 
+import br.com.opensig.core.client.visao.abstrato.AGraficoDados;
 import br.com.opensig.core.client.visao.abstrato.IListagem;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.core.shared.modelo.EBusca;

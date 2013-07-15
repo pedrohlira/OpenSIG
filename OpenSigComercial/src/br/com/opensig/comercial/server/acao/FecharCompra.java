@@ -3,7 +3,6 @@ package br.com.opensig.comercial.server.acao;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.server.ComercialServiceImpl;
@@ -41,9 +40,12 @@ public class FecharCompra extends Chain {
 	public FecharCompra(Chain next, CoreServiceImpl servico, ComCompra compra, Autenticacao auth) throws OpenSigException {
 		super(null);
 		this.servico = servico;
-		this.compra = compra;
 		this.impl = new ComercialServiceImpl();
 
+		// seleciona a compra
+		FiltroNumero fn = new FiltroNumero("comCompraId", ECompara.IGUAL, compra.getId());
+		this.compra = (ComCompra) servico.selecionar(compra, fn, false);
+		
 		// atualiza compra
 		AtualizarCompra atuComp = new AtualizarCompra(next);
 		// atualiza os produros
@@ -60,8 +62,6 @@ public class FecharCompra extends Chain {
 
 	@Override
 	public void execute() throws OpenSigException {
-		FiltroNumero fn = new FiltroNumero("comCompraId", ECompara.IGUAL, compra.getId());
-		compra = (ComCompra) servico.selecionar(compra, fn, false);
 		if (next != null) {
 			next.execute();
 		}
@@ -75,30 +75,27 @@ public class FecharCompra extends Chain {
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
 				FiltroObjeto fo1 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, compra.getEmpEmpresa());
-				emf = Conexao.getInstancia(new ProdEstoque().getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(new ProdEstoque().getPu()).createEntityManager();
 				em.getTransaction().begin();
 
 				for (ComCompraProduto cp : compra.getComCompraProdutos()) {
-					// formando o filtro
-					FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, cp.getProdProduto());
-					GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
-
 					// fatorando a quantida no estoque
 					double qtd = cp.getComCompraProdutoQuantidade();
 					if (cp.getProdEmbalagem().getProdEmbalagemId() != cp.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
 						qtd *= impl.getQtdEmbalagem(cp.getProdEmbalagem().getProdEmbalagemId());
 						qtd /= impl.getQtdEmbalagem(cp.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 					}
-
-					// formando o sql
+					// formando os parametros
 					ParametroFormula pf = new ParametroFormula("prodEstoqueQuantidade", qtd);
+					// formando o filtro
+					FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, cp.getProdProduto());
+					GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
+					// formando o sql
 					Sql sql = new Sql(new ProdEstoque(), EComando.ATUALIZAR, gf, pf);
 					servico.executar(em, sql);
 				}
@@ -115,8 +112,9 @@ public class FecharCompra extends Chain {
 				UtilServer.LOG.error("Erro ao atualizar estoque.", ex);
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}
@@ -129,14 +127,12 @@ public class FecharCompra extends Chain {
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
 				ProdProduto prod = new ProdProduto();
-				emf = Conexao.getInstancia(prod.getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(prod.getPu()).createEntityManager();
 				em.getTransaction().begin();
 
 				for (ComCompraProduto cp : compra.getComCompraProdutos()) {
@@ -173,8 +169,9 @@ public class FecharCompra extends Chain {
 				UtilServer.LOG.error("Erro ao atualizar produto.", ex);
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 

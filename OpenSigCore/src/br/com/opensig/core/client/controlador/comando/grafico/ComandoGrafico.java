@@ -24,9 +24,9 @@ public class ComandoGrafico<E extends Dados> extends AComando<E> {
 	public void execute(final Map contexto) {
 		super.execute(contexto);
 		GRAFICO.getPanel().getEl().mask(OpenSigCore.i18n.txtAguarde());
-		CoreProxy<E> persistencia = new CoreProxy<E>(DADOS);
+		CoreProxy<E> proxy = new CoreProxy<E>(DADOS);
 
-		persistencia.buscar(GRAFICO.getCmbCampoX().getValue(), GRAFICO.getCmbCampoSubX().getValue(), GRAFICO.getEData().toString(), GRAFICO.getCmbCampoY().getValue(), GRAFICO.getEValor(),
+		proxy.buscar(GRAFICO.getCmbCampoX().getValue(), GRAFICO.getCmbCampoSubX().getValue(), GRAFICO.getEData().toString(), GRAFICO.getCmbCampoY().getValue(), GRAFICO.getEValor(),
 				GRAFICO.getEOrdem(), LISTA.getProxy().getFiltroTotal(), new AsyncCallback<Collection<String[]>>() {
 
 					public void onFailure(Throwable caught) {

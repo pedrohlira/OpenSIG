@@ -22,6 +22,8 @@
 		<class>br.com.opensig.comercial.shared.modelo.ComEcfNota</class>
 		<class>br.com.opensig.comercial.shared.modelo.ComEcfNotaProduto</class>
 		<class>br.com.opensig.comercial.shared.modelo.ComEcfDocumento</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComTroca</class>
+		<class>br.com.opensig.comercial.shared.modelo.ComTrocaProduto</class>
 		<class>br.com.opensig.produto.shared.modelo.ProdProduto</class>
 		<class>br.com.opensig.produto.shared.modelo.ProdEstoque</class>
 		<class>br.com.opensig.produto.shared.modelo.ProdIcms</class>

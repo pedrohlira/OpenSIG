@@ -3,7 +3,6 @@ package br.com.opensig.comercial.server.acao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.shared.modelo.ComCompra;
@@ -33,14 +32,12 @@ public class SalvarCompra extends Chain {
 
 	@Override
 	public void execute() throws OpenSigException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 		validarProduto();
 
 		try {
 			// recupera uma instância do gerenciador de entidades
-			emf = Conexao.getInstancia(compra.getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(compra.getPu()).createEntityManager();
 			em.getTransaction().begin();
 
 			List<ComCompraProduto> produtos = compra.getComCompraProdutos();
@@ -53,7 +50,7 @@ public class SalvarCompra extends Chain {
 
 			// salva
 			compra.setComCompraProdutos(null);
-			servico.salvar(em, compra);
+			compra = (ComCompra) servico.salvar(em, compra);
 
 			// insere
 			for (ComCompraProduto comProd : produtos) {
@@ -73,8 +70,9 @@ public class SalvarCompra extends Chain {
 			UtilServer.LOG.error("Erro ao salvar a compra.", ex);
 			throw new ComercialException(ex.getMessage());
 		} finally {
-			em.close();
-			emf.close();
+			if (em != null) {
+				em.close();
+			}
 		}
 	}
 
@@ -92,5 +90,9 @@ public class SalvarCompra extends Chain {
 			UtilServer.LOG.error("Erro ao validar o produto.", ex);
 			throw new ComercialException(ex.getMessage());
 		}
+	}
+	
+	public ComCompra getCompra() {
+		return compra;
 	}
 }

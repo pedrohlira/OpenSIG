@@ -244,7 +244,7 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 			EmpEndereco endereco = new EmpEndereco();
 			endereco.setEmpEnderecoTipo(new EmpEnderecoTipo(Integer.valueOf(auth.getConf().get("nfe.tipoendecom"))));
 			endereco.setEmpEnderecoLogradouro(ende.getXLgr());
-			endereco.setEmpEnderecoNumero(Integer.valueOf(ende.getNro().replaceAll("\\D", "")));
+			endereco.setEmpEnderecoNumero(ende.getNro());
 			endereco.setEmpEnderecoComplemento(ende.getXCpl() != null ? ende.getXCpl() : "");
 			endereco.setEmpEnderecoBairro(ende.getXBairro());
 			FiltroNumero fn = new FiltroNumero("empMunicipioIbge", ECompara.IGUAL, ende.getCMun());

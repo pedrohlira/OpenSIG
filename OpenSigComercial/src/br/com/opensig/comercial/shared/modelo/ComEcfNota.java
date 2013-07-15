@@ -30,6 +30,7 @@ import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.core.shared.modelo.EDirecao;
 import br.com.opensig.empresa.shared.modelo.EmpCliente;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
+import br.com.opensig.financeiro.shared.modelo.FinReceber;
 
 /**
  * Classe que representa uma venda tipo D1 do ECF.
@@ -101,6 +102,11 @@ public class ComEcfNota extends Dados implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@XmlTransient
 	private EmpEmpresa empEmpresa;
+
+	@JoinColumn(name = "fin_receber_id")
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@XmlTransient
+	private FinReceber finReceber;
 
 	@OneToMany(mappedBy = "comEcfNota", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@XmlElement(name = "ecfNotaProdutos")
@@ -227,6 +233,14 @@ public class ComEcfNota extends Dados implements Serializable {
 		this.empEmpresa = empEmpresa;
 	}
 
+	public FinReceber getFinReceber() {
+		return finReceber;
+	}
+
+	public void setFinReceber(FinReceber finReceber) {
+		this.finReceber = finReceber;
+	}
+
 	public List<ComEcfNotaProduto> getComEcfNotaProdutos() {
 		return comEcfNotaProdutos;
 	}
@@ -246,10 +260,11 @@ public class ComEcfNota extends Dados implements Serializable {
 	public String[] toArray() {
 		int clienteId = empCliente != null ? empCliente.getEmpClienteId() : 0;
 		String clienteNome = empCliente != null ? empCliente.getEmpEntidade().getEmpEntidadeNome1() : "";
+		int receberId = finReceber == null ? 0 : finReceber.getFinReceberId();
 
 		return new String[] { comEcfNotaId + "", clienteId + "", clienteNome, empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), comEcfNotaSerie,
 				comEcfNotaSubserie, comEcfNotaNumero + "", UtilClient.getDataGrid(comEcfNotaData), comEcfNotaBruto.toString(), comEcfNotaDesconto.toString(), comEcfNotaLiquido.toString(),
-				comEcfNotaPis.toString(), comEcfNotaCofins.toString(), getComEcfNotaCancelada() + "" };
+				comEcfNotaPis.toString(), comEcfNotaCofins.toString(), receberId + "", getComEcfNotaCancelada() + "" };
 	}
 
 	public Dados getObjeto(String campo) {

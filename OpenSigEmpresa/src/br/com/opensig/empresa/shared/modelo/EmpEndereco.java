@@ -43,7 +43,7 @@ public class EmpEndereco extends Dados implements Serializable {
 	private String empEnderecoLogradouro;
 
 	@Column(name = "emp_endereco_numero")
-	private int empEnderecoNumero;
+	private String empEnderecoNumero;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "emp_entidade_id")
@@ -106,11 +106,11 @@ public class EmpEndereco extends Dados implements Serializable {
 		this.empEnderecoLogradouro = empEnderecoLogradouro;
 	}
 
-	public int getEmpEnderecoNumero() {
+	public String getEmpEnderecoNumero() {
 		return this.empEnderecoNumero;
 	}
 
-	public void setEmpEnderecoNumero(int empEnderecoNumero) {
+	public void setEmpEnderecoNumero(String empEnderecoNumero) {
 		this.empEnderecoNumero = empEnderecoNumero;
 	}
 
@@ -149,7 +149,7 @@ public class EmpEndereco extends Dados implements Serializable {
 	public String[] toArray() {
 		return new String[] { empEnderecoId + "", empEnderecoTipo.getEmpEnderecoTipoId() + "", empEnderecoTipo.getEmpEnderecoTipoDescricao(),
 				empMunicipio.getEmpEstado().getEmpPais().getEmpPaisDescricao(), empMunicipio.getEmpEstado().getEmpEstadoDescricao(), empMunicipio.getEmpMunicipioId() + "",
-				empMunicipio.getEmpMunicipioDescricao(), empEnderecoLogradouro, empEnderecoNumero + "", empEnderecoComplemento, empEnderecoBairro, empEnderecoCep };
+				empMunicipio.getEmpMunicipioDescricao(), empEnderecoLogradouro, empEnderecoNumero, empEnderecoComplemento, empEnderecoBairro, empEnderecoCep };
 	}
 
 	public Dados getObjeto(String campo) {

@@ -1,7 +1,6 @@
 package br.com.opensig.comercial.server.acao;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.shared.modelo.ComConsumo;
@@ -25,6 +24,10 @@ public class ExcluirConsumo extends Chain {
 		this.servico = servico;
 		this.consumo = consumo;
 		this.auth = auth;
+
+		// seleciona o consumo
+		FiltroNumero fn = new FiltroNumero("comConsumoId", ECompara.IGUAL, consumo.getId());
+		this.consumo = (ComConsumo) servico.selecionar(consumo, fn, false);
 		
 		// atualiza consumo
 		DeletarConsumo delConsumo = new DeletarConsumo(next);
@@ -34,8 +37,6 @@ public class ExcluirConsumo extends Chain {
 	}
 
 	public void execute() throws OpenSigException {
-		FiltroNumero fn = new FiltroNumero("comConsumoId", ECompara.IGUAL, consumo.getId());
-		consumo = (ComConsumo) servico.selecionar(consumo, fn, false);
 		if (next != null) {
 			next.execute();
 		}
@@ -70,19 +71,17 @@ public class ExcluirConsumo extends Chain {
 		public DeletarConsumo(Chain next) throws OpenSigException {
 			super(next);
 		}
-		
+
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
-				emf = Conexao.getInstancia(consumo.getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(consumo.getPu()).createEntityManager();
 				em.getTransaction().begin();
 				servico.deletar(em, consumo);
-				
+
 				if (next != null) {
 					next.execute();
 				}
@@ -94,8 +93,9 @@ public class ExcluirConsumo extends Chain {
 
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}

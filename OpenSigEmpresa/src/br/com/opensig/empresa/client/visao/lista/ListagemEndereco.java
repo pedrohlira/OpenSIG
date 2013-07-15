@@ -289,12 +289,12 @@ public class ListagemEndereco extends AListagemEditor<EmpEndereco> {
 				int endTipo = rec.getAsInteger("empEnderecoTipoId");
 				int municipio = rec.getAsInteger("empMunicipioId");
 				String logra = rec.getAsString("empEnderecoLogradouro") == null ? "" : rec.getAsString("empEnderecoLogradouro");
-				int numero = rec.getAsInteger("empEnderecoNumero");
+				String numero = rec.getAsString("empEnderecoNumero");
 				String comp = rec.getAsString("empEnderecoComplemento") == null ? "" : rec.getAsString("empEnderecoComplemento");
 				String bairro = rec.getAsString("empEnderecoBairro") == null ? "" : rec.getAsString("empEnderecoBairro");
 				String cep = rec.getAsString("empEnderecoCep") == null ? "" : rec.getAsString("empEnderecoCep");
 
-				if (endTipo == 0 || municipio == 0 || logra.equals("") || numero < 0 || bairro.equals("") || cep.equals("")) {
+				if (endTipo == 0 || municipio == 0 || logra.equals("") || numero.equals("") || bairro.equals("") || cep.equals("")) {
 					throw new Exception();
 				}
 

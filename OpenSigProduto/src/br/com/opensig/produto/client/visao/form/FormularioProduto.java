@@ -130,9 +130,9 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 		txtNcm = new TextField(OpenSigCore.i18n.txtNcm(), "prodProdutoNcm", 80);
 		txtNcm.setAllowBlank(false);
-		txtNcm.setMinLength(2);
+		txtNcm.setMinLength(8);
 		txtNcm.setMaxLength(8);
-		txtNcm.setRegex("^(\\d{2}|\\d{8})$");
+		txtNcm.setRegex("^(\\d{8})$");
 
 		txtBarra = new TextField(OpenSigCore.i18n.txtBarra(), "prodProdutoBarra", 110);
 		txtBarra.setMinLength(8);

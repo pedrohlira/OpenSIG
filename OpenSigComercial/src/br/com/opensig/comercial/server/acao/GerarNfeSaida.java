@@ -16,8 +16,12 @@ import br.com.opensig.comercial.shared.modelo.ComNatureza;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
 import br.com.opensig.comercial.shared.modelo.ComVendaProduto;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
+import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
+import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
+import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
+import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.controlador.parametro.GrupoParametro;
 import br.com.opensig.core.client.controlador.parametro.IParametro;
 import br.com.opensig.core.client.controlador.parametro.ParametroBinario;
@@ -77,6 +81,8 @@ import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.PIS.PISOutr;
 import br.com.opensig.nfe.TNFe.InfNFe.Det.Prod;
 import br.com.opensig.nfe.TNFe.InfNFe.Emit;
 import br.com.opensig.nfe.TNFe.InfNFe.Ide;
+import br.com.opensig.nfe.TNFe.InfNFe.Ide.NFref;
+import br.com.opensig.nfe.TNFe.InfNFe.Ide.NFref.RefECF;
 import br.com.opensig.nfe.TNFe.InfNFe.InfAdic;
 import br.com.opensig.nfe.TNFe.InfNFe.Total;
 import br.com.opensig.nfe.TNFe.InfNFe.Total.ICMSTot;
@@ -85,6 +91,7 @@ import br.com.opensig.nfe.TNFe.InfNFe.Transp.Transporta;
 import br.com.opensig.nfe.TNFe.InfNFe.Transp.Vol;
 import br.com.opensig.nfe.TUf;
 import br.com.opensig.nfe.TUfEmi;
+import br.com.opensig.produto.shared.modelo.Ibpt;
 import br.com.opensig.produto.shared.modelo.ProdComposicao;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
@@ -92,9 +99,12 @@ public class GerarNfeSaida extends Chain {
 	private CoreServiceImpl servico;
 	private ComVenda venda;
 	private ComFrete frete;
+	private List<ComVendaProduto> produtos;
 	private Date data;
 	private FisNotaSaida nota;
 	private Autenticacao auth;
+	private String nfe;
+	private int[] cupom;
 
 	private EmpEmpresa empEmissao;
 	private EmpEndereco endeEmissao;
@@ -124,14 +134,17 @@ public class GerarNfeSaida extends Chain {
 	private double valorPis;
 	private double valorCofins;
 
-	public GerarNfeSaida(Chain next, CoreServiceImpl servico, ComVenda venda, ComFrete frete, Autenticacao auth) throws OpenSigException {
+	public GerarNfeSaida(Chain next, CoreServiceImpl servico, ComVenda venda, ComFrete frete, String nfe, int[] cupom, Autenticacao auth) throws OpenSigException {
 		super(next);
 		this.servico = servico;
 		this.venda = venda;
 		this.frete = frete;
+		this.produtos = new ArrayList<ComVendaProduto>();
 		this.data = new Date();
 		this.infos = new HashMap<String, String>();
 		this.auth = auth;
+		this.nfe = nfe;
+		this.cupom = cupom;
 	}
 
 	@Override
@@ -349,11 +362,29 @@ public class GerarNfeSaida extends Chain {
 		// ambiente
 		ide.setTpAmb(auth.getConf().get("nfe.tipoamb"));
 		// finalidade
-		ide.setFinNFe(auth.getConf().get("nfe.finalidade"));
+		ide.setFinNFe(nfe.equals("") ? "1" : "2");
 		// processo emissao
 		ide.setProcEmi(auth.getConf().get("nfe.procemi"));
 		// versao processo
 		ide.setVerProc(auth.getConf().get("nfe.procver"));
+
+		// caso seja nfe complementar
+		if (!nfe.equals("")) {
+			NFref ref = new NFref();
+			ref.setRefNFe(nfe);
+			ide.getNFref().add(ref);
+		}
+		// caso seja troca com ecf refenciadas
+		if (cupom != null) {
+			RefECF ecf = new RefECF();
+			ecf.setMod("2D");
+			ecf.setNECF(cupom[0] + "");
+			ecf.setNCOO(cupom[1] + "");
+
+			NFref ref = new NFref();
+			ref.setRefECF(ecf);
+			ide.getNFref().add(ref);
+		}
 
 		return ide;
 	}
@@ -373,7 +404,7 @@ public class GerarNfeSaida extends Chain {
 		EmpMunicipio mun = endeEmissao.getEmpMunicipio();
 		TEnderEmi enderEmit = new TEnderEmi();
 		enderEmit.setXLgr(endeEmissao.getEmpEnderecoLogradouro().trim());
-		enderEmit.setNro(endeEmissao.getEmpEnderecoNumero() + "");
+		enderEmit.setNro(endeEmissao.getEmpEnderecoNumero());
 		if (endeEmissao.getEmpEnderecoComplemento() != null && !endeEmissao.getEmpEnderecoComplemento().trim().equals("")) {
 			enderEmit.setXCpl(endeEmissao.getEmpEnderecoComplemento().trim());
 		}
@@ -418,7 +449,7 @@ public class GerarNfeSaida extends Chain {
 		EmpMunicipio mun = endeDestino.getEmpMunicipio();
 		TEndereco enderDest = new TEndereco();
 		enderDest.setXLgr(endeDestino.getEmpEnderecoLogradouro().trim());
-		enderDest.setNro(endeDestino.getEmpEnderecoNumero() + "");
+		enderDest.setNro(endeDestino.getEmpEnderecoNumero());
 		if (endeDestino.getEmpEnderecoComplemento() != null && !endeDestino.getEmpEnderecoComplemento().trim().equals("")) {
 			enderDest.setXCpl(endeDestino.getEmpEnderecoComplemento().trim());
 		}
@@ -443,45 +474,44 @@ public class GerarNfeSaida extends Chain {
 
 	public void getProdutos(List<Det> dets) throws ComercialException {
 		FiltroObjeto fo = new FiltroObjeto("comVenda", ECompara.IGUAL, venda);
-		Lista<ComVendaProduto> produtos = null;
+		Lista<ComVendaProduto> auxProdutos = null;
 		try {
-			produtos = (Lista<ComVendaProduto>) servico.selecionar(new ComVendaProduto(), 0, 0, fo, false);
+			auxProdutos = (Lista<ComVendaProduto>) servico.selecionar(new ComVendaProduto(), 0, 0, fo, false);
 		} catch (Exception ex) {
 			UtilServer.LOG.error("Erro nos produtos da venda.", ex);
 			throw new ComercialException("Erro nos produtos da venda!");
 		}
 
 		// verifica se tem produtos com composicoes
-		List<ComVendaProduto> auxProdutos = new ArrayList<ComVendaProduto>();
-		for (ComVendaProduto vp : produtos.getLista()) {
+		for (ComVendaProduto vp : auxProdutos.getLista()) {
 			if (vp.getProdProduto().getProdComposicoes().size() == 0) {
-				auxProdutos.add(vp);
+				produtos.add(vp);
 			} else {
 				for (ProdComposicao comp : vp.getProdProduto().getProdComposicoes()) {
-					ComVendaProduto auxVenProd = new ComVendaProduto();
-					auxVenProd.setComVenda(vp.getComVenda());
-					auxVenProd.setProdProduto(comp.getProdProduto());
-					auxVenProd.setProdEmbalagem(comp.getProdEmbalagem());
+					ComVendaProduto avp = new ComVendaProduto();
+					avp.setComVenda(vp.getComVenda());
+					avp.setProdProduto(comp.getProdProduto());
+					avp.setProdEmbalagem(comp.getProdEmbalagem());
 					double qtd = vp.getComVendaProdutoQuantidade() * comp.getProdComposicaoQuantidade();
-					auxVenProd.setComVendaProdutoQuantidade(qtd);
+					avp.setComVendaProdutoQuantidade(qtd);
 					double bruto = comp.getProdComposicaoValor() / comp.getProdComposicaoQuantidade();
-					auxVenProd.setComVendaProdutoBruto(bruto);
+					avp.setComVendaProdutoBruto(bruto);
 					double totBruto = bruto * qtd;
-					auxVenProd.setComVendaProdutoTotalBruto(totBruto);
+					avp.setComVendaProdutoTotalBruto(totBruto);
 					double desc = vp.getComVendaProdutoDesconto();
 					double liquido = bruto - (bruto * desc / 100);
-					auxVenProd.setComVendaProdutoLiquido(liquido);
+					avp.setComVendaProdutoLiquido(liquido);
 					double totLiquido = qtd * liquido;
-					auxVenProd.setComVendaProdutoTotalLiquido(totLiquido);
-					auxVenProd.setComVendaProdutoIcms(vp.getComVendaProdutoIcms());
-					auxVenProd.setComVendaProdutoIpi(vp.getComVendaProdutoIpi());
-					auxProdutos.add(auxVenProd);
+					avp.setComVendaProdutoTotalLiquido(totLiquido);
+					avp.setComVendaProdutoIcms(vp.getComVendaProdutoIcms());
+					avp.setComVendaProdutoIpi(vp.getComVendaProdutoIpi());
+					produtos.add(avp);
 				}
 			}
 		}
 
 		int i = 1;
-		for (ComVendaProduto vp : auxProdutos) {
+		for (ComVendaProduto vp : produtos) {
 			ProdProduto pp = vp.getProdProduto();
 
 			// setando o item
@@ -531,19 +561,19 @@ public class GerarNfeSaida extends Chain {
 
 			// verifica se tem algum decreto de icms
 			if (!pp.getProdIcms().getProdIcmsDecreto().equals("")) {
-				infos.put("ICMS" + pp.getProdIcms().getProdIcmsId(), pp.getProdIcms().getProdIcmsDecreto());
+				infos.put("ICMS - " + pp.getProdIcms().getProdIcmsId(), pp.getProdIcms().getProdIcmsDecreto());
 			}
 			// verifica se tem algum decreto de ipi
 			if (!pp.getProdIpi().getProdIpiDecreto().equals("")) {
-				infos.put("IPI" + pp.getProdIpi().getProdIpiId(), pp.getProdIpi().getProdIpiDecreto());
+				infos.put("IPI - " + pp.getProdIpi().getProdIpiId(), pp.getProdIpi().getProdIpiDecreto());
 			}
 			// verifica se tem algum decreto de pis
 			if (!pp.getProdPis().getProdPisDecreto().equals("")) {
-				infos.put("PIS" + pp.getProdPis().getProdPisId(), pp.getProdPis().getProdPisDecreto());
+				infos.put("PIS - " + pp.getProdPis().getProdPisId(), pp.getProdPis().getProdPisDecreto());
 			}
 			// verifica se tem algum decreto de cofins
 			if (!pp.getProdCofins().getProdCofinsDecreto().equals("")) {
-				infos.put("COFINS" + pp.getProdCofins().getProdCofinsId(), pp.getProdCofins().getProdCofinsDecreto());
+				infos.put("COFINS - " + pp.getProdCofins().getProdCofinsId(), pp.getProdCofins().getProdCofinsDecreto());
 			}
 		}
 	}
@@ -741,7 +771,7 @@ public class GerarNfeSaida extends Chain {
 			trib.setPIPI(getValorNfe(porcento));
 			trib.setVIPI(strValor);
 		}
-		
+
 		ipi.setIPITrib(trib);
 		ipi.setCEnq(vp.getProdProduto().getProdIpi().getProdIpiEnq());
 		return ipi;
@@ -789,7 +819,7 @@ public class GerarNfeSaida extends Chain {
 	public COFINS getCOFINS(ComVendaProduto vp) {
 		COFINS cofins = new COFINS();
 		String cst = vp.getComVendaProdutoCofinsCst().equals("") ? vp.getProdProduto().getProdCofins().getProdCofinsCstSaida() : vp.getComVendaProdutoCofinsCst();
-		
+
 		// identifica pela natureza se cobra PIS
 		double porcento = 0.00;
 		if (comNatureza.getComNaturezaCofins()) {
@@ -799,7 +829,7 @@ public class GerarNfeSaida extends Chain {
 				porcento = vp.getProdProduto().getProdCofins().getProdCofinsAliquota();
 			}
 		}
-		
+
 		// faz o calculo do valor e define
 		double valor = vp.getComVendaProdutoTotalLiquido() * porcento / 100;
 		String strValor = getValorNfe(valor);
@@ -940,6 +970,27 @@ public class GerarNfeSaida extends Chain {
 		// uma mensagem padrao se precisar
 		if (auth.getConf().get("nfe.info") != null) {
 			sb.append("#" + auth.getConf().get("nfe.info"));
+		}
+		// caso a opcao de mostrar os valores de impostos esteja ativa
+		if (auth.getConf().get("nfe.ibpt").equalsIgnoreCase("SIM")) {
+			double impostos = 0.00;
+			for (ComVendaProduto vp : produtos) {
+				FiltroTexto ft = new FiltroTexto("ibptCodigo", ECompara.IGUAL, vp.getProdProduto().getProdProdutoNcm());
+				FiltroNumero fn = new FiltroNumero("ibptTabela", ECompara.IGUAL, vp.getProdProduto().getProdTipo().getProdTipoValor().equals("09") ? 1 : 0);
+				GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { ft, fn });
+				try {
+					Ibpt ibpt = (Ibpt) servico.selecionar(new Ibpt(), gf, false);
+					int ori = vp.getProdProduto().getProdOrigem().getProdOrigemValor();
+					double taxa = (ori == 0 || ori == 3 || ori == 4 || ori == 5) ? ibpt.getIbptAliqNac() : ibpt.getIbptAliqImp();
+					impostos += vp.getComVendaProdutoTotalLiquido() * taxa / 100;
+				} catch (Exception ex) {
+					continue;
+				}
+			}
+			double porcentagem = impostos / valorProd * 100;
+			sb.append("#Valor Aproximado dos Tributos em Reais ");
+			sb.append(UtilServer.formataNumero(impostos, 1, 2, false)).append(" [");
+			sb.append(UtilServer.formataNumero(porcentagem, 1, 2, false)).append(" porcentos] Fonte: IBPT");
 		}
 
 		InfAdic inf = new InfAdic();

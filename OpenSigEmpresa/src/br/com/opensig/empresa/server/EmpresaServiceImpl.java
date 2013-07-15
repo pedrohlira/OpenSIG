@@ -3,7 +3,6 @@ package br.com.opensig.empresa.server;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
@@ -27,24 +26,22 @@ import br.com.opensig.empresa.shared.modelo.EmpTransportadora;
 
 public class EmpresaServiceImpl<E extends Dados> extends CoreServiceImpl<E> implements EmpresaService<E> {
 
-	public EmpresaServiceImpl(){
+	public EmpresaServiceImpl() {
 	}
-	
-	public EmpresaServiceImpl(Autenticacao auth){
+
+	public EmpresaServiceImpl(Autenticacao auth) {
 		super(auth);
 	}
-	
+
 	public E salvar(E dados) throws EmpresaException {
 		if (dados instanceof EmpEmpresa) {
 			return (E) salvarEmpresa((EmpEmpresa) dados);
 		} else {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
-				emf = Conexao.getInstancia(dados.getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(dados.getPu()).createEntityManager();
 				em.getTransaction().begin();
 
 				// seta a entidade
@@ -62,21 +59,20 @@ public class EmpresaServiceImpl<E extends Dados> extends CoreServiceImpl<E> impl
 				UtilServer.LOG.error("Erro ao salvar a " + dados.getTabela(), ex);
 				throw new EmpresaException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	};
 
 	public EmpEmpresa salvarEmpresa(EmpEmpresa empresa) throws EmpresaException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 		EmpresaServiceImpl servico = new EmpresaServiceImpl(null);
-		
+
 		try {
 			// recupera uma instância do gerenciador de entidades
-			emf = Conexao.getInstancia(empresa.getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(empresa.getPu()).createEntityManager();
 			em.getTransaction().begin();
 
 			SalvarEntidade se = new SalvarEntidade(null, this, empresa.getEmpEntidade());
@@ -107,8 +103,9 @@ public class EmpresaServiceImpl<E extends Dados> extends CoreServiceImpl<E> impl
 			UtilServer.LOG.error("Erro ao salvar a empresa.", ex);
 			throw new EmpresaException(ex.getMessage());
 		} finally {
-			em.close();
-			emf.close();
+			if (em != null) {
+				em.close();
+			}
 		}
 	}
 

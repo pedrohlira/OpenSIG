@@ -81,7 +81,7 @@ public class Registro0150 extends ARegistro<Dados0150, EmpEntidade> {
 
 		for (EmpEndereco end : ent.getEmpEnderecos()) {
 			d.setEnd(end.getEmpEnderecoLogradouro());
-			d.setNum(end.getEmpEnderecoNumero() + "");
+			d.setNum(end.getEmpEnderecoNumero());
 			d.setCompl(end.getEmpEnderecoComplemento());
 			d.setBairro(end.getEmpEnderecoBairro());
 			d.setCod_mun(end.getEmpMunicipio().getEmpMunicipioIbge());

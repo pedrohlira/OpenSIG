@@ -3,7 +3,6 @@ package br.com.opensig.comercial.server.acao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
@@ -31,13 +30,11 @@ public class SalvarEcfVenda extends Chain {
 
 	@Override
 	public void execute() throws OpenSigException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
 			// recupera uma instância do gerenciador de entidades
-			emf = Conexao.getInstancia(venda.getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(venda.getPu()).createEntityManager();
 			em.getTransaction().begin();
 
 			List<ComEcfVendaProduto> produtos = venda.getComEcfVendaProdutos();
@@ -50,7 +47,6 @@ public class SalvarEcfVenda extends Chain {
 
 			// salva
 			venda.setComEcfVendaProdutos(null);
-			venda.setFinReceber(null);
 			servico.salvar(em, venda);
 
 			// insere
@@ -71,8 +67,9 @@ public class SalvarEcfVenda extends Chain {
 			UtilServer.LOG.error("Erro ao salvar a venda.", ex);
 			throw new ComercialException(ex.getMessage());
 		} finally {
-			em.close();
-			emf.close();
+			if (em != null) {
+				em.close();
+			}
 		}
 	}
 

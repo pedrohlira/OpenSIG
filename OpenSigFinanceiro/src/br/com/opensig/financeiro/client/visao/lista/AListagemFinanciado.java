@@ -57,9 +57,9 @@ public class AListagemFinanciado<E extends Dados> extends AListagem<E> {
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef(nomes.get("id")), new IntegerFieldDef(nomes.get("financeiroId")), new IntegerFieldDef(nomes.get("financeiroEmpresa") + ".empEmpresaId"),
 				new StringFieldDef(nomes.get("financeiroEmpresa") + ".empEntidade.empEntidadeNome1"), new StringFieldDef(nomes.get("financeiroNome")), new IntegerFieldDef("finConta.finContaId"),
 				new StringFieldDef("finConta.finContaNome"), new IntegerFieldDef("finForma.finFormaId"), new StringFieldDef("finForma.finFormaDescricao"), new StringFieldDef(nomes.get("documento")),
-				new FloatFieldDef(nomes.get("valor")), new StringFieldDef(nomes.get("parcela")), new DateFieldDef(nomes.get("cadastro")), new DateFieldDef(nomes.get("vencimento")),
-				new StringFieldDef(nomes.get("status")), new DateFieldDef(nomes.get("realizado")), new DateFieldDef(nomes.get("conciliado")), new IntegerFieldDef(nomes.get("financeiroNfe")),
-				new StringFieldDef(nomes.get("observacao")) };
+				new FloatFieldDef(nomes.get("valor")), new StringFieldDef(nomes.get("parcela")), new StringFieldDef(nomes.get("categoria")), new DateFieldDef(nomes.get("cadastro")),
+				new DateFieldDef(nomes.get("vencimento")), new StringFieldDef(nomes.get("status")), new DateFieldDef(nomes.get("realizado")), new DateFieldDef(nomes.get("conciliado")),
+				new IntegerFieldDef(nomes.get("financeiroNfe")), new StringFieldDef(nomes.get("observacao")) };
 		campos = new RecordDef(fd);
 
 		// selected
@@ -84,6 +84,7 @@ public class AListagemFinanciado<E extends Dados> extends AListagem<E> {
 		ColumnConfig ccDescricao = new ColumnConfig(OpenSigCore.i18n.txtTipo(), "finForma.finFormaDescricao", 100, true);
 		ColumnConfig ccDocumento = new ColumnConfig(OpenSigCore.i18n.txtDocumento(), nomes.get("documento"), 100, true);
 		ColumnConfig ccParcela = new ColumnConfig(OpenSigCore.i18n.txtParcela(), nomes.get("parcela"), 50, true);
+		ColumnConfig ccCategoria = new ColumnConfig(OpenSigCore.i18n.txtCategoria(), nomes.get("categoria"), 100, true);
 		ColumnConfig ccCadastro = new ColumnConfig(OpenSigCore.i18n.txtCadastro(), nomes.get("cadastro"), 75, true, DATA);
 		ColumnConfig ccVencimento = new ColumnConfig(OpenSigCore.i18n.txtVencimento(), nomes.get("vencimento"), 75, true, DATA);
 		ColumnConfig ccStatus = new ColumnConfig(OpenSigCore.i18n.txtStatus(), nomes.get("status"), 100, true);
@@ -96,7 +97,7 @@ public class AListagemFinanciado<E extends Dados> extends AListagem<E> {
 		SummaryColumnConfig sumValor = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtValor(), nomes.get("valor"), 75, true, DINHEIRO), DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { check, ccId, ccFinanceiroId, ccEmpresaId, ccEmpresa, ccNome, ccContaId, ccContaNome, ccFormaId, ccDescricao, ccDocumento, sumValor,
-				ccParcela, ccCadastro, ccVencimento, ccStatus, ccRealizado, ccConciliado, ccNfe, ccObservacao };
+				ccParcela, ccCategoria, ccCadastro, ccVencimento, ccStatus, ccRealizado, ccConciliado, ccNfe, ccObservacao };
 		modelos = new ColumnModel(bcc);
 
 		if (UtilClient.getAcaoPermitida(funcao, ComandoPermiteEmpresa.class) == null) {

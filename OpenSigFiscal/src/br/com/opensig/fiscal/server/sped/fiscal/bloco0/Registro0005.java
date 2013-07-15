@@ -15,7 +15,7 @@ public class Registro0005 extends ARegistro<Dados0005, Dados> {
 		EmpEndereco end = sped.getEmpEmpresa().getEmpEntidade().getEmpEnderecos().get(0);
 		d.setCep(Integer.valueOf(end.getEmpEnderecoCep().replaceAll("\\D", "")));
 		d.setEnd(end.getEmpEnderecoLogradouro());
-		d.setNum(end.getEmpEnderecoNumero() + "");
+		d.setNum(end.getEmpEnderecoNumero());
 		d.setCompl(end.getEmpEnderecoComplemento());
 		d.setBairro(end.getEmpEnderecoBairro());
 

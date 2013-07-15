@@ -237,9 +237,9 @@ public class FinRecebimento extends Dados implements Serializable {
 
 		return new String[] { finRecebimentoId + "", finReceber.getFinReceberId() + "", finReceber.getEmpEmpresa().getEmpEmpresaId() + "",
 				finReceber.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(), finReceber.getEmpEntidade().getEmpEntidadeNome1(), contaId + "", contaNome, finForma.getFinFormaId() + "",
-				finForma.getFinFormaDescricao(), finRecebimentoDocumento, finRecebimentoValor.toString(), finRecebimentoParcela, UtilClient.getDataGrid(finRecebimentoCadastro),
-				UtilClient.getDataGrid(finRecebimentoVencimento), finRecebimentoStatus, UtilClient.getDataGrid(finRecebimentoRealizado), UtilClient.getDataGrid(finRecebimentoConciliado),
-				finReceber.getFinReceberNfe() + "", finRecebimentoObservacao };
+				finForma.getFinFormaDescricao(), finRecebimentoDocumento, finRecebimentoValor.toString(), finRecebimentoParcela, finReceber.getFinReceberCategoria(),
+				UtilClient.getDataGrid(finRecebimentoCadastro), UtilClient.getDataGrid(finRecebimentoVencimento), finRecebimentoStatus, UtilClient.getDataGrid(finRecebimentoRealizado),
+				UtilClient.getDataGrid(finRecebimentoConciliado), finReceber.getFinReceberNfe() + "", finRecebimentoObservacao };
 	}
 
 }

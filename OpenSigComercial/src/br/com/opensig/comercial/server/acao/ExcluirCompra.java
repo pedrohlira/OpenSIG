@@ -1,7 +1,6 @@
 package br.com.opensig.comercial.server.acao;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.server.ComercialServiceImpl;
@@ -36,10 +35,13 @@ public class ExcluirCompra extends Chain {
 	public ExcluirCompra(Chain next, CoreServiceImpl servico, ComCompra compra, Autenticacao auth) throws OpenSigException {
 		super(null);
 		this.servico = servico;
-		this.compra = compra;
 		this.auth = auth;
 		this.impl = new ComercialServiceImpl();
 
+		// seleciona a compra
+		FiltroNumero fn = new FiltroNumero("comCompraId", ECompara.IGUAL, compra.getId());
+		this.compra = (ComCompra) servico.selecionar(compra, fn, false);
+		
 		// deletar compra
 		DeletarCompra delComp = new DeletarCompra(next);
 		// deletar nota
@@ -58,8 +60,6 @@ public class ExcluirCompra extends Chain {
 	}
 
 	public void execute() throws OpenSigException {
-		FiltroNumero fn = new FiltroNumero("comCompraId", ECompara.IGUAL, compra.getId());
-		compra = (ComCompra) servico.selecionar(compra, fn, false);
 		if (next != null) {
 			next.execute();
 		}
@@ -73,14 +73,12 @@ public class ExcluirCompra extends Chain {
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
 				FiltroObjeto fo1 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, compra.getEmpEmpresa());
-				emf = Conexao.getInstancia(new ProdEstoque().getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(new ProdEstoque().getPu()).createEntityManager();
 				em.getTransaction().begin();
 
 				if (compra.getComCompraFechada()) {
@@ -116,8 +114,9 @@ public class ExcluirCompra extends Chain {
 				UtilServer.LOG.error("Erro ao excluir a compra.", ex);
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}
@@ -154,13 +153,11 @@ public class ExcluirCompra extends Chain {
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
-				emf = Conexao.getInstancia(new FisNotaEntrada().getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(new FisNotaEntrada().getPu()).createEntityManager();
 				em.getTransaction().begin();
 
 				if (compra.getFisNotaEntrada() != null) {
@@ -179,8 +176,9 @@ public class ExcluirCompra extends Chain {
 				UtilServer.LOG.error("Erro ao excluir a nota.", ex);
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}
@@ -193,13 +191,11 @@ public class ExcluirCompra extends Chain {
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
-				emf = Conexao.getInstancia(compra.getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(compra.getPu()).createEntityManager();
 				em.getTransaction().begin();
 				servico.deletar(em, compra);
 
@@ -215,8 +211,9 @@ public class ExcluirCompra extends Chain {
 				UtilServer.LOG.error("Erro ao excluir a compra.", ex);
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}

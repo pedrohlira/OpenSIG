@@ -16,15 +16,15 @@ public class CancelarEcfVenda extends Chain {
 	public CancelarEcfVenda(Chain next, CoreServiceImpl servico, ComEcfVenda venda, Autenticacao auth) throws OpenSigException {
 		super(null);
 		this.servico = servico;
-		this.venda = venda;
 		this.next = next;
+	
+		// seleciona a venda
+		FiltroNumero fn = new FiltroNumero("comEcfVendaId", ECompara.IGUAL, venda.getId());
+		this.venda = (ComEcfVenda) servico.selecionar(venda, fn, false);
 	}
 
 	@Override
 	public void execute() throws OpenSigException {
-		// seta a venda
-		FiltroNumero fn = new FiltroNumero("comEcfVendaId", ECompara.IGUAL, venda.getId());
-		venda = (ComEcfVenda) servico.selecionar(venda, fn, false);
 		if (venda.getComEcfVendaProdutos() == null || venda.getComEcfVendaProdutos().isEmpty()) {
 			venda.setComEcfVendaCancelada(true);
 			servico.salvar(venda);

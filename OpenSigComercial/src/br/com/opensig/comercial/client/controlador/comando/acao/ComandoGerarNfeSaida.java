@@ -49,6 +49,9 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 	private NumberField txtVolume;
 	private NumberField txtLiquido;
 	private NumberField txtBruto;
+	private NumberField txtNfe;
+	private NumberField txtEcf;
+	private NumberField txtCoo;
 	private TextField txtEspecie;
 	private ComboBox cmbTransportadora;
 	private TextArea txtObservacao;
@@ -62,7 +65,8 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 			public void onSuccess(Object result) {
 				Record rec = LISTA.getPanel().getSelectionModel().getSelected();
 
-				if (rec != null && rec.getAsBoolean("comVendaFechada") && !rec.getAsBoolean("comVendaNfe") && !rec.getAsBoolean("comVendaCancelada") && rec.getAsInteger("empEmpresa.empEmpresaId") == Ponte.getLogin().getEmpresaId()) {
+				if (rec != null && rec.getAsBoolean("comVendaFechada") && !rec.getAsBoolean("comVendaNfe") && !rec.getAsBoolean("comVendaCancelada")
+						&& rec.getAsInteger("empEmpresa.empEmpresaId") == Ponte.getLogin().getEmpresaId()) {
 					venda = new ComVenda();
 					venda.setEmpEmpresa(new EmpEmpresa(rec.getAsInteger("empEmpresa.empEmpresaId")));
 					venda.setEmpCliente(new EmpCliente(rec.getAsInteger("empCliente.empClienteId")));
@@ -104,7 +108,7 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 
 	private void abrirFrete() {
 		// janela
-		wndNFe = new Window(OpenSigCore.i18n.txtNfe() + " -> " + OpenSigCore.i18n.txtFrete(), 350, 300, true, false);
+		wndNFe = new Window(OpenSigCore.i18n.txtNfe() + " -> " + OpenSigCore.i18n.txtFrete(), 350, 400, true, false);
 		wndNFe.setLayout(new FitLayout());
 		wndNFe.setIconCls("icon-nfe");
 		wndNFe.setClosable(false);
@@ -176,10 +180,18 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 					}
 					// seta info
 					venda.setComVendaObservacao(txtObservacao.getValueAsString());
-					
+
+					// caso tenha cupom referenciado
+					int[] cupom = null;
+					if (txtEcf.getValue() != null && txtCoo.getValue() != null) {
+						cupom = new int[2];
+						cupom[0] = txtEcf.getValue().intValue();
+						cupom[1] = txtCoo.getValue().intValue();
+					}
+
 					MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtNfe());
 					ComercialProxy proxy = new ComercialProxy();
-					proxy.gerarNfe(venda, frete, salvar);
+					proxy.gerarNfe(venda, frete, txtNfe.getValueAsString(), cupom, salvar);
 				}
 			}
 		});
@@ -205,7 +217,6 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 		MultiFieldPanel linha2 = new MultiFieldPanel();
 		linha2.setBorder(false);
 		linha2.addToRow(getTransportadora(), 320);
-
 		frm.add(linha2);
 
 		txtVolume = new NumberField(OpenSigCore.i18n.txtVolume(), "comFreteVolume", 60);
@@ -233,6 +244,29 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 		linha3.addToRow(txtBruto, 80);
 		linha3.addToRow(txtLiquido, 80);
 		frm.add(linha3);
+
+		txtNfe = new NumberField(OpenSigCore.i18n.txtNfe() + " " + OpenSigCore.i18n.txtComplemento(), "comCompraNfe", 300);
+		txtNfe.setAllowDecimals(false);
+		txtNfe.setAllowNegative(false);
+		txtNfe.setMinLength(44);
+		txtNfe.setMaxLength(44);
+		frm.add(txtNfe);
+
+		txtEcf = new NumberField(OpenSigCore.i18n.txtEcf(), "comCompraEcf", 120);
+		txtEcf.setAllowNegative(false);
+		txtEcf.setAllowDecimals(false);
+		txtEcf.setMaxLength(3);
+
+		txtCoo = new NumberField(OpenSigCore.i18n.txtCoo(), "comCompraCoo", 120);
+		txtCoo.setAllowNegative(false);
+		txtCoo.setAllowDecimals(false);
+		txtCoo.setMaxLength(11);
+
+		MultiFieldPanel linha4 = new MultiFieldPanel();
+		linha4.setBorder(false);
+		linha4.addToRow(txtEcf, 160);
+		linha4.addToRow(txtCoo, 160);
+		frm.add(linha4);
 
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), "comVendaObservacao");
 		txtObservacao.setMaxLength(255);

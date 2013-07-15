@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.server.ComercialServiceImpl;
@@ -41,10 +40,13 @@ public class FecharVenda extends Chain {
 	public FecharVenda(Chain next, CoreServiceImpl servico, ComVenda venda, List<String[]> invalidos, Autenticacao auth) throws OpenSigException {
 		super(null);
 		this.servico = servico;
-		this.venda = venda;
 		this.invalidos = invalidos;
 		this.impl = new ComercialServiceImpl();
 
+		// seta a venda
+		FiltroNumero fn = new FiltroNumero("comVendaId", ECompara.IGUAL, venda.getId());
+		this.venda = (ComVenda) servico.selecionar(venda, fn, false);
+		
 		// atualiza venda
 		AtualizarVenda atuVen = new AtualizarVenda(next);
 		// atualiza estoque
@@ -62,9 +64,6 @@ public class FecharVenda extends Chain {
 
 	@Override
 	public void execute() throws OpenSigException {
-		FiltroNumero fn = new FiltroNumero("comVendaId", ECompara.IGUAL, venda.getId());
-		venda = (ComVenda) servico.selecionar(venda, fn, false);
-		
 		// verifica se tem produtos com composicoes
 		List<ComVendaProduto> auxProdutos = new ArrayList<ComVendaProduto>();
 		for (ComVendaProduto vp : venda.getComVendaProdutos()) {
@@ -79,7 +78,7 @@ public class FecharVenda extends Chain {
 			}
 		}
 		venda.setComVendaProdutos(auxProdutos);
-		
+
 		if (next != null) {
 			next.execute();
 		}
@@ -111,8 +110,6 @@ public class FecharVenda extends Chain {
 					if (qtd > est.getProdEstoqueQuantidade()) {
 						invalidos.add(new String[] { est.getProdEstoqueId() + "", vp.getProdProduto().getProdProdutoDescricao(), vp.getProdProduto().getProdProdutoReferencia(),
 								est.getProdEstoqueQuantidade().toString(), qtd + "" });
-					} else {
-						vp.setComVendaProdutoQuantidade(qtd);
 					}
 				}
 			} catch (Exception ex) {
@@ -133,16 +130,14 @@ public class FecharVenda extends Chain {
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
-				emf = Conexao.getInstancia(new ProdEstoque().getPu());
-				em = emf.createEntityManager();
-				em.getTransaction().begin();
-
 				// recupera uma instância do gerenciador de entidades
 				FiltroObjeto fo1 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, venda.getEmpEmpresa());
+				em = Conexao.EMFS.get(new ProdEstoque().getPu()).createEntityManager();
+				em.getTransaction().begin();
+
 				for (ComVendaProduto vp : venda.getComVendaProdutos()) {
 					// fatorando a quantida no estoque
 					double qtd = vp.getComVendaProdutoQuantidade();
@@ -160,17 +155,19 @@ public class FecharVenda extends Chain {
 					servico.executar(em, sql);
 
 					// remove estoque da grade caso o produto tenha
-					for (ProdGrade grade : vp.getProdProduto().getProdGrades()) {
-						if (grade.getProdGradeBarra().equals(vp.getComVendaProdutoBarra())) {
-							// formando os parametros
-							ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
-							// formando o filtro
-							FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
-							GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
-							// busca o item
-							Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
-							servico.executar(em, sql1);
-							break;
+					if (vp.getProdProduto().getProdGrades() != null) {
+						for (ProdGrade grade : vp.getProdProduto().getProdGrades()) {
+							if (grade.getProdGradeBarra().equals(vp.getComVendaProdutoBarra())) {
+								// formando os parametros
+								ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
+								// formando o filtro
+								FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
+								GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
+								// formando o sql
+								Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
+								servico.executar(em, sql1);
+								break;
+							}
 						}
 					}
 				}
@@ -187,8 +184,9 @@ public class FecharVenda extends Chain {
 				UtilServer.LOG.error("Erro ao atualizar o estoque.", ex);
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}
@@ -212,5 +210,5 @@ public class FecharVenda extends Chain {
 			}
 		}
 	}
-	
+
 }

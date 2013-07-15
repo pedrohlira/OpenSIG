@@ -19,6 +19,10 @@
     background: url(../img/consumo.png) no-repeat center left !important;
 }
 
+.icon-troca {
+    background: url(../img/troca.png) no-repeat center left !important;
+}
+
 .icon-valor {
     background: url(../img/valor.png) no-repeat center left !important;
 }
@@ -45,6 +49,10 @@
 
 .icon-produtovenda {
     background: url(../img/produtovenda.png) no-repeat center left !important;
+}
+
+.icon-produtotroca {
+    background: url(../img/produtotroca.png) no-repeat center left !important;
 }
 
 .icon-ecf {

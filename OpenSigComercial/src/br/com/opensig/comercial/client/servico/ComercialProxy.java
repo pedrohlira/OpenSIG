@@ -8,8 +8,10 @@ import br.com.opensig.comercial.shared.modelo.ComConsumo;
 import br.com.opensig.comercial.shared.modelo.ComEcfVenda;
 import br.com.opensig.comercial.shared.modelo.ComEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
+import br.com.opensig.comercial.shared.modelo.ComTroca;
 import br.com.opensig.comercial.shared.modelo.ComValorProduto;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
+import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.servico.CoreProxy;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.fiscal.shared.modelo.FisNotaEntrada;
@@ -34,13 +36,18 @@ public class ComercialProxy<E extends Dados> extends CoreProxy<E> implements Com
 	}
 
 	@Override
-	public void gerarNfe(ComVenda venda, ComFrete frete, AsyncCallback<FisNotaSaida> asyncCallback) {
-		async.gerarNfe(venda, frete, asyncCallback);
+	public void gerarNfe(ComVenda venda, ComFrete frete, String nfe, int[] cupom, AsyncCallback<FisNotaSaida> asyncCallback) {
+		async.gerarNfe(venda, frete, nfe, cupom, asyncCallback);
 	}
 
 	@Override
-	public void gerarNfe(ComCompra compra, ComFrete frete, AsyncCallback<FisNotaEntrada> asyncCallback) {
-		async.gerarNfe(compra, frete, asyncCallback);
+	public void gerarNfe(ComCompra compra, ComFrete frete, String nfe, AsyncCallback<FisNotaEntrada> asyncCallback) {
+		async.gerarNfe(compra, frete, nfe, asyncCallback);
+	}
+
+	@Override
+	public void gerarCompra(IFiltro filtro, AsyncCallback asyncCallback) {
+		async.gerarCompra(filtro, asyncCallback);
 	}
 	
 	@Override
@@ -73,6 +80,11 @@ public class ComercialProxy<E extends Dados> extends CoreProxy<E> implements Com
 		async.salvarVenda(venda, asyncCallback);
 	}
 
+	@Override
+	public void salvarTroca(ComTroca troca, AsyncCallback<ComTroca> asyncCallback) {
+		async.salvarTroca(troca, asyncCallback);
+	}
+	
 	@Override
 	public void salvarValor(ComValorProduto valor, AsyncCallback<ComValorProduto> asyncCallback) {
 		async.salvarValor(valor, asyncCallback);
@@ -119,7 +131,7 @@ public class ComercialProxy<E extends Dados> extends CoreProxy<E> implements Com
 	}
 
 	@Override
-	public void fecharEcfVenda(ComEcfVenda venda, AsyncCallback<String[][]> asyncCallback) {
+	public void fecharEcfVenda(ComEcfVenda venda, AsyncCallback asyncCallback) {
 		async.fecharEcfVenda(venda, asyncCallback);
 	}
 	

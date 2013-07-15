@@ -1,9 +1,6 @@
 package br.com.opensig.comercial.server.acao;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.server.ComercialServiceImpl;
@@ -34,24 +31,22 @@ public class FecharEcfVenda extends Chain {
 	private CoreServiceImpl servico;
 	private ComercialServiceImpl impl;
 	private ComEcfVenda venda;
-	private List<String[]> invalidos;
 
-	public FecharEcfVenda(Chain next, CoreServiceImpl servico, ComEcfVenda venda, List<String[]> invalidos, Autenticacao auth) throws OpenSigException {
+	public FecharEcfVenda(Chain next, CoreServiceImpl servico, ComEcfVenda venda, Autenticacao auth) throws OpenSigException {
 		super(null);
 		this.servico = servico;
 		this.venda = venda;
-		this.invalidos = invalidos;
 		this.impl = new ComercialServiceImpl();
 
+		// seta a venda
+		FiltroNumero fn = new FiltroNumero("comEcfVendaId", ECompara.IGUAL, venda.getId());
+		this.venda = (ComEcfVenda) servico.selecionar(venda, fn, false);
+		
 		// atualiza venda
 		AtualizarVenda atuVen = new AtualizarVenda(next);
 		// atauliza estoque
 		AtualizarEstoque atuEst = new AtualizarEstoque(atuVen);
-		// valida o estoque
-		ValidarEstoque valEst = new ValidarEstoque(atuEst);
-		if (auth.getConf().get("estoque.ativo").equalsIgnoreCase("sim")) {
-			this.next = valEst;
-		} else if (auth.getConf().get("estoque.ativo").equalsIgnoreCase("nao")) {
+		if (!auth.getConf().get("estoque.ativo").equalsIgnoreCase("ignorar")) {
 			this.next = atuEst;
 		} else {
 			this.next = atuVen;
@@ -60,54 +55,8 @@ public class FecharEcfVenda extends Chain {
 
 	@Override
 	public void execute() throws OpenSigException {
-		FiltroNumero fn = new FiltroNumero("comEcfVendaId", ECompara.IGUAL, venda.getId());
-		venda = (ComEcfVenda) servico.selecionar(venda, fn, false);
-
 		if (next != null) {
 			next.execute();
-		}
-	}
-
-	private class ValidarEstoque extends Chain {
-
-		public ValidarEstoque(Chain next) throws OpenSigException {
-			super(next);
-		}
-
-		@Override
-		public void execute() throws OpenSigException {
-			try {
-				for (ComEcfVendaProduto venProd : venda.getComEcfVendaProdutos()) {
-					if (venProd.getProdProduto() != null) {
-						// formando o filtro
-						FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, venda.getComEcf().getEmpEmpresa());
-						FiltroObjeto fo1 = new FiltroObjeto("prodProduto", ECompara.IGUAL, venProd.getProdProduto());
-						GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fo1 });
-						// busca o item
-						ProdEstoque est = (ProdEstoque) servico.selecionar(new ProdEstoque(), gf, false);
-						// fatorando a quantida no estoque
-						double qtd = venProd.getComEcfVendaProdutoQuantidade();
-						if (venProd.getProdEmbalagem().getProdEmbalagemId() != venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
-							qtd *= impl.getQtdEmbalagem(venProd.getProdEmbalagem().getProdEmbalagemId());
-							qtd /= impl.getQtdEmbalagem(venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
-						}
-						// verificar a qtd do estoque
-						if (qtd > est.getProdEstoqueQuantidade()) {
-							invalidos.add(new String[] { est.getProdEstoqueId() + "", venProd.getProdProduto().getProdProdutoDescricao(), venProd.getProdProduto().getProdProdutoReferencia(), est.getProdEstoqueQuantidade().toString(), qtd + "" });
-						} else {
-							venProd.setComEcfVendaProdutoQuantidade(qtd);
-						}
-					} else {
-						invalidos.add(new String[] { "0", venProd.getComEcfVendaProdutoDescricao(), "", "0", venProd.getComEcfVendaProdutoQuantidade() + "" });
-					}
-				}
-			} catch (Exception ex) {
-				UtilServer.LOG.error("Erro ao validar o estoque.", ex);
-			}
-
-			if (next != null && invalidos.isEmpty()) {
-				next.execute();
-			}
 		}
 	}
 
@@ -119,47 +68,45 @@ public class FecharEcfVenda extends Chain {
 
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
-				emf = Conexao.getInstancia(new ProdEstoque().getPu());
-				em = emf.createEntityManager();
-				em.getTransaction().begin();
-
 				// recupera uma instância do gerenciador de entidades
 				FiltroObjeto fo1 = new FiltroObjeto("empEmpresa", ECompara.IGUAL, venda.getComEcf().getEmpEmpresa());
-				for (ComEcfVendaProduto venProd : venda.getComEcfVendaProdutos()) {
-					if (!venProd.getComEcfVendaProdutoCancelado()) {
+				em = Conexao.EMFS.get(new ProdEstoque().getPu()).createEntityManager();
+				em.getTransaction().begin();
+
+				for (ComEcfVendaProduto vp : venda.getComEcfVendaProdutos()) {
+					if (!vp.getComEcfVendaProdutoCancelado()) {
 						// fatorando a quantida no estoque
-						double qtd = venProd.getComEcfVendaProdutoQuantidade();
-						if (venProd.getProdEmbalagem().getProdEmbalagemId() != venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
-							qtd *= impl.getQtdEmbalagem(venProd.getProdEmbalagem().getProdEmbalagemId());
-							qtd /= impl.getQtdEmbalagem(venProd.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
+						double qtd = vp.getComEcfVendaProdutoQuantidade();
+						if (vp.getProdEmbalagem().getProdEmbalagemId() != vp.getProdProduto().getProdEmbalagem().getProdEmbalagemId()) {
+							qtd *= impl.getQtdEmbalagem(vp.getProdEmbalagem().getProdEmbalagemId());
+							qtd /= impl.getQtdEmbalagem(vp.getProdProduto().getProdEmbalagem().getProdEmbalagemId());
 						}
 						// formando os parametros
 						ParametroFormula pn1 = new ParametroFormula("prodEstoqueQuantidade", -1 * qtd);
 						// formando o filtro
-						FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, venProd.getProdProduto());
+						FiltroObjeto fo2 = new FiltroObjeto("prodProduto", ECompara.IGUAL, vp.getProdProduto());
 						GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo2 });
-						// busca o item
-						ProdEstoque est = new ProdEstoque();
 						// formando o sql
-						Sql sql = new Sql(est, EComando.ATUALIZAR, gf, pn1);
+						Sql sql = new Sql(new ProdEstoque(), EComando.ATUALIZAR, gf, pn1);
 						servico.executar(em, sql);
-						
+
 						// remove estoque da grade caso o produto tenha
-						for (ProdGrade grade : venProd.getProdProduto().getProdGrades()) {
-							if (grade.getProdGradeBarra().equals(venProd.getComEcfVendaProdutoCodigo())) {
-								// formando os parametros
-								ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
-								// formando o filtro
-								FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
-								GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
-								// busca o item
-								Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
-								servico.executar(em, sql1);
-								break;
+						if (vp.getProdProduto().getProdGrades() != null) {
+							for (ProdGrade grade : vp.getProdProduto().getProdGrades()) {
+								if (grade.getProdGradeBarra().equals(vp.getComEcfVendaProdutoCodigo())) {
+									// formando os parametros
+									ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
+									// formando o filtro
+									FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
+									GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
+									// formando o sql
+									Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
+									servico.executar(em, sql1);
+									break;
+								}
 							}
 						}
 					}
@@ -177,8 +124,9 @@ public class FecharEcfVenda extends Chain {
 				UtilServer.LOG.error("Erro ao atualizar o estoque.", ex);
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}

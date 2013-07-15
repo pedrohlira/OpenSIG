@@ -261,6 +261,13 @@
 		<imagem>icon-venda</imagem>
 	</funcao>
 	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoTroca
+		</classe>
+		<nome>Swap</nome>
+		<descricao>Administer swap at the company.</descricao>
+		<imagem>icon-troca</imagem>
+	</funcao>
+	<funcao>
 		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoCompraProduto
 		</classe>
 		<nome>Purchase Products</nome>
@@ -275,6 +282,14 @@
 		<descricao>Administer the products marketed by the company in sales.
 		</descricao>
 		<imagem>icon-produtovenda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoTrocaProduto
+		</classe>
+		<nome>Swap Products</nome>
+		<descricao>Administer the products received by the company in swaps.
+		</descricao>
+		<imagem>icon-produtotroca</imagem>
 	</funcao>
 	<funcao>
 		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcf
@@ -790,5 +805,12 @@
 		<nome>CCe</nome>
 		<descricao>Make CCe Out.</descricao>
 		<imagem>icon-carta</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarCompra
+		</classe>
+		<nome>Purchase</nome>
+		<descricao>Make swaps buy.</descricao>
+		<imagem>icon-compra</imagem>
 	</acao>
 </opensig>

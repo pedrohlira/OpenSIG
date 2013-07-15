@@ -268,6 +268,13 @@
 		<imagem>icon-venda</imagem>
 	</funcao>
 	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoTroca
+		</classe>
+		<nome>Troca</nome>
+		<descricao>Administrar as trocas na empresa.</descricao>
+		<imagem>icon-troca</imagem>
+	</funcao>
+	<funcao>
 		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoCompraProduto
 		</classe>
 		<nome>Compra Produtos</nome>
@@ -284,6 +291,15 @@
 			empresa.
 		</descricao>
 		<imagem>icon-produtovenda</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoTrocaProduto
+		</classe>
+		<nome>Troca Produtos</nome>
+		<descricao>Administrar os produtos recebidos pelas trocas na
+			empresa.
+		</descricao>
+		<imagem>icon-produtotroca</imagem>
 	</funcao>
 	<funcao>
 		<classe>br.com.opensig.comercial.client.controlador.comando.ComandoEcf
@@ -806,5 +822,12 @@
 		<nome>CCe</nome>
 		<descricao>Gerar CCe de Entrada.</descricao>
 		<imagem>icon-carta</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarCompra
+		</classe>
+		<nome>Compra</nome>
+		<descricao>Gerar compra das trocas.</descricao>
+		<imagem>icon-compra</imagem>
 	</acao>
 </opensig>

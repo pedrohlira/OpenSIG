@@ -48,6 +48,7 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 	private NumberField txtVolume;
 	private NumberField txtLiquido;
 	private NumberField txtBruto;
+	private NumberField txtNfe;
 	private TextField txtEspecie;
 	private ComboBox cmbTransportadora;
 	private TextArea txtObservacao;
@@ -102,7 +103,7 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 
 	private void abrirFrete() {
 		// janela
-		wndNFe = new Window(OpenSigCore.i18n.txtNfe() + " -> " + OpenSigCore.i18n.txtFrete(), 350, 300, true, false);
+		wndNFe = new Window(OpenSigCore.i18n.txtNfe() + " -> " + OpenSigCore.i18n.txtFrete(), 350, 350, true, false);
 		wndNFe.setLayout(new FitLayout());
 		wndNFe.setIconCls("icon-nfe");
 		wndNFe.setClosable(false);
@@ -177,7 +178,7 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 
 					MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtNfe());
 					ComercialProxy proxy = new ComercialProxy();
-					proxy.gerarNfe(compra, frete, salvar);
+					proxy.gerarNfe(compra, frete, txtNfe.getValueAsString(), salvar);
 				}
 			}
 		});
@@ -204,7 +205,6 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 		MultiFieldPanel linha2 = new MultiFieldPanel();
 		linha2.setBorder(false);
 		linha2.addToRow(getTransportadora(), 320);
-
 		frm.add(linha2);
 
 		txtVolume = new NumberField(OpenSigCore.i18n.txtVolume(), "comFreteVolume", 60);
@@ -232,6 +232,13 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 		linha3.addToRow(txtBruto, 80);
 		linha3.addToRow(txtLiquido, 80);
 		frm.add(linha3);
+
+		txtNfe = new NumberField(OpenSigCore.i18n.txtNfe() + " " + OpenSigCore.i18n.txtComplemento(), "comCompraNfe", 300);
+		txtNfe.setAllowDecimals(false);
+		txtNfe.setAllowNegative(false);
+		txtNfe.setMinLength(44);
+		txtNfe.setMaxLength(44);
+		frm.add(txtNfe);
 
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), "comCompraObservacao");
 		txtObservacao.setMaxLength(255);

@@ -139,7 +139,7 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		ccId.setHidden(true);
 		ccId.setFixed(true);
 
-		ColumnConfig ccVendaId = new ColumnConfig("", "empVendaId", 10, true);
+		ColumnConfig ccVendaId = new ColumnConfig("", "comVendaId", 10, true);
 		ccVendaId.setHidden(true);
 		ccVendaId.setFixed(true);
 

@@ -69,7 +69,8 @@ public class SisCliente extends Dados implements Serializable {
 		if (ent.getEmpEnderecos().size() > 0) {
 			EmpEndereco ende = ent.getEmpEnderecos().get(0);
 			sisClienteEndereco = ende.getEmpEnderecoLogradouro();
-			sisClienteNumero = ende.getEmpEnderecoNumero();
+			String numero = ende.getEmpEnderecoNumero().replaceAll("\\D", "");
+			sisClienteNumero = numero.equals("") ? 0 : Integer.valueOf(numero);
 			sisClienteComplemento = ende.getEmpEnderecoComplemento();
 			sisClienteBairro = ende.getEmpEnderecoBairro();
 			sisClienteCep = ende.getEmpEnderecoCep();

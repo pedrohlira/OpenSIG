@@ -19,7 +19,9 @@ import br.com.opensig.core.client.visao.abstrato.AListagem;
 import br.com.opensig.core.client.visao.abstrato.IFormulario;
 import br.com.opensig.core.shared.modelo.IFavorito;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
+import br.com.opensig.empresa.client.controlador.comando.ComandoCliente;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
+import br.com.opensig.financeiro.client.controlador.comando.ComandoReceber;
 
 import com.gwtext.client.data.ArrayReader;
 import com.gwtext.client.data.BooleanFieldDef;
@@ -56,7 +58,7 @@ public class ListagemEcfNota extends AListagem<ComEcfNota> {
 				new IntegerFieldDef("empEmpresa.empEmpresaId"), new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"), new IntegerFieldDef("comEcfNotaSerie"),
 				new IntegerFieldDef("comEcfNotaSubserie"), new IntegerFieldDef("comEcfNotaNumero"), new DateFieldDef("comEcfNotaData"), new FloatFieldDef("comEcfNotaBruto"),
 				new FloatFieldDef("comEcfNotaDesconto"), new FloatFieldDef("comEcfNotaLiquido"), new FloatFieldDef("comEcfNotaPis"), new FloatFieldDef("comEcfNotaCofins"),
-				new BooleanFieldDef("comEcfNotaCancelada") };
+				new IntegerFieldDef("finReceber.finReceberId"), new BooleanFieldDef("comEcfNotaCancelada") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -73,6 +75,8 @@ public class ListagemEcfNota extends AListagem<ComEcfNota> {
 		ColumnConfig ccNumero = new ColumnConfig(OpenSigCore.i18n.txtNumero(), "comEcfNotaNumero", 75, true);
 		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), "comEcfNotaData", 75, true, DATA);
 		ColumnConfig ccDesconto = new ColumnConfig(OpenSigCore.i18n.txtDesconto(), "comEcfNotaDesconto", 75, true, PORCENTAGEM);
+		ColumnConfig ccReceberId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtReceber(), "finReceber.finReceberId", 100, true);
+		ccReceberId.setHidden(true);
 		ColumnConfig ccCancelada = new ColumnConfig(OpenSigCore.i18n.txtCancelada(), "comEcfNotaCancelada", 75, true, BOLEANO);
 
 		// sumarios
@@ -82,7 +86,7 @@ public class ListagemEcfNota extends AListagem<ComEcfNota> {
 		SummaryColumnConfig sumCofins = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtCofins(), "comEcfNotaCofins", 75, true, DINHEIRO), DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccClienteId, ccCliente, ccEmpresaId, ccEmpresa, ccSerie, ccSubSerie, ccNumero, ccData, sumBruto, ccDesconto, sumLiquido, sumPis,
-				sumCofins, ccCancelada };
+				sumCofins, ccReceberId, ccCancelada };
 		modelos = new ColumnModel(bcc);
 
 		GrupoFiltro gf = new GrupoFiltro();
@@ -132,11 +136,25 @@ public class ListagemEcfNota extends AListagem<ComEcfNota> {
 	public void irPara() {
 		Menu mnuContexto = new Menu();
 
+		// cliente
+		SisFuncao cliente = UtilClient.getFuncaoPermitida(ComandoCliente.class);
+		MenuItem itemCliente = gerarFuncao(cliente, "empClienteId", "empCliente.empClienteId");
+		if (itemCliente != null) {
+			mnuContexto.addItem(itemCliente);
+		}
+		
 		// produtos nota
 		SisFuncao produto = UtilClient.getFuncaoPermitida(ComandoEcfNotaProduto.class);
 		MenuItem itemProduto = gerarFuncao(produto, "comEcfNota.comEcfNotaId", "comEcfNotaId");
 		if (itemProduto != null) {
 			mnuContexto.addItem(itemProduto);
+		}
+		
+		// receber
+		SisFuncao receber = UtilClient.getFuncaoPermitida(ComandoReceber.class);
+		MenuItem itemReceber = gerarFuncao(receber, "finReceberId", "finReceber.finReceberId");
+		if (itemReceber != null) {
+			mnuContexto.addItem(itemReceber);
 		}
 
 		if (mnuContexto.getItems().length > 0) {

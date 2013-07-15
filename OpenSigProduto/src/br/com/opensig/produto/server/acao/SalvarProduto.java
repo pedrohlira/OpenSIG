@@ -3,7 +3,6 @@ package br.com.opensig.produto.server.acao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.EJuncao;
@@ -45,13 +44,11 @@ public class SalvarProduto extends Chain {
 
 	@Override
 	public void execute() throws OpenSigException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
 			// recupera uma instância do gerenciador de entidades
-			emf = Conexao.getInstancia(produto.getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(produto.getPu()).createEntityManager();
 			em.getTransaction().begin();
 
 			// salva
@@ -103,8 +100,9 @@ public class SalvarProduto extends Chain {
 			UtilServer.LOG.error("Erro ao salvar o produto", ex);
 			throw new ProdutoException(ex.getMessage());
 		} finally {
-			em.close();
-			emf.close();
+			if (em != null) {
+				em.close();
+			}
 		}
 	}
 

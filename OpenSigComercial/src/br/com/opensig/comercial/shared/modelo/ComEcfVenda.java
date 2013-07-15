@@ -126,6 +126,11 @@ public class ComEcfVenda extends Dados implements Serializable {
 	@XmlTransient
 	private ComEcfZ comEcfZ;
 
+	@JoinColumn(name = "com_troca_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@XmlElement(name = "ecfTroca")
+	private ComTroca comTroca;
+
 	@OneToMany(mappedBy = "comEcfVenda", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@XmlElement(name = "ecfVendaProdutos")
 	private List<ComEcfVendaProduto> comEcfVendaProdutos;
@@ -292,6 +297,14 @@ public class ComEcfVenda extends Dados implements Serializable {
 		this.comEcfZ = comEcfZ;
 	}
 
+	public ComTroca getComTroca() {
+		return comTroca;
+	}
+
+	public void setComTroca(ComTroca comTroca) {
+		this.comTroca = comTroca;
+	}
+
 	public String getCancelada() {
 		return cancelada;
 	}
@@ -356,11 +369,12 @@ public class ComEcfVenda extends Dados implements Serializable {
 		int clienteId = empCliente == null ? 0 : empCliente.getEmpClienteId();
 		String clienteNome = empCliente == null ? "" : empCliente.getEmpEntidade().getEmpEntidadeNome1();
 		int receberId = finReceber == null ? 0 : finReceber.getFinReceberId();
+		int trocaId = comTroca == null ? 0 : comTroca.getComTrocaId();
 
 		return new String[] { comEcfVendaId + "", comEcfZ.getComEcfZId() + "", comEcf.getEmpEmpresa().getEmpEmpresaId() + "", comEcf.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(),
 				sisUsuario.getSisUsuarioId() + "", sisUsuario.getSisUsuarioLogin(), vendedorId + "", vendedorNome, gerenteId + "", gerenteNome, clienteId + "", clienteNome, comEcf.getComEcfId() + "",
 				comEcf.getComEcfSerie(), comEcfVendaCcf + "", comEcfVendaCoo + "", UtilClient.getDataGrid(comEcfVendaData), comEcfVendaBruto.toString(), comEcfVendaDesconto.toString(),
-				comEcfVendaAcrescimo.toString(), comEcfVendaLiquido.toString(), getComEcfVendaFechada() + "", receberId + "", getComEcfVendaCancelada() + "", comEcfVendaObservacao };
+				comEcfVendaAcrescimo.toString(), comEcfVendaLiquido.toString(), getComEcfVendaFechada() + "", receberId + "", trocaId + "", getComEcfVendaCancelada() + "", comEcfVendaObservacao };
 	}
 
 	public void anularDependencia() {
@@ -371,6 +385,7 @@ public class ComEcfVenda extends Dados implements Serializable {
 		finReceber = null;
 		comEcf = null;
 		comEcfZ = null;
+		comTroca = null;
 		comEcfVendaProdutos = null;
 	}
 }

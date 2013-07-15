@@ -42,12 +42,15 @@ import com.gwtext.client.widgets.menu.MenuItem;
 import com.gwtextux.client.widgets.grid.plugins.GridBooleanFilter;
 import com.gwtextux.client.widgets.grid.plugins.GridFilter;
 import com.gwtextux.client.widgets.grid.plugins.GridListFilter;
+import com.gwtextux.client.widgets.grid.plugins.GridSummaryPlugin;
+import com.gwtextux.client.widgets.grid.plugins.SummaryColumnConfig;
 
 public class ListagemProduto extends AListagem<ProdProduto> {
 
 	public ListagemProduto(IFormulario formulario) {
 		super(formulario);
 		inicializar();
+		addPlugin(new GridSummaryPlugin());
 	}
 
 	public void inicializar() {
@@ -75,7 +78,6 @@ public class ListagemProduto extends AListagem<ProdProduto> {
 		ccCusto.setHidden(true);
 		ColumnConfig ccPreco = new ColumnConfig(OpenSigCore.i18n.txtPreco(), "prodProdutoPreco", 75, true, DINHEIRO);
 		ColumnConfig ccVolume = new ColumnConfig(OpenSigCore.i18n.txtQtdCx(), "prodProdutoVolume", 50, true);
-		ColumnConfig ccEstoque = new ColumnConfig(OpenSigCore.i18n.txtEstoque(), "t1.prodEstoqueQuantidade", 75, true, NUMERO);
 		ColumnConfig ccCategoria = new ColumnConfig(OpenSigCore.i18n.txtCategoria(), "prodProdutoCategoria", 200, true);
 		ColumnConfig ccCodForn = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtFornecedor(), "empFornecedor.empFornecedorId", 100, true);
 		ccCodForn.setHidden(true);
@@ -115,6 +117,9 @@ public class ListagemProduto extends AListagem<ProdProduto> {
 		ColumnConfig ccAlterado = new ColumnConfig(OpenSigCore.i18n.txtAlterado(), "prodProdutoAlterado", 120, true, DATAHORA);
 		ColumnConfig ccAtivo = new ColumnConfig(OpenSigCore.i18n.txtAtivo(), "prodProdutoAtivo", 50, true, BOLEANO);
 		ColumnConfig ccObservacao = new ColumnConfig(OpenSigCore.i18n.txtObservacao(), "prodProdutoObservacao", 200, true);
+
+		// sumarios
+		SummaryColumnConfig ccEstoque = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtEstoque(), "t1.prodEstoqueQuantidade", 75, true, NUMERO), NUMERO);
 
 		if (form instanceof FormularioProduto) {
 			BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccNcm, ccBarra, ccDescricao, ccRef, ccCusto, ccPreco, ccEmbalagemId, ccEmbalagem, ccVolume, ccEstoque, ccCategoria, ccCodForn,

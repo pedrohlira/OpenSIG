@@ -152,7 +152,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		ccId.setHidden(true);
 		ccId.setFixed(true);
 
-		ColumnConfig ccCompraId = new ColumnConfig("", "empCompraId", 10, true);
+		ColumnConfig ccCompraId = new ColumnConfig("", "comCompraId", 10, true);
 		ccCompraId.setHidden(true);
 		ccCompraId.setFixed(true);
 

@@ -112,13 +112,11 @@ public class FormularioCompra extends AFormulario<ComCompra> {
 		txtSerie.setAllowBlank(false);
 		txtSerie.setAllowDecimals(false);
 		txtSerie.setAllowNegative(false);
-		txtSerie.setMaxLength(3);
 
 		txtNumero = new NumberField(OpenSigCore.i18n.txtNumero(), "comCompraNumero", 80);
 		txtNumero.setAllowBlank(false);
 		txtNumero.setAllowDecimals(false);
 		txtNumero.setAllowNegative(false);
-		txtNumero.setMaxLength(6);
 
 		dtEmissao = new DateField(OpenSigCore.i18n.txtEmissao(), "comCompraEmissao", 90);
 		dtEmissao.setAllowBlank(false);

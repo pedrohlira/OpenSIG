@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import org.beanio.BeanReader;
@@ -199,8 +198,6 @@ public class ImportarCat52 implements IImportacao<Cat52> {
 
 		try {
 			FecharEcfVenda fecharVenda;
-			ArrayList<String[]> invalidos = new ArrayList<String[]>();
-
 			// percorre as vendas
 			for (ComEcfVenda venda : vendasEcf.getLista()) {
 				vendas++;
@@ -216,7 +213,7 @@ public class ImportarCat52 implements IImportacao<Cat52> {
 
 					// valida se fecha a venda
 					if (fechar) {
-						fecharVenda = new FecharEcfVenda(null, service, venda, invalidos, auth);
+						fecharVenda = new FecharEcfVenda(null, service, venda, auth);
 						fecharVenda.execute();
 					} else {
 						vendasNfechadas++;
@@ -372,12 +369,11 @@ public class ImportarCat52 implements IImportacao<Cat52> {
 
 	// atualiza os produtos pelo codigo
 	private void atualizarProdutos() {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
+
 		try {
 			// abre a conexao
-			emf = Conexao.getInstancia(new ComEcfVendaProduto().getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(new ComEcfVendaProduto().getPu()).createEntityManager();
 			// inicia a transacao
 			em.getTransaction().begin();
 			// atualiza pelo codigo de barras
@@ -425,8 +421,9 @@ public class ImportarCat52 implements IImportacao<Cat52> {
 				em.getTransaction().rollback();
 			}
 		} finally {
-			em.close();
-			emf.close();
+			if (em != null) {
+				em.close();
+			}
 		}
 	}
 

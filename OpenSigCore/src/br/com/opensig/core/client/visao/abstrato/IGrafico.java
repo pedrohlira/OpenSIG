@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import br.com.opensig.core.client.controlador.comando.IComando;
-import br.com.opensig.core.client.visao.grafico.IGraficoDados;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.core.shared.modelo.EBusca;
 import br.com.opensig.core.shared.modelo.EData;

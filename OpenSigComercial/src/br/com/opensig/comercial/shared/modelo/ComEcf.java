@@ -14,7 +14,9 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import br.com.opensig.comercial.server.rest.BooleanToInteger;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 
@@ -67,7 +69,8 @@ public class ComEcf extends Dados implements Serializable {
 	private String comEcfSerie;
 
 	@Column(name = "com_ecf_ativo")
-	@XmlElement(name = "ecfImpressoraAtivo", type = Boolean.class)
+	@XmlElement(name = "ecfImpressoraAtivo")
+	@XmlJavaTypeAdapter(BooleanToInteger.class)
 	private int comEcfAtivo;
 
 	@JoinColumn(name = "emp_empresa_id")

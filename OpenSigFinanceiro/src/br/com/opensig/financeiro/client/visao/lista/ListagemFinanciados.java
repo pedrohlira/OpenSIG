@@ -60,8 +60,9 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("id"), new IntegerFieldDef("financeiroId"), new IntegerFieldDef("empresaId"), new StringFieldDef("empresaNome"),
 				new StringFieldDef("nome"), new IntegerFieldDef("finContaId"), new StringFieldDef("finContaNome"), new IntegerFieldDef("finFormaId"), new StringFieldDef("finFormaDescricao"),
-				new StringFieldDef("documento"), new FloatFieldDef("valor"), new StringFieldDef("parcela"), new DateFieldDef("cadastro"), new DateFieldDef("vencimento"), new StringFieldDef("status"),
-				new DateFieldDef("realizado"), new DateFieldDef("conciliado"), new IntegerFieldDef("nfe"), new StringFieldDef("observacao") };
+				new StringFieldDef("documento"), new FloatFieldDef("valor"), new StringFieldDef("parcela"), new StringFieldDef("categoria"), new DateFieldDef("cadastro"),
+				new DateFieldDef("vencimento"), new StringFieldDef("status"), new DateFieldDef("realizado"), new DateFieldDef("conciliado"), new IntegerFieldDef("nfe"),
+				new StringFieldDef("observacao") };
 		campos = new RecordDef(fd);
 
 		// formas
@@ -125,6 +126,10 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 		ColumnConfig ccParcela = new ColumnConfig(OpenSigCore.i18n.txtParcela(), "parcela", 50, false);
 		ccParcela.setEditor(new GridEditor(getParcela()));
 
+		ColumnConfig ccCategoria = new ColumnConfig("", "categoria", 10, false);
+		ccCategoria.setHidden(true);
+		ccCategoria.setFixed(true);
+
 		ColumnConfig ccCadastro = new ColumnConfig("", "cadastro", 10, false);
 		ccCadastro.setHidden(true);
 		ccCadastro.setFixed(true);
@@ -156,8 +161,8 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 		ccValor.setEditor(new GridEditor(getValor()));
 		SummaryColumnConfig sumValor = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccValor, IListagem.DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccFinanceiroId, ccEmpresaId, ccEmpresaNome, ccNome, ccContaId, ccConta, ccTipoId, ccTipo, ccDocumento, sumValor, ccParcela, ccCadastro,
-				ccVencimento, ccStatus, ccRealizado, ccConciliado, ccNfe, ccObservacao };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccFinanceiroId, ccEmpresaId, ccEmpresaNome, ccNome, ccContaId, ccConta, ccTipoId, ccTipo, ccDocumento, sumValor, ccParcela,
+				ccCategoria, ccCadastro, ccVencimento, ccStatus, ccRealizado, ccConciliado, ccNfe, ccObservacao };
 		modelos = new ColumnModel(bcc);
 
 		addEditorGridListener(new EditorGridListenerAdapter() {

@@ -1,7 +1,6 @@
 package br.com.opensig.comercial.server.acao;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
@@ -23,8 +22,11 @@ public class ExcluirFrete extends Chain {
 	public ExcluirFrete(Chain next, CoreServiceImpl servico, ComFrete frete, Autenticacao auth) throws OpenSigException {
 		super(null);
 		this.servico = servico;
-		this.frete = frete;
 		this.auth = auth;
+
+		// seleciona o frete
+		FiltroNumero fn = new FiltroNumero("comFreteId", ECompara.IGUAL, frete.getId());
+		this.frete = (ComFrete) servico.selecionar(frete, fn, false);
 		
 		// atualiza frete
 		DeletarFrete delFrete = new DeletarFrete(next);
@@ -34,8 +36,6 @@ public class ExcluirFrete extends Chain {
 	}
 
 	public void execute() throws OpenSigException {
-		FiltroNumero fn = new FiltroNumero("comFreteId", ECompara.IGUAL, frete.getId());
-		frete = (ComFrete) servico.selecionar(frete, fn, false);
 		if (next != null) {
 			next.execute();
 		}
@@ -70,19 +70,17 @@ public class ExcluirFrete extends Chain {
 		public DeletarFrete(Chain next) throws OpenSigException {
 			super(next);
 		}
-		
+
 		@Override
 		public void execute() throws OpenSigException {
-			EntityManagerFactory emf = null;
 			EntityManager em = null;
 
 			try {
 				// recupera uma instância do gerenciador de entidades
-				emf = Conexao.getInstancia(frete.getPu());
-				em = emf.createEntityManager();
+				em = Conexao.EMFS.get(frete.getPu()).createEntityManager();
 				em.getTransaction().begin();
 				servico.deletar(em, frete);
-				
+
 				if (next != null) {
 					next.execute();
 				}
@@ -94,8 +92,9 @@ public class ExcluirFrete extends Chain {
 
 				throw new ComercialException(ex.getMessage());
 			} finally {
-				em.close();
-				emf.close();
+				if (em != null) {
+					em.close();
+				}
 			}
 		}
 	}

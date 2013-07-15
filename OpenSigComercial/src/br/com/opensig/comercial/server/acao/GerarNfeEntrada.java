@@ -15,6 +15,7 @@ import br.com.opensig.comercial.shared.modelo.ComCompra;
 import br.com.opensig.comercial.shared.modelo.ComCompraProduto;
 import br.com.opensig.comercial.shared.modelo.ComFrete;
 import br.com.opensig.comercial.shared.modelo.ComNatureza;
+import br.com.opensig.comercial.shared.modelo.ComTroca;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
@@ -25,6 +26,7 @@ import br.com.opensig.core.client.controlador.parametro.ParametroBinario;
 import br.com.opensig.core.client.controlador.parametro.ParametroNumero;
 import br.com.opensig.core.client.controlador.parametro.ParametroObjeto;
 import br.com.opensig.core.client.padroes.Chain;
+import br.com.opensig.core.client.servico.CoreException;
 import br.com.opensig.core.client.servico.OpenSigException;
 import br.com.opensig.core.server.CoreServiceImpl;
 import br.com.opensig.core.server.UtilServer;
@@ -77,6 +79,8 @@ import br.com.opensig.nfe.TNFe.InfNFe.Det.Imposto.PIS.PISOutr;
 import br.com.opensig.nfe.TNFe.InfNFe.Det.Prod;
 import br.com.opensig.nfe.TNFe.InfNFe.Emit;
 import br.com.opensig.nfe.TNFe.InfNFe.Ide;
+import br.com.opensig.nfe.TNFe.InfNFe.Ide.NFref;
+import br.com.opensig.nfe.TNFe.InfNFe.Ide.NFref.RefECF;
 import br.com.opensig.nfe.TNFe.InfNFe.InfAdic;
 import br.com.opensig.nfe.TNFe.InfNFe.Total;
 import br.com.opensig.nfe.TNFe.InfNFe.Total.ICMSTot;
@@ -91,9 +95,11 @@ public class GerarNfeEntrada extends Chain {
 	private CoreServiceImpl servico;
 	private ComCompra compra;
 	private ComFrete frete;
+	private List<ComTroca> trocas;
 	private Date data;
 	private FisNotaEntrada nota;
 	private Autenticacao auth;
+	private String nfe;
 
 	private EmpEmpresa empEmissao;
 	private EmpEndereco endeEmissao;
@@ -118,7 +124,7 @@ public class GerarNfeEntrada extends Chain {
 	private double valorPis;
 	private double valorCofins;
 
-	public GerarNfeEntrada(Chain next, CoreServiceImpl servico, ComCompra compra, ComFrete frete, Autenticacao auth) throws OpenSigException {
+	public GerarNfeEntrada(Chain next, CoreServiceImpl servico, ComCompra compra, ComFrete frete, String nfe, Autenticacao auth) throws OpenSigException {
 		super(next);
 		this.servico = servico;
 		this.compra = compra;
@@ -126,6 +132,7 @@ public class GerarNfeEntrada extends Chain {
 		this.data = new Date();
 		this.infos = new HashMap<String, String>();
 		this.auth = auth;
+		this.nfe = nfe;
 	}
 
 	@Override
@@ -284,6 +291,14 @@ public class GerarNfeEntrada extends Chain {
 	}
 
 	public Ide getIde() {
+		// seleciona as trocas desta compra se tiver
+		try {
+			FiltroObjeto fo = new FiltroObjeto("comCompra", ECompara.IGUAL, compra);
+			trocas = servico.selecionar(new ComTroca(), 0, 0, fo, false).getLista();
+		} catch (CoreException e) {
+			trocas = null;
+		}
+
 		Ide ide = new Ide();
 		// uf
 		ide.setCUF(endeEmissao.getEmpMunicipio().getEmpEstado().getEmpEstadoIbge() + "");
@@ -316,11 +331,31 @@ public class GerarNfeEntrada extends Chain {
 		// ambiente
 		ide.setTpAmb(auth.getConf().get("nfe.tipoamb"));
 		// finalidade
-		ide.setFinNFe(auth.getConf().get("nfe.finalidade"));
+		ide.setFinNFe(nfe.equals("") ? "1" : "2");
 		// processo emissao
 		ide.setProcEmi(auth.getConf().get("nfe.procemi"));
 		// versao processo
 		ide.setVerProc(auth.getConf().get("nfe.procver"));
+
+		// caso seja nfe complementar
+		if (!nfe.equals("")) {
+			NFref ref = new NFref();
+			ref.setRefNFe(nfe);
+			ide.getNFref().add(ref);
+		}
+		// caso seja troca com ecf refenciadas
+		if (trocas != null) {
+			for (ComTroca troca : trocas) {
+				RefECF ecf = new RefECF();
+				ecf.setMod("2D");
+				ecf.setNECF(troca.getComTrocaEcf() + "");
+				ecf.setNCOO(troca.getComTrocaCoo() + "");
+
+				NFref ref = new NFref();
+				ref.setRefECF(ecf);
+				ide.getNFref().add(ref);
+			}
+		}
 
 		return ide;
 	}
@@ -340,7 +375,7 @@ public class GerarNfeEntrada extends Chain {
 		EmpMunicipio mun = endeEmissao.getEmpMunicipio();
 		TEnderEmi enderEmit = new TEnderEmi();
 		enderEmit.setXLgr(endeEmissao.getEmpEnderecoLogradouro().trim());
-		enderEmit.setNro(endeEmissao.getEmpEnderecoNumero() + "");
+		enderEmit.setNro(endeEmissao.getEmpEnderecoNumero());
 		if (endeEmissao.getEmpEnderecoComplemento() != null && !endeEmissao.getEmpEnderecoComplemento().trim().equals("")) {
 			enderEmit.setXCpl(endeEmissao.getEmpEnderecoComplemento().trim());
 		}
@@ -385,7 +420,7 @@ public class GerarNfeEntrada extends Chain {
 		EmpMunicipio mun = endeEmissao.getEmpMunicipio();
 		TEndereco enderDest = new TEndereco();
 		enderDest.setXLgr(endeEmissao.getEmpEnderecoLogradouro().trim());
-		enderDest.setNro(endeEmissao.getEmpEnderecoNumero() + "");
+		enderDest.setNro(endeEmissao.getEmpEnderecoNumero());
 		if (endeEmissao.getEmpEnderecoComplemento() != null && !endeEmissao.getEmpEnderecoComplemento().trim().equals("")) {
 			enderDest.setXCpl(endeEmissao.getEmpEnderecoComplemento().trim());
 		}

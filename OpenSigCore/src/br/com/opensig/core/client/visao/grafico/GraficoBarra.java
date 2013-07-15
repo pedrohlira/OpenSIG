@@ -3,6 +3,7 @@ package br.com.opensig.core.client.visao.grafico;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.opensig.core.client.visao.abstrato.AGraficoDados;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.core.shared.modelo.EBusca;
 import br.com.opensig.core.shared.modelo.EData;

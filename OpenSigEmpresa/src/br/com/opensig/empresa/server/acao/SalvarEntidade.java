@@ -3,7 +3,6 @@ package br.com.opensig.empresa.server.acao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
@@ -32,13 +31,11 @@ public class SalvarEntidade extends Chain {
 
 	@Override
 	public void execute() throws OpenSigException {
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
 
 		try {
 			// recupera uma instância do gerenciador de entidades
-			emf = Conexao.getInstancia(entidade.getPu());
-			em = emf.createEntityManager();
+			em = Conexao.EMFS.get(entidade.getPu()).createEntityManager();
 			em.getTransaction().begin();
 
 			List<EmpContato> contatos = entidade.getEmpContatos();
@@ -79,8 +76,9 @@ public class SalvarEntidade extends Chain {
 			UtilServer.LOG.error("Erro na salvar a entidade.", ex);
 			throw new EmpresaException(ex.getMessage());
 		} finally {
-			em.close();
-			emf.close();
+			if (em != null) {
+				em.close();
+			}
 		}
 	}
 

@@ -312,6 +312,11 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 			}
 
 			if (max <= Ponte.getLogin().getDesconto() || autorizado) {
+				FinReceber receber = null;
+				if (!hdnReceber.getValueAsString().equals("0")) {
+					receber = new FinReceber(Integer.valueOf(hdnReceber.getValueAsString()));
+				}
+				classe.setFinReceber(receber);
 				ComercialProxy proxy = new ComercialProxy();
 				proxy.salvarEcfVenda(classe, asyncSalvar);
 			} else {
