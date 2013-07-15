@@ -12,6 +12,7 @@ Temos vários módulos criados e adicionados ao OpenSIG transformando-o em um ER
 Outro sistema sobre esta plataforma criado foi o OpeNFE que gerencia todas as funcionalidades envolvendo as notas fiscais eletrônicas, podendo ser usado isoladamente ou integrado com seu sistema ERP.
 
 DEMONSTRAÇÃO
+
 url : http://opensig.com.br
 usuário: demo
 senha: opendemo
