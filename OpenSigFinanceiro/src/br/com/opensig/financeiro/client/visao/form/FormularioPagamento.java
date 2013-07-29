@@ -19,6 +19,7 @@ public class FormularioPagamento extends AFormularioFinanciado<FinPagamento> {
 		nomes.put("documento", "finPagamentoDocumento");
 		nomes.put("valor", "finPagamentoValor");
 		nomes.put("parcela", "finPagamentoParcela");
+		nomes.put("categoria", "finPagar.finPagarCategoria");
 		nomes.put("cadastro", "finPagamentoCadastro");
 		nomes.put("vencimento", "finPagamentoVencimento");
 		nomes.put("status", "finPagamentoStatus");

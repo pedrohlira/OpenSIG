@@ -538,7 +538,7 @@ public class RestServidor extends ARest {
 						vp.setComEcfVendaProdutoLiquido(vp.getComEcfVendaProdutoBruto() - descV + acresV);
 						vp.setComEcfVendaProdutoTotal(vp.getComEcfVendaProdutoLiquido() * vp.getComEcfVendaProdutoQuantidade());
 						if (!venda.getComEcfVendaCancelada() && !vp.getComEcfVendaProdutoCancelado()) {
-							getEstoque(sqls, vp.getComEcfVendaProdutoQuantidade(), vp.getProdEmbalagem(), vp.getProdProduto(), vp.getComEcfVendaProdutoCodigo());
+							getEstoque(sqls, vp.getComEcfVendaProdutoQuantidade(), vp.getProdEmbalagem(), vp.getProdProduto(), vp.getComEcfVendaProdutoBarra());
 							sqls.add(getAtualizaProduto(vp.getProdProduto()));
 						}
 					}

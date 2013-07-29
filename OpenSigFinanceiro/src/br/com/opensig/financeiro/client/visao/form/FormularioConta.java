@@ -50,20 +50,21 @@ public class FormularioConta extends AFormulario<FinConta> {
 		txtNome.setMaxLength(20);
 
 		txtNumero = new TextField(OpenSigCore.i18n.txtNumero(), "finContaNumero", 60);
-		txtNumero.setMaxLength(10);
+		txtNumero.setMaxLength(11);
 
 		txtAgencia = new TextField(OpenSigCore.i18n.txtAgencia(), "finContaAgencia", 60);
-		txtAgencia.setMaxLength(10);
+		txtAgencia.setMaxLength(11);
 
 		txtCarteira = new TextField(OpenSigCore.i18n.txtCarteira(), "finContaCarteira", 60);
-		txtCarteira.setMaxLength(10);
+		txtCarteira.setMaxLength(11);
 
 		txtConvenio = new TextField(OpenSigCore.i18n.txtConvenio(), "finContaConvenio", 60);
-		txtConvenio.setMaxLength(10);
+		txtConvenio.setMaxLength(11);
 
 		txtSaldo = new NumberField(OpenSigCore.i18n.txtSaldo(), "finContaSaldo", 80);
 		txtSaldo.setAllowBlank(false);
-		txtSaldo.setMaxLength(13);
+		txtSaldo.setMaxLength(11);
+		txtSaldo.setDecimalPrecision(2);
 		
 		MultiFieldPanel linha1 = new MultiFieldPanel();
 		linha1.setBorder(false);

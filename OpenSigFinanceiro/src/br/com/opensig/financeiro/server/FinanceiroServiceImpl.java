@@ -19,6 +19,7 @@ import br.com.opensig.financeiro.server.boleto.FabricaRecibo;
 import br.com.opensig.financeiro.server.boleto.IRecibo;
 import br.com.opensig.financeiro.server.cobranca.Boleto;
 import br.com.opensig.financeiro.shared.modelo.FinCategoria;
+import br.com.opensig.financeiro.shared.modelo.FinConta;
 import br.com.opensig.financeiro.shared.modelo.FinPagar;
 import br.com.opensig.financeiro.shared.modelo.FinReceber;
 import br.com.opensig.financeiro.shared.modelo.FinRecebimento;
@@ -32,7 +33,7 @@ public class FinanceiroServiceImpl extends CoreServiceImpl implements Financeiro
 		super(auth);
 	}
 	
-	public String gerar(int boletoId, String tipo, boolean recibo) throws FinanceiroException {
+	public String gerar(int boletoId, int contaId, String tipo, boolean recibo) throws FinanceiroException {
 		String retorno = "";
 		HttpSession sessao = getThreadLocalRequest().getSession();
 		Autenticacao auth = SessionManager.LOGIN.get(sessao);
@@ -40,6 +41,9 @@ public class FinanceiroServiceImpl extends CoreServiceImpl implements Financeiro
 		try {
 			FiltroNumero fn = new FiltroNumero("finRecebimentoId", ECompara.IGUAL, boletoId);
 			FinRecebimento finBoleto = (FinRecebimento) selecionar(new FinRecebimento(), fn, false);
+			
+			FiltroNumero fn1 = new FiltroNumero("finContaId", ECompara.IGUAL, contaId);
+			FinConta finConta = (FinConta) selecionar(new FinConta(), fn1, false);
 
 			byte[] obj = null;
 			String nome = "";
@@ -51,7 +55,7 @@ public class FinanceiroServiceImpl extends CoreServiceImpl implements Financeiro
 				obj = rec.getRecibo(finBoleto);
 			} else {
 				nome = "boleto";
-				Boleto bol  = new Boleto(finBoleto.getFinConta(), auth);
+				Boleto bol  = new Boleto(finConta, auth);
 				obj = bol.gerar(tipo, finBoleto);
 			}
 

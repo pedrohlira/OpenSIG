@@ -38,9 +38,9 @@ public class ComEcfVendaProduto extends Dados implements Serializable {
 	@XmlElement(name = "ecfVendaProdutoId")
 	private int comEcfVendaProdutoId;
 
-	@Column(name = "com_ecf_venda_produto_codigo")
+	@Column(name = "com_ecf_venda_produto_barra")
 	@XmlElement(name = "ecfVendaProdutoBarra")
-	private String comEcfVendaProdutoCodigo;
+	private String comEcfVendaProdutoBarra;
 
 	@Column(name = "com_ecf_venda_produto_descricao")
 	@XmlTransient
@@ -97,7 +97,7 @@ public class ComEcfVendaProduto extends Dados implements Serializable {
 	private transient int comEcfVendaProdutoCoo;
 
 	private transient String comEcfVendaProdutoUnd;
-	
+
 	public ComEcfVendaProduto() {
 		this(0);
 	}
@@ -151,12 +151,12 @@ public class ComEcfVendaProduto extends Dados implements Serializable {
 		return this.comEcfVendaProdutoBruto;
 	}
 
-	public String getComEcfVendaProdutoCodigo() {
-		return comEcfVendaProdutoCodigo;
+	public String getComEcfVendaProdutoBarra() {
+		return comEcfVendaProdutoBarra;
 	}
 
-	public void setComEcfVendaProdutoCodigo(String comEcfVendaProdutoCodigo) {
-		this.comEcfVendaProdutoCodigo = comEcfVendaProdutoCodigo;
+	public void setComEcfVendaProdutoBarra(String comEcfVendaProdutoBarra) {
+		this.comEcfVendaProdutoBarra = comEcfVendaProdutoBarra;
 	}
 
 	public String getComEcfVendaProdutoDescricao() {
@@ -254,23 +254,21 @@ public class ComEcfVendaProduto extends Dados implements Serializable {
 	public String[] toArray() {
 		String fornecedor = "";
 		String prodId = "0";
-		String barra = comEcfVendaProdutoCodigo;
 		String desc = comEcfVendaProdutoDescricao;
 		String ref = "";
 
 		if (prodProduto != null) {
 			fornecedor = prodProduto.getEmpFornecedor().getEmpEntidade().getEmpEntidadeNome1();
 			prodId = prodProduto.getProdProdutoId() + "";
-			barra = prodProduto.getProdProdutoBarra();
 			desc = prodProduto.getProdProdutoDescricao();
 			ref = prodProduto.getProdProdutoReferencia();
 		}
 
 		return new String[] { comEcfVendaProdutoId + "", comEcfVenda.getComEcfVendaId() + "", comEcfVenda.getComEcf().getComEcfId() + "", comEcfVenda.getComEcf().getComEcfSerie(),
-				comEcfVenda.getComEcf().getEmpEmpresa().getEmpEmpresaId() + "", comEcfVenda.getComEcf().getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(), fornecedor, prodId, barra, desc, ref,
-				UtilClient.getDataGrid(comEcfVenda.getComEcfVendaData()), comEcfVendaProdutoQuantidade.toString(), prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(),
-				comEcfVendaProdutoBruto.toString(), comEcfVendaProdutoDesconto.toString(), comEcfVendaProdutoAcrescimo.toString(), comEcfVendaProdutoLiquido.toString(),
-				comEcfVendaProdutoTotal.toString(), getComEcfVendaProdutoCancelado() + "", comEcfVendaProdutoOrdem + "" };
+				comEcfVenda.getComEcf().getEmpEmpresa().getEmpEmpresaId() + "", comEcfVenda.getComEcf().getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(), fornecedor, prodId,
+				comEcfVendaProdutoBarra, desc, ref, UtilClient.getDataGrid(comEcfVenda.getComEcfVendaData()), comEcfVendaProdutoQuantidade.toString(), prodEmbalagem.getProdEmbalagemId() + "",
+				prodEmbalagem.getProdEmbalagemNome(), comEcfVendaProdutoBruto.toString(), comEcfVendaProdutoDesconto.toString(), comEcfVendaProdutoAcrescimo.toString(),
+				comEcfVendaProdutoLiquido.toString(), comEcfVendaProdutoTotal.toString(), getComEcfVendaProdutoCancelado() + "", comEcfVendaProdutoOrdem + "" };
 	}
 
 }

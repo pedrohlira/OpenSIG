@@ -12,7 +12,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface FinanceiroServiceAsync<E extends Dados> extends CoreServiceAsync<E> {
 
-	public abstract void gerar(int boletoId, String tipo, boolean recibo, AsyncCallback<String> asyncCallback);
+	public abstract void gerar(int boletoId, int contaId, String tipo, boolean recibo, AsyncCallback<String> asyncCallback);
 
 	public abstract void salvarReceber(FinReceber receber, List<FinCategoria> categorias, AsyncCallback<FinReceber> asyncCallback);
 	

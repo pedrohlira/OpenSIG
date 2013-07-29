@@ -119,7 +119,7 @@ public class ListagemProduto extends AListagem<ProdProduto> {
 		ColumnConfig ccObservacao = new ColumnConfig(OpenSigCore.i18n.txtObservacao(), "prodProdutoObservacao", 200, true);
 
 		// sumarios
-		SummaryColumnConfig ccEstoque = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtEstoque(), "t1.prodEstoqueQuantidade", 75, true, NUMERO), NUMERO);
+		SummaryColumnConfig ccEstoque = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtEstoque(), "t1.prodEstoqueQuantidade", 75, true, VALOR), VALOR);
 
 		if (form instanceof FormularioProduto) {
 			BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccNcm, ccBarra, ccDescricao, ccRef, ccCusto, ccPreco, ccEmbalagemId, ccEmbalagem, ccVolume, ccEstoque, ccCategoria, ccCodForn,

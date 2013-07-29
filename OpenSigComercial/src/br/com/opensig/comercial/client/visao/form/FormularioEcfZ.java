@@ -107,11 +107,13 @@ public class FormularioEcfZ extends AFormulario<ComEcfZ> {
 		txtBruto.setAllowBlank(false);
 		txtBruto.setAllowNegative(false);
 		txtBruto.setMaxLength(11);
+		txtBruto.setDecimalPrecision(2);
 
 		txtGt = new NumberField(OpenSigCore.i18n.txtTotal(), "comEcfZGt", 80);
 		txtGt.setAllowBlank(false);
 		txtGt.setAllowNegative(false);
 		txtGt.setMaxLength(11);
+		txtGt.setDecimalPrecision(2);
 
 		chkIssqn = new Checkbox(OpenSigCore.i18n.txtIssqn(), "comEcfZIssqn");
 

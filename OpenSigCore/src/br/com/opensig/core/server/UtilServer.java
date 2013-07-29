@@ -196,13 +196,8 @@ public class UtilServer extends HttpServlet {
 	 * @return bytes do pdf.
 	 */
 	public static byte[] getPDF(byte[] obj, String formato) {
-		// define as variaveis
-		String nome = new Date().getTime() + "";
-		String comando = PATH_EMPRESA + "htmltopdf.sh";
-		String pathHtml = PATH_EMPRESA + nome + ".html";
-		String pathPdf = PATH_EMPRESA + nome + ".pdf";
-
 		// salva o html em arquivo
+		String pathHtml = PATH_EMPRESA + "tmp/" + new Date().getTime() + ".html";
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(pathHtml));
 			bw.write(new String(obj));
@@ -212,22 +207,8 @@ public class UtilServer extends HttpServlet {
 			obj = null;
 		}
 
-		// gera o pdf usando o wkhtmltopdf
-		try {
-			ProcessBuilder pb = new ProcessBuilder(comando, formato, nome);
-			pb.redirectErrorStream(true);
-			Process process = pb.start();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				System.out.println(line);
-			}
-		} catch (Exception ex) {
-			UtilServer.LOG.error("Erro na geracao do pdf.", ex);
-			obj = null;
-		}
-
 		// le o arquivo pdf em arquivo
+		String pathPdf = getPDF(pathHtml, formato);
 		try {
 			File f = new File(pathPdf);
 			obj = new byte[(int) f.length()];
@@ -239,11 +220,43 @@ public class UtilServer extends HttpServlet {
 			obj = null;
 		}
 
-		// delete os arquivos temporarios
-		new File(pathHtml).delete();
+		// delete o arquivo temporario
 		new File(pathPdf).delete();
-
 		return obj;
+	}
+	
+	/**
+	 * Metodo que transforma os bytes de um html em pdf.
+	 * 
+	 * @param obj
+	 *            uri do html.
+	 * @param formato
+	 *            o tipo de apresentacao.
+	 * @return uri do pdf.
+	 */
+	public static String getPDF(String pathHtml, String formato) {
+		// define as variaveis
+		String comando = PATH_EMPRESA + "htmltopdf.sh";
+		String pathPdf = pathHtml.replace("html", "pdf");
+
+		// gera o pdf usando o wkhtmltopdf
+		try {
+			ProcessBuilder pb = new ProcessBuilder(comando, formato, pathHtml, pathPdf);
+			pb.redirectErrorStream(true);
+			Process process = pb.start();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				LOG.info(line);
+			}
+		} catch (Exception ex) {
+			UtilServer.LOG.error("Erro na geracao do pdf.", ex);
+			return null;
+		}
+
+		// delete o arquivo temporario
+		new File(pathHtml).delete();
+		return pathPdf;
 	}
 
 	/**

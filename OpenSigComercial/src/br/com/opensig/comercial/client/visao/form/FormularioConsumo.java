@@ -81,7 +81,8 @@ public class FormularioConsumo extends AFormulario<ComConsumo> {
 		txtBase = new NumberField(OpenSigCore.i18n.txtIcmsBase(), "comConsumoBase", 70);
 		txtBase.setAllowBlank(false);
 		txtBase.setAllowNegative(false);
-		txtBase.setMaxLength(13);
+		txtBase.setMaxLength(11);
+		txtBase.setDecimalPrecision(2);
 
 		txtAliquota = new NumberField(OpenSigCore.i18n.txtAliquota() + " %", "comConsumoAliquota", 70);
 		txtAliquota.setAllowBlank(false);
@@ -92,12 +93,14 @@ public class FormularioConsumo extends AFormulario<ComConsumo> {
 		txtIcms = new NumberField(OpenSigCore.i18n.txtIcms(), "comConsumoIcms", 70);
 		txtIcms.setAllowBlank(false);
 		txtIcms.setAllowNegative(false);
-		txtIcms.setMaxLength(13);
+		txtIcms.setMaxLength(11);
+		txtIcms.setDecimalPrecision(2);
 
 		txtValor = new NumberField(OpenSigCore.i18n.txtValor(), "comConsumoValor", 120);
 		txtValor.setAllowBlank(false);
 		txtValor.setAllowNegative(false);
-		txtValor.setMaxLength(13);
+		txtValor.setMaxLength(11);
+		txtValor.setDecimalPrecision(2);
 
 		MultiFieldPanel linha2 = new MultiFieldPanel();
 		linha2.setBorder(false);

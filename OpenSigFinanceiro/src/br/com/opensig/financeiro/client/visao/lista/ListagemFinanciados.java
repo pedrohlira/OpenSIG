@@ -293,7 +293,7 @@ public class ListagemFinanciados<E extends Dados> extends AListagemEditor<E> {
 		txtValor.setAllowNegative(false);
 		txtValor.setSelectOnFocus(true);
 		txtValor.setDecimalPrecision(2);
-		txtValor.setMaxLength(13);
+		txtValor.setMaxLength(11);
 		return txtValor;
 	}
 

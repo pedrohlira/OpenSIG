@@ -117,7 +117,7 @@ public class ListagemVendaProduto extends AListagem<ComVendaProduto> {
 		ccOrdem.setHidden(true);
 
 		// somarotios
-		SummaryColumnConfig ccQuantidade = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comVendaProdutoQuantidade", 50, true, NUMERO), NUMERO);
+		SummaryColumnConfig ccQuantidade = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comVendaProdutoQuantidade", 75, true, VALOR), VALOR);
 		SummaryColumnConfig ccBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comVendaProdutoBruto", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig ccLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtLiquido(), "comVendaProdutoLiquido", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig ccTotalBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtTotal() + " " + OpenSigCore.i18n.txtBruto(),

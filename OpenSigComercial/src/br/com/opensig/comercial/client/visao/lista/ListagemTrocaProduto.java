@@ -80,7 +80,7 @@ public class ListagemTrocaProduto extends AListagem<ComTrocaProduto> {
 		ccOrdem.setHidden(true);
 
 		// somarotios
-		SummaryColumnConfig ccQuantidade = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comTrocaProdutoQuantidade", 50, true, NUMERO), NUMERO);
+		SummaryColumnConfig ccQuantidade = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comTrocaProdutoQuantidade", 75, true, VALOR), VALOR);
 		SummaryColumnConfig ccValor = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtValor(), "comTrocaProdutoValor", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig ccTotal = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comTrocaProdutoTotal", 75, true, DINHEIRO), DINHEIRO);
 

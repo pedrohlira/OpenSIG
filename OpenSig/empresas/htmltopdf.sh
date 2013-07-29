@@ -13,4 +13,4 @@ CMD="$PATH/wkhtmltopdf.app/Contents/MacOS/wkhtmltopdf";
 #CMD="$PATH/wkthmltopdf.exe";
 
 # Aplicatico com parametros
-"$CMD" --footer-left "Sistema: OpenSIG" --footer-center "Pagina [page] de [toPage]" --footer-right "[date] [time]" --footer-font-name "serif" --footer-font-size 8 --quiet --orientation $1 "$PATH/$2.html" "$PATH/$2.pdf";
+"$CMD" --footer-left "Sistema: OpenSIG" --footer-center "Pagina [page] de [toPage]" --footer-right "[date] [time]" --footer-font-name "serif" --footer-font-size 8 --quiet --orientation $1 "$2" "$3";

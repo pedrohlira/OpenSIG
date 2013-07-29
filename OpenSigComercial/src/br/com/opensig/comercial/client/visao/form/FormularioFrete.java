@@ -95,7 +95,7 @@ public class FormularioFrete extends AFormulario<ComFrete> {
 		txtCfop.setAllowNegative(false);
 		txtCfop.setMinLength(4);
 		txtCfop.setMaxLength(4);
-		txtCfop.setMaxValue(4000);
+		txtCfop.setMaxValue(3999);
 
 		txtVolume = new NumberField(OpenSigCore.i18n.txtVolume(), "comFreteVolume", 70);
 		txtVolume.setAllowBlank(false);
@@ -110,12 +110,14 @@ public class FormularioFrete extends AFormulario<ComFrete> {
 		txtPeso = new NumberField(OpenSigCore.i18n.txtPeso() + " kg", "comFretePeso", 70);
 		txtPeso.setAllowBlank(false);
 		txtPeso.setAllowNegative(false);
-		txtPeso.setMaxLength(13);
+		txtPeso.setMaxLength(11);
+		txtPeso.setDecimalPrecision(2);
 
 		txtCubagem = new NumberField(OpenSigCore.i18n.txtCubagem(), "comFreteCubagem", 70);
 		txtCubagem.setAllowBlank(false);
 		txtCubagem.setAllowNegative(false);
-		txtCubagem.setMaxLength(13);
+		txtCubagem.setMaxLength(11);
+		txtCubagem.setDecimalPrecision(2);
 
 		MultiFieldPanel linha3 = new MultiFieldPanel();
 		linha3.setBorder(false);
@@ -132,18 +134,20 @@ public class FormularioFrete extends AFormulario<ComFrete> {
 		txtValorProduto = new NumberField(OpenSigCore.i18n.txtValorProduto(), "comFreteValorProduto", 120);
 		txtValorProduto.setAllowBlank(false);
 		txtValorProduto.setAllowNegative(false);
-		txtValorProduto.setMaxLength(13);
+		txtValorProduto.setMaxLength(11);
+		txtValorProduto.setDecimalPrecision(2);
 
 		txtNota = new NumberField(OpenSigCore.i18n.txtNota(), "comFreteNota", 100);
 		txtNota.setAllowBlank(false);
 		txtNota.setAllowNegative(false);
 		txtNota.setAllowDecimals(false);
-		txtNota.setMaxLength(10);
+		txtNota.setMaxLength(11);
 
 		txtBase = new NumberField(OpenSigCore.i18n.txtIcmsBase(), "comFreteBase", 70);
 		txtBase.setAllowBlank(false);
 		txtBase.setAllowNegative(false);
-		txtBase.setMaxLength(13);
+		txtBase.setMaxLength(11);
+		txtBase.setDecimalPrecision(2);
 
 		txtAliquota = new NumberField(OpenSigCore.i18n.txtAliquota() + " %", "comFreteAliquota", 70);
 		txtAliquota.setAllowBlank(false);
@@ -154,12 +158,14 @@ public class FormularioFrete extends AFormulario<ComFrete> {
 		txtIcms = new NumberField(OpenSigCore.i18n.txtIcms(), "comFreteIcms", 70);
 		txtIcms.setAllowBlank(false);
 		txtIcms.setAllowNegative(false);
-		txtIcms.setMaxLength(13);
+		txtIcms.setMaxLength(11);
+		txtIcms.setDecimalPrecision(2);
 
 		txtValor = new NumberField(OpenSigCore.i18n.txtValor(), "comFreteValor", 120);
 		txtValor.setAllowBlank(false);
 		txtValor.setAllowNegative(false);
-		txtValor.setMaxLength(13);
+		txtValor.setMaxLength(11);
+		txtValor.setDecimalPrecision(2);
 
 		MultiFieldPanel linha4 = new MultiFieldPanel();
 		linha4.setBorder(false);

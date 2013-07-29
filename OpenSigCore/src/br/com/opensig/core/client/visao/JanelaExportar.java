@@ -150,7 +150,7 @@ public class JanelaExportar extends Window {
 		String[] html = new String[] { "br.com.opensig.core.server.exportar.Html", "html", "", modo.name(), "HTML", "html.png", "" };
 		dados.add(html);
 		// xls
-		String[] xls = new String[] { "br.com.opensig.core.server.exportar.Xls", "xls", "", modo.name(), "XLS", "xls.png", "" };
+		String[] xls = new String[] { "br.com.opensig.core.server.exportar.Xlsx", "xlsx", "", modo.name(), "XLSX", "xls.png", "" };
 		dados.add(xls);
 
 		// filtro

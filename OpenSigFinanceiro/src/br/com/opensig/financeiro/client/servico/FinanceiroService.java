@@ -9,7 +9,7 @@ import br.com.opensig.financeiro.shared.modelo.FinReceber;
 
 public interface FinanceiroService extends CoreService {
 
-	public String gerar(int boletoId, String tipo, boolean recibo) throws FinanceiroException;
+	public String gerar(int boletoId, int contaId, String tipo, boolean recibo) throws FinanceiroException;
 
 	public FinReceber salvarReceber(FinReceber receber, List<FinCategoria> categorias) throws FinanceiroException;
 	

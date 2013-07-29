@@ -31,6 +31,8 @@ import com.gwtext.client.widgets.grid.BaseColumnConfig;
 import com.gwtext.client.widgets.grid.ColumnConfig;
 import com.gwtext.client.widgets.grid.ColumnModel;
 import com.gwtext.client.widgets.grid.GridEditor;
+import com.gwtextux.client.widgets.grid.plugins.GridSummaryPlugin;
+import com.gwtextux.client.widgets.grid.plugins.SummaryColumnConfig;
 
 public class ListagemGrades extends AListagemEditor<ProdGrade> {
 
@@ -40,6 +42,7 @@ public class ListagemGrades extends AListagemEditor<ProdGrade> {
 	public ListagemGrades(boolean barraTarefa) {
 		super(new ProdGrade(), barraTarefa);
 		inicializar();
+		addPlugin(new GridSummaryPlugin());
 	}
 
 	public void inicializar() {
@@ -82,24 +85,26 @@ public class ListagemGrades extends AListagemEditor<ProdGrade> {
 		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "prodGradeBarra", 100, false);
 		ccBarra.setEditor(new GridEditor(txtBarra));
 
-		ColumnConfig ccTamanho = new ColumnConfig(OpenSigCore.i18n.txtTamanho(), "prodGradeTamanho", 100, false);
+		ColumnConfig ccTamanho = new ColumnConfig(OpenSigCore.i18n.txtTamanho(), "prodGradeTamanho", 75, false);
 		ccTamanho.setEditor(new GridEditor(getTipo(stTamanho)));
 
-		ColumnConfig ccCor = new ColumnConfig(OpenSigCore.i18n.txtCor(), "prodGradeCor", 100, false);
+		ColumnConfig ccCor = new ColumnConfig(OpenSigCore.i18n.txtCor(), "prodGradeCor", 75, false);
 		ccCor.setEditor(new GridEditor(getTipo(stCor)));
 
-		ColumnConfig ccTipo = new ColumnConfig(OpenSigCore.i18n.txtOpcao(), "prodGradeOpcao", 100, false);
+		ColumnConfig ccTipo = new ColumnConfig(OpenSigCore.i18n.txtOpcao(), "prodGradeOpcao", 75, false);
 		ccTipo.setEditor(new GridEditor(getTipo(stTipo)));
 
 		txtEstoque = new NumberField();
 		txtEstoque.setAllowBlank(false);
 		txtEstoque.setAllowNegative(false);
-		txtEstoque.setMaxLength(10);
+		txtEstoque.setMaxLength(11);
+		txtEstoque.setDecimalPrecision(4);
 		txtEstoque.setSelectOnFocus(true);
-		ColumnConfig ccEstoque = new ColumnConfig(OpenSigCore.i18n.txtEstoque(), "prodGradeEstoque", 100, false, IListagem.NUMERO);
+		ColumnConfig ccEstoque = new ColumnConfig(OpenSigCore.i18n.txtEstoque(), "prodGradeEstoque", 75, false, IListagem.VALOR);
 		ccEstoque.setEditor(new GridEditor(txtEstoque));
+		SummaryColumnConfig sumEstoque = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccEstoque, IListagem.VALOR);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccBarra, ccTamanho, ccCor, ccTipo, ccEstoque };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccBarra, ccTamanho, ccCor, ccTipo, sumEstoque };
 		modelos = new ColumnModel(bcc);
 
 		// barra de menu

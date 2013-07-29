@@ -73,7 +73,7 @@ public class ListagemGrade extends AListagem<ProdEstoqueGrade> {
 		ColumnConfig ccOpcao = new ColumnConfig(OpenSigCore.i18n.txtOpcao(), "prodGrade.prodGradeOpcao", 100, true);
 		
 		// somarotios
-		SummaryColumnConfig ccEstoque = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtEstoque(), "prodEstoqueGradeQuantidade", 100, true, NUMERO), NUMERO);
+		SummaryColumnConfig ccEstoque = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtEstoque(), "prodEstoqueGradeQuantidade", 100, true, VALOR), VALOR);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccEmpresaId, ccEmpresa, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccTamanho, ccCor, ccOpcao, ccEstoque };
 		modelos = new ColumnModel(bcc);

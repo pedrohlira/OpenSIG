@@ -26,8 +26,8 @@ public class FinanceiroProxy<E extends Dados> extends CoreProxy<E> implements Fi
 		sdf.setServiceEntryPoint(GWT.getHostPageBaseURL() + "FinanceiroService");
 	}
 	
-	public void gerar(int boletoId, String tipo, boolean recibo, AsyncCallback<String> asyncCallback) {
-		async.gerar(boletoId, tipo, recibo, asyncCallback);
+	public void gerar(int boletoId, int contaId, String tipo, boolean recibo, AsyncCallback<String> asyncCallback) {
+		async.gerar(boletoId, contaId, tipo, recibo, asyncCallback);
 	}
 
 	public void salvarReceber(FinReceber receber, List<FinCategoria> categorias, AsyncCallback<FinReceber> asyncCallback) {

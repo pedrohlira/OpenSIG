@@ -89,6 +89,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 	private boolean autorizado;
 	private boolean autosave;
 	private double max;
+	private String idNatureza;
 	private AsyncCallback asyncSalvar;
 	private AsyncCallback<ILogin> asyncLogin;
 	private ComandoPesquisa cmdPesquisa;
@@ -394,12 +395,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 		} else {
 			txtUsuario.setValue(Ponte.getLogin().getUsuario());
 			cmbVendedor.setValue(Ponte.getLogin().getId() + "");
-			for (Record rec2 : cmbNatureza.getStore().getRecords()) {
-				if (rec2.getAsString("comNaturezaNome").equalsIgnoreCase("Venda")) {
-					cmbNatureza.setValue(rec2.getAsString("comNaturezaId"));
-					break;
-				}
-			}
+			cmbNatureza.setValue(idNatureza);
 		}
 		cmbCliente.focus(true);
 
@@ -476,12 +472,18 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 
 	private ComboBox getNatureza() {
 		FieldDef[] fdNatureza = new FieldDef[] { new IntegerFieldDef("comNaturezaId"), new IntegerFieldDef("empEmpresa.empEmpresaId"), new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"),
-				new StringFieldDef("comNaturezaNome"), new StringFieldDef("comNaturezaDescricao"), new IntegerFieldDef("comNaturezaCfopDentro"), new IntegerFieldDef("comNaturezaCfopFora") };
+				new StringFieldDef("comNaturezaNome") };
 		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Ponte.getLogin().getEmpresaId()));
 		CoreProxy<ComNatureza> proxy = new CoreProxy<ComNatureza>(new ComNatureza(), fo);
 		final Store storeNatureza = new Store(proxy, new ArrayReader(new RecordDef(fdNatureza)), true);
 		storeNatureza.addStoreListener(new StoreListenerAdapter() {
 			public void onLoad(Store store, Record[] records) {
+				for (Record rec : records) {
+					if (rec.getAsString("comNaturezaNome").equalsIgnoreCase("venda")) {
+						idNatureza = rec.getAsString("comNaturezaId");
+						break;
+					}
+				}
 				mostrar();
 			}
 
@@ -506,6 +508,16 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 		cmbNatureza.setValueField("comNaturezaId");
 		cmbNatureza.setForceSelection(true);
 		cmbNatureza.setEditable(false);
+		cmbNatureza.addListener(new ComboBoxListenerAdapter() {
+			public void onSelect(ComboBox comboBox, Record record, int index) {
+				super.onSelect(comboBox, record, index);
+				if (!record.getAsString("comNaturezaId").equals(idNatureza)) {
+					for (int i = 21; i < gridProdutos.getModelos().getColumnCount(); i++) {
+						gridProdutos.getModelos().setHidden(i, false);
+					}
+				}
+			}
+		});
 
 		return cmbNatureza;
 	}

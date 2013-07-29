@@ -19,6 +19,7 @@ public class FormularioRecebimento extends AFormularioFinanciado<FinRecebimento>
 		nomes.put("documento", "finRecebimentoDocumento");
 		nomes.put("valor", "finRecebimentoValor");
 		nomes.put("parcela", "finRecebimentoParcela");
+		nomes.put("categoria", "finReceber.finReceberCategoria");
 		nomes.put("cadastro", "finRecebimentoCadastro");
 		nomes.put("vencimento", "finRecebimentoVencimento");
 		nomes.put("status", "finRecebimentoStatus");

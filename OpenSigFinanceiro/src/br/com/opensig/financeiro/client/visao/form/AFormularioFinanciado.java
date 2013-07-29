@@ -68,7 +68,8 @@ public abstract class AFormularioFinanciado<E extends Dados> extends AFormulario
 		txtValor = new NumberField(OpenSigCore.i18n.txtValor(), nomes.get("valor"), 100);
 		txtValor.setAllowBlank(false);
 		txtValor.setAllowNegative(false);
-		txtValor.setMaxLength(13);
+		txtValor.setMaxLength(11);
+		txtValor.setDecimalPrecision(2);
 
 		txtParcela = new TextField(OpenSigCore.i18n.txtParcela(), nomes.get("parcela"), 100);
 		txtParcela.setRegex("\\d{2}/\\d{2}");

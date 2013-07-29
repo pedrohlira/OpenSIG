@@ -219,11 +219,13 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 
 		txtBruto = new NumberField(OpenSigCore.i18n.txtBruto(), "comFreteBruto", 60);
 		txtBruto.setAllowNegative(false);
-		txtBruto.setMaxLength(13);
+		txtBruto.setMaxLength(11);
+		txtBruto.setDecimalPrecision(2);
 
 		txtLiquido = new NumberField(OpenSigCore.i18n.txtLiquido(), "comFreteLiquido", 60);
 		txtLiquido.setAllowNegative(false);
-		txtLiquido.setMaxLength(13);
+		txtLiquido.setMaxLength(11);
+		txtLiquido.setDecimalPrecision(2);
 
 		MultiFieldPanel linha3 = new MultiFieldPanel();
 		linha3.setBorder(false);

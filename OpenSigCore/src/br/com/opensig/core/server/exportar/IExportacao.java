@@ -11,7 +11,6 @@ import br.com.opensig.core.shared.modelo.sistema.SisExpImp;
  * Interface que generaliza a forma como o sistema trata as exportacoes.
  * 
  * @author Pedro H. Lira
- * @version 1.0
  */
 public interface IExportacao<E extends Dados> {
 
@@ -36,9 +35,9 @@ public interface IExportacao<E extends Dados> {
 	 *            os dados de endereco.
 	 * @param contatos
 	 *            os dados de contato.
-	 * @return um array de bytes do arquivo exportado.
+	 * @return o local onde esta o arquivo gerado.
 	 */
-	public byte[] getArquivo(CoreService<E> service, SisExpImp modo, ExpListagem<E> exp, String[][] enderecos, String[][] contatos);
+	public String getArquivo(CoreService<E> service, SisExpImp modo, ExpListagem<E> exp, String[][] enderecos, String[][] contatos);
 
 	/**
 	 * Metodo que exporta o registro.
@@ -53,7 +52,7 @@ public interface IExportacao<E extends Dados> {
 	 *            os dados de endereco.
 	 * @param contatos
 	 *            os dados de contato.
-	 * @return um array de bytes do arquivo exportado.
+	 * @return o local onde esta o arquivo gerado.
 	 */
-	public byte[] getArquivo(CoreService<E> service, SisExpImp modo, ExpRegistro<E> exp, String[][] enderecos, String[][] contatos);
+	public String getArquivo(CoreService<E> service, SisExpImp modo, ExpRegistro<E> exp, String[][] enderecos, String[][] contatos);
 }

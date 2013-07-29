@@ -62,25 +62,29 @@ public class ListagemEcfVendaProdutos extends AListagemEditor<ComEcfVendaProduto
 		txtQuantidade.setAllowBlank(false);
 		txtQuantidade.setAllowNegative(false);
 		txtQuantidade.setSelectOnFocus(true);
+		txtQuantidade.setDecimalPrecision(4);
 		txtQuantidade.setMaxLength(11);
 
 		txtDesconto = new NumberField();
 		txtDesconto.setAllowBlank(false);
 		txtDesconto.setAllowNegative(false);
 		txtDesconto.setSelectOnFocus(true);
-		txtDesconto.setMaxLength(13);
+		txtDesconto.setMaxLength(11);
+		txtDesconto.setDecimalPrecision(2);
 
 		txtAcrescimo = new NumberField();
 		txtAcrescimo.setAllowBlank(false);
 		txtAcrescimo.setAllowNegative(false);
 		txtAcrescimo.setSelectOnFocus(true);
-		txtAcrescimo.setMaxLength(13);
+		txtAcrescimo.setMaxLength(11);
+		txtAcrescimo.setDecimalPrecision(2);
 
 		txtLiquido = new NumberField();
 		txtLiquido.setAllowBlank(false);
 		txtLiquido.setAllowNegative(false);
 		txtLiquido.setSelectOnFocus(true);
-		txtLiquido.setMaxLength(13);
+		txtLiquido.setMaxLength(11);
+		txtLiquido.setDecimalPrecision(2);
 
 		// colunas
 		ColumnConfig ccId = new ColumnConfig("", "comVendaProdutoId", 10, true);
@@ -125,7 +129,7 @@ public class ListagemEcfVendaProdutos extends AListagemEditor<ComEcfVendaProduto
 		ccData.setHidden(true);
 		ccData.setFixed(true);
 
-		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comEcfVendaProdutoQuantidade", 50, true, IListagem.NUMERO);
+		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comEcfVendaProdutoQuantidade", 75, true, IListagem.VALOR);
 		ccQuantidade.setEditor(new GridEditor(txtQuantidade));
 
 		ColumnConfig ccEmbalagemId = new ColumnConfig("", "prodEmbalagem.prodEmbalagemId", 10, true);
@@ -238,7 +242,7 @@ public class ListagemEcfVendaProdutos extends AListagemEditor<ComEcfVendaProduto
 				double liquido = rec.getAsDouble("comEcfVendaProdutoLiquido");
 				double totLiquido = rec.getAsDouble("comEcfVendaProdutoTotal");
 
-				if (prodId == 0 || quantidade < 1 || desconto > 100.00) {
+				if (prodId == 0 || quantidade <= 0 || desconto > 100.00) {
 					throw new Exception();
 				}
 

@@ -1,5 +1,8 @@
 package br.com.opensig.core.server.exportar;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -21,72 +24,126 @@ import br.com.opensig.core.shared.modelo.sistema.SisExpImp;
 public class Html<E extends Dados> extends AExportacao<E> {
 
 	@Override
-	public byte[] getArquivo(CoreService<E> service, SisExpImp modo, ExpListagem<E> exp, String[][] enderecos, String[][] contatos) {
-		// seleciona os dados
+	public String getArquivo(CoreService<E> service, SisExpImp modo, ExpListagem<E> exp, String[][] enderecos, String[][] contatos) {
+		this.agrupados = new double[exp.getMetadados().size()];
+		this.expLista = exp;
+		String path = UtilServer.PATH_EMPRESA + "tmp/" + new Date().getTime() + ".html";
+
 		try {
-			lista = service.selecionar(exp.getClasse(), modo.getInicio(), modo.getLimite(), exp.getFiltro(), true);
+			bw = new BufferedWriter(new FileWriter(path));
+			// inicio do arquivo
+			bw.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><html xmlns='http://www.w3.org/1999/xhtml'>");
+			// estilo do arquivo
+			formato = "landscape";
+			bw.write(getEstilo(exp.getNome()));
+			// cabecalho da empresa
+			bw.write(getCabecalhoEmpresa());
+			// inicio da listagem
+			bw.write("<table -fs-table-paginate: paginate;>");
+			// cabeçalho da listagem
+			bw.write(getCabecalhoListagem());
+			// corpo da listagem
+			bw.write("<tbody>");
+			bw.flush();
+			// seleciona os dados
+			int inicio = modo.getInicio();
+			int limite = modo.getLimite() == 0 || modo.getLimite() > PAGINACAO ? PAGINACAO : modo.getLimite();
+			int fim = 0;
+			do {
+				lista = service.selecionar(exp.getClasse(), inicio, limite, exp.getFiltro(), true);
+				// determina o fim do recorte
+				if (lista.getTotal() - inicio < limite) {
+					fim = lista.getTotal() - inicio;
+				} else {
+					fim = limite;
+				}
+				bw.write(getCorpoListagem(fim));
+				bw.flush();
+				inicio += limite;
+			} while (fim == PAGINACAO && (modo.getLimite() == 0 || modo.getLimite() > PAGINACAO));
+			bw.write("</tbody>");
+			// rodape da listagem
+			bw.write(getRodapeListagem());
+			// fim da listagem
+			bw.write("</table>");
+			// rodape da empresa
+			bw.write(getRodapeEmpresa(enderecos, contatos));
+			// fim do arquivo
+			bw.write("</body></html>");
+			
+			bw.flush();
+			bw.close();
+			return path;
+		} catch (IOException ex) {
+			return null;
 		} catch (CoreException e) {
 			return null;
-		} finally {
-			this.modo = modo;
-			this.agrupados = new double[exp.getMetadados().size()];
-			this.expLista = exp;
 		}
-
-		// inicio do arquivo
-		StringBuffer sb = new StringBuffer("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><html xmlns='http://www.w3.org/1999/xhtml'>");
-		// estilo do arquivo
-		formato = "landscape";
-		sb.append(getEstilo(exp.getNome()));
-		// cabecalho da empresa
-		sb.append(getCabecalhoEmpresa());
-		// inicio da listagem
-		sb.append("<table -fs-table-paginate: paginate;>");
-		// cabeçalho da listagem
-		sb.append(getCabecalhoListagem());
-		// corpo da listagem
-		sb.append(getCorpoListagem());
-		// rodape da listagem
-		sb.append(getRodapeListagem());
-		// fim da listagem
-		sb.append("</table>");
-		// rodape da empresa
-		sb.append(getRodapeEmpresa(enderecos, contatos));
-		// fim do arquivo
-		sb.append("</body></html>");
-		// normaliza
-		return UtilServer.normaliza(sb.toString()).getBytes();
 	}
 
 	@Override
-	public byte[] getArquivo(CoreService<E> service, SisExpImp modo, ExpRegistro<E> exp, String[][] enderecos, String[][] contatos) {
-		// seleciona os dados
+	public String getArquivo(CoreService<E> service, SisExpImp modo, ExpRegistro<E> exp, String[][] enderecos, String[][] contatos) {
+		this.expReg = exp;
+		String path = UtilServer.PATH_EMPRESA + "tmp/" + new Date().getTime() + ".html";
+
 		try {
-			this.registro = service.selecionar(exp.getClasse(), modo.getInicio(), modo.getLimite(), exp.getFiltro(), true);
+			bw = new BufferedWriter(new FileWriter(path));
+			// inicio do arquivo
+			bw.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><html xmlns='http://www.w3.org/1999/xhtml'>");
+			// estilo do arquivo
+			formato = exp.getExpLista() == null ? "portrait" : "landscape";
+			bw.write(getEstilo(exp.getNome()));
+			// cabecalho da empresa
+			bw.write(getCabecalhoEmpresa());
+			bw.flush();
+			// seleciona os dados
+			int inicio = modo.getInicio();
+			int limite = modo.getLimite() == 0 || modo.getLimite() > PAGINACAO ? PAGINACAO : modo.getLimite();
+			int fim = 0;
+			do {
+				registro = service.selecionar(exp.getClasse(), inicio, limite, exp.getFiltro(), true);
+				// determina o fim do recorte
+				if (registro.getTotal() - inicio < limite) {
+					fim = registro.getTotal() - inicio;
+				} else {
+					fim = limite;
+				}
+				bw.write(getCorpoRegistro(service, fim));
+				bw.flush();
+				inicio += limite;
+			} while (fim == PAGINACAO && (modo.getLimite() == 0 || modo.getLimite() > PAGINACAO));
+			// rodape da empresa
+			bw.write(getRodapeEmpresa(enderecos, contatos));
+			// fim do arquivo
+			bw.write("</body></html>");
+			
+			bw.flush();
+			bw.close();
+			return path;
+		} catch (IOException e) {
+			return null;
 		} catch (CoreException e) {
 			return null;
-		} finally {
-			this.modo = modo;
-			this.expReg = exp;
 		}
+	}
 
-		// inicio do arquivo
-		StringBuffer sb = new StringBuffer("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><html xmlns=\"http://www.w3.org/1999/xhtml\">");
-		// estilo do arquivo
-		formato = exp.getExpLista() == null ? "portrait" : "landscape";
-		sb.append(getEstilo(exp.getNome()));
-		// cabecalho da empresa
-		sb.append(getCabecalhoEmpresa());
+	/**
+	 * Metodo que gera o cabecalho do registro.
+	 * 
+	 * @return o cabecalho do registro.
+	 */
+	public String getCabecalhoRegistro() {
+		String cabecalho = "<caption>:: " + expReg.getNome() + " ::</caption>";
+		return cabecalho;
+	}
 
-		// definindo o final
-		int fim = 0;
-		if (modo.getLimite() == 0) {
-			fim = registro.getDados().length;
-		} else if (registro.getTotal() - modo.getInicio() < modo.getLimite()) {
-			fim = registro.getTotal() - modo.getInicio();
-		} else {
-			fim = modo.getLimite();
-		}
+	/**
+	 * Metodo que gera o corpo do registro.
+	 * 
+	 * @return o corpo do registro.
+	 */
+	public String getCorpoRegistro(CoreService<E> service, int fim) {
+		StringBuffer sb = new StringBuffer();
 		for (int pos = 0; pos < fim; pos++) {
 			String[] reg = registro.getDados()[pos];
 			// inicio do registro
@@ -98,29 +155,27 @@ public class Html<E extends Dados> extends AExportacao<E> {
 			// fim do registro
 			sb.append("</table>");
 			// listas do registro
-			if (exp.getExpLista() != null) {
-				for (ExpListagem expLista : exp.getExpLista()) {
+			if (expReg.getExpLista() != null) {
+				for (ExpListagem aux : expReg.getExpLista()) {
 					// seleciona os dados
-					try {
-						if (expLista.getFiltro() instanceof FiltroObjeto) {
-							Dados d = (Dados) expLista.getFiltro().getValor();
-							int id = d.getCampoId().equalsIgnoreCase("empEntidadeId") ? Integer.valueOf(reg[1]) : Integer.valueOf(reg[0]);
-							d.setId(id);
-						}
-						this.lista = service.selecionar(expLista.getClasse(), 0, 0, expLista.getFiltro(), true);
-					} catch (CoreException e) {
-						return null;
-					} finally {
-						this.agrupados = new double[expLista.getMetadados().size()];
-						this.expLista = expLista;
+					if (aux.getFiltro() instanceof FiltroObjeto) {
+						Dados d = (Dados) aux.getFiltro().getValor();
+						int id = d.getCampoId().equalsIgnoreCase("empEntidadeId") ? Integer.valueOf(reg[1]) : Integer.valueOf(reg[0]);
+						d.setId(id);
 					}
-
+					try {
+						lista = service.selecionar(aux.getClasse(), 0, 0, aux.getFiltro(), true);
+					} catch (CoreException e) {
+						return "";
+					}
+					agrupados = new double[aux.getMetadados().size()];
+					expLista = aux;
 					// inicio listagem
 					sb.append("<hr /><table>");
 					// cabecalho da listagem
 					sb.append(getCabecalhoListagem());
 					// corpo da listagem
-					sb.append(getCorpoListagem());
+					sb.append(getCorpoListagem(lista.getTotal()));
 					// rodape da listagem
 					sb.append(getRodapeListagem());
 					// fim da listagem
@@ -128,22 +183,7 @@ public class Html<E extends Dados> extends AExportacao<E> {
 				}
 			}
 		}
-		// rodape da empresa
-		sb.append(getRodapeEmpresa(enderecos, contatos));
-		// fim do arquivo
-		sb.append("</body></html>");
-		// normaliza
-		return UtilServer.normaliza(sb.toString()).getBytes();
-	}
-
-	/**
-	 * Metodo que gera o cabecalho do registro.
-	 * 
-	 * @return o cabecalho do registro.
-	 */
-	public String getCabecalhoRegistro() {
-		String cabecalho = "<caption>:: " + expReg.getNome() + " ::</caption>";
-		return cabecalho;
+		return sb.toString();
 	}
 
 	/**
@@ -214,7 +254,6 @@ public class Html<E extends Dados> extends AExportacao<E> {
 			sbEndereco.append("</tr>");
 		}
 		sbEndereco.append("</tbody></table>");
-
 		// dados do contato
 		StringBuffer sbContato = new StringBuffer("<table><tbody>");
 		for (String[] contato : contatos) {
@@ -224,7 +263,6 @@ public class Html<E extends Dados> extends AExportacao<E> {
 			sbContato.append("</tr>");
 		}
 		sbContato.append("</tbody></table>");
-
 		// alinhamento
 		StringBuffer sb = new StringBuffer("<hr /><table><tbody><tr style='height: 10px;'>");
 		sb.append("<td style='width:70%'>" + sbEndereco.toString() + "</td>");
@@ -279,17 +317,8 @@ public class Html<E extends Dados> extends AExportacao<E> {
 	 * 
 	 * @return o corpo da listagem.
 	 */
-	public String getCorpoListagem() {
-		StringBuffer sb = new StringBuffer("<tbody>");
-		int fim = 0;
-		if (modo.getLimite() == 0 || expReg != null) {
-			fim = lista.getDados().length;
-		} else if (lista.getTotal() - modo.getInicio() < modo.getLimite()) {
-			fim = lista.getTotal() - modo.getInicio();
-		} else {
-			fim = modo.getLimite();
-		}
-
+	public String getCorpoListagem(int fim) {
+		StringBuffer sb = new StringBuffer();
 		for (int j = 0; j < fim; j++) {
 			sb.append("<tr>");
 			for (int i = 0; i < expLista.getMetadados().size(); i++) {
@@ -322,8 +351,8 @@ public class Html<E extends Dados> extends AExportacao<E> {
 				}
 			}
 			sb.append("</tr>");
+			regs++;
 		}
-		sb.append("</tbody>");
 		return sb.toString();
 	}
 
@@ -334,31 +363,24 @@ public class Html<E extends Dados> extends AExportacao<E> {
 	 */
 	public String getRodapeListagem() {
 		boolean semGrupo = true;
-		String rodape = "";
-		int reg = 0;
-		if (modo.getLimite() == 0 || expReg != null) {
-			reg = lista.getDados().length;
-		} else if (lista.getTotal() - modo.getInicio() < modo.getLimite()) {
-			reg = lista.getTotal() - modo.getInicio();
-		} else {
-			reg = modo.getLimite();
-		}
+		StringBuffer rodape = new StringBuffer();
 
 		for (int i = 0; i < agrupados.length; i++) {
 			if (agrupados[i] == 0) {
-				rodape += "<td>&nbsp;</td>";
+				rodape.append("<td>&nbsp;</td>");
 			} else if (agrupados[i] > 0) {
 				semGrupo = false;
-				rodape += "<td><div class=\"nobreak\">" + UtilServer.formataNumero(agrupados[i], 1, 2, true) + "</div></td>";
+				rodape.append("<td><div class=\"nobreak\">").append(UtilServer.formataNumero(agrupados[i], 1, 2, true)).append("</div></td>");
 			}
 		}
 
 		StringBuffer sb = new StringBuffer("<tfoot>");
 		if (!semGrupo) {
-			sb.append("<tr><td colspan='" + agrupados.length + "'><div class=\"nobreak\">" + auth.getConf().get("txtTotal") + "<hr /></div></td></tr>");
-			sb.append("<tr>" + rodape + "</tr>");
+			sb.append("<tr><td colspan='").append(agrupados.length).append("'><div class=\"nobreak\">").append(auth.getConf().get("txtTotal")).append("<hr /></div></td></tr>");
+			sb.append("<tr>").append(rodape.toString()).append("</tr>");
 		}
-		sb.append("<tr><td colspan='" + agrupados.length + "'><div class=\"nobreak\">" + auth.getConf().get("txtRegistro") + " :: " + reg + "</div></td></tr></tfoot>");
+		sb.append("<tr><td colspan='").append(agrupados.length).append("'><div class=\"nobreak\">").append(auth.getConf().get("txtRegistro")).append(" :: ").append(regs)
+				.append("</div></td></tr></tfoot>");
 
 		return sb.toString();
 	}

@@ -61,7 +61,7 @@ public class ListagemEcfVendaProduto extends AListagem<ComEcfVendaProduto> {
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comEcfVendaProdutoId"), new IntegerFieldDef("comEcfVenda.comEcfVendaId"), new IntegerFieldDef("comEcfVenda.comEcf.comEcfId"),
 				new StringFieldDef("comEcfVenda.comEcf.comEcfSerie"), new IntegerFieldDef("comEcfVenda.comEcf.empEmpresa.empEmpresaId"),
 				new StringFieldDef("comEcfVenda.comEcf.empEmpresa.empEntidade.empEntidadeNome1"), new StringFieldDef("prodProduto.empFornecedor.empEntidade.empEntidadeNome1"),
-				new IntegerFieldDef("prodProduto.prodProdutoId"), new StringFieldDef("prodProduto.prodProdutoBarra"), new StringFieldDef("prodProduto.prodProdutoDescricao"),
+				new IntegerFieldDef("prodProduto.prodProdutoId"), new StringFieldDef("comEcfVendaProdutoBarra"), new StringFieldDef("prodProduto.prodProdutoDescricao"),
 				new StringFieldDef("prodProduto.prodProdutoReferencia"), new DateFieldDef("comEcfVenda.comEcfVendaData"), new FloatFieldDef("comEcfVendaProdutoQuantidade"),
 				new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"), new FloatFieldDef("comEcfVendaProdutoBruto"),
 				new FloatFieldDef("comEcfVendaProdutoDesconto"), new FloatFieldDef("comEcfVendaProdutoAcrescimo"), new FloatFieldDef("comEcfVendaProdutoLiquido"),
@@ -82,7 +82,7 @@ public class ListagemEcfVendaProduto extends AListagem<ComEcfVendaProduto> {
 		ColumnConfig ccEmpresa = new ColumnConfig(OpenSigCore.i18n.txtEmpresa(), "comEcfVenda.comEcf.empEmpresa.empEntidade.empEntidadeNome1", 200, true);
 		ccEmpresa.setHidden(true);
 		ColumnConfig ccFornecedor = new ColumnConfig(OpenSigCore.i18n.txtFornecedor(), "prodProduto.empFornecedor.empEntidade.empEntidadeNome1", 200, true);
-		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "prodProduto.prodProdutoBarra", 100, true);
+		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "comEcfVendaProdutoBarra", 100, true);
 		ColumnConfig ccProduto = new ColumnConfig(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoDescricao", 250, true);
 		ColumnConfig ccReferencia = new ColumnConfig(OpenSigCore.i18n.txtRef(), "prodProduto.prodProdutoReferencia", 100, true);
 		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), "comEcfVenda.comEcfVendaData", 100, true, DATAHORA);
@@ -97,13 +97,13 @@ public class ListagemEcfVendaProduto extends AListagem<ComEcfVendaProduto> {
 		ccOrdem.setHidden(true);
 
 		// somatorios
-		SummaryColumnConfig ccQuantidade = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comEcfVendaProdutoQuantidade", 50, true, NUMERO), NUMERO);
+		SummaryColumnConfig ccQuantidade = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comEcfVendaProdutoQuantidade", 75, true, VALOR), VALOR);
 		SummaryColumnConfig ccBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comEcfVendaProdutoBruto", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig ccLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtLiquido(), "comEcfVendaProdutoLiquido", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig ccTotal = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comEcfVendaProdutoTotal", 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccVendaEcfId, ccEcfId, ccEcf, ccEmpresaId, ccEmpresa, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccData,
-				ccQuantidade, ccEmbalagemId, ccEmbalagem, ccBruto, ccDesconto, ccAcrescimo, ccLiquido, ccTotal, ccCancelado, ccOrdem };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccVendaEcfId, ccEcfId, ccEcf, ccEmpresaId, ccEmpresa, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccData, ccQuantidade,
+				ccEmbalagemId, ccEmbalagem, ccBruto, ccDesconto, ccAcrescimo, ccLiquido, ccTotal, ccCancelado, ccOrdem };
 		modelos = new ColumnModel(bcc);
 
 		GrupoFiltro gf = new GrupoFiltro();

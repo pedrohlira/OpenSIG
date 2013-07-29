@@ -20,5 +20,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/NFE"/>
 	<classpathentry kind="lib" path="/OpenSig/jars/jasypt-1.9.0.jar"/>
 	<classpathentry kind="lib" path="/OpenSig/jars/Json.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/POI"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

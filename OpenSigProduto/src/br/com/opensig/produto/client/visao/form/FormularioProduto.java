@@ -143,24 +143,22 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		txtVolume.setAllowBlank(false);
 		txtVolume.setAllowDecimals(false);
 		txtVolume.setAllowNegative(false);
-		txtVolume.setMaxLength(10);
+		txtVolume.setMaxLength(11);
 		txtVolume.setValue(1);
 		txtVolume.setMinValue(1);
 
 		txtCusto = new NumberField(OpenSigCore.i18n.txtCusto(), "prodProdutoCusto", 80);
 		txtCusto.setAllowBlank(false);
-		txtCusto.setAllowDecimals(true);
 		txtCusto.setAllowNegative(false);
 		txtCusto.setDecimalPrecision(2);
-		txtCusto.setMaxLength(13);
+		txtCusto.setMaxLength(11);
 		txtCusto.setValue(0);
 
 		txtPreco = new NumberField(OpenSigCore.i18n.txtPreco(), "prodProdutoPreco", 80);
 		txtPreco.setAllowBlank(false);
-		txtPreco.setAllowDecimals(true);
 		txtPreco.setAllowNegative(false);
 		txtPreco.setDecimalPrecision(2);
-		txtPreco.setMaxLength(13);
+		txtPreco.setMaxLength(11);
 		txtPreco.setValue(0);
 
 		MultiFieldPanel linha1 = new MultiFieldPanel();
@@ -177,14 +175,15 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		txtReferencia.setRegex("^\\w*$");
 		txtReferencia.setMaxLength(20);
 
-		txtDescricao = new TextField(OpenSigCore.i18n.txtDescricao(), "prodProdutoDescricao", 320);
+		txtDescricao = new TextField(OpenSigCore.i18n.txtDescricao(), "prodProdutoDescricao", 300);
 		txtDescricao.setAllowBlank(false);
 		txtDescricao.setMaxLength(100);
 
-		txtEstoque = new NumberField(OpenSigCore.i18n.txtEstoque(), "t1.prodEstoqueQuantidade", 50);
+		txtEstoque = new NumberField(OpenSigCore.i18n.txtEstoque(), "t1.prodEstoqueQuantidade", 80);
 		txtEstoque.setAllowBlank(false);
 		txtEstoque.setAllowNegative(false);
-		txtEstoque.setMaxLength(10);
+		txtEstoque.setMaxLength(11);
+		txtEstoque.setDecimalPrecision(4);
 		txtEstoque.setValue(0);
 
 		chkAtivo = new Checkbox(OpenSigCore.i18n.txtAtivo(), "prodProdutoAtivo");
@@ -193,8 +192,8 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		MultiFieldPanel linha2 = new MultiFieldPanel();
 		linha2.setBorder(false);
 		linha2.addToRow(txtReferencia, 100);
-		linha2.addToRow(txtDescricao, 340);
-		linha2.addToRow(txtEstoque, 70);
+		linha2.addToRow(txtDescricao, 320);
+		linha2.addToRow(txtEstoque, 100);
 		linha2.addToRow(chkAtivo, 50);
 		coluna1.add(linha2);
 
@@ -343,13 +342,13 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		}
 
 		// valida os valores da grade
-		double subEst = 0.00;
+		double subEst = 0.0000;
 		for (ProdGrade grade : grades) {
 			subEst += grade.getProdGradeEstoque();
 		}
-		String strEstoque = UtilClient.formataNumero(txtEstoque.getValue().doubleValue(), 1, 2, true);
-		String strSub = UtilClient.formataNumero(subEst, 1, 2, true);
-		if (subEst > 0.00 && !strEstoque.equals(strSub)) {
+		String strEstoque = UtilClient.formataNumero(txtEstoque.getValue().doubleValue(), 1, 4, true);
+		String strSub = UtilClient.formataNumero(subEst, 1, 4, true);
+		if (subEst > 0 && !strEstoque.equals(strSub)) {
 			retorno = false;
 			new ToastWindow(OpenSigCore.i18n.msgCampoInvalido(), OpenSigCore.i18n.txtParcial() + " = " + strSub + " :: " + OpenSigCore.i18n.txtEstoque() + " = " + strEstoque).show();
 		}

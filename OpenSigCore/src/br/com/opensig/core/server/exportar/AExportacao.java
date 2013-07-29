@@ -1,5 +1,6 @@
 package br.com.opensig.core.server.exportar;
 
+import java.io.BufferedWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,13 +12,11 @@ import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.core.shared.modelo.ExpListagem;
 import br.com.opensig.core.shared.modelo.ExpRegistro;
 import br.com.opensig.core.shared.modelo.Lista;
-import br.com.opensig.core.shared.modelo.sistema.SisExpImp;
 
 /**
  * Classe abstrata que generaliza a forma como o sistema trata as exportacoes.
  * 
  * @author Pedro H. Lira
- * @version 1.0
  */
 public abstract class AExportacao<E extends Dados> implements IExportacao<E> {
 
@@ -34,10 +33,6 @@ public abstract class AExportacao<E extends Dados> implements IExportacao<E> {
 	 */
 	protected Lista<E> lista;
 	/**
-	 * Modo de exportacao
-	 */
-	protected SisExpImp modo;
-	/**
 	 * valors agrupados para usar como sumarios.
 	 */
 	protected double[] agrupados;
@@ -53,6 +48,18 @@ public abstract class AExportacao<E extends Dados> implements IExportacao<E> {
 	 * formato de apresentacao
 	 */
 	protected String formato;
+	/**
+	 * arquivo gerado para download.
+	 */
+	protected BufferedWriter bw;
+	/**
+	 * Total de registros processados.
+	 */
+	protected int regs;
+	/**
+	 * Numero usado para paginar internamente.
+	 */
+	protected final int PAGINACAO = 50;
  
 	@Override
 	public void setAuth(Autenticacao auth) {

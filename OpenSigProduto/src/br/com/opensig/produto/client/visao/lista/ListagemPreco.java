@@ -77,10 +77,9 @@ public class ListagemPreco extends AListagemEditor<ProdPreco> {
 
 		txtValor = new NumberField();
 		txtValor.setAllowBlank(false);
-		txtValor.setAllowDecimals(true);
 		txtValor.setAllowNegative(false);
 		txtValor.setDecimalPrecision(2);
-		txtValor.setMaxLength(13);
+		txtValor.setMaxLength(11);
 		txtValor.setSelectOnFocus(true);
 		ColumnConfig ccPreco = new ColumnConfig(OpenSigCore.i18n.txtPreco(), "prodPrecoValor", 100, false, IListagem.DINHEIRO);
 		ccPreco.setEditor(new GridEditor(txtValor));

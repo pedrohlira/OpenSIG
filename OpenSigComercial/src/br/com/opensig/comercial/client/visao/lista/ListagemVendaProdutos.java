@@ -72,18 +72,21 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		txtQuantidade.setAllowNegative(false);
 		txtQuantidade.setSelectOnFocus(true);
 		txtQuantidade.setMaxLength(11);
+		txtQuantidade.setDecimalPrecision(4);
 
 		txtDesconto = new NumberField();
 		txtDesconto.setAllowBlank(false);
 		txtDesconto.setAllowNegative(false);
 		txtDesconto.setSelectOnFocus(true);
-		txtDesconto.setMaxLength(13);
+		txtDesconto.setMaxLength(11);
+		txtDesconto.setDecimalPrecision(2);
 
 		txtLiquido = new NumberField();
 		txtLiquido.setAllowBlank(false);
 		txtLiquido.setAllowNegative(false);
 		txtLiquido.setSelectOnFocus(true);
-		txtLiquido.setMaxLength(13);
+		txtLiquido.setMaxLength(11);
+		txtLiquido.setDecimalPrecision(2);
 
 		txtCfop = new NumberField();
 		txtCfop.setAllowNegative(false);
@@ -173,7 +176,7 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		ccData.setHidden(true);
 		ccData.setFixed(true);
 
-		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comVendaProdutoQuantidade", 50, true, IListagem.NUMERO);
+		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comVendaProdutoQuantidade", 75, true, IListagem.VALOR);
 		ccQuantidade.setEditor(new GridEditor(txtQuantidade));
 
 		ColumnConfig ccEmbalagemId = new ColumnConfig("", "prodEmbalagem.prodEmbalagemId", 10, true);
@@ -183,7 +186,6 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		ColumnConfig ccEmbalagem = new ColumnConfig(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemNome", 75, true);
 
 		ColumnConfig ccBruto = new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comVendaProdutoBruto", 75, true, IListagem.DINHEIRO);
-		ccBruto.setHidden(true);
 
 		ColumnConfig ccDesconto = new ColumnConfig(OpenSigCore.i18n.txtDesconto(), "comVendaProdutoDesconto", 50, true, IListagem.PORCENTAGEM);
 		ccDesconto.setEditor(new GridEditor(txtDesconto));
@@ -240,7 +242,6 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 
 		// sumarios
 		ColumnConfig ccTotalBruto = new ColumnConfig(OpenSigCore.i18n.txtTotal() + " " + OpenSigCore.i18n.txtBruto(), "comVendaProdutoTotalBruto", 75, true, IListagem.DINHEIRO);
-		ccTotalBruto.setHidden(true);
 		SummaryColumnConfig sumBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccTotalBruto, IListagem.DINHEIRO);
 
 		ColumnConfig ccTatalLiquido = new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comVendaProdutoTotalLiquido", 75, true, IListagem.DINHEIRO);
@@ -318,7 +319,7 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 				String cofinsCst = rec.getAsString("comVendaProdutoCofinsCst");
 				double cofins = rec.getAsDouble("comVendaProdutoCofins");
 
-				if ((estoque != 0 && quantidade > estoque) || quantidade < 1 || desconto > 100.00 || liquido < 0.01) {
+				if ((estoque != 0 && quantidade > estoque) || quantidade <= 0 || desconto > 100.00 || liquido <= 0) {
 					throw new Exception();
 				}
 

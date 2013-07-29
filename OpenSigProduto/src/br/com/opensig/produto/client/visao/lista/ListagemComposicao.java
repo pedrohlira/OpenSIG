@@ -31,6 +31,8 @@ import com.gwtext.client.widgets.grid.ColumnConfig;
 import com.gwtext.client.widgets.grid.ColumnModel;
 import com.gwtext.client.widgets.grid.GridEditor;
 import com.gwtext.client.widgets.grid.Renderer;
+import com.gwtextux.client.widgets.grid.plugins.GridSummaryPlugin;
+import com.gwtextux.client.widgets.grid.plugins.SummaryColumnConfig;
 
 public class ListagemComposicao extends AListagemEditor<ProdComposicao> {
 
@@ -44,6 +46,7 @@ public class ListagemComposicao extends AListagemEditor<ProdComposicao> {
 	public ListagemComposicao(boolean barraTarefa) {
 		super(new ProdComposicao(), barraTarefa);
 		inicializar();
+		addPlugin(new GridSummaryPlugin());
 	}
 
 	public void inicializar() {
@@ -106,18 +109,18 @@ public class ListagemComposicao extends AListagemEditor<ProdComposicao> {
 		txtQtd.setSelectOnFocus(true);
 		ColumnConfig ccQtd = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "prodComposicaoQuantidade", 100, false, IListagem.VALOR);
 		ccQtd.setEditor(new GridEditor(txtQtd));
+		SummaryColumnConfig sumQtd = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccQtd, IListagem.VALOR);
 
 		txtValor = new NumberField();
 		txtValor.setAllowBlank(false);
-		txtValor.setAllowDecimals(true);
 		txtValor.setAllowNegative(false);
 		txtValor.setDecimalPrecision(2);
-		txtValor.setMaxLength(13);
+		txtValor.setMaxLength(11);
 		txtValor.setSelectOnFocus(true);
 		ColumnConfig ccPreco = new ColumnConfig(OpenSigCore.i18n.txtPreco(), "prodComposicaoValor", 100, false, IListagem.DINHEIRO);
 		ccPreco.setEditor(new GridEditor(txtValor));
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccProdutoId, ccProduto, ccEmbalagemId, ccEmbalagem, ccQtd, ccPreco };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccProdutoId, ccProduto, ccEmbalagemId, ccEmbalagem, sumQtd, ccPreco };
 		modelos = new ColumnModel(bcc);
 
 		// barra de menu

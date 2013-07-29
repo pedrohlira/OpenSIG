@@ -108,12 +108,13 @@ public abstract class AFormularioFinanceiro<E extends Dados, T extends Dados> ex
 		txtNfe.setAllowBlank(false);
 		txtNfe.setAllowNegative(false);
 		txtNfe.setAllowDecimals(false);
-		txtNfe.setMaxLength(10);
+		txtNfe.setMaxLength(11);
 
 		txtValor = new NumberField(OpenSigCore.i18n.txtValor(), nomes.get("valor"), 80);
 		txtValor.setAllowBlank(false);
 		txtValor.setAllowNegative(false);
-		txtValor.setMaxLength(13);
+		txtValor.setMaxLength(11);
+		txtValor.setDecimalPrecision(2);
 
 		dtCadastro = new DateField(OpenSigCore.i18n.txtCadastro(), nomes.get("cadastro"), 100);
 		dtCadastro.setAllowBlank(false);

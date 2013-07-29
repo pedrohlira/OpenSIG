@@ -96,7 +96,7 @@ public class FecharEcfVenda extends Chain {
 						// remove estoque da grade caso o produto tenha
 						if (vp.getProdProduto().getProdGrades() != null) {
 							for (ProdGrade grade : vp.getProdProduto().getProdGrades()) {
-								if (grade.getProdGradeBarra().equals(vp.getComEcfVendaProdutoCodigo())) {
+								if (grade.getProdGradeBarra().equals(vp.getComEcfVendaProdutoBarra())) {
 									// formando os parametros
 									ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
 									// formando o filtro

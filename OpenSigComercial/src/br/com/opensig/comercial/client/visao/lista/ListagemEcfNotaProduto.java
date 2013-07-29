@@ -53,7 +53,7 @@ public class ListagemEcfNotaProduto extends AListagem<ComEcfNotaProduto> {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comEcfNotaProdutoId"), new IntegerFieldDef("comEcfNota.comEcfNotaId"), new IntegerFieldDef("comEcfNota.empEmpresa.empEmpresaId"),
 				new StringFieldDef("comEcfNota.empEmpresa.empEntidade.empEntidadeNome1"), new StringFieldDef("comEcfNota.empCliente.empEntidade.empEntidadeNome1"),
-				new StringFieldDef("prodProduto.empFornecedor.empEntidade.empEntidadeNome1"), new IntegerFieldDef("prodProduto.prodProdutoId"), new StringFieldDef("prodProduto.prodProdutoBarra"),
+				new StringFieldDef("prodProduto.empFornecedor.empEntidade.empEntidadeNome1"), new IntegerFieldDef("prodProduto.prodProdutoId"), new StringFieldDef("comEcfNotaProdutoBarra"),
 				new StringFieldDef("prodProduto.prodProdutoDescricao"), new StringFieldDef("prodProduto.prodProdutoReferencia"), new DateFieldDef("comEcfNota.comEcfNotaData"),
 				new FloatFieldDef("comEcfNotaProdutoQuantidade"), new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"),
 				new FloatFieldDef("comEcfNotaProdutoBruto"), new FloatFieldDef("comEcfNotaProdutoDesconto"), new FloatFieldDef("comEcfNotaProdutoLiquido"), new FloatFieldDef("comEcfNotaProdutoIcms"),
@@ -73,7 +73,7 @@ public class ListagemEcfNotaProduto extends AListagem<ComEcfNotaProduto> {
 		ColumnConfig ccCliente = new ColumnConfig(OpenSigCore.i18n.txtCliente(), "comEcfNota.empCliente.empEntidade.empEntidadeNome1", 200, true);
 		ccCliente.setHidden(true);
 		ColumnConfig ccFornecedor = new ColumnConfig(OpenSigCore.i18n.txtFornecedor(), "prodProduto.empFornecedor.empEntidade.empEntidadeNome1", 200, true);
-		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "prodProduto.prodProdutoBarra", 100, true);
+		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "comEcfNotaProdutoBarra", 100, true);
 		ColumnConfig ccProduto = new ColumnConfig(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoDescricao", 250, true);
 		ColumnConfig ccReferencia = new ColumnConfig(OpenSigCore.i18n.txtRef(), "prodProduto.prodProdutoReferencia", 100, true);
 		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), "comEcfNota.comEcfNotaData", 100, true, DATAHORA);
@@ -86,7 +86,7 @@ public class ListagemEcfNotaProduto extends AListagem<ComEcfNotaProduto> {
 		ccOrdem.setHidden(true);
 
 		// somatorios
-		SummaryColumnConfig ccQuantidade = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comEcfNotaProdutoQuantidade", 50, true, NUMERO), NUMERO);
+		SummaryColumnConfig ccQuantidade = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comEcfNotaProdutoQuantidade", 75, true, VALOR), VALOR);
 		SummaryColumnConfig ccBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comEcfNotaProdutoBruto", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig ccLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtLiquido(), "comEcfNotaProdutoLiquido", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig ccIcms = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comEcfNotaProdutoIcms", 75, true, DINHEIRO), DINHEIRO);

@@ -212,7 +212,8 @@ public class ListagemValidarCompra {
 		txtFrete = new NumberField(OpenSigCore.i18n.txtFrete(), "comCompraValorFrete", 80);
 		txtFrete.setAllowBlank(false);
 		txtFrete.setAllowNegative(false);
-		txtFrete.setMaxLength(13);
+		txtFrete.setMaxLength(11);
+		txtFrete.setDecimalPrecision(2);
 
 		chkPagar = new Checkbox(OpenSigCore.i18n.txtPagar(), "comCompraPaga");
 		chkPagar.setChecked(compra.getComCompraPaga());

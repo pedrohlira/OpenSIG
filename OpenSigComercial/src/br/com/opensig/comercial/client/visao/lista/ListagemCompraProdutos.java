@@ -80,6 +80,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		txtQuantidade.setAllowBlank(false);
 		txtQuantidade.setAllowNegative(false);
 		txtQuantidade.setSelectOnFocus(true);
+		txtQuantidade.setDecimalPrecision(4);
 		txtQuantidade.setMaxLength(11);
 
 		txtValor = new NumberField();
@@ -146,6 +147,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		txtPreco.setAllowNegative(false);
 		txtPreco.setSelectOnFocus(true);
 		txtPreco.setMaxLength(11);
+		txtPreco.setDecimalPrecision(2);
 
 		// colunas
 		ColumnConfig ccId = new ColumnConfig("", "comCompraProdutoId", 10, true);
@@ -182,7 +184,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 
 		ColumnConfig ccReferencia = new ColumnConfig(OpenSigCore.i18n.txtRef(), "prodProduto.prodProdutoReferencia", 75, true);
 
-		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comCompraProdutoQuantidade", 50, true, IListagem.NUMERO);
+		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comCompraProdutoQuantidade", 75, true, IListagem.VALOR);
 		ccQuantidade.setEditor(new GridEditor(txtQuantidade));
 
 		ColumnConfig ccEmbalagemId = new ColumnConfig(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemId", 75, true, new Renderer() {
@@ -235,7 +237,6 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		ccPreco.setEditor(new GridEditor(txtPreco));
 
 		ColumnConfig ccOrdem = new ColumnConfig(OpenSigCore.i18n.txtOrdem(), "comCompraProdutoOrdem", 100, true);
-		ccOrdem.setHidden(true);
 
 		// sumarios
 		ColumnConfig ccTotal = new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comCompraProdutoTotal", 75, true, IListagem.DINHEIRO);
@@ -274,7 +275,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 				double cofins = rec.getAsDouble("comCompraProdutoCofins");
 				double preco = rec.getAsDouble("comCompraProdutoPreco");
 
-				if (quantidade < 0.01 || valor < 0.01 || total < 0.01 || cfop == 0 || icmsCst == null || ipiCst == null) {
+				if (quantidade <= 0 || valor <= 0 || total <= 0 || cfop <= 0 || icmsCst == null || ipiCst == null) {
 					throw new Exception();
 				}
 

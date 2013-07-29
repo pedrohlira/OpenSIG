@@ -381,7 +381,7 @@ public class ImportarCat52 implements IImportacao<Cat52> {
 			sql.append("UPDATE com_ecf_venda_produto, prod_produto");
 			sql.append(" SET com_ecf_venda_produto.prod_produto_id = prod_produto.prod_produto_id");
 			sql.append(" WHERE com_ecf_venda_produto.prod_produto_id is null");
-			sql.append(" AND com_ecf_venda_produto.com_ecf_venda_produto_codigo = prod_produto.prod_produto_barra");
+			sql.append(" AND com_ecf_venda_produto.com_ecf_venda_produto_barra = prod_produto.prod_produto_barra");
 			Query rs = em.createNativeQuery(sql.toString());
 			// efetiva a transacao
 			int total = rs.executeUpdate();

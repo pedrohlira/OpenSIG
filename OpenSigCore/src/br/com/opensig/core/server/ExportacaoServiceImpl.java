@@ -28,7 +28,6 @@ import br.com.opensig.core.shared.modelo.sistema.SisExpImp;
  * Classe que implementa as chamadas no servidor para as exportacoes do sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
  */
 public class ExportacaoServiceImpl<E extends Dados> extends CoreServiceImpl<E> implements ExportacaoService<E> {
 
@@ -64,6 +63,7 @@ public class ExportacaoServiceImpl<E extends Dados> extends CoreServiceImpl<E> i
 				obj = new byte[is.available()];
 				is.read(obj);
 				is.close();
+				arq.delete();
 			} else if (arquivo.startsWith(System.getProperty("file.separator")) || arquivo.substring(1, 2).equals(":")) {
 				throw new Exception(auth.getConf().get("errRegistro"));
 			} else {
@@ -111,7 +111,7 @@ public class ExportacaoServiceImpl<E extends Dados> extends CoreServiceImpl<E> i
 			Class exp = Class.forName(modo.getSisExpImpClasse());
 			IExportacao<E> exporta = (IExportacao<E>) exp.newInstance();
 			exporta.setAuth(auth);
-			byte[] obj = null;
+			String obj = null;
 			nome += "." + modo.getSisExpImpExtensoes();
 
 			// verifica o tipo de exportacao
@@ -212,18 +212,26 @@ public class ExportacaoServiceImpl<E extends Dados> extends CoreServiceImpl<E> i
 		try {
 			if (id != null) {
 				// pegando os dados e normalizando
-				byte[] obj = (byte[]) sessao.getAttribute(id);
-				String arquivo = sessao.getAttribute(id + "arquivo").toString();
-				arquivo = UtilServer.normaliza(arquivo).replace(" ", "_");
+				byte[] obj = null;
+
+				if (sessao.getAttribute(id) instanceof String) {
+					// lendo o arquivo
+					String path = sessao.getAttribute(id).toString();
+					File arq = new File(path);
+					InputStream is = new FileInputStream(arq);
+					obj = new byte[is.available()];
+					is.read(obj);
+					is.close();
+					arq.delete();
+				} else {
+					obj = (byte[]) sessao.getAttribute(id);
+				}
+				String nome = sessao.getAttribute(id + "arquivo").toString();
+				nome = UtilServer.normaliza(nome).replace(" ", "_");
 
 				// setando os cabecalhos
 				if (imp == null) {
-					if (obj == null) {
-						resp.addHeader("Content-Disposition", "attachment; filename=vazio.txt");
-						obj = new String("Dados nao encontrados.").getBytes();
-					} else {
-						resp.addHeader("Content-Disposition", "attachment; filename=" + arquivo.toLowerCase());
-					}
+					resp.addHeader("Content-Disposition", "attachment; filename=" + nome.toLowerCase());
 					resp.addHeader("Pragma", "no-cache");
 					resp.addIntHeader("Expires", 0);
 					resp.addHeader("Content-Type", "application/octet-stream");

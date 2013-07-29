@@ -96,7 +96,7 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 		ccOrdem.setHidden(true);
 
 		// somatorios
-		SummaryColumnConfig ccQuantidade = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comCompraProdutoQuantidade", 75, true, NUMERO), NUMERO);
+		SummaryColumnConfig ccQuantidade = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comCompraProdutoQuantidade", 75, true, VALOR), VALOR);
 		SummaryColumnConfig ccValor = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtValor(), "comCompraProdutoValor", 75, true, VALOR), VALOR);
 		SummaryColumnConfig ccTotal = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comCompraProdutoTotal", 75, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig ccPreco = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtPreco(), "comCompraProdutoPreco", 75, true, DINHEIRO), DINHEIRO);

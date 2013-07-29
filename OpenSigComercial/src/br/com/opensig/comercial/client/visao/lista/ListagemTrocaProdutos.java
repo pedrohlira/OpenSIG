@@ -55,12 +55,14 @@ public class ListagemTrocaProdutos extends AListagemEditor<ComTrocaProduto> {
 		txtQuantidade.setAllowNegative(false);
 		txtQuantidade.setSelectOnFocus(true);
 		txtQuantidade.setMaxLength(11);
+		txtQuantidade.setDecimalPrecision(4);
 
 		txtValor = new NumberField();
 		txtValor.setAllowBlank(false);
 		txtValor.setAllowNegative(false);
 		txtValor.setSelectOnFocus(true);
-		txtValor.setMaxLength(13);
+		txtValor.setMaxLength(11);
+		txtValor.setDecimalPrecision(2);
 
 		// colunas
 		ColumnConfig ccId = new ColumnConfig("", "comTrocaProdutoId", 10, true);
@@ -97,7 +99,7 @@ public class ListagemTrocaProdutos extends AListagemEditor<ComTrocaProduto> {
 		ccData.setHidden(true);
 		ccData.setFixed(true);
 
-		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comTrocaProdutoQuantidade", 50, true, IListagem.NUMERO);
+		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comTrocaProdutoQuantidade", 75, true, IListagem.VALOR);
 		ccQuantidade.setEditor(new GridEditor(txtQuantidade));
 
 		ColumnConfig ccEmbalagemId = new ColumnConfig("", "prodEmbalagem.prodEmbalagemId", 10, true);
@@ -147,7 +149,7 @@ public class ListagemTrocaProdutos extends AListagemEditor<ComTrocaProduto> {
 				double valor = rec.getAsDouble("comTrocaProdutoValor");
 				double total = rec.getAsDouble("comTrocaProdutoTotal");
 
-				if (quantidade < 1 || valor < 0.01) {
+				if (quantidade <= 0 || valor <= 0) {
 					throw new Exception();
 				}
 

@@ -137,23 +137,27 @@ public class FormularioCompra extends AFormulario<ComCompra> {
 		txtIcmsBase = new NumberField(OpenSigCore.i18n.txtIcmsBase(), "comCompraIcmsBase", 80);
 		txtIcmsBase.setAllowBlank(false);
 		txtIcmsBase.setAllowNegative(false);
-		txtIcmsBase.setMaxLength(13);
+		txtIcmsBase.setMaxLength(11);
+		txtIcmsBase.setDecimalPrecision(2);
 
 		txtIcmsValor = new NumberField(OpenSigCore.i18n.txtIcmsValor(), "comCompraIcmsValor", 80);
 		txtIcmsValor.setAllowBlank(false);
 		txtIcmsValor.setAllowNegative(false);
-		txtIcmsValor.setMaxLength(13);
+		txtIcmsValor.setMaxLength(11);
+		txtIcmsValor.setDecimalPrecision(2);
 
 		txtSubBase = new NumberField(OpenSigCore.i18n.txtSubBase(), "comCompraIcmssubBase", 80);
 		txtSubBase.setAllowBlank(false);
 		txtSubBase.setAllowNegative(false);
-		txtSubBase.setMaxLength(13);
+		txtSubBase.setMaxLength(11);
+		txtSubBase.setDecimalPrecision(2);
 		txtSubBase.setValue(0.00);
 
 		txtSubValor = new NumberField(OpenSigCore.i18n.txtSubValor(), "comCompraIcmssubValor", 80);
 		txtSubValor.setAllowBlank(false);
 		txtSubValor.setAllowNegative(false);
-		txtSubValor.setMaxLength(13);
+		txtSubValor.setMaxLength(11);
+		txtSubValor.setDecimalPrecision(2);
 		txtSubValor.setValue(0);
 
 		MultiFieldPanel linha2 = new MultiFieldPanel();
@@ -168,41 +172,47 @@ public class FormularioCompra extends AFormulario<ComCompra> {
 		txtFrete = new NumberField(OpenSigCore.i18n.txtFrete(), "comCompraValorFrete", 80);
 		txtFrete.setAllowBlank(false);
 		txtFrete.setAllowNegative(false);
-		txtFrete.setMaxLength(13);
+		txtFrete.setMaxLength(11);
+		txtFrete.setDecimalPrecision(2);
 		txtFrete.setValue(0);
 
 		txtSeguro = new NumberField(OpenSigCore.i18n.txtSeguro(), "comCompraValorSeguro", 80);
 		txtSeguro.setAllowBlank(false);
 		txtSeguro.setAllowNegative(false);
-		txtSeguro.setMaxLength(13);
+		txtSeguro.setMaxLength(11);
+		txtSeguro.setDecimalPrecision(2);
 		txtSeguro.setValue(0);
 
 		txtIpi = new NumberField(OpenSigCore.i18n.txtIpi(), "comCompraValorIpi", 80);
 		txtIpi.setAllowBlank(false);
 		txtIpi.setAllowNegative(false);
-		txtIpi.setMaxLength(13);
+		txtIpi.setMaxLength(11);
+		txtIpi.setDecimalPrecision(2);
 
 		txtValorProduto = new NumberField(OpenSigCore.i18n.txtValorProduto(), "comCompraValorProduto", 80);
-		txtValorProduto.setAllowNegative(false);
-		txtValorProduto.setMaxLength(13);
+		txtValorProduto.setMaxLength(11);
+		txtValorProduto.setDecimalPrecision(2);
 		txtValorProduto.setReadOnly(true);
 
 		txtDesconto = new NumberField(OpenSigCore.i18n.txtDesconto(), "comCompraValorDesconto", 80);
 		txtDesconto.setAllowBlank(false);
 		txtDesconto.setAllowNegative(false);
-		txtDesconto.setMaxLength(13);
+		txtDesconto.setMaxLength(11);
+		txtDesconto.setDecimalPrecision(2);
 		txtDesconto.setValue(0);
 
 		txtOutros = new NumberField(OpenSigCore.i18n.txtOutro(), "comCompraValorOutros", 80);
 		txtOutros.setAllowBlank(false);
 		txtOutros.setAllowNegative(false);
-		txtOutros.setMaxLength(13);
+		txtOutros.setMaxLength(11);
+		txtOutros.setDecimalPrecision(2);
 		txtOutros.setValue(0);
 
 		txtValorNota = new NumberField(OpenSigCore.i18n.txtValorNota(), "comCompraValorNota", 120);
 		txtValorNota.setAllowBlank(false);
 		txtValorNota.setAllowNegative(false);
-		txtValorNota.setMaxLength(13);
+		txtValorNota.setMaxLength(11);
+		txtValorNota.setDecimalPrecision(2);
 		txtValorNota.setValue(0);
 
 		MultiFieldPanel linha3 = new MultiFieldPanel();
@@ -503,7 +513,7 @@ public class FormularioCompra extends AFormulario<ComCompra> {
 
 	private ComboBox getNatureza() {
 		FieldDef[] fdNatureza = new FieldDef[] { new IntegerFieldDef("comNaturezaId"), new IntegerFieldDef("empEmpresa.empEmpresaId"), new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"),
-				new StringFieldDef("comNaturezaNome"), new StringFieldDef("comNaturezaDescricao"), new IntegerFieldDef("comNaturezaCfopDentro"), new IntegerFieldDef("comNaturezaCfopFora") };
+				new StringFieldDef("comNaturezaNome") };
 		FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, new EmpEmpresa(Ponte.getLogin().getEmpresaId()));
 		CoreProxy<ComNatureza> proxy = new CoreProxy<ComNatureza>(new ComNatureza(), fo);
 		final Store storeNatureza = new Store(proxy, new ArrayReader(new RecordDef(fdNatureza)), true);
