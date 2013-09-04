@@ -20,6 +20,7 @@ import br.com.opensig.comercial.server.acao.FecharVenda;
 import br.com.opensig.comercial.server.acao.GerarCompra;
 import br.com.opensig.comercial.server.acao.GerarNfeEntrada;
 import br.com.opensig.comercial.server.acao.GerarNfeSaida;
+import br.com.opensig.comercial.server.acao.GerarVenda;
 import br.com.opensig.comercial.server.acao.SalvarCompra;
 import br.com.opensig.comercial.server.acao.SalvarEcfVenda;
 import br.com.opensig.comercial.server.acao.SalvarEcfZ;
@@ -108,6 +109,17 @@ public class ComercialServiceImpl extends CoreServiceImpl implements ComercialSe
 			gerar.execute();
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro no comando gerarCompra.", e);
+			throw new ComercialException(e.getMessage());
+		}
+	}
+	
+	@Override
+	public void gerarVenda(IFiltro filtro) throws ComercialException {
+		try {
+			GerarVenda gerar = new GerarVenda(null, this, filtro, getAuth());
+			gerar.execute();
+		} catch (Exception e) {
+			UtilServer.LOG.error("Erro no comando gerarVenda.", e);
 			throw new ComercialException(e.getMessage());
 		}
 	}

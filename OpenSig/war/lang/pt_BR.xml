@@ -830,4 +830,11 @@
 		<descricao>Gerar compra das trocas.</descricao>
 		<imagem>icon-compra</imagem>
 	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarVenda
+		</classe>
+		<nome>Venda</nome>
+		<descricao>Gerar venda da compra.</descricao>
+		<imagem>icon-venda</imagem>
+	</acao>
 </opensig>

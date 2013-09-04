@@ -127,6 +127,9 @@ public class ComCompra extends Dados implements Serializable {
 	@OneToMany(mappedBy = "comCompra", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<ComCompraProduto> comCompraProdutos;
 
+	@OneToMany(mappedBy = "comCompra", fetch = FetchType.LAZY)
+	private List<ComTroca> comTrocas;
+	
 	public ComCompra() {
 		this(0);
 	}
@@ -320,6 +323,14 @@ public class ComCompra extends Dados implements Serializable {
 		this.comCompraProdutos = comCompraProdutos;
 	}
 
+	public List<ComTroca> getComTrocas() {
+		return comTrocas;
+	}
+	
+	public void setComTrocas(List<ComTroca> comTrocas) {
+		this.comTrocas = comTrocas;
+	}
+	
 	public EmpEmpresa getEmpEmpresa() {
 		return empEmpresa;
 	}
@@ -397,6 +408,7 @@ public class ComCompra extends Dados implements Serializable {
 		empEstado = null;
 		comNatureza = null;
 		comCompraProdutos = null;
+		comTrocas = null;
 		finPagar = null;
 		fisNotaEntrada = null;
 	}

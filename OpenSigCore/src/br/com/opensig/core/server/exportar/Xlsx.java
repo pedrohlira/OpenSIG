@@ -89,7 +89,7 @@ public class Xlsx<E extends Dados> extends AExportacao<E> {
 	@Override
 	public String getArquivo(CoreService<E> service, SisExpImp modo, ExpListagem<E> exp, String[][] enderecos, String[][] contatos) {
 		this.expLista = exp;
-		String path = UtilServer.PATH_EMPRESA + "tmp/" + new Date().getTime() + ".html";
+		String path = UtilServer.PATH_EMPRESA + "tmp/" + new Date().getTime() + ".xlsx";
 
 		try {
 			// inicio do arquivo
@@ -130,7 +130,7 @@ public class Xlsx<E extends Dados> extends AExportacao<E> {
 	@Override
 	public String getArquivo(CoreService<E> service, SisExpImp modo, ExpRegistro<E> exp, String[][] enderecos, String[][] contatos) {
 		this.expReg = exp;
-		String path = UtilServer.PATH_EMPRESA + "tmp/" + new Date().getTime() + ".html";
+		String path = UtilServer.PATH_EMPRESA + "tmp/" + new Date().getTime() + ".xlsx";
 
 		try {
 			// inicio do arquivo
@@ -208,7 +208,7 @@ public class Xlsx<E extends Dados> extends AExportacao<E> {
 	 */
 	public void getCorpo(Sheet sheet, List<ExpMeta> metadados, CoreService service, int inicio, int fim) {
 		for (int i = 0; i < fim; i++) {
-			Row lin = sheet.createRow(i + 1);
+			Row lin = sheet.createRow(inicio + i + 1);
 			int colunas = 0;
 			int j = 0;
 

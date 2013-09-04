@@ -417,17 +417,20 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		getForm().reset();
 		treeCategoria.getLblValidacao().hide();
 
-		FiltroNumero fn = new FiltroNumero("prodPrecoId", ECompara.IGUAL, 0);
-		gridPrecos.getProxy().setFiltroPadrao(fn);
-		gridPrecos.getStore().removeAll();
-
-		FiltroNumero fn1 = new FiltroNumero("prodComposicaoId", ECompara.IGUAL, 0);
-		gridComposicoes.getProxy().setFiltroPadrao(fn1);
-		gridComposicoes.getStore().removeAll();
-
+		tabDados.setActiveTab(2);
 		FiltroNumero fn2 = new FiltroNumero("prodGradeId", ECompara.IGUAL, 0);
 		gridGrades.getProxy().setFiltroPadrao(fn2);
 		gridGrades.getStore().removeAll();
+		
+		tabDados.setActiveTab(1);
+		FiltroNumero fn1 = new FiltroNumero("prodComposicaoId", ECompara.IGUAL, 0);
+		gridComposicoes.getProxy().setFiltroPadrao(fn1);
+		gridComposicoes.getStore().removeAll();
+		
+		tabDados.setActiveTab(0);
+		FiltroNumero fn = new FiltroNumero("prodPrecoId", ECompara.IGUAL, 0);
+		gridPrecos.getProxy().setFiltroPadrao(fn);
+		gridPrecos.getStore().removeAll();
 	}
 
 	public void mostrarDados() {

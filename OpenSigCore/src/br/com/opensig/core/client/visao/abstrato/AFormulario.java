@@ -198,6 +198,8 @@ public abstract class AFormulario<E extends Dados> extends FormPanel implements 
 						public void onSpecialKey(Field field, EventObject e) {
 							if (e.getKey() == EventObject.ENTER) {
 								setFieldFocus(field);
+							} else {
+								super.onSpecialKey(field, e);
 							}
 						}
 					});

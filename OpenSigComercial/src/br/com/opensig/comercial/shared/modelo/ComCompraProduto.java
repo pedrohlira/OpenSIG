@@ -61,6 +61,9 @@ public class ComCompraProduto extends Dados implements Serializable {
 	@Column(name = "com_compra_produto_preco")
 	private Double comCompraProdutoPreco;
 
+	@Column(name = "com_compra_produto_barra")
+	private String comCompraProdutoBarra;
+	
 	@Column(name = "com_compra_produto_quantidade")
 	private Double comCompraProdutoQuantidade;
 
@@ -182,6 +185,14 @@ public class ComCompraProduto extends Dados implements Serializable {
 		this.comCompraProdutoPreco = comCompraProdutoPreco;
 	}
 
+	public String getComCompraProdutoBarra() {
+		return comCompraProdutoBarra;
+	}
+	
+	public void setComCompraProdutoBarra(String comCompraProdutoBarra) {
+		this.comCompraProdutoBarra = comCompraProdutoBarra;
+	}
+	
 	public Double getComCompraProdutoQuantidade() {
 		return this.comCompraProdutoQuantidade;
 	}
@@ -249,7 +260,7 @@ public class ComCompraProduto extends Dados implements Serializable {
 	public String[] toArray() {
 		return new String[] { comCompraProdutoId + "", comCompra.getComCompraId() + "", comCompra.getEmpEmpresa().getEmpEmpresaId() + "",
 				comCompra.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getEmpFornecedor().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getProdProdutoId() + "",
-				prodProduto.getProdProdutoBarra(), prodProduto.getProdProdutoDescricao(), prodProduto.getProdProdutoReferencia(), UtilClient.getDataGrid(comCompra.getComCompraRecebimento()),
+				comCompraProdutoBarra, prodProduto.getProdProdutoDescricao(), prodProduto.getProdProdutoReferencia(), UtilClient.getDataGrid(comCompra.getComCompraRecebimento()),
 				comCompraProdutoQuantidade + "", prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), comCompraProdutoValor.toString(), comCompraProdutoTotal.toString(),
 				comCompraProdutoCfop + "", comCompraProdutoIcmsCst, comCompraProdutoIcms.toString(), comCompraProdutoIpiCst, comCompraProdutoIpi.toString(), comCompraProdutoPisCst,
 				comCompraProdutoPis.toString(), comCompraProdutoCofinsCst, comCompraProdutoCofins.toString(), comCompraProdutoPreco.toString(), comCompraProdutoOrdem + "" };

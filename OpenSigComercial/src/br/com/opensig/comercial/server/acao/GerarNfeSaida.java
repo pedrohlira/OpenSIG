@@ -519,10 +519,10 @@ public class GerarNfeSaida extends Chain {
 			det.setNItem((i++) + "");
 			// cod produto
 			Prod prod = new Prod();
-			if (pp.getProdProdutoBarra() == null) {
+			if (vp.getComVendaProdutoBarra() == null) {
 				prod.setCProd(UtilServer.formataNumero(pp.getProdProdutoId(), 6, 0, false));
 			} else {
-				prod.setCProd(pp.getProdProdutoBarra());
+				prod.setCProd(vp.getComVendaProdutoBarra());
 			}
 			// barra
 			prod.setCEAN(pp.getProdProdutoBarra() == null ? "" : pp.getProdProdutoBarra());
@@ -531,7 +531,7 @@ public class GerarNfeSaida extends Chain {
 			// ncm
 			prod.setNCM(pp.getProdProdutoNcm());
 			// cfop
-			prod.setCFOP(getCfop(pp));
+			prod.setCFOP(getCfop(vp));
 			// unidade
 			prod.setUCom(vp.getProdEmbalagem().getProdEmbalagemNome());
 			// quantidde
@@ -578,15 +578,18 @@ public class GerarNfeSaida extends Chain {
 		}
 	}
 
-	public String getCfop(ProdProduto prod) {
-		String cst = prod.getProdIcms().getProdIcmsCst();
+	public String getCfop(ComVendaProduto vp) {
 		int cfop = dentro ? 0 : 1000;
-
-		// verifica se é substituicao
-		if (cst.equals("10") || cst.equals("60")) {
-			cfop += comNatureza.getComNaturezaCfopSub();
+		if (vp.getComVendaProdutoCfop() == 0) {
+			String cst = vp.getComVendaProdutoIcmsCst().equals("") ? vp.getProdProduto().getProdIcms().getProdIcmsCst() : vp.getComVendaProdutoIcmsCst();
+			// verifica se é substituicao
+			if (cst.equals("10") || cst.equals("60")) {
+				cfop += comNatureza.getComNaturezaCfopSub();
+			} else {
+				cfop += comNatureza.getComNaturezaCfopTrib();
+			}
 		} else {
-			cfop += comNatureza.getComNaturezaCfopTrib();
+			cfop = vp.getComVendaProdutoCfop();
 		}
 
 		return cfop + "";
@@ -804,6 +807,13 @@ public class GerarNfeSaida extends Chain {
 			outr.setPPIS("0.00");
 			outr.setVPIS("0.00");
 			pis.setPISOutr(outr);
+		} else if (cst.equals("49")) {
+			PISOutr outr = new PISOutr();
+			outr.setCST(cst);
+			outr.setVBC(getValorNfe(vp.getComVendaProdutoTotalLiquido()));
+			outr.setPPIS(getValorNfe(porcento));
+			outr.setVPIS(strValor);
+			pis.setPISOutr(outr);
 		} else {
 			PISAliq aliq = new PISAliq();
 			aliq.setCST(cst);
@@ -842,6 +852,13 @@ public class GerarNfeSaida extends Chain {
 			outr.setVBC("0.00");
 			outr.setPCOFINS("0.00");
 			outr.setVCOFINS("0.00");
+			cofins.setCOFINSOutr(outr);
+		} else if (cst.equals("49")) {
+			COFINSOutr outr = new COFINSOutr();
+			outr.setCST(cst);
+			outr.setVBC(getValorNfe(vp.getComVendaProdutoTotalLiquido()));
+			outr.setPCOFINS(getValorNfe(porcento));
+			outr.setVCOFINS(strValor);
 			cofins.setCOFINSOutr(outr);
 		} else {
 			COFINSAliq aliq = new COFINSAliq();
@@ -957,15 +974,13 @@ public class GerarNfeSaida extends Chain {
 
 	public InfAdic getInformacoes() {
 		StringBuffer sb = new StringBuffer();
-		// adiciona as informacoes necessarias de decretos
+		// adiciona o decreto da natureza
+		if (!comNatureza.getComNaturezaDecreto().equals("")) {
+			sb.append(comNatureza.getComNaturezaDecreto() + "#");
+		}
+		// adiciona os decretos para os tributos
 		for (Entry<String, String> info : infos.entrySet()) {
 			sb.append(info.getValue() + "#");
-		}
-		// adiciona o pedido da venda
-		sb.append("Venda " + UtilServer.formataNumero(venda.getComVendaId(), 6, 0, false) + " ");
-		// case tenha alguma observacao
-		if (venda.getComVendaObservacao() != null) {
-			sb.append("#" + venda.getComVendaObservacao());
 		}
 		// uma mensagem padrao se precisar
 		if (auth.getConf().get("nfe.info") != null) {
@@ -991,6 +1006,12 @@ public class GerarNfeSaida extends Chain {
 			sb.append("#Valor Aproximado dos Tributos em Reais ");
 			sb.append(UtilServer.formataNumero(impostos, 1, 2, false)).append(" [");
 			sb.append(UtilServer.formataNumero(porcentagem, 1, 2, false)).append(" porcentos] Fonte: IBPT");
+		}
+		// adiciona o pedido da venda
+		sb.append("Venda " + UtilServer.formataNumero(venda.getComVendaId(), 6, 0, false) + " ");
+		// case tenha alguma observacao
+		if (venda.getComVendaObservacao() != null) {
+			sb.append("#" + venda.getComVendaObservacao());
 		}
 
 		InfAdic inf = new InfAdic();

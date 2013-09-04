@@ -50,6 +50,7 @@ public class SalvarCompra extends Chain {
 
 			// salva
 			compra.setComCompraProdutos(null);
+			compra.setComTrocas(null);
 			compra = (ComCompra) servico.salvar(em, compra);
 
 			// insere

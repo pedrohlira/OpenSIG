@@ -11,8 +11,11 @@ import br.com.opensig.comercial.shared.modelo.ComNatureza;
 import br.com.opensig.comercial.shared.modelo.ComTroca;
 import br.com.opensig.comercial.shared.modelo.ComTrocaProduto;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
+import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
+import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
+import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.controlador.parametro.GrupoParametro;
 import br.com.opensig.core.client.controlador.parametro.IParametro;
@@ -59,11 +62,13 @@ public class GerarCompra extends Chain {
 			FiltroTexto ft = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.IGUAL, empresa.getEmpEntidade().getEmpEntidadeDocumento1());
 			EmpFornecedor fornecedor = (EmpFornecedor) servico.selecionar(new EmpFornecedor(), ft, false);
 			if (fornecedor == null) {
-				throw new Exception("Cadastre uma fornecedor com os mesmos dados da empresa.");
+				throw new Exception("Cadastre um fornecedor com os mesmos dados da empresa. Deixe somente um fornecedor com o mesmo cnpj da empresa");
 			}
 
 			FiltroNumero fn1 = new FiltroNumero("comNaturezaCfopTrib", ECompara.IGUAL, 1202);
-			ComNatureza natureza = (ComNatureza) servico.selecionar(new ComNatureza(), fn1, false);
+			FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, empresa);
+			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fn1, fo });
+			ComNatureza natureza = (ComNatureza) servico.selecionar(new ComNatureza(), gf, false);
 			if (natureza == null) {
 				throw new Exception("Cadastre uma natureza de operação com cfop 1202.");
 			}
@@ -91,17 +96,18 @@ public class GerarCompra extends Chain {
 					cp.setComCompra(null);
 					cp.setProdProduto(pp);
 					cp.setProdEmbalagem(tp.getProdEmbalagem());
+					cp.setComCompraProdutoBarra(tp.getComTrocaProdutoBarra());
 					cp.setComCompraProdutoQuantidade(tp.getComTrocaProdutoQuantidade());
 					cp.setComCompraProdutoValor(tp.getComTrocaProdutoValor());
 					cp.setComCompraProdutoTotal(tp.getComTrocaProdutoTotal());
-					cp.setComCompraProdutoCfop(1202);
+					cp.setComCompraProdutoCfop(natureza.getComNaturezaCfopTrib());
 					cp.setComCompraProdutoIcmsCst(auth.getConf().get("nfe.crt").equals("1") ? pp.getProdIcms().getProdIcmsCson() : pp.getProdIcms().getProdIcmsCst());
 					cp.setComCompraProdutoIcms(natureza.getComNaturezaIcms() ? pp.getProdIcms().getProdIcmsDentro() : 0.00);
-					cp.setComCompraProdutoIpiCst(pp.getProdIpi().getProdIpiCstEntrada());
+					cp.setComCompraProdutoIpiCst("49"); // outras entradas
 					cp.setComCompraProdutoIpi(natureza.getComNaturezaIpi() ? pp.getProdIpi().getProdIpiAliquota() : 0.00);
-					cp.setComCompraProdutoPisCst(pp.getProdPis().getProdPisCstEntrada());
+					cp.setComCompraProdutoPisCst("98"); // outras entradas
 					cp.setComCompraProdutoPis(natureza.getComNaturezaPis() ? pp.getProdPis().getProdPisAliquota() : 0.00);
-					cp.setComCompraProdutoCofinsCst(pp.getProdCofins().getProdCofinsCstEntrada());
+					cp.setComCompraProdutoCofinsCst("98"); // outras entradas
 					cp.setComCompraProdutoCofins(natureza.getComNaturezaCofins() ? pp.getProdCofins().getProdCofinsAliquota() : 0.00);
 					cp.setComCompraProdutoPreco(tp.getComTrocaProdutoValor());
 					cp.setComCompraProdutoOrdem(ordem++);

@@ -68,7 +68,6 @@ public class FormularioFrete extends AFormulario<ComFrete> {
 		txtCtrc.setAllowBlank(false);
 		txtCtrc.setAllowDecimals(false);
 		txtCtrc.setAllowNegative(false);
-		txtCtrc.setMaxLength(6);
 
 		MultiFieldPanel linha1 = new MultiFieldPanel();
 		linha1.setBorder(false);

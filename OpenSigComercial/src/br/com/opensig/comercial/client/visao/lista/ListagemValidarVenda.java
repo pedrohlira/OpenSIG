@@ -271,7 +271,8 @@ public class ListagemValidarVenda {
 			if (prod.getProdProdutoId() == 0) {
 				prod.setProdProdutoCategoria(cmbCategoria.getValue());
 			}
-			if ("".equals(prod.getProdProdutoBarra())) {
+			if ("".equals(vp.getComVendaProdutoBarra())) {
+				vp.setComVendaProdutoBarra(null);
 				prod.setProdProdutoBarra(null);
 			}
 		}
@@ -291,13 +292,13 @@ public class ListagemValidarVenda {
 		ProdProduto prod = vp.getProdProduto();
 		// altera
 		prod.setProdProdutoId(rec.getAsInteger("prodProdutoId"));
-		prod.setProdProdutoBarra("".equals(rec.getAsString("comVendaProdutoBarra")) ? null : rec.getAsString("comVendaProdutoBarra"));
+		prod.setProdProdutoBarra(rec.getAsString("comVendaProdutoBarra"));
 		prod.setProdProdutoDescricao(rec.getAsString("prodProduto.prodProdutoDescricao"));
 		prod.setProdProdutoReferencia(rec.getAsString("prodProduto.prodProdutoReferencia") == null ? "" : rec.getAsString("prodProduto.prodProdutoReferencia"));
 		prod.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
-
 		// seta
 		vp.setProdProduto(prod);
+		vp.setComVendaProdutoBarra(rec.getAsString("comVendaProdutoBarra"));
 		vp.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
 		venda.getComVendaProdutos().set(row, vp);
 	}

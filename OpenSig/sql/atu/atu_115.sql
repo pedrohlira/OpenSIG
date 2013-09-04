@@ -7,3 +7,18 @@ UPDATE `sis_exp_imp` SET `sis_exp_imp_modelo`='<beanio xmlns=\"http://www.beanio
 # Colocando 4 casas decimais na quantidade
 ALTER TABLE `com_troca_produto` CHANGE COLUMN `com_troca_produto_quantidade` `com_troca_produto_quantidade` DECIMAL(10,4) NOT NULL  ;
 ALTER TABLE `com_ecf_nota_produto` CHANGE COLUMN `com_ecf_nota_produto_quantidade` `com_ecf_nota_produto_quantidade` DECIMAL(10,4) NOT NULL  ;
+
+# Colocando o campo de decreto para a natureza de operacao
+ALTER TABLE `com_natureza` ADD COLUMN `com_natureza_decreto` VARCHAR(1000) NOT NULL  AFTER `com_natureza_cofins` ;
+
+# Colocando o campo de barra nos produtos da compra
+ALTER TABLE `com_compra_produto` ADD COLUMN `com_compra_produto_barra` VARCHAR(14) NULL  AFTER `prod_embalagem_id` ;
+
+# Aumentando o campo de observacao da compra e venda para o limite de 4000, pois a nfe suporte 5000
+ALTER TABLE `com_compra` CHANGE COLUMN `com_compra_observacao` `com_compra_observacao` VARCHAR(4000) NOT NULL  ;
+ALTER TABLE `com_venda` CHANGE COLUMN `com_venda_observacao` `com_venda_observacao` VARCHAR(4000) NOT NULL  ;
+
+# Acao que gera uma venda a partir de uma compra
+INSERT INTO `sis_acao` (`sis_funcao_id`, `sis_acao_classe`, `sis_acao_ordem`, `sis_acao_subordem`, `sis_acao_ativo`, `sis_acao_visivel`) 
+SELECT `sis_funcao_id`, 'br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarVenda', '16', '0', '1', '1' FROM `sis_funcao` 
+WHERE `sis_funcao_classe` = 'br.com.opensig.comercial.client.controlador.comando.ComandoCompra';

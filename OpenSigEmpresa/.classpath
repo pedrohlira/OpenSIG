@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT-2.4.0"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OpenSigCore"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JPA">
 		<attributes>

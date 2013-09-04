@@ -201,6 +201,8 @@ public abstract class AListagemEditor<E extends Dados> extends EditorGridPanel i
 			public void onSpecialKey(Field field, EventObject e) {
 				if (e.getKey() == EventObject.ENTER) {
 					setCellFocus();
+				} else {
+					super.onSpecialKey(field, e);
 				}
 			}
 		});

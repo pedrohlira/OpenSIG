@@ -46,6 +46,7 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 	private ListagemGrades gridGrades;
 	private TextField txtBusca;
 	private AsyncCallback<Record> asyncResultado;
+	private ToolbarButton btnPesquisar;
 	private Window wnd;
 
 	public FormularioPesquisa(ProdProduto classe, SisFuncao funcao) {
@@ -166,13 +167,27 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 
 		// montando os filtros de busca
 		txtBusca = new TextField("", "txtBusca");
-		txtBusca.setWidth(Ext.getBody().getWidth() - 300);
+		txtBusca.setWidth(Ext.getBody().getWidth() - 400);
 		txtBusca.setAllowBlank(false);
 		txtBusca.setTitle(OpenSigCore.i18n.msgPesquisar());
 		txtBusca.setMaxLength(100);
 		txtBusca.setSelectOnFocus(true);
 		txtBusca.addKeyListener(EventObject.ENTER, new KeyListener() {
 			public void onKey(int key, EventObject e) {
+				pesquisar();
+			}
+		});
+
+		btnPesquisar = new ToolbarButton(OpenSigCore.i18n.txtPesquisar());
+		btnPesquisar.setIconCls("icon-pesquisa");
+		btnPesquisar.setTitle(OpenSigCore.i18n.msgPesquisar());
+		btnPesquisar.addListener(new ButtonListenerAdapter() {
+			public void onClick(Button button, EventObject e) {
+				pesquisar();
+			}
+		});
+		btnPesquisar.addListener("onkeypress", new Function() {
+			public void execute() {
 				pesquisar();
 			}
 		});
@@ -203,6 +218,13 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 				wnd.hide();
 			}
 		});
+		btnSelecionar.addListener("onkeypress", new Function() {
+			public void execute() {
+				limparDados();
+				asyncResultado = null;
+				wnd.hide();
+			}
+		});
 
 		// muda a barra de tarefas
 		Toolbar tool = new Toolbar();
@@ -211,6 +233,8 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 		tool.addSeparator();
 		tool.addText(OpenSigCore.i18n.txtPesquisar() + ":");
 		tool.addField(txtBusca);
+		tool.addSeparator();
+		tool.addButton(btnPesquisar);
 		setTlbAcao(tool);
 	}
 
@@ -279,31 +303,19 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 			// verifica se e longo
 			try {
 				long valor = Long.valueOf(texto);
-				if (texto.length() <= 6) {
-					// codigo
-					FiltroNumero fn = new FiltroNumero("prodProdutoId", ECompara.IGUAL, valor);
-					// barra do preco
-					FiltroTexto ft1 = new FiltroTexto("prodPrecoBarra", ECompara.IGUAL, texto);
-					ft1.setCampoPrefixo("t2.");
-					// barra da grade
-					FiltroTexto ft2 = new FiltroTexto("prodGradeBarra", ECompara.IGUAL, texto);
-					ft2.setCampoPrefixo("t3.");
-					// referencia
-					FiltroTexto ft3 = new FiltroTexto("prodProdutoReferencia", ECompara.CONTEM, texto);
-					filtro.add(new GrupoFiltro(EJuncao.OU, new IFiltro[] { fn, ft1, ft2, ft3 }));
-				} else {
-					// barra
-					FiltroTexto ft = new FiltroTexto("prodProdutoBarra", ECompara.IGUAL, texto);
-					// barra do preco
-					FiltroTexto ft1 = new FiltroTexto("prodPrecoBarra", ECompara.IGUAL, texto);
-					ft1.setCampoPrefixo("t2.");
-					// barra da grade
-					FiltroTexto ft2 = new FiltroTexto("prodGradeBarra", ECompara.IGUAL, texto);
-					ft2.setCampoPrefixo("t3.");
-					// referencia
-					FiltroTexto ft3 = new FiltroTexto("prodProdutoReferencia", ECompara.CONTEM, texto);
-					filtro.add(new GrupoFiltro(EJuncao.OU, new IFiltro[] { ft, ft1, ft2, ft3 }));
-				}
+				// codigo
+				FiltroNumero fn = new FiltroNumero("prodProdutoId", ECompara.IGUAL, valor);
+				// barra
+				FiltroTexto ft = new FiltroTexto("prodProdutoBarra", ECompara.IGUAL, texto);
+				// barra do preco
+				FiltroTexto ft1 = new FiltroTexto("prodPrecoBarra", ECompara.IGUAL, texto);
+				ft1.setCampoPrefixo("t2.");
+				// barra da grade
+				FiltroTexto ft2 = new FiltroTexto("prodGradeBarra", ECompara.IGUAL, texto);
+				ft2.setCampoPrefixo("t3.");
+				// referencia
+				FiltroTexto ft3 = new FiltroTexto("prodProdutoReferencia", ECompara.CONTEM, texto);
+				filtro.add(new GrupoFiltro(EJuncao.OU, new IFiltro[] { fn, ft, ft1, ft2, ft3 }));
 			} catch (NumberFormatException ex) {
 				// verifica se e decimal
 				try {
@@ -328,7 +340,13 @@ public class FormularioPesquisa extends AFormulario<ProdProduto> {
 					FiltroTexto ft2 = new FiltroTexto("prodProdutoReferencia", compara, texto);
 					// fornecedor
 					FiltroTexto ft3 = new FiltroTexto("empFornecedor.empEntidade.empEntidadeNome1", ECompara.CONTEM, texto);
-					filtro.add(new GrupoFiltro(EJuncao.OU, new IFiltro[] { ft1, ft2, ft3 }));
+					// barra do preco
+					FiltroTexto ft4 = new FiltroTexto("prodPrecoBarra", ECompara.IGUAL, texto);
+					ft4.setCampoPrefixo("t2.");
+					// barra da grade
+					FiltroTexto ft5 = new FiltroTexto("prodGradeBarra", ECompara.IGUAL, texto);
+					ft5.setCampoPrefixo("t3.");
+					filtro.add(new GrupoFiltro(EJuncao.OU, new IFiltro[] { ft1, ft2, ft3, ft4, ft5 }));
 				}
 			}
 

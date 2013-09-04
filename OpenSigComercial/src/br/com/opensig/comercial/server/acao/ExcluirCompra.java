@@ -6,6 +6,7 @@ import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.server.ComercialServiceImpl;
 import br.com.opensig.comercial.shared.modelo.ComCompra;
 import br.com.opensig.comercial.shared.modelo.ComCompraProduto;
+import br.com.opensig.comercial.shared.modelo.ComTroca;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
@@ -24,6 +25,8 @@ import br.com.opensig.core.shared.modelo.Sql;
 import br.com.opensig.financeiro.shared.modelo.FinPagamento;
 import br.com.opensig.fiscal.shared.modelo.FisNotaEntrada;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
+import br.com.opensig.produto.shared.modelo.ProdEstoqueGrade;
+import br.com.opensig.produto.shared.modelo.ProdGrade;
 
 public class ExcluirCompra extends Chain {
 
@@ -41,11 +44,13 @@ public class ExcluirCompra extends Chain {
 		// seleciona a compra
 		FiltroNumero fn = new FiltroNumero("comCompraId", ECompara.IGUAL, compra.getId());
 		this.compra = (ComCompra) servico.selecionar(compra, fn, false);
-		
+
 		// deletar compra
 		DeletarCompra delComp = new DeletarCompra(next);
+		// desvincula as trocas
+		DesvincularTroca desTroca = new DesvincularTroca(delComp);
 		// deletar nota
-		DeletarNota delNota = new DeletarNota(delComp);
+		DeletarNota delNota = new DeletarNota(desTroca);
 		// atauliza estoque
 		AtualizarEstoque atuEst = new AtualizarEstoque(delNota);
 		// valida os pagamentos
@@ -99,6 +104,23 @@ public class ExcluirCompra extends Chain {
 						// formando o sql
 						Sql sql = new Sql(est, EComando.ATUALIZAR, gf, pn1);
 						servico.executar(em, sql);
+
+						// remove estoque da grade caso o produto tenha
+						if (cp.getProdProduto().getProdGrades() != null) {
+							for (ProdGrade grade : cp.getProdProduto().getProdGrades()) {
+								if (grade.getProdGradeBarra().equals(cp.getComCompraProdutoBarra())) {
+									// formando os parametros
+									ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
+									// formando o filtro
+									FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
+									GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
+									// busca o item
+									Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
+									servico.executar(em, sql1);
+									break;
+								}
+							}
+						}
 					}
 				}
 
@@ -181,6 +203,34 @@ public class ExcluirCompra extends Chain {
 				}
 			}
 		}
+	}
+
+	private class DesvincularTroca extends Chain {
+
+		public DesvincularTroca(Chain next) throws OpenSigException {
+			super(next);
+		}
+
+		@Override
+		public void execute() throws OpenSigException {
+			try {
+				if (compra.getComTrocas() != null) {
+					for (ComTroca troca : compra.getComTrocas()) {
+						troca.setComCompra(null);
+						troca.setComTrocaAtivo(true);
+					}
+					servico.salvar(compra.getComTrocas());
+				}
+
+				if (next != null) {
+					next.execute();
+				}
+			} catch (Exception ex) {
+				UtilServer.LOG.error("Erro ao desvincular as trocas.", ex);
+				throw new ComercialException(ex.getMessage());
+			}
+		}
+
 	}
 
 	private class DeletarCompra extends Chain {

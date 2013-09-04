@@ -205,6 +205,8 @@ public class RestCliente extends ARest {
 	/**
 	 * Metodo que retorna a lista de embalagens cadastradas no sistema.
 	 * 
+	 * @param id
+	 *            o ultimo id cadastro no banco do pdv.
 	 * @return uma lista de objetos embalagem em formato JSON.
 	 * @throws RestException
 	 *             em caso de nao conseguir acessar a informacao.
@@ -212,10 +214,11 @@ public class RestCliente extends ARest {
 	@Path("/embalagem")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProdEmbalagem> getEmbalagem() throws RestException {
+	public List<ProdEmbalagem> getEmbalagem(@QueryParam("id") int id) throws RestException {
 		autorizar();
 		try {
-			return service.selecionar(new ProdEmbalagem(), 0, 0, null, false).getLista();
+			FiltroNumero fn = new FiltroNumero("prodEmbalagemId", ECompara.MAIOR, id);
+			return service.selecionar(new ProdEmbalagem(), 0, 0, fn, false).getLista();
 		} catch (Exception ex) {
 			log.error(ex);
 			throw new RestException(ex);
@@ -225,6 +228,8 @@ public class RestCliente extends ARest {
 	/**
 	 * Metodo que retorna a lista de tipos de grades cadastradas no sistema.
 	 * 
+	 * @param id
+	 *            o ultimo id cadastro no banco do pdv.
 	 * @return uma lista de objetos tipo grade em formato JSON.
 	 * @throws RestException
 	 *             em caso de nao conseguir acessar a informacao.
@@ -232,10 +237,11 @@ public class RestCliente extends ARest {
 	@Path("/tipo_grade")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProdGradeTipo> getGradeTipo() throws RestException {
+	public List<ProdGradeTipo> getGradeTipo(@QueryParam("id") int id) throws RestException {
 		autorizar();
 		try {
-			return service.selecionar(new ProdGradeTipo(), 0, 0, null, false).getLista();
+			FiltroNumero fn = new FiltroNumero("prodGradeTipoId", ECompara.MAIOR, id);
+			return service.selecionar(new ProdGradeTipo(), 0, 0, fn, false).getLista();
 		} catch (Exception ex) {
 			log.error(ex);
 			throw new RestException(ex);

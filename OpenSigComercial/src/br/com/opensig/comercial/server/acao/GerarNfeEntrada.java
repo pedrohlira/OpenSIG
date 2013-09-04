@@ -245,7 +245,7 @@ public class GerarNfeEntrada extends Chain {
 			FiltroTexto ft = new FiltroTexto("fisNotaEntradaChave", ECompara.CONTEM, empEmissao.getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("\\D", ""));
 			Number nfeNumero = servico.buscar(new FisNotaEntrada(), "t.fisNotaEntradaNumero", EBusca.MAXIMO, ft);
 			if (nfeNumero == null) {
-				nfeNumero = Integer.valueOf(auth.getConf().get("nfe.numero"));
+				nfeNumero = 0;
 			}
 			nNF = UtilServer.formataNumero(nfeNumero.intValue() + 1, 9, 0, false);
 		} catch (Exception ex) {
@@ -472,7 +472,7 @@ public class GerarNfeEntrada extends Chain {
 			// ncm
 			prod.setNCM(pp.getProdProdutoNcm());
 			// cfop
-			prod.setCFOP(getCfop(pp));
+			prod.setCFOP(getCfop(cp));
 			// unidade
 			prod.setUCom(pp.getProdEmbalagem().getProdEmbalagemNome());
 			// quantidde
@@ -519,15 +519,18 @@ public class GerarNfeEntrada extends Chain {
 		}
 	}
 
-	public String getCfop(ProdProduto prod) {
-		String cst = prod.getProdIcms().getProdIcmsCst();
+	public String getCfop(ComCompraProduto cp) {
 		int cfop = dentro ? 0 : 1000;
-
-		// verifica se é substituicao
-		if (cst.equals("10") || cst.equals("60")) {
-			cfop += comNatureza.getComNaturezaCfopSub();
+		if (cp.getComCompraProdutoCfop() == 0) {
+			String cst = cp.getComCompraProdutoIcmsCst().equals("") ? cp.getProdProduto().getProdIcms().getProdIcmsCst() : cp.getComCompraProdutoIcmsCst();
+			// verifica se é substituicao
+			if (cst.equals("10") || cst.equals("60")) {
+				cfop += comNatureza.getComNaturezaCfopSub();
+			} else {
+				cfop += comNatureza.getComNaturezaCfopTrib();
+			}
 		} else {
-			cfop += comNatureza.getComNaturezaCfopTrib();
+			cfop = cp.getComCompraProdutoCfop();
 		}
 
 		return cfop + "";
@@ -702,7 +705,7 @@ public class GerarNfeEntrada extends Chain {
 
 		IPITrib trib = new IPITrib();
 		if (porcento == 0.00) {
-			trib.setCST("99");
+			trib.setCST("49");
 			trib.setVBC("0.00");
 			trib.setPIPI("0.00");
 			trib.setVIPI("0.00");
@@ -740,10 +743,17 @@ public class GerarNfeEntrada extends Chain {
 		// isento ou simples nacional
 		if (porcento == 0.00) {
 			PISOutr outr = new PISOutr();
-			outr.setCST("99");
+			outr.setCST("98");
 			outr.setVBC("0.00");
 			outr.setPPIS("0.00");
 			outr.setVPIS("0.00");
+			pis.setPISOutr(outr);
+		} else if (cst.equals("98")) {
+			PISOutr outr = new PISOutr();
+			outr.setCST(cst);
+			outr.setVBC(getValorNfe(cp.getComCompraProdutoTotal()));
+			outr.setPPIS(getValorNfe(porcento));
+			outr.setVPIS(strValor);
 			pis.setPISOutr(outr);
 		} else {
 			PISAliq aliq = new PISAliq();
@@ -779,10 +789,17 @@ public class GerarNfeEntrada extends Chain {
 		// isento ou simples nacional
 		if (porcento == 0.00) {
 			COFINSOutr outr = new COFINSOutr();
-			outr.setCST("99");
+			outr.setCST("98");
 			outr.setVBC("0.00");
 			outr.setPCOFINS("0.00");
 			outr.setVCOFINS("0.00");
+			cofins.setCOFINSOutr(outr);
+		} else if (cst.equals("98")) {
+			COFINSOutr outr = new COFINSOutr();
+			outr.setCST(cst);
+			outr.setVBC(getValorNfe(cp.getComCompraProdutoTotal()));
+			outr.setPCOFINS(getValorNfe(porcento));
+			outr.setVCOFINS(strValor);
 			cofins.setCOFINSOutr(outr);
 		} else {
 			COFINSAliq aliq = new COFINSAliq();
@@ -898,9 +915,17 @@ public class GerarNfeEntrada extends Chain {
 
 	public InfAdic getInformacoes() {
 		StringBuffer sb = new StringBuffer();
-		// adiciona as informacoes necessarias de decretos
+		// adiciona o decreto da natureza
+		if (!comNatureza.getComNaturezaDecreto().equals("")) {
+			sb.append(comNatureza.getComNaturezaDecreto() + "#");
+		}
+		// adiciona os decretos para os tributos
 		for (Entry<String, String> info : infos.entrySet()) {
 			sb.append(info.getValue() + "#");
+		}
+		// uma mensagem padrao se precisar
+		if (auth.getConf().get("nfe.info") != null) {
+			sb.append("#" + auth.getConf().get("nfe.info"));
 		}
 		// adiciona o pedido da venda
 		sb.append("Compra " + UtilServer.formataNumero(compra.getComCompraId(), 6, 0, false) + " ");
@@ -908,11 +933,7 @@ public class GerarNfeEntrada extends Chain {
 		if (compra.getComCompraObservacao() != null) {
 			sb.append("#" + compra.getComCompraObservacao());
 		}
-		// uma mensagem padrao se precisar
-		if (auth.getConf().get("nfe.info") != null) {
-			sb.append("#" + auth.getConf().get("nfe.info"));
-		}
-
+		
 		InfAdic inf = new InfAdic();
 		inf.setInfCpl(sb.toString());
 		return inf;

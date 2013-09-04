@@ -52,7 +52,6 @@ public class JanelaExportar extends Window {
 	protected Record rec;
 	protected AsyncCallback<String> async;
 	
-	protected int limite;
 	protected Button btnOK;
 	protected Panel panTipo;
 	protected DataView dataView;
@@ -86,7 +85,6 @@ public class JanelaExportar extends Window {
 		this.lista = lista;
 		this.modo = modo;
 		this.async = async;
-		this.limite = UtilClient.CONF.get("listagem.registro") != null ? Integer.valueOf(UtilClient.CONF.get("listagem.registro")) : 500;
 
 		inicializar();
 		setDados();
@@ -293,9 +291,7 @@ public class JanelaExportar extends Window {
 		expimp.setInicio(inicio);
 		expimp.setLimite(fim);
 
-		if ((fim == 0 && limite > 0 && lista.getPanel().getStore().getTotalCount() > limite) || (fim > limite && limite > 0)) {
-			MessageBox.alert(OpenSigCore.i18n.txtExportar(), OpenSigCore.i18n.msgExportar(limite + ""));
-		} else if (lista.getPanel().getStore().getCount() > 0) {
+	    if (lista.getPanel().getStore().getCount() > 0) {
 			EModo modo2 = chkRegistro.getValue() ? EModo.REGISTRO : EModo.LISTAGEM;
 			lista.setExportacao(expimp, modo, modo2, async);
 			close();
@@ -415,14 +411,6 @@ public class JanelaExportar extends Window {
 
 	public void setStore(Store store) {
 		this.store = store;
-	}
-
-	public int getLimite() {
-		return limite;
-	}
-
-	public void setLimite(int limite) {
-		this.limite = limite;
 	}
 
 }

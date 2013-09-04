@@ -49,7 +49,7 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 	private NumberField txtVolume;
 	private NumberField txtLiquido;
 	private NumberField txtBruto;
-	private NumberField txtNfe;
+	private TextField txtNfe;
 	private NumberField txtEcf;
 	private NumberField txtCoo;
 	private TextField txtEspecie;
@@ -247,11 +247,8 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 		linha3.addToRow(txtLiquido, 80);
 		frm.add(linha3);
 
-		txtNfe = new NumberField(OpenSigCore.i18n.txtNfe() + " " + OpenSigCore.i18n.txtComplemento(), "comCompraNfe", 300);
-		txtNfe.setAllowDecimals(false);
-		txtNfe.setAllowNegative(false);
-		txtNfe.setMinLength(44);
-		txtNfe.setMaxLength(44);
+		txtNfe = new TextField(OpenSigCore.i18n.txtNfe() + " " + OpenSigCore.i18n.txtComplemento(), "comCompraNfe", 300);
+		txtNfe.setRegex("^(\\d{44})$");
 		frm.add(txtNfe);
 
 		txtEcf = new NumberField(OpenSigCore.i18n.txtEcf(), "comCompraEcf", 120);
@@ -271,7 +268,7 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 		frm.add(linha4);
 
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), "comVendaObservacao");
-		txtObservacao.setMaxLength(255);
+		txtObservacao.setMaxLength(4000);
 		txtObservacao.setWidth("95%");
 		txtObservacao.setValue(venda.getComVendaObservacao());
 		frm.add(txtObservacao);

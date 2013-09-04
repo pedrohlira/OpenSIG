@@ -361,7 +361,7 @@
 	<context-param>
 		<description>Path padrao das empresas e suas configuracoes e arquivos.</description>
 		<param-name>sistema.empresas</param-name>
-		<param-value>/Volumes/Macintosh HD 2/Users/pedrohenriquelira/Documents/Projetos/Git/OpenSIG/OpenSig/empresas/</param-value>
+		<param-value>/Users/pedrohenriquelira/Documents/Projetos/Git/OpenSIG/OpenSig/empresas/</param-value>
 	</context-param>
 	<context-param>
 		<description>Url para validar a validade do sistema</description>

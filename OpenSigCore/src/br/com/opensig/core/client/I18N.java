@@ -2,7 +2,7 @@ package br.com.opensig.core.client;
 
 /**
  * Interface to represent the messages contained in resource bundle:
- * 	/Volumes/Macintosh HD 2/Users/pedrohenriquelira/Documents/Projetos/Git/OpenSIG/OpenSigCore/src/br/com/opensig/core/client/I18N.properties'.
+ * 	/Users/pedrohenriquelira/Documents/Projetos/Git/OpenSIG/OpenSigCore/src/br/com/opensig/core/client/I18N.properties'.
  */
 public interface I18N extends com.google.gwt.i18n.client.Messages {
   

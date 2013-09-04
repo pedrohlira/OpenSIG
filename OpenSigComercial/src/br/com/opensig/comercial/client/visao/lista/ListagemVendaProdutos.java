@@ -138,59 +138,59 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		txtCofins.setMaxLength(5);
 
 		// colunas
-		ColumnConfig ccId = new ColumnConfig("", "comVendaProdutoId", 10, true);
+		ColumnConfig ccId = new ColumnConfig("", "comVendaProdutoId", 10, false);
 		ccId.setHidden(true);
 		ccId.setFixed(true);
 
-		ColumnConfig ccVendaId = new ColumnConfig("", "comVendaId", 10, true);
+		ColumnConfig ccVendaId = new ColumnConfig("", "comVendaId", 10, false);
 		ccVendaId.setHidden(true);
 		ccVendaId.setFixed(true);
 
-		ColumnConfig ccEmpresaId = new ColumnConfig("", "empEmpresaId", 10, true);
+		ColumnConfig ccEmpresaId = new ColumnConfig("", "empEmpresaId", 10, false);
 		ccEmpresaId.setHidden(true);
 		ccEmpresaId.setFixed(true);
 
-		ColumnConfig ccEmpresa = new ColumnConfig("", "empEmpresa", 10, true);
+		ColumnConfig ccEmpresa = new ColumnConfig("", "empEmpresa", 10, false);
 		ccEmpresa.setHidden(true);
 		ccEmpresa.setFixed(true);
 
-		ColumnConfig ccCliente = new ColumnConfig("", "empCliente", 10, true);
+		ColumnConfig ccCliente = new ColumnConfig("", "empCliente", 10, false);
 		ccCliente.setHidden(true);
 		ccCliente.setFixed(true);
 
-		ColumnConfig ccFornecedor = new ColumnConfig("", "empFornecedor", 10, true);
+		ColumnConfig ccFornecedor = new ColumnConfig("", "empFornecedor", 10, false);
 		ccFornecedor.setHidden(true);
 		ccFornecedor.setFixed(true);
 
-		ColumnConfig ccProdId = new ColumnConfig("", "prodProdutoId", 10, true);
+		ColumnConfig ccProdId = new ColumnConfig("", "prodProdutoId", 10, false);
 		ccProdId.setHidden(true);
 		ccProdId.setFixed(true);
 
-		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "comVendaProdutoBarra", 100, true);
+		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "comVendaProdutoBarra", 100, false);
 
-		ColumnConfig ccProduto = new ColumnConfig(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoDescricao", 250, true);
+		ColumnConfig ccProduto = new ColumnConfig(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoDescricao", 250, false);
 
-		ColumnConfig ccReferencia = new ColumnConfig(OpenSigCore.i18n.txtRef(), "prodProduto.prodProdutoReferencia", 75, true);
+		ColumnConfig ccReferencia = new ColumnConfig(OpenSigCore.i18n.txtRef(), "prodProduto.prodProdutoReferencia", 75, false);
 
-		ColumnConfig ccData = new ColumnConfig("", "comVenda.comVendaData", 10, true);
+		ColumnConfig ccData = new ColumnConfig("", "comVenda.comVendaData", 10, false);
 		ccData.setHidden(true);
 		ccData.setFixed(true);
 
-		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comVendaProdutoQuantidade", 75, true, IListagem.VALOR);
+		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comVendaProdutoQuantidade", 75, false, IListagem.VALOR);
 		ccQuantidade.setEditor(new GridEditor(txtQuantidade));
 
-		ColumnConfig ccEmbalagemId = new ColumnConfig("", "prodEmbalagem.prodEmbalagemId", 10, true);
+		ColumnConfig ccEmbalagemId = new ColumnConfig("", "prodEmbalagem.prodEmbalagemId", 10, false);
 		ccEmbalagemId.setHidden(true);
 		ccEmbalagemId.setFixed(true);
 
-		ColumnConfig ccEmbalagem = new ColumnConfig(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemNome", 75, true);
+		ColumnConfig ccEmbalagem = new ColumnConfig(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemNome", 75, false);
 
-		ColumnConfig ccBruto = new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comVendaProdutoBruto", 75, true, IListagem.DINHEIRO);
+		ColumnConfig ccBruto = new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comVendaProdutoBruto", 75, false, IListagem.DINHEIRO);
 
-		ColumnConfig ccDesconto = new ColumnConfig(OpenSigCore.i18n.txtDesconto(), "comVendaProdutoDesconto", 50, true, IListagem.PORCENTAGEM);
+		ColumnConfig ccDesconto = new ColumnConfig(OpenSigCore.i18n.txtDesconto(), "comVendaProdutoDesconto", 50, false, IListagem.PORCENTAGEM);
 		ccDesconto.setEditor(new GridEditor(txtDesconto));
 
-		ColumnConfig ccLiquido = new ColumnConfig(OpenSigCore.i18n.txtLiquido(), "comVendaProdutoLiquido", 75, true, IListagem.DINHEIRO);
+		ColumnConfig ccLiquido = new ColumnConfig(OpenSigCore.i18n.txtLiquido(), "comVendaProdutoLiquido", 75, false, IListagem.DINHEIRO);
 		ccLiquido.setEditor(new GridEditor(txtLiquido));
 
 		ColumnConfig ccEstoque = new ColumnConfig("", "comVendaProdutoEstoque", 0, false);
@@ -201,50 +201,50 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		ccOrigem.setHidden(true);
 		ccOrigem.setFixed(true);
 
-		ColumnConfig ccCfop = new ColumnConfig(OpenSigCore.i18n.txtCfop(), "comVendaProdutoCfop", 75, true, IListagem.NUMERO);
+		ColumnConfig ccCfop = new ColumnConfig(OpenSigCore.i18n.txtCfop(), "comVendaProdutoCfop", 75, false, IListagem.NUMERO);
 		ccCfop.setEditor(new GridEditor(txtCfop));
 		ccCfop.setHidden(true);
 
-		ColumnConfig ccIcmsCst = new ColumnConfig(OpenSigCore.i18n.txtIcms() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoIcmsCst", 100, true);
+		ColumnConfig ccIcmsCst = new ColumnConfig(OpenSigCore.i18n.txtIcms() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoIcmsCst", 100, false);
 		ccIcmsCst.setEditor(new GridEditor(txtIcmsCst));
 		ccIcmsCst.setHidden(true);
 
-		ColumnConfig ccIcms = new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comVendaProdutoIcms", 75, true, IListagem.PORCENTAGEM);
+		ColumnConfig ccIcms = new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comVendaProdutoIcms", 75, false, IListagem.PORCENTAGEM);
 		ccIcms.setEditor(new GridEditor(txtIcms));
 		ccIcms.setHidden(true);
 
-		ColumnConfig ccIpiCst = new ColumnConfig(OpenSigCore.i18n.txtIpi() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoIpiCst", 100, true);
+		ColumnConfig ccIpiCst = new ColumnConfig(OpenSigCore.i18n.txtIpi() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoIpiCst", 100, false);
 		ccIpiCst.setEditor(new GridEditor(txtIpiCst));
 		ccIpiCst.setHidden(true);
 
-		ColumnConfig ccIpi = new ColumnConfig(OpenSigCore.i18n.txtIpi(), "comVendaProdutoIpi", 75, true, IListagem.PORCENTAGEM);
+		ColumnConfig ccIpi = new ColumnConfig(OpenSigCore.i18n.txtIpi(), "comVendaProdutoIpi", 75, false, IListagem.PORCENTAGEM);
 		ccIpi.setEditor(new GridEditor(txtIpi));
 		ccIpi.setHidden(true);
 
-		ColumnConfig ccPisCst = new ColumnConfig(OpenSigCore.i18n.txtPis() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoPisCst", 100, true);
+		ColumnConfig ccPisCst = new ColumnConfig(OpenSigCore.i18n.txtPis() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoPisCst", 100, false);
 		ccPisCst.setEditor(new GridEditor(txtPisCst));
 		ccPisCst.setHidden(true);
 
-		ColumnConfig ccPis = new ColumnConfig(OpenSigCore.i18n.txtPis(), "comVendaProdutoPis", 75, true, IListagem.PORCENTAGEM);
+		ColumnConfig ccPis = new ColumnConfig(OpenSigCore.i18n.txtPis(), "comVendaProdutoPis", 75, false, IListagem.PORCENTAGEM);
 		ccPis.setEditor(new GridEditor(txtPis));
 		ccPis.setHidden(true);
 
-		ColumnConfig ccCofinsCst = new ColumnConfig(OpenSigCore.i18n.txtCofins() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoCofinsCst", 100, true);
+		ColumnConfig ccCofinsCst = new ColumnConfig(OpenSigCore.i18n.txtCofins() + " - " + OpenSigCore.i18n.txtCst(), "comVendaProdutoCofinsCst", 100, false);
 		ccCofinsCst.setEditor(new GridEditor(txtCofinsCst));
 		ccCofinsCst.setHidden(true);
 
-		ColumnConfig ccCofins = new ColumnConfig(OpenSigCore.i18n.txtCofins(), "comVendaProdutoCofins", 75, true, IListagem.PORCENTAGEM);
+		ColumnConfig ccCofins = new ColumnConfig(OpenSigCore.i18n.txtCofins(), "comVendaProdutoCofins", 75, false, IListagem.PORCENTAGEM);
 		ccCofins.setEditor(new GridEditor(txtCofins));
 		ccCofins.setHidden(true);
 
-		ColumnConfig ccOrdem = new ColumnConfig(OpenSigCore.i18n.txtOrdem(), "comVendaProdutoOrdem", 100, true);
+		ColumnConfig ccOrdem = new ColumnConfig(OpenSigCore.i18n.txtOrdem(), "comVendaProdutoOrdem", 100, false);
 		ccOrdem.setHidden(true);
 
 		// sumarios
-		ColumnConfig ccTotalBruto = new ColumnConfig(OpenSigCore.i18n.txtTotal() + " " + OpenSigCore.i18n.txtBruto(), "comVendaProdutoTotalBruto", 75, true, IListagem.DINHEIRO);
+		ColumnConfig ccTotalBruto = new ColumnConfig(OpenSigCore.i18n.txtTotal() + " " + OpenSigCore.i18n.txtBruto(), "comVendaProdutoTotalBruto", 75, false, IListagem.DINHEIRO);
 		SummaryColumnConfig sumBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccTotalBruto, IListagem.DINHEIRO);
 
-		ColumnConfig ccTatalLiquido = new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comVendaProdutoTotalLiquido", 75, true, IListagem.DINHEIRO);
+		ColumnConfig ccTatalLiquido = new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comVendaProdutoTotalLiquido", 75, false, IListagem.DINHEIRO);
 		SummaryColumnConfig sumLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccTatalLiquido, IListagem.DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccVendaId, ccEmpresaId, ccEmpresa, ccCliente, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccData, ccQuantidade,

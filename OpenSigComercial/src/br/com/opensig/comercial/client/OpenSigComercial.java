@@ -28,6 +28,7 @@ import br.com.opensig.comercial.client.controlador.comando.acao.ComandoFecharVen
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarCompra;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarNfeEntrada;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarNfeSaida;
+import br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarVenda;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagar;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagarConsumo;
 import br.com.opensig.comercial.client.controlador.comando.acao.ComandoPagarFrete;
@@ -63,6 +64,7 @@ public class OpenSigComercial implements EntryPoint {
 		fc.addComando(ComandoFecharCompra.class.getName(), (IComando) GWT.create(ComandoFecharCompra.class));
 		fc.addComando(ComandoPagar.class.getName(), (IComando) GWT.create(ComandoPagar.class));
 		fc.addComando(ComandoGerarNfeEntrada.class.getName(), (IComando) GWT.create(ComandoGerarNfeEntrada.class));
+		fc.addComando(ComandoGerarVenda.class.getName(), (IComando) GWT.create(ComandoGerarVenda.class));
 
 		// venda
 		fc.addComando(ComandoVenda.class.getName(), (IComando) GWT.create(ComandoVenda.class));

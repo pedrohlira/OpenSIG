@@ -356,6 +356,7 @@ public class ImportarCompra extends ImportarNFe<ComCompra> {
 			cp.setComCompraProdutoValor(Double.valueOf(det.getProd().getVUnCom()));
 			cp.setComCompraProdutoTotal(Double.valueOf(det.getProd().getVProd()));
 			cp.setComCompraProdutoPreco(pp.getProdProdutoPreco());
+			cp.setComCompraProdutoBarra(pp.getProdProdutoBarra());
 			cp.setComCompraProdutoOrdem(Integer.valueOf(det.getNItem()));
 			comProdutos.add(cp);
 		}

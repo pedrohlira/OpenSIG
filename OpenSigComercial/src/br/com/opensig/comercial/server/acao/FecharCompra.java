@@ -29,6 +29,8 @@ import br.com.opensig.core.shared.modelo.Autenticacao;
 import br.com.opensig.core.shared.modelo.EComando;
 import br.com.opensig.core.shared.modelo.Sql;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
+import br.com.opensig.produto.shared.modelo.ProdEstoqueGrade;
+import br.com.opensig.produto.shared.modelo.ProdGrade;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 public class FecharCompra extends Chain {
@@ -98,6 +100,23 @@ public class FecharCompra extends Chain {
 					// formando o sql
 					Sql sql = new Sql(new ProdEstoque(), EComando.ATUALIZAR, gf, pf);
 					servico.executar(em, sql);
+					
+					// remove estoque da grade caso o produto tenha
+					if (cp.getProdProduto().getProdGrades() != null) {
+						for (ProdGrade grade : cp.getProdProduto().getProdGrades()) {
+							if (grade.getProdGradeBarra().equals(cp.getComCompraProdutoBarra())) {
+								// formando os parametros
+								ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", qtd);
+								// formando o filtro
+								FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
+								GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo1, fo3 });
+								// formando o sql
+								Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
+								servico.executar(em, sql1);
+								break;
+							}
+						}
+					}
 				}
 
 				if (next != null) {

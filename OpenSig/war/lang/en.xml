@@ -813,4 +813,11 @@
 		<descricao>Make swaps buy.</descricao>
 		<imagem>icon-compra</imagem>
 	</acao>
+	<acao>
+		<classe>br.com.opensig.comercial.client.controlador.comando.acao.ComandoGerarVenda
+		</classe>
+		<nome>Sale</nome>
+		<descricao>Make sale of purchase.</descricao>
+		<imagem>icon-venda</imagem>
+	</acao>
 </opensig>

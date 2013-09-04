@@ -12,6 +12,7 @@ import com.gwtext.client.widgets.form.Checkbox;
 import com.gwtext.client.widgets.form.Hidden;
 import com.gwtext.client.widgets.form.MultiFieldPanel;
 import com.gwtext.client.widgets.form.NumberField;
+import com.gwtext.client.widgets.form.TextArea;
 import com.gwtext.client.widgets.form.TextField;
 
 public class FormularioNatureza extends AFormulario<ComNatureza> {
@@ -26,6 +27,7 @@ public class FormularioNatureza extends AFormulario<ComNatureza> {
 	private Checkbox chkIpi;
 	private Checkbox chkPis;
 	private Checkbox chkCofins;
+	private TextArea txtDecreto;
 
 	public FormularioNatureza(SisFuncao funcao) {
 		super(new ComNatureza(), funcao);
@@ -82,6 +84,11 @@ public class FormularioNatureza extends AFormulario<ComNatureza> {
 		linha2.addToRow(chkPis, 70);
 		linha2.addToRow(chkCofins, 70);
 		add(linha2);
+		
+		txtDecreto = new TextArea(OpenSigCore.i18n.txtDecreto(), "comNaturezaDecreto");
+		txtDecreto.setMaxLength(1000);
+		txtDecreto.setWidth("95%");
+		add(txtDecreto);
 	}
 
 	public boolean setDados() {
@@ -98,6 +105,7 @@ public class FormularioNatureza extends AFormulario<ComNatureza> {
 		classe.setComNaturezaIpi(chkIpi.getValue());
 		classe.setComNaturezaPis(chkPis.getValue());
 		classe.setComNaturezaCofins(chkCofins.getValue());
+		classe.setComNaturezaDecreto(txtDecreto.getValueAsString() == null ? "" : txtDecreto.getValueAsString());
 		if (hdnEmpresa.getValueAsString().equals("0")) {
 			classe.setEmpEmpresa(new EmpEmpresa(Ponte.getLogin().getEmpresaId()));
 		} else {
@@ -208,4 +216,11 @@ public class FormularioNatureza extends AFormulario<ComNatureza> {
 		this.chkCofins = chkCofins;
 	}
 
+	public TextArea getTxtDecreto() {
+		return txtDecreto;
+	}
+	
+	public void setTxtDecreto(TextArea txtDecreto) {
+		this.txtDecreto = txtDecreto;
+	}
 }

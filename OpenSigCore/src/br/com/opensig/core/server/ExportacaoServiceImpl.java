@@ -63,7 +63,9 @@ public class ExportacaoServiceImpl<E extends Dados> extends CoreServiceImpl<E> i
 				obj = new byte[is.available()];
 				is.read(obj);
 				is.close();
-				arq.delete();
+				if (arquivo.contains("tmp")) {
+					arq.delete();
+				}
 			} else if (arquivo.startsWith(System.getProperty("file.separator")) || arquivo.substring(1, 2).equals(":")) {
 				throw new Exception(auth.getConf().get("errRegistro"));
 			} else {
@@ -222,7 +224,9 @@ public class ExportacaoServiceImpl<E extends Dados> extends CoreServiceImpl<E> i
 					obj = new byte[is.available()];
 					is.read(obj);
 					is.close();
-					arq.delete();
+					if (path.contains("tmp")) {
+						arq.delete();
+					}
 				} else {
 					obj = (byte[]) sessao.getAttribute(id);
 				}

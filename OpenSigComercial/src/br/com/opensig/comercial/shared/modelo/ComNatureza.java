@@ -50,6 +50,9 @@ public class ComNatureza extends Dados implements Serializable {
 	@Column(name = "com_natureza_cofins")
 	private int comNaturezaCofins;
 
+	@Column(name = "com_natureza_decreto")
+	private String comNaturezaDecreto;
+
 	@JoinColumn(name = "emp_empresa_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private EmpEmpresa empEmpresa;
@@ -135,6 +138,14 @@ public class ComNatureza extends Dados implements Serializable {
 		this.comNaturezaCofins = comNaturezaCofins == false ? 0 : 1;
 	}
 
+	public String getComNaturezaDecreto() {
+		return comNaturezaDecreto;
+	}
+
+	public void setComNaturezaDecreto(String comNaturezaDecreto) {
+		this.comNaturezaDecreto = comNaturezaDecreto;
+	}
+
 	public EmpEmpresa getEmpEmpresa() {
 		return empEmpresa;
 	}
@@ -153,7 +164,7 @@ public class ComNatureza extends Dados implements Serializable {
 
 	public String[] toArray() {
 		return new String[] { comNaturezaId + "", empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), comNaturezaNome, comNaturezaDescricao,
-				comNaturezaCfopTrib + "", comNaturezaCfopSub + "", getComNaturezaIcms() + "", getComNaturezaIpi() + "", getComNaturezaPis() + "", getComNaturezaCofins() + "" };
+				comNaturezaCfopTrib + "", comNaturezaCfopSub + "", getComNaturezaIcms() + "", getComNaturezaIpi() + "", getComNaturezaPis() + "", getComNaturezaCofins() + "", comNaturezaDecreto };
 	}
 
 	public Dados getObjeto(String campo) {

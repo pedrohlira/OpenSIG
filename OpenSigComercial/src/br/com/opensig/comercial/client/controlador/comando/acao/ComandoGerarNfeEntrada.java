@@ -48,7 +48,7 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 	private NumberField txtVolume;
 	private NumberField txtLiquido;
 	private NumberField txtBruto;
-	private NumberField txtNfe;
+	private TextField txtNfe;
 	private TextField txtEspecie;
 	private ComboBox cmbTransportadora;
 	private TextArea txtObservacao;
@@ -235,15 +235,12 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 		linha3.addToRow(txtLiquido, 80);
 		frm.add(linha3);
 
-		txtNfe = new NumberField(OpenSigCore.i18n.txtNfe() + " " + OpenSigCore.i18n.txtComplemento(), "comCompraNfe", 300);
-		txtNfe.setAllowDecimals(false);
-		txtNfe.setAllowNegative(false);
-		txtNfe.setMinLength(44);
-		txtNfe.setMaxLength(44);
+		txtNfe = new TextField(OpenSigCore.i18n.txtNfe() + " " + OpenSigCore.i18n.txtComplemento(), "comCompraNfe", 300);
+		txtNfe.setRegex("^(\\d{44})$");
 		frm.add(txtNfe);
 
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), "comCompraObservacao");
-		txtObservacao.setMaxLength(255);
+		txtObservacao.setMaxLength(4000);
 		txtObservacao.setWidth("95%");
 		txtObservacao.setValue(compra.getComCompraObservacao());
 		frm.add(txtObservacao);

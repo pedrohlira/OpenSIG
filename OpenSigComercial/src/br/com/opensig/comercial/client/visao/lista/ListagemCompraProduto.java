@@ -56,7 +56,7 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comCompraProdutoId"), new IntegerFieldDef("comCompra.comCompraId"), new IntegerFieldDef("comCompra.empEmpresa.empEmpresaId"),
 				new StringFieldDef("comCompra.empEmpresa.empEntidade.empEntidadeNome1"), new StringFieldDef("prodProduto.empFornecedor.empEntidade.empEntidadeNome1"),
-				new IntegerFieldDef("prodProduto.prodProdutoId"), new StringFieldDef("prodProduto.prodProdutoBarra"), new StringFieldDef("prodProduto.prodProdutoDescricao"),
+				new IntegerFieldDef("prodProduto.prodProdutoId"), new StringFieldDef("comCompraProdutoBarra"), new StringFieldDef("prodProduto.prodProdutoDescricao"),
 				new StringFieldDef("prodProduto.prodProdutoReferencia"), new DateFieldDef("comCompra.comCompraRecebimento"), new FloatFieldDef("comCompraProdutoQuantidade"),
 				new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"), new FloatFieldDef("comCompraProdutoValor"),
 				new FloatFieldDef("comCompraProdutoTotal"), new IntegerFieldDef("comCompraProdutoCfop"), new StringFieldDef("comCompraProdutoIcmsCst"), new FloatFieldDef("comCompraProdutoIcms"),
@@ -75,7 +75,7 @@ public class ListagemCompraProduto extends AListagem<ComCompraProduto> {
 		ColumnConfig ccEmpresa = new ColumnConfig(OpenSigCore.i18n.txtEmpresa(), "comCompra.empEmpresa.empEntidade.empEntidadeNome1", 100, true);
 		ccEmpresa.setHidden(true);
 		ColumnConfig ccFornecedor = new ColumnConfig(OpenSigCore.i18n.txtFornecedor(), "prodProduto.empFornecedor.empEntidade.empEntidadeNome1", 200, true);
-		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "prodProduto.prodProdutoBarra", 100, true);
+		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "comCompraProdutoBarra", 100, true);
 		ColumnConfig ccProduto = new ColumnConfig(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoDescricao", 250, true);
 		ColumnConfig ccReferencia = new ColumnConfig(OpenSigCore.i18n.txtRef(), "prodProduto.prodProdutoReferencia", 100, true);
 		ColumnConfig ccRecebimento = new ColumnConfig(OpenSigCore.i18n.txtData(), "comCompra.comCompraRecebimento", 75, true, DATA);

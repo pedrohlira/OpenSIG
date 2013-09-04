@@ -121,7 +121,7 @@ public class ListagemValidarCompra {
 			public void onSuccess(Record result) {
 				Record rec = gridProdutos.getSelectionModel().getSelected();
 				rec.set("prodProdutoId", result.getAsInteger("prodProdutoId"));
-				rec.set("prodProduto.prodProdutoBarra", "".equals(result.getAsString("prodProdutoBarra")) ? null : result.getAsString("prodProdutoBarra"));
+				rec.set("comCompraProdutoBarra", "".equals(result.getAsString("prodProdutoBarra")) ? null : result.getAsString("prodProdutoBarra"));
 				rec.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
 				rec.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
 				rec.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
@@ -307,8 +307,9 @@ public class ListagemValidarCompra {
 			if (prod.getProdProdutoId() == 0) {
 				prod.setProdProdutoCategoria(cmbCategoria.getValue());
 			}
-			if ("".equals(prod.getProdProdutoBarra())) {
+			if ("".equals(cp.getComCompraProdutoBarra())) {
 				prod.setProdProdutoBarra(null);
+				cp.setComCompraProdutoBarra(null);
 			}
 		}
 
@@ -329,14 +330,14 @@ public class ListagemValidarCompra {
 		ProdProduto prod = cp.getProdProduto();
 		// altera
 		prod.setProdProdutoId(rec.getAsInteger("prodProdutoId"));
-		prod.setProdProdutoBarra("".equals(rec.getAsString("prodProduto.prodProdutoBarra")) ? null : rec.getAsString("prodProduto.prodProdutoBarra"));
+		prod.setProdProdutoBarra(rec.getAsString("comCompraProdutoBarra"));
 		prod.setProdProdutoDescricao(rec.getAsString("prodProduto.prodProdutoDescricao"));
 		prod.setProdProdutoReferencia(rec.getAsString("prodProduto.prodProdutoReferencia") == null ? "" : rec.getAsString("prodProduto.prodProdutoReferencia"));
 		prod.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
-
 		// seta
 		cp.setProdProduto(prod);
 		cp.setComCompraProdutoPreco(rec.getAsDouble("comCompraProdutoPreco"));
+		cp.setComCompraProdutoBarra(rec.getAsString("comCompraProdutoBarra"));
 		cp.setProdEmbalagem(new ProdEmbalagem(rec.getAsInteger("prodEmbalagem.prodEmbalagemId")));
 		compra.getComCompraProdutos().set(row, cp);
 	}
@@ -405,7 +406,7 @@ public class ListagemValidarCompra {
 			gridProdutos.getModelos().setEditable(conf.getId(), false);
 
 			// barra
-			if (conf.getDataIndex().equals("prodProduto.prodProdutoBarra")) {
+			if (conf.getDataIndex().equals("comCompraProdutoBarra")) {
 				TextField txtBarra = new TextField();
 				txtBarra.setMinLength(8);
 				txtBarra.setMaxLength(14);

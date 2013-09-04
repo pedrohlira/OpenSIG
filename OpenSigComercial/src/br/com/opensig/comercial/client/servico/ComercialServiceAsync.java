@@ -28,6 +28,8 @@ public interface ComercialServiceAsync<E extends Dados> extends CoreServiceAsync
 	public abstract void gerarCompra(IFiltro filtro, AsyncCallback asyncCallback);
 	
 	public abstract void fecharCompra(ComCompra compra, AsyncCallback asyncCallback);
+	
+	public abstract void gerarVenda(IFiltro filtro, AsyncCallback asyncCallback);
 
 	public abstract void fecharVenda(ComVenda venda, AsyncCallback<String[][]> asyncCallback);
 

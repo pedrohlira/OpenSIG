@@ -56,6 +56,11 @@ public class ComercialProxy<E extends Dados> extends CoreProxy<E> implements Com
 	}
 
 	@Override
+	public void gerarVenda(IFiltro filtro, AsyncCallback asyncCallback) {
+		async.gerarVenda(filtro, asyncCallback);
+	}
+	
+	@Override
 	public void fecharVenda(ComVenda venda, AsyncCallback<String[][]> asyncCallback) {
 		async.fecharVenda(venda, asyncCallback);
 	}

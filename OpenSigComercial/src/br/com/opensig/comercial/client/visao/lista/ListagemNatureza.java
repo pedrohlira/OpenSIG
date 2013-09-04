@@ -41,7 +41,8 @@ public class ListagemNatureza extends AListagem<ComNatureza> {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comNaturezaId"), new IntegerFieldDef("empEmpresa.empEmpresaId"), new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"),
 				new StringFieldDef("comNaturezaNome"), new StringFieldDef("comNaturezaDescricao"), new IntegerFieldDef("comNaturezaCfopTrib"), new IntegerFieldDef("comNaturezaCfopSub"),
-				new BooleanFieldDef("comNaturezaIcms"), new BooleanFieldDef("comNaturezaIpi"), new BooleanFieldDef("comNaturezaPis"), new BooleanFieldDef("comNaturezaCofins") };
+				new BooleanFieldDef("comNaturezaIcms"), new BooleanFieldDef("comNaturezaIpi"), new BooleanFieldDef("comNaturezaPis"), new BooleanFieldDef("comNaturezaCofins"),
+				new StringFieldDef("comNaturezaDecreto") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -58,8 +59,9 @@ public class ListagemNatureza extends AListagem<ComNatureza> {
 		ColumnConfig ccIpi = new ColumnConfig(OpenSigCore.i18n.txtIpi(), "comNaturezaIpi", 75, true, BOLEANO);
 		ColumnConfig ccPis = new ColumnConfig(OpenSigCore.i18n.txtPis(), "comNaturezaPis", 75, true, BOLEANO);
 		ColumnConfig ccCofins = new ColumnConfig(OpenSigCore.i18n.txtCofins(), "comNaturezaCofins", 75, true, BOLEANO);
+		ColumnConfig ccDecreto = new ColumnConfig(OpenSigCore.i18n.txtDecreto(), "comNaturezaDecreto", 200, true);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccEmpresaId, ccEmpresa, ccNome, ccDescricao, ccTrib, ccSub, ccIcms, ccIpi, ccPis, ccCofins };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccEmpresaId, ccEmpresa, ccNome, ccDescricao, ccTrib, ccSub, ccIcms, ccIpi, ccPis, ccCofins, ccDecreto };
 		modelos = new ColumnModel(bcc);
 
 		if (UtilClient.getAcaoPermitida(funcao, ComandoPermiteEmpresa.class) == null) {

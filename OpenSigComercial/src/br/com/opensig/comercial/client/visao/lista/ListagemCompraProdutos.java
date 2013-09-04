@@ -60,7 +60,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 	public void inicializar() {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comCompraProdutoId"), new IntegerFieldDef("comCompra.comCompraId"), new IntegerFieldDef("empEmpresaId"),
-				new StringFieldDef("empEmpresa"), new StringFieldDef("empFornecedor"), new IntegerFieldDef("prodProdutoId"), new StringFieldDef("prodProduto.prodProdutoBarra"),
+				new StringFieldDef("empEmpresa"), new StringFieldDef("empFornecedor"), new IntegerFieldDef("prodProdutoId"), new StringFieldDef("comCompraProdutoBarra"),
 				new StringFieldDef("prodProduto.prodProdutoDescricao"), new StringFieldDef("prodProduto.prodProdutoReferencia"), new DateFieldDef("comCompra.comCompraRecebimento"),
 				new FloatFieldDef("comCompraProdutoQuantidade"), new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"),
 				new FloatFieldDef("comCompraProdutoValor"), new FloatFieldDef("comCompraProdutoTotal"), new IntegerFieldDef("comCompraProdutoCfop"), new StringFieldDef("comCompraProdutoIcmsCst"),
@@ -72,7 +72,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		FieldDef[] fdEmbalagem = new FieldDef[] { new IntegerFieldDef("prodEmbalagemId"), new StringFieldDef("prodEmbalagemNome"), new IntegerFieldDef("prodEmbalagemUnidade"),
 				new StringFieldDef("prodEmbalagemDescricao") };
 		CoreProxy<ProdEmbalagem> proxy = new CoreProxy<ProdEmbalagem>(new ProdEmbalagem());
-		storeEmbalagem = new Store(proxy, new ArrayReader(new RecordDef(fdEmbalagem)), true);
+		storeEmbalagem = new Store(proxy, new ArrayReader(new RecordDef(fdEmbalagem)), false);
 		storeEmbalagem.load();
 
 		// editores
@@ -150,44 +150,44 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		txtPreco.setDecimalPrecision(2);
 
 		// colunas
-		ColumnConfig ccId = new ColumnConfig("", "comCompraProdutoId", 10, true);
+		ColumnConfig ccId = new ColumnConfig("", "comCompraProdutoId", 10, false);
 		ccId.setHidden(true);
 		ccId.setFixed(true);
 
-		ColumnConfig ccCompraId = new ColumnConfig("", "comCompraId", 10, true);
+		ColumnConfig ccCompraId = new ColumnConfig("", "comCompraId", 10, false);
 		ccCompraId.setHidden(true);
 		ccCompraId.setFixed(true);
 
-		ColumnConfig ccEmpresaId = new ColumnConfig("", "empEmpresaId", 10, true);
+		ColumnConfig ccEmpresaId = new ColumnConfig("", "empEmpresaId", 10, false);
 		ccEmpresaId.setHidden(true);
 		ccEmpresaId.setFixed(true);
 
-		ColumnConfig ccEmpresa = new ColumnConfig("", "empEmpresa", 10, true);
+		ColumnConfig ccEmpresa = new ColumnConfig("", "empEmpresa", 10, false);
 		ccEmpresa.setHidden(true);
 		ccEmpresa.setFixed(true);
 
-		ColumnConfig ccFornecedor = new ColumnConfig("", "empFornecedor", 10, true);
+		ColumnConfig ccFornecedor = new ColumnConfig("", "empFornecedor", 10, false);
 		ccFornecedor.setHidden(true);
 		ccFornecedor.setFixed(true);
 
-		ColumnConfig ccProdId = new ColumnConfig("", "prodProdutoId", 10, true);
+		ColumnConfig ccProdId = new ColumnConfig("", "prodProdutoId", 10, false);
 		ccProdId.setHidden(true);
 		ccProdId.setFixed(true);
 
-		ColumnConfig ccRecebimento = new ColumnConfig("", "comCompra.comCompraRecebimento", 10, true);
+		ColumnConfig ccRecebimento = new ColumnConfig("", "comCompra.comCompraRecebimento", 10, false);
 		ccRecebimento.setHidden(true);
 		ccRecebimento.setFixed(true);
 
-		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "prodProduto.prodProdutoBarra", 100, true);
+		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "comCompraProdutoBarra", 100, false);
 
-		ColumnConfig ccProduto = new ColumnConfig(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoDescricao", 250, true);
+		ColumnConfig ccProduto = new ColumnConfig(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoDescricao", 250, false);
 
-		ColumnConfig ccReferencia = new ColumnConfig(OpenSigCore.i18n.txtRef(), "prodProduto.prodProdutoReferencia", 75, true);
+		ColumnConfig ccReferencia = new ColumnConfig(OpenSigCore.i18n.txtRef(), "prodProduto.prodProdutoReferencia", 75, false);
 
-		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comCompraProdutoQuantidade", 75, true, IListagem.VALOR);
+		ColumnConfig ccQuantidade = new ColumnConfig(OpenSigCore.i18n.txtQtd(), "comCompraProdutoQuantidade", 75, false, IListagem.VALOR);
 		ccQuantidade.setEditor(new GridEditor(txtQuantidade));
 
-		ColumnConfig ccEmbalagemId = new ColumnConfig(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemId", 75, true, new Renderer() {
+		ColumnConfig ccEmbalagemId = new ColumnConfig(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemId", 75, false, new Renderer() {
 			public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
 				if (value != null) {
 					record = UtilClient.getRegistro(storeEmbalagem, "prodEmbalagemId", value.toString());
@@ -199,47 +199,47 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		});
 		ccEmbalagemId.setEditor(new GridEditor(getEmbalagem()));
 
-		ColumnConfig ccEmbalagem = new ColumnConfig("", "prodEmbalagem.prodEmbalagemNome", 10, true);
+		ColumnConfig ccEmbalagem = new ColumnConfig("", "prodEmbalagem.prodEmbalagemNome", 10, false);
 		ccEmbalagem.setHidden(true);
 		ccEmbalagem.setFixed(true);
 
-		ColumnConfig ccValor = new ColumnConfig(OpenSigCore.i18n.txtValor(), "comCompraProdutoValor", 75, true, IListagem.VALOR);
+		ColumnConfig ccValor = new ColumnConfig(OpenSigCore.i18n.txtValor(), "comCompraProdutoValor", 75, false, IListagem.VALOR);
 		ccValor.setEditor(new GridEditor(txtValor));
 
-		ColumnConfig ccCfop = new ColumnConfig(OpenSigCore.i18n.txtCfop(), "comCompraProdutoCfop", 75, true, IListagem.NUMERO);
+		ColumnConfig ccCfop = new ColumnConfig(OpenSigCore.i18n.txtCfop(), "comCompraProdutoCfop", 75, false, IListagem.NUMERO);
 		ccCfop.setEditor(new GridEditor(txtCfop));
 
-		ColumnConfig ccIcmsCst = new ColumnConfig(OpenSigCore.i18n.txtIcms() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoIcmsCst", 100, true);
+		ColumnConfig ccIcmsCst = new ColumnConfig(OpenSigCore.i18n.txtIcms() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoIcmsCst", 100, false);
 		ccIcmsCst.setEditor(new GridEditor(txtIcmsCst));
 
-		ColumnConfig ccIcms = new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comCompraProdutoIcms", 75, true, IListagem.PORCENTAGEM);
+		ColumnConfig ccIcms = new ColumnConfig(OpenSigCore.i18n.txtIcms(), "comCompraProdutoIcms", 75, false, IListagem.PORCENTAGEM);
 		ccIcms.setEditor(new GridEditor(txtIcms));
 
-		ColumnConfig ccIpiCst = new ColumnConfig(OpenSigCore.i18n.txtIpi() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoIpiCst", 100, true);
+		ColumnConfig ccIpiCst = new ColumnConfig(OpenSigCore.i18n.txtIpi() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoIpiCst", 100, false);
 		ccIpiCst.setEditor(new GridEditor(txtIpiCst));
 
-		ColumnConfig ccIpi = new ColumnConfig(OpenSigCore.i18n.txtIpi(), "comCompraProdutoIpi", 75, true, IListagem.PORCENTAGEM);
+		ColumnConfig ccIpi = new ColumnConfig(OpenSigCore.i18n.txtIpi(), "comCompraProdutoIpi", 75, false, IListagem.PORCENTAGEM);
 		ccIpi.setEditor(new GridEditor(txtIpi));
 
-		ColumnConfig ccPisCst = new ColumnConfig(OpenSigCore.i18n.txtPis() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoPisCst", 100, true);
+		ColumnConfig ccPisCst = new ColumnConfig(OpenSigCore.i18n.txtPis() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoPisCst", 100, false);
 		ccPisCst.setEditor(new GridEditor(txtPisCst));
 
-		ColumnConfig ccPis = new ColumnConfig(OpenSigCore.i18n.txtPis(), "comCompraProdutoPis", 75, true, IListagem.PORCENTAGEM);
+		ColumnConfig ccPis = new ColumnConfig(OpenSigCore.i18n.txtPis(), "comCompraProdutoPis", 75, false, IListagem.PORCENTAGEM);
 		ccPis.setEditor(new GridEditor(txtPis));
 
-		ColumnConfig ccCofinsCst = new ColumnConfig(OpenSigCore.i18n.txtCofins() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoCofinsCst", 100, true);
+		ColumnConfig ccCofinsCst = new ColumnConfig(OpenSigCore.i18n.txtCofins() + " - " + OpenSigCore.i18n.txtCst(), "comCompraProdutoCofinsCst", 100, false);
 		ccCofinsCst.setEditor(new GridEditor(txtCofinsCst));
 
-		ColumnConfig ccCofins = new ColumnConfig(OpenSigCore.i18n.txtCofins(), "comCompraProdutoCofins", 75, true, IListagem.PORCENTAGEM);
+		ColumnConfig ccCofins = new ColumnConfig(OpenSigCore.i18n.txtCofins(), "comCompraProdutoCofins", 75, false, IListagem.PORCENTAGEM);
 		ccCofins.setEditor(new GridEditor(txtCofins));
 
-		ColumnConfig ccPreco = new ColumnConfig(OpenSigCore.i18n.txtPreco(), "comCompraProdutoPreco", 75, true, IListagem.DINHEIRO);
+		ColumnConfig ccPreco = new ColumnConfig(OpenSigCore.i18n.txtPreco(), "comCompraProdutoPreco", 75, false, IListagem.DINHEIRO);
 		ccPreco.setEditor(new GridEditor(txtPreco));
 
-		ColumnConfig ccOrdem = new ColumnConfig(OpenSigCore.i18n.txtOrdem(), "comCompraProdutoOrdem", 100, true);
+		ColumnConfig ccOrdem = new ColumnConfig(OpenSigCore.i18n.txtOrdem(), "comCompraProdutoOrdem", 100, false);
 
 		// sumarios
-		ColumnConfig ccTotal = new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comCompraProdutoTotal", 75, true, IListagem.DINHEIRO);
+		ColumnConfig ccTotal = new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comCompraProdutoTotal", 75, false, IListagem.DINHEIRO);
 		SummaryColumnConfig sumTotal = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccTotal, IListagem.DINHEIRO);
 
 		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccCompraId, ccEmpresaId, ccEmpresa, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccRecebimento, ccQuantidade,
@@ -260,6 +260,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 		for (Record rec : recs) {
 			try {
 				int prodId = rec.getAsInteger("prodProdutoId");
+				String barra = rec.getAsString("comCompraProdutoBarra");
 				double quantidade = rec.getAsDouble("comCompraProdutoQuantidade");
 				int embalagemId = rec.getAsInteger("prodEmbalagem.prodEmbalagemId");
 				double valor = rec.getAsDouble("comCompraProdutoValor");
@@ -283,6 +284,7 @@ public class ListagemCompraProdutos extends AListagemEditor<ComCompraProduto> {
 				cp.setProdProduto(new ProdProduto(prodId));
 				cp.setComCompraProdutoQuantidade(quantidade);
 				cp.setProdEmbalagem(new ProdEmbalagem(embalagemId));
+				cp.setComCompraProdutoBarra(barra);
 				cp.setComCompraProdutoValor(valor);
 				cp.setComCompraProdutoTotal(total);
 				cp.setComCompraProdutoCfop(cfop);

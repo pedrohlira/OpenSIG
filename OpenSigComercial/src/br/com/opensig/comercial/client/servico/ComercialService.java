@@ -26,6 +26,8 @@ public interface ComercialService extends CoreService {
 	
 	public void fecharCompra(ComCompra compra) throws ComercialException;
 
+	public void gerarVenda(IFiltro filtro) throws ComercialException;
+	
 	public String[][] fecharVenda(ComVenda venda) throws ComercialException;
 
 	public void fecharFrete(ComFrete frete) throws ComercialException;

@@ -42,6 +42,7 @@ import br.com.opensig.produto.client.controlador.comando.ComandoPesquisa;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwtext.client.core.EventObject;
 import com.gwtext.client.data.ArrayReader;
 import com.gwtext.client.data.FieldDef;
 import com.gwtext.client.data.IntegerFieldDef;
@@ -51,10 +52,13 @@ import com.gwtext.client.data.SortState;
 import com.gwtext.client.data.Store;
 import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.data.event.StoreListenerAdapter;
+import com.gwtext.client.widgets.Button;
 import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.MessageBox.ConfirmCallback;
+import com.gwtext.client.widgets.event.ButtonListenerAdapter;
 import com.gwtext.client.widgets.form.ComboBox;
 import com.gwtext.client.widgets.form.Field;
+import com.gwtext.client.widgets.form.FieldSet;
 import com.gwtext.client.widgets.form.Hidden;
 import com.gwtext.client.widgets.form.Label;
 import com.gwtext.client.widgets.form.MultiFieldPanel;
@@ -78,9 +82,19 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 	private ComboBox cmbVendedor;
 	private ComboBox cmbNatureza;
 	private TextField txtUsuario;
-	private NumberField txtPadraoDesc;
 	private TextArea txtObservacao;
 	private Label lblRegistros;
+	private NumberField pDesconto;
+	private NumberField pCfop;
+	private TextField pIcmsCst;
+	private NumberField pIcms;
+	private TextField pIpiCst;
+	private NumberField pIpi;
+	private TextField pPisCst;
+	private NumberField pPis;
+	private TextField pCofinsCst;
+	private NumberField pCofins;
+	private Button btnAtualizar;
 	private ListagemVendaProdutos gridProdutos;
 	private List<ComVendaProduto> produtos;
 
@@ -93,6 +107,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 	private AsyncCallback asyncSalvar;
 	private AsyncCallback<ILogin> asyncLogin;
 	private ComandoPesquisa cmdPesquisa;
+	private FieldSet padrao;
 
 	public FormularioVenda(SisFuncao funcao) {
 		super(new ComVenda(), funcao);
@@ -123,9 +138,88 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 		add(linha1);
 		lblRegistros = new Label();
 
-		txtPadraoDesc = new NumberField("", "padraoCfop", 50, 0);
-		txtPadraoDesc.setAllowNegative(false);
-		txtPadraoDesc.addListener(new TextFieldListenerAdapter() {
+		pCfop = new NumberField(OpenSigCore.i18n.txtCfop(), "pCfop", 40);
+		pCfop.setAllowDecimals(false);
+		pCfop.setAllowNegative(false);
+		pCfop.setMinLength(4);
+		pCfop.setMaxLength(4);
+		pCfop.setMinValue(4000);
+
+		pIcmsCst = new TextField(OpenSigCore.i18n.txtIcms() + " - " + OpenSigCore.i18n.txtCst(), "pIcmsCst", 50);
+		pIcmsCst.setRegex("^(\\d{2}|\\d{3})$");
+
+		pIcms = new NumberField(OpenSigCore.i18n.txtIcms() + " %", "pIcms", 40, 0);
+		pIcms.setAllowBlank(false);
+		pIcms.setAllowNegative(false);
+		pIcms.setDecimalPrecision(2);
+		pIcms.setMaxLength(5);
+
+		pIpiCst = new TextField(OpenSigCore.i18n.txtIpi() + " - " + OpenSigCore.i18n.txtCst(), "pIpiCst", 50);
+		pIpiCst.setRegex("^(\\d{2})$");
+
+		pIpi = new NumberField(OpenSigCore.i18n.txtIpi() + " %", "pIpi", 40, 0);
+		pIpi.setAllowBlank(false);
+		pIpi.setAllowNegative(false);
+		pIpi.setDecimalPrecision(2);
+		pIpi.setMaxLength(5);
+
+		pPisCst = new TextField(OpenSigCore.i18n.txtPis() + " - " + OpenSigCore.i18n.txtCst(), "pPisCst", 50);
+		pPisCst.setRegex("^(\\d{2})$");
+
+		pPis = new NumberField(OpenSigCore.i18n.txtPis() + " %", "pPis", 40, 0);
+		pPis.setAllowNegative(false);
+		pPis.setAllowBlank(false);
+		pPis.setDecimalPrecision(2);
+		pPis.setMaxLength(5);
+
+		pCofinsCst = new TextField(OpenSigCore.i18n.txtCofins() + " - " + OpenSigCore.i18n.txtCst(), "pCofinsCst", 50);
+		pCofinsCst.setRegex("^(\\d{2})$");
+
+		pCofins = new NumberField(OpenSigCore.i18n.txtCofins() + " %", "pCofins", 40, 0);
+		pCofins.setAllowNegative(false);
+		pCofins.setAllowBlank(false);
+		pCofins.setDecimalPrecision(2);
+		pCofins.setMaxLength(5);
+		
+		btnAtualizar = new Button(OpenSigCore.i18n.txtAtualizar());
+		btnAtualizar.setIconCls("icon-selecionar");
+		btnAtualizar.addListener(new ButtonListenerAdapter(){
+			public void onClick(Button button, EventObject e) {
+				for(Record rec : gridProdutos.getStore().getRecords()){
+					rec.set("comVendaProdutoCfop", pCfop.getValue() == null ? 0 : pCfop.getValue().intValue());
+					rec.set("comVendaProdutoIcmsCst", pIcmsCst.getValueAsString());
+					rec.set("comVendaProdutoIcms", pIcms.getValueAsString());
+					rec.set("comVendaProdutoIpiCst", pIpiCst.getValueAsString());
+					rec.set("comVendaProdutoIpi", pIpi.getValueAsString());
+					rec.set("comVendaProdutoPisCst", pPisCst.getValueAsString());
+					rec.set("comVendaProdutoPis", pPis.getValueAsString());
+					rec.set("comVendaProdutoCofinsCst", pCofinsCst.getValueAsString());
+					rec.set("comVendaProdutoCofins", pCofins.getValueAsString());
+				}
+			}
+		});
+
+		MultiFieldPanel linha2 = new MultiFieldPanel();
+		linha2.setBorder(false);
+		linha2.addToRow(pCfop, 60);
+		linha2.addToRow(pIcmsCst, 70);
+		linha2.addToRow(pIcms, 60);
+		linha2.addToRow(pIpiCst, 70);
+		linha2.addToRow(pIpi, 60);
+		linha2.addToRow(pPisCst, 70);
+		linha2.addToRow(pPis, 60);
+		linha2.addToRow(pCofinsCst, 100);
+		linha2.addToRow(pCofins, 80);
+		linha2.addToRow(btnAtualizar, 100);
+
+		padrao = new FieldSet("Dados Padrões Para os Produtos");
+		padrao.add(linha2);
+		padrao.setVisible(false);
+		add(padrao);
+
+		pDesconto = new NumberField("", "pDesconto", 50, 0);
+		pDesconto.setAllowNegative(false);
+		pDesconto.addListener(new TextFieldListenerAdapter() {
 			public void onChange(Field field, Object newVal, Object oldVal) {
 				if (newVal == null || newVal.toString().equals("")) {
 					field.setValue("0");
@@ -142,47 +236,59 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 
 			public void onSuccess(Record result) {
 				gridProdutos.stopEditing();
+				int pos;
 				double bruto = result.getAsDouble("prodProdutoPreco");
-				double desc = txtPadraoDesc.getValue().doubleValue();
+				double desc = pDesconto.getValue().doubleValue();
 				double liquido = bruto - (bruto * desc / 100);
 				String strValor = NumberFormat.getFormat("0.##").format(liquido);
 				liquido = Double.valueOf(strValor.replace(",", "."));
 
-				Record reg = gridProdutos.getCampos().createRecord(new Object[gridProdutos.getCampos().getFields().length]);
-				reg.set("comVendaProdutoId", 0);
-				reg.set("prodProdutoId", result.getAsInteger("prodProdutoId"));
-				reg.set("comVendaProdutoBarra", result.getAsString("prodProdutoBarra"));
-				reg.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
-				reg.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
-				reg.set("comVendaProdutoQuantidade", 0);
-				reg.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
-				reg.set("prodEmbalagem.prodEmbalagemNome", result.getAsString("prodEmbalagem.prodEmbalagemNome"));
-				reg.set("comVendaProdutoBruto", bruto);
-				reg.set("comVendaProdutoDesconto", desc);
-				reg.set("comVendaProdutoLiquido", liquido);
-				reg.set("comVendaProdutoTotalBruto", 0);
-				reg.set("comVendaProdutoTotalLiquido", 0);
-				reg.set("comVendaProdutoCfop", 0);
-				reg.set("comVendaProdutoIcmsCst", "");
-				reg.set("comVendaProdutoIcms", 0);
-				reg.set("comVendaProdutoIpiCst", "");
-				reg.set("comVendaProdutoIpi", 0);
-				reg.set("comVendaProdutoPisCst", "");
-				reg.set("comVendaProdutoPis", 0);
-				reg.set("comVendaProdutoCofinsCst", "");
-				reg.set("comVendaProdutoCofins", 0);
-				reg.set("comVendaProdutoEstoque", result.getAsInteger("t1.prodEstoqueQuantidade"));
+				for (pos = 0; pos < gridProdutos.getStore().getCount(); pos++) {
+					if (gridProdutos.getStore().getAt(pos).getAsInteger("prodProdutoId") == result.getAsInteger("prodProdutoId")
+							&& gridProdutos.getStore().getAt(pos).getAsString("comVendaProdutoBarra").equals(result.getAsString("prodProdutoBarra"))) {
+						break;
+					}
+				}
 
-				if (reg.getAsInteger("comVendaProdutoEstoque") > 0 || !UtilClient.CONF.get("estoque.ativo").equalsIgnoreCase("sim")) {
-					gridProdutos.getStore().add(reg);
+				if (pos == gridProdutos.getStore().getCount()) {
+					Record rec = gridProdutos.getCampos().createRecord(new Object[gridProdutos.getCampos().getFields().length]);
+					rec.set("comVendaProdutoId", 0);
+					rec.set("prodProdutoId", result.getAsInteger("prodProdutoId"));
+					rec.set("comVendaProdutoBarra", result.getAsString("prodProdutoBarra"));
+					rec.set("prodProduto.prodProdutoDescricao", result.getAsString("prodProdutoDescricao"));
+					rec.set("prodProduto.prodProdutoReferencia", result.getAsString("prodProdutoReferencia"));
+					rec.set("comVendaProdutoQuantidade", 1);
+					rec.set("prodEmbalagem.prodEmbalagemId", result.getAsInteger("prodEmbalagem.prodEmbalagemId"));
+					rec.set("prodEmbalagem.prodEmbalagemNome", result.getAsString("prodEmbalagem.prodEmbalagemNome"));
+					rec.set("comVendaProdutoBruto", bruto);
+					rec.set("comVendaProdutoDesconto", desc);
+					rec.set("comVendaProdutoLiquido", liquido);
+					rec.set("comVendaProdutoTotalBruto", 0);
+					rec.set("comVendaProdutoTotalLiquido", 0);
+					rec.set("comVendaProdutoCfop", pCfop.getValue() == null ? 0 : pCfop.getValue().intValue());
+					rec.set("comVendaProdutoIcmsCst", pIcmsCst.getValueAsString());
+					rec.set("comVendaProdutoIcms", pIcms.getValueAsString());
+					rec.set("comVendaProdutoIpiCst", pIpiCst.getValueAsString());
+					rec.set("comVendaProdutoIpi", pIpi.getValueAsString());
+					rec.set("comVendaProdutoPisCst", pPisCst.getValueAsString());
+					rec.set("comVendaProdutoPis", pPis.getValueAsString());
+					rec.set("comVendaProdutoCofinsCst", pCofinsCst.getValueAsString());
+					rec.set("comVendaProdutoCofins", pCofins.getValueAsString());
+					rec.set("comVendaProdutoEstoque", result.getAsInteger("t1.prodEstoqueQuantidade"));
+
+					if (rec.getAsInteger("comVendaProdutoEstoque") > 0 || !UtilClient.CONF.get("estoque.ativo").equalsIgnoreCase("sim")) {
+						gridProdutos.getStore().add(rec);
+					} else {
+						new ToastWindow(OpenSigCore.i18n.txtEstoque(), rec.getAsString("prodProduto.prodProdutoDescricao") + " = 0").show();
+						return;
+					}
 				} else {
-					new ToastWindow(OpenSigCore.i18n.txtEstoque(), reg.getAsString("prodProduto.prodProdutoDescricao") + " = 0").show();
-					return;
+					new ToastWindow(getTitle(), OpenSigCore.i18n.errExiste()).show();
 				}
 
 				for (int col = 0; col < gridProdutos.getModelos().getColumnCount(); col++) {
 					if (gridProdutos.getModelos().getDataIndex(col).equals("comVendaProdutoQuantidade")) {
-						gridProdutos.startEditing(gridProdutos.getStore().getCount() - 1, col);
+						gridProdutos.startEditing(pos, col);
 						break;
 					}
 				}
@@ -214,7 +320,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 			};
 		};
 		gridProdutos.getTopToolbar().addText(OpenSigCore.i18n.txtPadrao() + "-" + OpenSigCore.i18n.txtDesconto());
-		gridProdutos.getTopToolbar().addField(txtPadraoDesc);
+		gridProdutos.getTopToolbar().addField(pDesconto);
 		gridProdutos.getTopToolbar().addSpacer();
 
 		gridProdutos.getTopToolbar().addSeparator();
@@ -224,7 +330,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 		add(gridProdutos);
 
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), "comVendaObservacao");
-		txtObservacao.setMaxLength(255);
+		txtObservacao.setMaxLength(4000);
 		txtObservacao.setWidth("95%");
 		add(txtObservacao);
 
@@ -397,6 +503,7 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 			cmbVendedor.setValue(Ponte.getLogin().getId() + "");
 			cmbNatureza.setValue(idNatureza);
 		}
+		mostrarCampos(cmbNatureza.getValue().equals(idNatureza));
 		cmbCliente.focus(true);
 
 		if (duplicar) {
@@ -511,17 +618,15 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 		cmbNatureza.addListener(new ComboBoxListenerAdapter() {
 			public void onSelect(ComboBox comboBox, Record record, int index) {
 				super.onSelect(comboBox, record, index);
-				if (!record.getAsString("comNaturezaId").equals(idNatureza)) {
-					for (int i = 21; i < gridProdutos.getModelos().getColumnCount(); i++) {
-						gridProdutos.getModelos().setHidden(i, false);
-					}
-				}
+				// campos dos produtos
+				boolean normal = record.getAsString("comNaturezaId").equals(idNatureza);
+				mostrarCampos(normal);
 			}
 		});
 
 		return cmbNatureza;
 	}
-
+	
 	public void gerarListas() {
 		// produtos
 		List<ExpMeta> metadados = new ArrayList<ExpMeta>();
@@ -558,6 +663,13 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 		expLista.add(produtos);
 	}
 
+	private void mostrarCampos(boolean normal){
+		for (int i = 21; i < gridProdutos.getModelos().getColumnCount(); i++) {
+			gridProdutos.getModelos().setHidden(i, normal);
+		}
+		padrao.setVisible(!normal);
+	}
+	
 	private void totalizar(String field) {
 		double bruto = 0.00;
 		double liquido = 0.00;
@@ -661,11 +773,11 @@ public class FormularioVenda extends AFormulario<ComVenda> {
 	}
 
 	public NumberField getTxtPadraoDesc() {
-		return txtPadraoDesc;
+		return pDesconto;
 	}
 
 	public void setTxtPadraoDesc(NumberField txtPadraoDesc) {
-		this.txtPadraoDesc = txtPadraoDesc;
+		this.pDesconto = txtPadraoDesc;
 	}
 
 	public double getMax() {

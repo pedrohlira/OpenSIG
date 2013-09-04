@@ -59,7 +59,6 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 		}
 	}
 
-
 	protected ProdProduto getProduto(EmpFornecedor fornecedor, Prod prod, MyIcms icms) throws OpenSigException {
 		String ean = prod.getCEAN();
 		String ref = prod.getCProd();
