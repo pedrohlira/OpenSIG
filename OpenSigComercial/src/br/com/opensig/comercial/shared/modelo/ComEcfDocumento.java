@@ -72,6 +72,11 @@ public class ComEcfDocumento extends Dados implements Serializable {
 	@XmlTransient
 	private ComEcf comEcf;
 
+	@JoinColumn(name = "com_ecf_z_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@XmlTransient
+	private ComEcfZ comEcfZ;
+
 	public ComEcfDocumento() {
 		this(0);
 	}
@@ -161,13 +166,22 @@ public class ComEcfDocumento extends Dados implements Serializable {
 		this.comEcf = comEcf;
 	}
 
+	public ComEcfZ getComEcfZ() {
+		return comEcfZ;
+	}
+
+	public void setComEcfZ(ComEcfZ comEcfZ) {
+		this.comEcfZ = comEcfZ;
+	}
+
 	public String[] toArray() {
 		return new String[] { comEcfDocumentoId + "", comEcf.getEmpEmpresa().getEmpEmpresaId() + "", comEcf.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(), comEcf.getComEcfId() + "",
-				comEcf.getComEcfSerie(), comEcfDocumentoCoo + "", comEcfDocumentoGnf + "", comEcfDocumentoGrg + "", comEcfDocumentoCdc + "", comEcfDocumentoTipo,
+				comEcfZ.getComEcfZId() + "", comEcf.getComEcfSerie(), comEcfDocumentoCoo + "", comEcfDocumentoGnf + "", comEcfDocumentoGrg + "", comEcfDocumentoCdc + "", comEcfDocumentoTipo,
 				UtilClient.getDataHoraGrid(comEcfDocumentoData) };
 	}
 
 	public void anularDependencia() {
 		comEcf = null;
+		comEcfZ = null;
 	}
 }

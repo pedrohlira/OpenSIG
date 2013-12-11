@@ -139,6 +139,7 @@ public class ImportarCat52 implements IImportacao<Cat52> {
 							ComEcfDocumento doc = (ComEcfDocumento) rec;
 							doc.setComEcfDocumentoUsuario(0);
 							doc.setComEcf(ecf);
+							doc.setComEcfZ(ecfZ);
 							docs.add(doc);
 						}
 					} catch (Exception e) {
@@ -258,7 +259,7 @@ public class ImportarCat52 implements IImportacao<Cat52> {
 	// seta os dados da Z
 	private ComEcfZ getEcfZ(ComEcfZ ecfZ, ComEcf ecf, Cat52 cat52) throws ParametroException, CoreException {
 		ecfZ.setComEcf(ecf);
-		ecfZ.setComEcfZUsuario(0);
+		ecfZ.setComEcfZUsuario(1);
 		ecfZ.setComEcfZBruto(ecfZ.getComEcfZBruto() / 100);
 		ecfZ.setComEcfZIssqn(ecfZ.getIssqn().equalsIgnoreCase("S"));
 		ecfZ.setComEcfZTotais(new ArrayList<ComEcfZTotais>());

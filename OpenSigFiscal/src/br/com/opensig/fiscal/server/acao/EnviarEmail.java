@@ -4,7 +4,6 @@ import org.w3c.dom.Document;
 
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
-import br.com.opensig.core.client.servico.OpenSigException;
 import br.com.opensig.core.server.MailServiceImpl;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Anexo;
@@ -21,7 +20,7 @@ public class EnviarEmail implements Runnable {
 	private FisNotaSaida saida;
 	private Autenticacao auth;
 
-	public EnviarEmail(FiscalServiceImpl servico, FisNotaSaida saida, Autenticacao auth) throws OpenSigException {
+	public EnviarEmail(FiscalServiceImpl servico, FisNotaSaida saida, Autenticacao auth) {
 		this.servico = servico;
 		this.saida = saida;
 		this.auth = auth;

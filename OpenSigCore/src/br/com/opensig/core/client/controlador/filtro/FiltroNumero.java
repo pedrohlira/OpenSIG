@@ -36,7 +36,7 @@ public class FiltroNumero extends AFiltro<Number> {
 
 	@Override
 	public String getSql() throws ParametroException {
-		if (compara != ECompara.CONTEM && compara != ECompara.CONTEM_FIM && compara != ECompara.CONTEM_INICIO) {
+		if (compara != ECompara.CONTEM && compara != ECompara.CONTEM_FIM && compara != ECompara.CONTEM_INICIO && compara != ECompara.NULO && compara != ECompara.VAZIO) {
 			return super.getSql();
 		} else {
 			throw new ParametroException(OpenSigCore.i18n.errFiltro());

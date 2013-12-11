@@ -40,8 +40,11 @@ public class FiltroData extends AFiltro<Date> {
 
 	@Override
 	public String getSql() throws ParametroException {
-		if (compara != ECompara.CONTEM && compara != ECompara.CONTEM_FIM && compara != ECompara.CONTEM_INICIO) {
+		if (compara != ECompara.CONTEM && compara != ECompara.CONTEM_FIM && compara != ECompara.CONTEM_INICIO && compara != ECompara.NULO && compara != ECompara.VAZIO) {
 			return super.getSql();
+		} else if (compara == ECompara.NULO || compara == ECompara.VAZIO) {
+			tratarPrefixo();
+			return prefixo + campo + " " + compara.toString();
 		} else {
 			throw new ParametroException(OpenSigCore.i18n.errFiltro());
 		}

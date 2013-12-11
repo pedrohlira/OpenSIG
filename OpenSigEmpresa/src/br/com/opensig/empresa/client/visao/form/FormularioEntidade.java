@@ -90,7 +90,7 @@ public abstract class FormularioEntidade<E extends Dados> extends AFormulario<E>
 
 		txtNome1 = new TextField(OpenSigCore.i18n.txtEntidadeNome1(), prefixo + ".empEntidadeNome1", 300);
 		txtNome1.setAllowBlank(false);
-		txtNome1.setMaxLength(100);
+		txtNome1.setMaxLength(60);
 		coluna1.add(txtNome1);
 
 		txtCNPJ = new TextField(OpenSigCore.i18n.txtEntidadeDoc1(), "docCNPJ", 150);
@@ -139,7 +139,7 @@ public abstract class FormularioEntidade<E extends Dados> extends AFormulario<E>
 		coluna2.setLayout(new FormLayout());
 
 		txtNome2 = new TextField(OpenSigCore.i18n.txtEntidadeNome2(), prefixo + ".empEntidadeNome2", 300);
-		txtNome2.setMaxLength(15);
+		txtNome2.setMaxLength(60);
 		txtNome2.setAllowBlank(false);
 		coluna2.add(txtNome2);
 

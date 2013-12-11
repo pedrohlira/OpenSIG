@@ -347,7 +347,7 @@ public class Html<E extends Dados> extends AExportacao<E> {
 						}
 					}
 				} else {
-					agrupados[i] = -1;
+					agrupados[i] = Double.MIN_NORMAL;
 				}
 			}
 			sb.append("</tr>");
@@ -368,7 +368,7 @@ public class Html<E extends Dados> extends AExportacao<E> {
 		for (int i = 0; i < agrupados.length; i++) {
 			if (agrupados[i] == 0) {
 				rodape.append("<td>&nbsp;</td>");
-			} else if (agrupados[i] > 0) {
+			} else if (agrupados[i] > Double.MIN_NORMAL) {
 				semGrupo = false;
 				rodape.append("<td><div class=\"nobreak\">").append(UtilServer.formataNumero(agrupados[i], 1, 2, true)).append("</div></td>");
 			}

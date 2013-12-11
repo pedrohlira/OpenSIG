@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -97,10 +96,10 @@ public class ComEcfZ extends Dados implements Serializable {
 	private List<ComEcfZTotais> comEcfZTotais;
 
 	@OneToMany(mappedBy = "comEcfZ", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	@XmlElement(name = "ecfVendas")
+	@XmlTransient
 	private List<ComEcfVenda> comEcfVendas;
 
-	@Transient
+	@OneToMany(mappedBy = "comEcfZ", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@XmlElement(name = "ecfDocumentos")
 	private List<ComEcfDocumento> comEcfDocumentos;
 
@@ -269,5 +268,6 @@ public class ComEcfZ extends Dados implements Serializable {
 		comEcf = null;
 		comEcfZTotais = null;
 		comEcfVendas = null;
+		comEcfDocumentos = null;
 	}
 }

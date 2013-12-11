@@ -45,9 +45,9 @@ public class ListagemEcfDocumento extends AListagem<ComEcfDocumento> {
 	public void inicializar() {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comEcfDocumentoId"), new IntegerFieldDef("comEcf.empEmpresa.empEmpresaId"),
-				new StringFieldDef("comEcf.empEmpresa.empEntidade.empEntidadeNome1"), new IntegerFieldDef("comEcf.comEcfId"), new StringFieldDef("comEcf.comEcfSerie"),
-				new IntegerFieldDef("comEcfDocumentoCoo"), new IntegerFieldDef("comEcfDocumentoGnf"), new IntegerFieldDef("comEcfDocumentoGrg"), new IntegerFieldDef("comEcfDocumentoCdc"),
-				new StringFieldDef("comEcfDocumentoTipo"), new DateFieldDef("comEcfDocumentoData") };
+				new StringFieldDef("comEcf.empEmpresa.empEntidade.empEntidadeNome1"), new IntegerFieldDef("comEcf.comEcfId"), new IntegerFieldDef("comEcfZ.comEcfZId"),
+				new StringFieldDef("comEcf.comEcfSerie"), new IntegerFieldDef("comEcfDocumentoCoo"), new IntegerFieldDef("comEcfDocumentoGnf"), new IntegerFieldDef("comEcfDocumentoGrg"),
+				new IntegerFieldDef("comEcfDocumentoCdc"), new StringFieldDef("comEcfDocumentoTipo"), new DateFieldDef("comEcfDocumentoData") };
 		campos = new RecordDef(fd);
 
 		// colunas
@@ -58,6 +58,9 @@ public class ListagemEcfDocumento extends AListagem<ComEcfDocumento> {
 		ccEmpresa.setHidden(true);
 		ColumnConfig ccEcfId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtEcf(), "comEcf.comEcfId", 100, false);
 		ccEcfId.setHidden(true);
+		ColumnConfig ccZId = new ColumnConfig("", "comEcfZ.comEcfZId", 10, false);
+		ccZId.setHidden(true);
+		ccZId.setFixed(true);
 		ColumnConfig ccEcf = new ColumnConfig(OpenSigCore.i18n.txtEcf(), "comEcf.comEcfSerie", 200, true);
 		ColumnConfig ccCoo = new ColumnConfig(OpenSigCore.i18n.txtCoo(), "comEcfDocumentoCoo", 75, true);
 		ColumnConfig ccGnf = new ColumnConfig(OpenSigCore.i18n.txtGnf(), "comEcfDocumentoGnf", 75, true);
@@ -66,7 +69,7 @@ public class ListagemEcfDocumento extends AListagem<ComEcfDocumento> {
 		ColumnConfig ccTipo = new ColumnConfig(OpenSigCore.i18n.txtTipo(), "comEcfDocumentoTipo", 50, true);
 		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), "comEcfDocumentoData", 120, true, DATAHORA);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccEmpresaId, ccEmpresa, ccEcfId, ccCoo, ccEcf, ccGnf, ccGrg, ccCdc, ccTipo, ccData };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccEmpresaId, ccEmpresa, ccEcfId, ccZId, ccCoo, ccEcf, ccGnf, ccGrg, ccCdc, ccTipo, ccData };
 		modelos = new ColumnModel(bcc);
 
 		if (UtilClient.getAcaoPermitida(funcao, ComandoPermiteEmpresa.class) == null) {
@@ -119,7 +122,7 @@ public class ListagemEcfDocumento extends AListagem<ComEcfDocumento> {
 		filtros.get("comEcf.empEmpresa.empEmpresaId").setActive(false, true);
 		super.setFavorito(favorito);
 	}
-	
+
 	@Override
 	public void irPara() {
 		Menu mnuContexto = new Menu();
@@ -131,6 +134,13 @@ public class ListagemEcfDocumento extends AListagem<ComEcfDocumento> {
 			mnuContexto.addItem(itemEcf);
 		}
 		
+		// EcfZ
+		SisFuncao z = UtilClient.getFuncaoPermitida(ComandoEcf.class);
+		MenuItem itemZ = gerarFuncao(z, "comEcfZId", "comEcfZ.comEcfZId");
+		if (itemEcf != null) {
+			mnuContexto.addItem(itemZ);
+		}
+
 		if (mnuContexto.getItems().length > 0) {
 			MenuItem mnuItem = getIrPara();
 			mnuItem.setMenu(mnuContexto);

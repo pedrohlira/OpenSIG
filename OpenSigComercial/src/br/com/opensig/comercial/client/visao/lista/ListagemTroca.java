@@ -59,8 +59,8 @@ public class ListagemTroca extends AListagem<ComTroca> {
 	public void inicializar() {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comTrocaId"), new IntegerFieldDef("empEmpresa.empEmpresaId"), new StringFieldDef("empEmpresa.empEntidade.empEntidadeNome1"),
-				new IntegerFieldDef("comCompra.comCompraId"), new DateFieldDef("comTrocaData"), new StringFieldDef("comTrocaCliente"), new FloatFieldDef("comTrocaValor"),
-				new IntegerFieldDef("comTrocaEcf"), new IntegerFieldDef("comTrocaCoo"), new BooleanFieldDef("comTrocaAtivo") };
+				new IntegerFieldDef("comCompra.comCompraId"), new IntegerFieldDef("comEcfVenda.comEcfVendaId"), new DateFieldDef("comTrocaData"), new StringFieldDef("comTrocaCliente"),
+				new FloatFieldDef("comTrocaValor"), new IntegerFieldDef("comTrocaEcf"), new IntegerFieldDef("comTrocaCoo"), new BooleanFieldDef("comTrocaAtivo") };
 		campos = new RecordDef(fd);
 
 		// selected
@@ -76,6 +76,9 @@ public class ListagemTroca extends AListagem<ComTroca> {
 		ColumnConfig ccCompraId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtCompra(), "comCompra.comCompraId", 100, true);
 		ccCompraId.setHidden(true);
 		ccCompraId.setFixed(true);
+		ColumnConfig ccVendaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtVenda(), "comEcfVenda.comEcfVendaId", 100, true);
+		ccVendaId.setHidden(true);
+		ccVendaId.setFixed(true);
 		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), "comTrocaData", 120, true, DATAHORA);
 		ColumnConfig ccCliente = new ColumnConfig(OpenSigCore.i18n.txtEntidadeDoc1(), "comTrocaCliente", 150, true);
 		ColumnConfig ccEcf = new ColumnConfig(OpenSigCore.i18n.txtEcf(), "comTrocaEcf", 75, true, NUMERO);
@@ -85,7 +88,7 @@ public class ListagemTroca extends AListagem<ComTroca> {
 		// sumarios
 		SummaryColumnConfig sumValor = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtValor(), "comTrocaValor", 100, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { check, ccId, ccEmpresaId, ccEmpresa, ccCompraId, ccData, ccCliente, sumValor, ccEcf, ccCoo, ccAtivo };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { check, ccId, ccEmpresaId, ccEmpresa, ccCompraId, ccVendaId, ccData, ccCliente, sumValor, ccEcf, ccCoo, ccAtivo };
 		modelos = new ColumnModel(bcc);
 
 		if (UtilClient.getAcaoPermitida(funcao, ComandoPermiteEmpresa.class) == null) {
@@ -163,7 +166,7 @@ public class ListagemTroca extends AListagem<ComTroca> {
 
 		// ecf venda
 		SisFuncao venda = UtilClient.getFuncaoPermitida(ComandoEcfVenda.class);
-		MenuItem itemVenda = gerarFuncao(venda, "comTroca.comTrocaId", "comTrocaId");
+		MenuItem itemVenda = gerarFuncao(venda, "comEcfVendaId", "comEcfVenda.comEcfVendaId");
 		if (itemVenda != null) {
 			mnuContexto.addItem(itemVenda);
 		}

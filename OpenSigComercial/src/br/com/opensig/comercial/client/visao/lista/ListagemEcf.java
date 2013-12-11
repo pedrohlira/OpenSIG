@@ -3,6 +3,7 @@ package br.com.opensig.comercial.client.visao.lista;
 import java.util.Map.Entry;
 
 import br.com.opensig.comercial.client.controlador.comando.ComandoEcfDocumento;
+import br.com.opensig.comercial.client.controlador.comando.ComandoEcfVenda;
 import br.com.opensig.comercial.client.controlador.comando.ComandoEcfZ;
 import br.com.opensig.comercial.shared.modelo.ComEcf;
 import br.com.opensig.core.client.OpenSigCore;
@@ -120,6 +121,13 @@ public class ListagemEcf extends AListagem<ComEcf> {
 			mnuContexto.addItem(itemEcfZ);
 		}
 
+		// vendas
+		SisFuncao venda = UtilClient.getFuncaoPermitida(ComandoEcfVenda.class);
+		MenuItem itemVenda = gerarFuncao(venda, "comEcf.comEcfId", "comEcfId");
+		if (itemVenda != null) {
+			mnuContexto.addItem(itemVenda);
+		}
+		
 		// docs
 		SisFuncao doc = UtilClient.getFuncaoPermitida(ComandoEcfDocumento.class);
 		MenuItem itemDoc = gerarFuncao(doc, "comEcf.comEcfId", "comEcfId");

@@ -213,16 +213,16 @@ public class CoreProxy<E extends Dados> extends GWTProxy implements CoreServiceA
 								String sValor = baseParams[i + 2].getValue();
 								fil = new FiltroNumero(baseParams[i - 1].getValue(), ECompara.toCompara(baseParams[i + 1].getValue()), Long.valueOf(sValor));
 							} else if (baseParams[i].getValue().equals("date")) {
-								Date valor = DateTimeFormat.getFormat("MM/dd/yyyy HH:mm:ss").parse(baseParams[i + 2].getValue() + " 00:00:00");
-								Date valor1 = DateTimeFormat.getFormat("MM/dd/yyyy HH:mm:ss").parse(baseParams[i + 2].getValue() + " 23:59:59");
+								Date valor = DateTimeFormat.getFormat("MM/dd/yyyy").parse(baseParams[i + 2].getValue());
+								Date valor1 = new Date(valor.getTime() + 1 * 86400000);
 								ECompara compara = ECompara.toCompara(baseParams[i + 1].getValue());
 
 								if (compara == ECompara.IGUAL) {
 									FiltroData fd1 = new FiltroData(baseParams[i - 1].getValue(), ECompara.MAIOR_IGUAL, valor);
-									FiltroData fd2 = new FiltroData(baseParams[i - 1].getValue(), ECompara.MENOR_IGUAL, valor1);
+									FiltroData fd2 = new FiltroData(baseParams[i - 1].getValue(), ECompara.MENOR, valor1);
 									GrupoFiltro between = new GrupoFiltro(EJuncao.E, new IFiltro[] { fd1, fd2 });
 									fil = between;
-								} else if (compara == ECompara.MAIOR) {
+								} else if (compara == ECompara.MAIOR_IGUAL) {
 									fil = new FiltroData(baseParams[i - 1].getValue(), compara, valor1);
 								} else {
 									fil = new FiltroData(baseParams[i - 1].getValue(), compara, valor);

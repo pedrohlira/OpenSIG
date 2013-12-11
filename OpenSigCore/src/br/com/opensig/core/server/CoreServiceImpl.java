@@ -592,6 +592,7 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 				em.getTransaction().begin();
 				Query rs = em.createNativeQuery(sql);
 				resultado = rs.executeUpdate();
+				UtilServer.LOG.debug("Registros atingidos: " + resultado);
 				em.getTransaction().commit();
 			}
 		} catch (Exception ex) {
@@ -684,6 +685,7 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 
 			// executa o comando
 			resultado = rs.executeUpdate();
+			UtilServer.LOG.debug("Registros atingidos: " + resultado);
 		}
 
 		return resultado;
@@ -791,7 +793,7 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 			sMet.invoke(obj, new Object[] { (Date) sql.getParametro().getValor() });
 		} else if (gMet.getReturnType() == Character.class || gMet.getReturnType() == char.class) {
 			sMet.invoke(obj, new Object[] { valor.charAt(0) });
-		} else if (gMet.getReturnType() == String.class){
+		} else if (gMet.getReturnType() == String.class) {
 			sMet.invoke(obj, new Object[] { valor });
 		} else {
 			sMet.invoke(obj, new Object[] { sql.getParametro().getValor() });

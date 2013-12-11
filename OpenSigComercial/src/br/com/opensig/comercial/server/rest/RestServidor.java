@@ -35,6 +35,7 @@ import br.com.opensig.comercial.shared.rest.SisCliente;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroBinario;
+import br.com.opensig.core.client.controlador.filtro.FiltroData;
 import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
@@ -42,6 +43,7 @@ import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.controlador.parametro.ParametroData;
 import br.com.opensig.core.client.controlador.parametro.ParametroFormula;
+import br.com.opensig.core.client.controlador.parametro.ParametroObjeto;
 import br.com.opensig.core.client.servico.CoreException;
 import br.com.opensig.core.client.servico.OpenSigException;
 import br.com.opensig.core.server.UtilServer;
@@ -68,7 +70,6 @@ import br.com.opensig.permissao.shared.modelo.SisConfiguracao;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
 import br.com.opensig.produto.shared.modelo.ProdEstoqueGrade;
-import br.com.opensig.produto.shared.modelo.ProdGrade;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 /**
@@ -81,7 +82,6 @@ import br.com.opensig.produto.shared.modelo.ProdProduto;
 public class RestServidor extends ARest {
 
 	private Map<String, String> conf;
-	private EmpCliente clientePadrao;
 
 	/**
 	 * Construtor padrao.
@@ -114,66 +114,76 @@ public class RestServidor extends ARest {
 		autorizar();
 
 		try {
-			// identifica o cliente
-			conf = getConfig();
-			EmpCliente cliente = getCliente(ecfNota.getSisCliente());
+			// valida se ja existe
+			FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, ecf.getEmpEmpresa());
+			FiltroTexto ft = new FiltroTexto("comEcfNotaSerie", ECompara.IGUAL, ecfNota.getComEcfNotaSerie());
+			FiltroTexto ft1 = new FiltroTexto("comEcfNotaSubserie", ECompara.IGUAL, ecfNota.getComEcfNotaSubserie());
+			FiltroNumero fn = new FiltroNumero("comEcfNotaNumero", ECompara.IGUAL, ecfNota.getComEcfNotaNumero());
+			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, ft, ft1, fn });
+			ComEcfNota aux = (ComEcfNota) service.selecionar(ecfNota, gf, false);
 
-			// transforma os descontos em porcentagens
-			double desc = ecfNota.getComEcfNotaDesconto() > 0 ? ecfNota.getComEcfNotaDesconto() / ecfNota.getComEcfNotaBruto() * 100 : 0.00;
-			FinReceber receber = null;
-			if (!ecfNota.getComEcfNotaCancelada()) {
-				// salva o receber
-				receber = new FinReceber();
-				receber.setEmpEmpresa(ecf.getEmpEmpresa());
-				receber.setEmpEntidade(cliente.getEmpEntidade());
-				receber.setFinReceberCadastro(ecfNota.getComEcfNotaData());
-				receber.setFinReceberCategoria(conf.get("categoria.ecf"));
-				receber.setFinReceberNfe(ecfNota.getComEcfNotaNumero());
-				receber.setFinReceberValor(ecfNota.getComEcfNotaLiquido());
-				receber.setFinReceberObservacao("NFC emitido pelo ECF.");
-				receber = (FinReceber) service.salvar(receber);
+			if (aux == null) {
+				// identifica o cliente
+				conf = getConfig();
+				EmpCliente cliente = getCliente(ecfNota.getSisCliente());
 
-				// salva o recebimento
-				FinRecebimento recebimento = new FinRecebimento();
-				recebimento.setFinReceber(receber);
-				recebimento.setFinForma(new FinForma(1));
-				recebimento.setFinConta(null);
-				recebimento.setFinRecebimentoCadastro(ecfNota.getComEcfNotaData());
-				recebimento.setFinRecebimentoConciliado(ecfNota.getComEcfNotaData());
-				recebimento.setFinRecebimentoDocumento("Serie:" + ecfNota.getComEcfNotaSerie() + " Sub:" + ecfNota.getComEcfNotaSubserie() + " N:" + ecfNota.getComEcfNotaNumero());
-				recebimento.setFinRecebimentoObservacao("NFC emitido pelo ECF.");
-				recebimento.setFinRecebimentoParcela("01/01");
-				recebimento.setFinRecebimentoRealizado(ecfNota.getComEcfNotaData());
-				recebimento.setFinRecebimentoStatus("REALIZADO");
-				recebimento.setFinRecebimentoValor(ecfNota.getComEcfNotaLiquido());
-				recebimento.setFinRecebimentoVencimento(ecfNota.getComEcfNotaData());
-				service.salvar(recebimento);
-			}
+				// transforma os descontos em porcentagens
+				double desc = ecfNota.getComEcfNotaDesconto() > 0 ? ecfNota.getComEcfNotaDesconto() / ecfNota.getComEcfNotaBruto() * 100 : 0.00;
+				FinReceber receber = null;
+				if (!ecfNota.getComEcfNotaCancelada()) {
+					// salva o receber
+					receber = new FinReceber();
+					receber.setEmpEmpresa(ecf.getEmpEmpresa());
+					receber.setEmpEntidade(cliente.getEmpEntidade());
+					receber.setFinReceberCadastro(ecfNota.getComEcfNotaData());
+					receber.setFinReceberCategoria(conf.get("categoria.ecf"));
+					receber.setFinReceberNfe(ecfNota.getComEcfNotaNumero());
+					receber.setFinReceberValor(ecfNota.getComEcfNotaLiquido());
+					receber.setFinReceberObservacao("NFC emitido pelo ECF.");
+					receber = (FinReceber) service.salvar(receber);
 
-			// salva a nota
-			List<ComEcfNotaProduto> nps = ecfNota.getComEcfNotaProdutos();
-			ecfNota.setId(0);
-			ecfNota.setComEcfNotaDesconto(desc);
-			ecfNota.setEmpEmpresa(ecf.getEmpEmpresa());
-			ecfNota.setEmpCliente(cliente);
-			ecfNota.setComEcfNotaProdutos(null);
-			ecfNota.setFinReceber(receber);
-			ecfNota = (ComEcfNota) service.salvar(ecfNota);
+					// salva o recebimento
+					FinRecebimento recebimento = new FinRecebimento();
+					recebimento.setFinReceber(receber);
+					recebimento.setFinForma(new FinForma(1));
+					recebimento.setFinConta(null);
+					recebimento.setFinRecebimentoCadastro(ecfNota.getComEcfNotaData());
+					recebimento.setFinRecebimentoConciliado(ecfNota.getComEcfNotaData());
+					recebimento.setFinRecebimentoDocumento("Serie:" + ecfNota.getComEcfNotaSerie() + " Sub:" + ecfNota.getComEcfNotaSubserie() + " N:" + ecfNota.getComEcfNotaNumero());
+					recebimento.setFinRecebimentoObservacao("NFC emitido pelo ECF.");
+					recebimento.setFinRecebimentoParcela("01/01");
+					recebimento.setFinRecebimentoRealizado(ecfNota.getComEcfNotaData());
+					recebimento.setFinRecebimentoStatus("REALIZADO");
+					recebimento.setFinRecebimentoValor(ecfNota.getComEcfNotaLiquido());
+					recebimento.setFinRecebimentoVencimento(ecfNota.getComEcfNotaData());
+					service.salvar(recebimento);
+				}
 
-			// salva os produtos vendidos
-			List<Sql> sqls = new ArrayList<Sql>();
-			for (ComEcfNotaProduto np : nps) {
-				np.setId(0);
-				np.setComEcfNotaProdutoDesconto(desc);
-				np.setComEcfNota(ecfNota);
-				getEstoque(sqls, np.getComEcfNotaProdutoQuantidade(), np.getProdEmbalagem(), np.getProdProduto(), np.getComEcfNotaProdutoBarra());
-				sqls.add(getAtualizaProduto(np.getProdProduto()));
-				service.salvar(np);
-			}
+				// salva a nota
+				List<ComEcfNotaProduto> nps = ecfNota.getComEcfNotaProdutos();
+				ecfNota.setId(0);
+				ecfNota.setComEcfNotaDesconto(desc);
+				ecfNota.setEmpEmpresa(ecf.getEmpEmpresa());
+				ecfNota.setEmpCliente(cliente);
+				ecfNota.setComEcfNotaProdutos(null);
+				ecfNota.setFinReceber(receber);
+				ecfNota = (ComEcfNota) service.salvar(ecfNota);
 
-			if (!ecfNota.getComEcfNotaCancelada()) {
-				// atualiza o estoque
-				service.executar(sqls.toArray(new Sql[] {}));
+				// salva os produtos vendidos
+				List<Sql> sqls = new ArrayList<Sql>();
+				for (ComEcfNotaProduto np : nps) {
+					np.setId(0);
+					np.setComEcfNotaProdutoDesconto(desc);
+					np.setComEcfNota(ecfNota);
+					getEstoque(sqls, np.getComEcfNotaProdutoQuantidade(), np.getProdEmbalagem(), np.getProdProduto(), np.getComEcfNotaProdutoBarra());
+					sqls.add(getAtualizaProduto(np.getProdProduto()));
+					service.salvar(np);
+				}
+
+				if (!ecfNota.getComEcfNotaCancelada()) {
+					// atualiza o estoque
+					service.executar(sqls.toArray(new Sql[] {}));
+				}
 			}
 		} catch (Exception ex) {
 			log.error("Erro ao salvar a nota.", ex);
@@ -196,183 +206,332 @@ public class RestServidor extends ARest {
 	public void setNfe(FisNotaSaida ecfNfe) throws RestException {
 		autorizar();
 		try {
-			// identifica o status
-			conf = getConfig();
-			ENotaStatus status = ENotaStatus.valueOf(ecfNfe.getEcfNotaEletronicaStatus());
-			FisNotaStatus ns = new FisNotaStatus(status);
+			FiltroTexto ft = new FiltroTexto("fisNotaSaidaChave", ECompara.IGUAL, ecfNfe.getFisNotaSaidaChave());
+			FisNotaSaida aux = (FisNotaSaida) service.selecionar(ecfNfe, ft, false);
 
-			// salva a nfe
-			ecfNfe.setId(0);
-			ecfNfe.setEmpEmpresa(ecf.getEmpEmpresa());
-			ecfNfe.setFisNotaStatus(ns);
-			ecfNfe.setFisNotaSaidaCadastro(ecfNfe.getFisNotaSaidaData());
-			ecfNfe.setFisNotaSaidaErro("");
-			ecfNfe = (FisNotaSaida) service.salvar(ecfNfe);
+			if (aux == null) {
+				// identifica o status
+				conf = getConfig();
+				ENotaStatus status = ENotaStatus.valueOf(ecfNfe.getEcfNotaEletronicaStatus());
+				FisNotaStatus ns = new FisNotaStatus(status);
 
-			if (status == ENotaStatus.AUTORIZADO || status == ENotaStatus.CANCELADO) {
-				// faz o parse do xml para objeto
-				String xml = ecfNfe.getFisNotaSaidaXml();
-				int I = xml.indexOf("<infNFe");
-				int F = xml.indexOf("</NFe>") + 6;
-				xml = "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
-				TNFe nfe = UtilServer.xmlToObj(xml, "br.com.opensig.nfe");
+				// salva a nfe
+				ecfNfe.setId(0);
+				ecfNfe.setEmpEmpresa(ecf.getEmpEmpresa());
+				ecfNfe.setFisNotaStatus(ns);
+				ecfNfe.setFisNotaSaidaCadastro(ecfNfe.getFisNotaSaidaData());
+				ecfNfe.setFisNotaSaidaErro("");
+				ecfNfe = (FisNotaSaida) service.salvar(ecfNfe);
 
-				// identifica o cliente
-				String doc = nfe.getInfNFe().getDest().getCPF();
-				if (doc == null || doc.equals("")) {
-					doc = nfe.getInfNFe().getDest().getCNPJ();
-				}
-				String nome = nfe.getInfNFe().getDest().getXNome();
-				SisCliente sisCliente = new SisCliente();
-				sisCliente.setSisClienteDoc(doc);
-				sisCliente.setSisClienteNome(nome);
-				EmpCliente cliente = getCliente(sisCliente);
+				if (status == ENotaStatus.AUTORIZADO || status == ENotaStatus.CANCELADO) {
+					// faz o parse do xml para objeto
+					String xml = ecfNfe.getFisNotaSaidaXml();
+					int I = xml.indexOf("<infNFe");
+					int F = xml.indexOf("</NFe>") + 6;
+					xml = "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
+					TNFe nfe = UtilServer.xmlToObj(xml, "br.com.opensig.nfe");
 
-				// salva o receber
-				FinReceber receber = null;
-				if (status == ENotaStatus.AUTORIZADO) {
-					// salva o receber
-					receber = new FinReceber();
-					receber.setEmpEmpresa(ecf.getEmpEmpresa());
-					receber.setEmpEntidade(cliente.getEmpEntidade());
-					receber.setFinReceberCadastro(ecfNfe.getFisNotaSaidaCadastro());
-					receber.setFinReceberCategoria(conf.get("categoria.ecf"));
-					receber.setFinReceberNfe(ecfNfe.getFisNotaSaidaNumero());
-					receber.setFinReceberValor(ecfNfe.getFisNotaSaidaValor());
-					receber.setFinReceberObservacao("NFe emitido pelo ECF.");
-					receber = (FinReceber) service.salvar(receber);
-
-					// salva o recebimento
-					FinRecebimento recebimento = new FinRecebimento();
-					recebimento.setFinReceber(receber);
-					recebimento.setFinForma(new FinForma(1));
-					recebimento.setFinConta(null);
-					recebimento.setFinRecebimentoCadastro(ecfNfe.getFisNotaSaidaCadastro());
-					recebimento.setFinRecebimentoConciliado(ecfNfe.getFisNotaSaidaCadastro());
-					recebimento.setFinRecebimentoDocumento("NFe: " + ecfNfe.getFisNotaSaidaNumero());
-					recebimento.setFinRecebimentoObservacao("NFe emitido pelo ECF.");
-					recebimento.setFinRecebimentoParcela("01/01");
-					recebimento.setFinRecebimentoRealizado(ecfNfe.getFisNotaSaidaCadastro());
-					recebimento.setFinRecebimentoStatus("REALIZADO");
-					recebimento.setFinRecebimentoValor(ecfNfe.getFisNotaSaidaValor());
-					recebimento.setFinRecebimentoVencimento(ecfNfe.getFisNotaSaidaCadastro());
-					service.salvar(recebimento);
-				}
-
-				// identifica a natureza de venda
-				FiltroNumero fn = new FiltroNumero("comNaturezaCfopTrib", ECompara.IGUAL, 5102);
-				ComNatureza natureza = (ComNatureza) service.selecionar(new ComNatureza(), fn, false);
-
-				// salva a venda
-				ComVenda venda = new ComVenda();
-				venda.setSisUsuario(venda.getSisUsuario());
-				venda.setSisVendedor(venda.getSisUsuario());
-				venda.setEmpCliente(cliente);
-				venda.setEmpEmpresa(ecf.getEmpEmpresa());
-				venda.setComNatureza(natureza);
-				venda.setFinReceber(receber);
-				venda.setFisNotaSaida(ecfNfe);
-				venda.setComVendaValorBruto(ecfNfe.getFisNotaSaidaValor());
-				venda.setComVendaValorLiquido(ecfNfe.getFisNotaSaidaValor());
-				venda.setComVendaData(ecfNfe.getFisNotaSaidaCadastro());
-				venda.setComVendaObservacao("Venda importada do ECF.");
-				venda.setComVendaFechada(true);
-				venda.setComVendaRecebida(receber != null);
-				venda.setComVendaCancelada(status == ENotaStatus.CANCELADO);
-				venda.setComVendaNfe(true);
-				venda = (ComVenda) service.salvar(venda, false);
-
-				// identifica os produtos da venda
-				List<Sql> sqls = new ArrayList<Sql>();
-				List<ComVendaProduto> cvp = new ArrayList<ComVendaProduto>();
-				for (TNFe.InfNFe.Det det : nfe.getInfNFe().getDet()) {
-					// achando o produto
-					IFiltro filtro;
-					if (det.getProd().getCEAN() == null || det.getProd().getCEAN().equals("")) {
-						filtro = new FiltroNumero("prodProdutoId", ECompara.IGUAL, det.getProd().getCProd());
-					} else {
-						filtro = new FiltroTexto("prodProdutoBarra", ECompara.IGUAL, det.getProd().getCEAN());
+					// identifica o cliente
+					String doc = nfe.getInfNFe().getDest().getCPF();
+					if (doc == null || doc.equals("")) {
+						doc = nfe.getInfNFe().getDest().getCNPJ();
 					}
-					ProdProduto pp = (ProdProduto) service.selecionar(new ProdProduto(), filtro, false);
+					String nome = nfe.getInfNFe().getDest().getXNome();
+					SisCliente sisCliente = new SisCliente();
+					sisCliente.setSisClienteDoc(doc);
+					sisCliente.setSisClienteNome(nome);
+					EmpCliente cliente = getCliente(sisCliente);
 
-					// achando a embalagem usada na venda
-					FiltroTexto ft = new FiltroTexto("prodEmbalagemNome", ECompara.IGUAL, det.getProd().getUCom());
-					ProdEmbalagem emb = (ProdEmbalagem) service.selecionar(new ProdEmbalagem(), ft, false);
+					// salva o receber
+					FinReceber receber = null;
+					if (status == ENotaStatus.AUTORIZADO) {
+						// salva o receber
+						receber = new FinReceber();
+						receber.setEmpEmpresa(ecf.getEmpEmpresa());
+						receber.setEmpEntidade(cliente.getEmpEntidade());
+						receber.setFinReceberCadastro(ecfNfe.getFisNotaSaidaCadastro());
+						receber.setFinReceberCategoria(conf.get("categoria.ecf"));
+						receber.setFinReceberNfe(ecfNfe.getFisNotaSaidaNumero());
+						receber.setFinReceberValor(ecfNfe.getFisNotaSaidaValor());
+						receber.setFinReceberObservacao("NFe emitido pelo ECF.");
+						receber = (FinReceber) service.salvar(receber);
 
-					// monta a atualizacao do estoque
-					double qtd = Double.valueOf(det.getProd().getQCom());
-					getEstoque(sqls, qtd, emb, pp, "");
-					sqls.add(getAtualizaProduto(pp));
+						// salva o recebimento
+						FinRecebimento recebimento = new FinRecebimento();
+						recebimento.setFinReceber(receber);
+						recebimento.setFinForma(new FinForma(1));
+						recebimento.setFinConta(null);
+						recebimento.setFinRecebimentoCadastro(ecfNfe.getFisNotaSaidaCadastro());
+						recebimento.setFinRecebimentoConciliado(ecfNfe.getFisNotaSaidaCadastro());
+						recebimento.setFinRecebimentoDocumento("NFe: " + ecfNfe.getFisNotaSaidaNumero());
+						recebimento.setFinRecebimentoObservacao("NFe emitido pelo ECF.");
+						recebimento.setFinRecebimentoParcela("01/01");
+						recebimento.setFinRecebimentoRealizado(ecfNfe.getFisNotaSaidaCadastro());
+						recebimento.setFinRecebimentoStatus("REALIZADO");
+						recebimento.setFinRecebimentoValor(ecfNfe.getFisNotaSaidaValor());
+						recebimento.setFinRecebimentoVencimento(ecfNfe.getFisNotaSaidaCadastro());
+						service.salvar(recebimento);
+					}
 
-					MyIcms myicms = new MyIcms(det.getImposto().getICMS());
-					// ipi
-					String ipi = "";
-					String pIpi = "";
-					try {
-						ipi = det.getImposto().getIPI().getIPITrib().getCST();
-						pIpi = det.getImposto().getIPI().getIPITrib().getPIPI();
-						if (pIpi == null) {
+					// identifica a natureza de venda
+					FiltroNumero fn = new FiltroNumero("comNaturezaCfopTrib", ECompara.IGUAL, 5102);
+					ComNatureza natureza = (ComNatureza) service.selecionar(new ComNatureza(), fn, false);
+
+					// salva a venda
+					ComVenda venda = new ComVenda();
+					venda.setSisUsuario(venda.getSisUsuario());
+					venda.setSisVendedor(venda.getSisUsuario());
+					venda.setEmpCliente(cliente);
+					venda.setEmpEmpresa(ecf.getEmpEmpresa());
+					venda.setComNatureza(natureza);
+					venda.setFinReceber(receber);
+					venda.setFisNotaSaida(ecfNfe);
+					venda.setComVendaValorBruto(ecfNfe.getFisNotaSaidaValor());
+					venda.setComVendaValorLiquido(ecfNfe.getFisNotaSaidaValor());
+					venda.setComVendaData(ecfNfe.getFisNotaSaidaCadastro());
+					venda.setComVendaObservacao("Venda importada do ECF.");
+					venda.setComVendaFechada(true);
+					venda.setComVendaRecebida(receber != null);
+					venda.setComVendaCancelada(status == ENotaStatus.CANCELADO);
+					venda.setComVendaNfe(true);
+					venda = (ComVenda) service.salvar(venda, false);
+
+					// identifica os produtos da venda
+					List<Sql> sqls = new ArrayList<Sql>();
+					List<ComVendaProduto> cvp = new ArrayList<ComVendaProduto>();
+					for (TNFe.InfNFe.Det det : nfe.getInfNFe().getDet()) {
+						// achando o produto
+						IFiltro filtro;
+						if (det.getProd().getCEAN() == null || det.getProd().getCEAN().equals("")) {
+							filtro = new FiltroNumero("prodProdutoId", ECompara.IGUAL, det.getProd().getCProd());
+						} else {
+							filtro = new FiltroTexto("prodProdutoBarra", ECompara.IGUAL, det.getProd().getCEAN());
+						}
+						ProdProduto pp = (ProdProduto) service.selecionar(new ProdProduto(), filtro, false);
+
+						// achando a embalagem usada na venda
+						FiltroTexto ft1 = new FiltroTexto("prodEmbalagemNome", ECompara.IGUAL, det.getProd().getUCom());
+						ProdEmbalagem emb = (ProdEmbalagem) service.selecionar(new ProdEmbalagem(), ft1, false);
+
+						// monta a atualizacao do estoque
+						double qtd = Double.valueOf(det.getProd().getQCom());
+						getEstoque(sqls, qtd, emb, pp, "");
+						sqls.add(getAtualizaProduto(pp));
+
+						MyIcms myicms = new MyIcms(det.getImposto().getICMS());
+						// ipi
+						String ipi = "";
+						String pIpi = "";
+						try {
+							ipi = det.getImposto().getIPI().getIPITrib().getCST();
+							pIpi = det.getImposto().getIPI().getIPITrib().getPIPI();
+							if (pIpi == null) {
+								pIpi = "0.00";
+							}
+						} catch (Exception e) {
+							ipi = "99";
 							pIpi = "0.00";
 						}
-					} catch (Exception e) {
-						ipi = "99";
-						pIpi = "0.00";
-					}
-					// pis
-					String pis = "";
-					String pPis = "";
-					try {
-						pis = det.getImposto().getPIS().getPISAliq().getCST();
-						pPis = det.getImposto().getPIS().getPISAliq().getPPIS();
-					} catch (Exception e) {
-						pis = "49";
-						pPis = "0.00";
-					}
-					// cofins
-					String cofins = "";
-					String pCofins = "";
-					try {
-						cofins = det.getImposto().getCOFINS().getCOFINSAliq().getCST();
-						pCofins = det.getImposto().getCOFINS().getCOFINSAliq().getPCOFINS();
-					} catch (Exception e) {
-						cofins = "49";
-						pCofins = "0.00";
-					}
+						// pis
+						String pis = "";
+						String pPis = "";
+						try {
+							pis = det.getImposto().getPIS().getPISAliq().getCST();
+							pPis = det.getImposto().getPIS().getPISAliq().getPPIS();
+						} catch (Exception e) {
+							pis = "49";
+							pPis = "0.00";
+						}
+						// cofins
+						String cofins = "";
+						String pCofins = "";
+						try {
+							cofins = det.getImposto().getCOFINS().getCOFINSAliq().getCST();
+							pCofins = det.getImposto().getCOFINS().getCOFINSAliq().getPCOFINS();
+						} catch (Exception e) {
+							cofins = "49";
+							pCofins = "0.00";
+						}
 
-					// setando o produto da venda
-					ComVendaProduto vp = new ComVendaProduto();
-					Prod prod = det.getProd();
-					vp.setProdProduto(pp);
-					vp.setProdEmbalagem(pp.getProdEmbalagem());
-					vp.setComVenda(venda);
-					vp.setComVendaProdutoCfop(Integer.valueOf(prod.getCFOP()));
-					vp.setComVendaProdutoIcmsCst(myicms.getCst());
-					vp.setComVendaProdutoIcms(Double.valueOf(myicms.getAliquota()));
-					vp.setComVendaProdutoIpiCst(ipi);
-					vp.setComVendaProdutoIpi(Double.valueOf(pIpi));
-					vp.setComVendaProdutoPisCst(pis);
-					vp.setComVendaProdutoPis(Double.valueOf(pPis));
-					vp.setComVendaProdutoCofinsCst(cofins);
-					vp.setComVendaProdutoCofins(Double.valueOf(pCofins));
-					vp.setComVendaProdutoQuantidade(Double.valueOf(prod.getQCom()));
-					vp.setComVendaProdutoBruto(Double.valueOf(prod.getVUnCom()));
-					vp.setComVendaProdutoDesconto(prod.getVDesc() == null ? 0.00 : Double.valueOf(prod.getVDesc()));
-					vp.setComVendaProdutoLiquido(vp.getComVendaProdutoBruto() - vp.getComVendaProdutoDesconto());
-					vp.setComVendaProdutoTotalBruto(vp.getComVendaProdutoQuantidade() * vp.getComVendaProdutoBruto());
-					vp.setComVendaProdutoTotalLiquido(vp.getComVendaProdutoQuantidade() * vp.getComVendaProdutoLiquido());
-					vp.setComVendaProdutoBarra(pp.getProdProdutoBarra());
-					vp.setComVendaProdutoOrdem(Integer.valueOf(det.getNItem()));
-					cvp.add(vp);
-				}
-				service.salvar(cvp);
+						// setando o produto da venda
+						ComVendaProduto vp = new ComVendaProduto();
+						Prod prod = det.getProd();
+						vp.setProdProduto(pp);
+						vp.setProdEmbalagem(pp.getProdEmbalagem());
+						vp.setComVenda(venda);
+						vp.setComVendaProdutoCfop(Integer.valueOf(prod.getCFOP()));
+						vp.setComVendaProdutoIcmsCst(myicms.getCst());
+						vp.setComVendaProdutoIcms(Double.valueOf(myicms.getAliquota()));
+						vp.setComVendaProdutoIpiCst(ipi);
+						vp.setComVendaProdutoIpi(Double.valueOf(pIpi));
+						vp.setComVendaProdutoPisCst(pis);
+						vp.setComVendaProdutoPis(Double.valueOf(pPis));
+						vp.setComVendaProdutoCofinsCst(cofins);
+						vp.setComVendaProdutoCofins(Double.valueOf(pCofins));
+						vp.setComVendaProdutoQuantidade(Double.valueOf(prod.getQCom()));
+						vp.setComVendaProdutoBruto(Double.valueOf(prod.getVUnCom()));
+						vp.setComVendaProdutoDesconto(prod.getVDesc() == null ? 0.00 : Double.valueOf(prod.getVDesc()));
+						vp.setComVendaProdutoLiquido(vp.getComVendaProdutoBruto() - vp.getComVendaProdutoDesconto());
+						vp.setComVendaProdutoTotalBruto(vp.getComVendaProdutoQuantidade() * vp.getComVendaProdutoBruto());
+						vp.setComVendaProdutoTotalLiquido(vp.getComVendaProdutoQuantidade() * vp.getComVendaProdutoLiquido());
+						vp.setComVendaProdutoBarra(pp.getProdProdutoBarra());
+						vp.setComVendaProdutoOrdem(Integer.valueOf(det.getNItem()));
+						cvp.add(vp);
+					}
+					service.salvar(cvp);
 
-				// remove do estoque
-				if (status == ENotaStatus.AUTORIZADO) {
-					service.executar(sqls.toArray(new Sql[] {}));
+					// remove do estoque
+					if (status == ENotaStatus.AUTORIZADO) {
+						service.executar(sqls.toArray(new Sql[] {}));
+					}
 				}
 			}
 		} catch (Exception ex) {
 			log.error("Erro ao salvar a nfe.", ex);
+			throw new RestException(ex.getMessage());
+		}
+	}
+
+	/**
+	 * Metodo que cadastra na base do server as vendas, produtos vendidos,
+	 * pagamentos emitidos pelos sistemas em modo client.
+	 * 
+	 * @param ecfVenda
+	 *            um objeto do tipo ComEcfVenda.
+	 * @throws RestException
+	 *             em caso de nao conseguir acessar a informacao.
+	 */
+	@Path("/venda")
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void setVenda(ComEcfVenda ecfVenda) throws RestException {
+		autorizar();
+
+		try {
+			// pega o config e um cliente padrao
+			conf = getConfig();
+			FiltroNumero fn2 = new FiltroNumero("empClienteId", ECompara.IGUAL, conf.get("cliente.padrao"));
+			EmpCliente cliente = ecfVenda.getSisCliente() != null ? getCliente(ecfVenda.getSisCliente()) : (EmpCliente) service.selecionar(new EmpCliente(), fn2, false);
+
+			// guarda as listas
+			List<ComEcfVendaProduto> vProdutos = ecfVenda.getComEcfVendaProdutos();
+			List<ComTroca> trocas = ecfVenda.getComTrocas();
+
+			// transforma os acrescimos e descontos em porcentagens
+			double acresP = ecfVenda.getComEcfVendaBruto() > 0 ? ecfVenda.getComEcfVendaAcrescimo() / ecfVenda.getComEcfVendaBruto() * 100 : 0.00;
+			double descP = ecfVenda.getComEcfVendaBruto() > 0 ? ecfVenda.getComEcfVendaDesconto() / ecfVenda.getComEcfVendaBruto() * 100 : 0.00;
+
+			// salva o receber da venda
+			FinReceber receber = null;
+			if (!ecfVenda.getComEcfVendaCancelada()) {
+				// coloca dados de cartao na obs
+				StringBuilder sb = new StringBuilder("CUPOM FISCAL:: ");
+				for (FinReceber rec : ecfVenda.getEcfPagamentos()) {
+					if (rec.getFinReceberNfe() > 0) {
+						sb.append("GNF: ").append(rec.getFinReceberNfe()).append(" - ").append("NSU: ").append(rec.getFinReceberCategoria()).append("\n");
+					}
+				}
+
+				// salva o receber da venda
+				receber = new FinReceber();
+				receber.setEmpEmpresa(ecf.getEmpEmpresa());
+				receber.setEmpEntidade(cliente.getEmpEntidade());
+				receber.setFinReceberCadastro(ecfVenda.getComEcfVendaData());
+				receber.setFinReceberCategoria(conf.get("categoria.ecf"));
+				receber.setFinReceberNfe(ecfVenda.getComEcfVendaCcf());
+				receber.setFinReceberValor(ecfVenda.getComEcfVendaLiquido());
+				receber.setFinReceberObservacao(sb.toString());
+				receber = (FinReceber) service.salvar(receber);
+
+				// salva os recebimentos
+				for (FinReceber rec : ecfVenda.getEcfPagamentos()) {
+					int par = 0;
+					for (FinRecebimento recebimento : rec.getFinRecebimentos()) {
+						recebimento.setFinRecebimentoId(0);
+						recebimento.setFinReceber(receber);
+						recebimento.setFinForma(rec.getFinForma());
+						recebimento.setFinConta(null);
+						recebimento.setFinRecebimentoCadastro(rec.getFinReceberCadastro());
+						recebimento.setFinRecebimentoRealizado(rec.getFinReceberCadastro());
+						recebimento.setFinRecebimentoStatus("REALIZADO");
+						if ("".equals(recebimento.getFinRecebimentoDocumento())) {
+							recebimento.setFinRecebimentoDocumento("CCF: " + ecfVenda.getComEcfVendaCcf());
+						}
+						recebimento.setFinRecebimentoObservacao("CUPOM FISCAL");
+						par++;
+						recebimento.setFinRecebimentoParcela(UtilServer.formataNumero(par, 2, 0, false) + "/" + UtilServer.formataNumero(rec.getFinRecebimentos().size(), 2, 0, false));
+						service.salvar(recebimento);
+					}
+				}
+			}
+
+			// salva a venda
+			ecfVenda.setId(0);
+			ecfVenda.setComEcf(ecf);
+			ecfVenda.setComEcfZ(null);
+			ecfVenda.setEmpCliente(cliente);
+			ecfVenda.setFinReceber(receber);
+			ecfVenda.setComEcfVendaProdutos(null);
+			ecfVenda.setComTrocas(null);
+			ecfVenda.setComEcfVendaAcrescimo(acresP);
+			ecfVenda.setComEcfVendaDesconto(descP);
+			ecfVenda.setComEcfVendaProdutos(null);
+			ecfVenda.setComEcfVendaFechada(true);
+			if (ecfVenda.getComEcfVendaCancelada() == false) {
+				ecfVenda.setComEcfVendaCancelada(vProdutos.isEmpty());
+			}
+			ecfVenda = (ComEcfVenda) service.salvar(ecfVenda);
+
+			// salva os produtos
+			if (vProdutos != null) {
+				List<Sql> sqls = new ArrayList<Sql>();
+				for (ComEcfVendaProduto vp : vProdutos) {
+					double acresV = vp.getComEcfVendaProdutoBruto() * acresP / 100;
+					double descV = vp.getComEcfVendaProdutoBruto() * descP / 100;
+
+					vp.setId(0);
+					vp.setComEcfVenda(ecfVenda);
+					vp.setComEcfVendaProdutoAcrescimo(acresP);
+					vp.setComEcfVendaProdutoDesconto(descP);
+					vp.setComEcfVendaProdutoLiquido(vp.getComEcfVendaProdutoBruto() - descV + acresV);
+					vp.setComEcfVendaProdutoTotal(vp.getComEcfVendaProdutoLiquido() * vp.getComEcfVendaProdutoQuantidade());
+					if (!ecfVenda.getComEcfVendaCancelada() && !vp.getComEcfVendaProdutoCancelado()) {
+						getEstoque(sqls, vp.getComEcfVendaProdutoQuantidade(), vp.getProdEmbalagem(), vp.getProdProduto(), vp.getComEcfVendaProdutoBarra());
+						sqls.add(getAtualizaProduto(vp.getProdProduto()));
+					}
+				}
+				service.salvar(vProdutos);
+
+				// atualiza com as instrucoes SQL.
+				if (!sqls.isEmpty()) {
+					service.executar(sqls.toArray(new Sql[] {}));
+				}
+			}
+
+			// salva as trocas
+			if (trocas != null) {
+				for (ComTroca troca : trocas) {
+					// guarda os produtos da troca
+					List<ComTrocaProduto> tps = troca.getComTrocaProdutos();
+
+					// salva a troca
+					troca.setComTrocaId(0);
+					troca.setEmpEmpresa(ecf.getEmpEmpresa());
+					troca.setComCompra(null);
+					troca.setComEcfVenda(ecfVenda);
+					troca.setComTrocaProdutos(null);
+					troca = (ComTroca) service.salvar(troca);
+
+					// salva os produtos
+					for (ComTrocaProduto tp : tps) {
+						tp.setId(0);
+						tp.setComTroca(troca);
+					}
+					service.salvar(tps);
+				}
+			}
+		} catch (Exception ex) {
+			log.error("Erro ao salvar a venda.", ex);
 			throw new RestException(ex.getMessage());
 		}
 	}
@@ -403,12 +562,9 @@ public class RestServidor extends ARest {
 			if (aux == null) {
 				// pega o config e um cliente padrao
 				conf = getConfig();
-				FiltroNumero fn1 = new FiltroNumero("empClienteId", ECompara.IGUAL, conf.get("cliente.padrao"));
-				clientePadrao = (EmpCliente) service.selecionar(new EmpCliente(), fn1, false);
 
 				// guarda os totais e vendas e docs
 				List<ComEcfZTotais> totais = ecfZ.getComEcfZTotais();
-				List<ComEcfVenda> vendas = ecfZ.getComEcfVendas();
 				List<ComEcfDocumento> docs = ecfZ.getComEcfDocumentos();
 
 				// salva a reduzaoZ
@@ -431,133 +587,27 @@ public class RestServidor extends ARest {
 				}
 				service.salvar(zTotais.values());
 
-				List<Sql> sqls = new ArrayList<Sql>();
-				// salva as vendas
-				for (ComEcfVenda venda : vendas) {
-					FinReceber receber = null;
-					ComTroca troca = null;
-
-					// identifica o cliente
-					EmpCliente cliente = venda.getSisCliente() != null ? getCliente(venda.getSisCliente()) : clientePadrao;
-
-					// caso nao esteja cancelada
-					if (!venda.getComEcfVendaCancelada()) {
-						// coloca dados de cartao na obs
-						StringBuilder sb = new StringBuilder("CUPOM FISCAL:: ");
-						for (FinReceber rec : venda.getEcfPagamentos()) {
-							if (rec.getFinReceberNfe() > 0) {
-								sb.append("GNF: ").append(rec.getFinReceberNfe()).append(" - ").append("NSU: ").append(rec.getFinReceberCategoria()).append("\n");
-							}
-						}
-
-						// salva o receber da venda
-						receber = new FinReceber();
-						receber.setEmpEmpresa(ecf.getEmpEmpresa());
-						receber.setEmpEntidade(cliente.getEmpEntidade());
-						receber.setFinReceberCadastro(venda.getComEcfVendaData());
-						receber.setFinReceberCategoria(conf.get("categoria.ecf"));
-						receber.setFinReceberNfe(venda.getComEcfVendaCcf());
-						receber.setFinReceberValor(venda.getComEcfVendaLiquido());
-						receber.setFinReceberObservacao(sb.toString());
-						receber = (FinReceber) service.salvar(receber);
-
-						// salva os recebimentos
-						for (FinReceber rec : venda.getEcfPagamentos()) {
-							int par = 0;
-							for (FinRecebimento recebimento : rec.getFinRecebimentos()) {
-								recebimento.setFinRecebimentoId(0);
-								recebimento.setFinReceber(receber);
-								recebimento.setFinForma(rec.getFinForma());
-								recebimento.setFinConta(null);
-								recebimento.setFinRecebimentoCadastro(rec.getFinReceberCadastro());
-								recebimento.setFinRecebimentoRealizado(rec.getFinReceberCadastro());
-								recebimento.setFinRecebimentoStatus("REALIZADO");
-								if ("".equals(recebimento.getFinRecebimentoDocumento())) {
-									recebimento.setFinRecebimentoDocumento("CCF: " + venda.getComEcfVendaCcf());
-								}
-								recebimento.setFinRecebimentoObservacao("CUPOM FISCAL");
-								par++;
-								recebimento.setFinRecebimentoParcela(UtilServer.formataNumero(par, 2, 0, false) + "/" + UtilServer.formataNumero(rec.getFinRecebimentos().size(), 2, 0, false));
-								service.salvar(recebimento);
-							}
-						}
-
-						// caso tenha uma troca vinculada
-						if (venda.getComTroca() != null) {
-							// guarda os produtos da troca
-							troca = venda.getComTroca();
-							List<ComTrocaProduto> tps = troca.getComTrocaProdutos();
-
-							// salva a troca
-							troca.setComTrocaId(0);
-							troca.setEmpEmpresa(ecf.getEmpEmpresa());
-							troca.setComCompra(null);
-							troca.setComTrocaProdutos(null);
-							troca = (ComTroca) service.salvar(troca);
-
-							// salva os produtos
-							for (ComTrocaProduto tp : tps) {
-								tp.setId(0);
-								tp.setComTroca(troca);
-							}
-							service.salvar(tps);
-						}
-					}
-
-					// guarda os produtos vendidos
-					List<ComEcfVendaProduto> vps = venda.getComEcfVendaProdutos();
-
-					// transforma os acrescimos e descontos em porcentagens
-					double acresP = venda.getComEcfVendaBruto() > 0 ? venda.getComEcfVendaAcrescimo() / venda.getComEcfVendaBruto() * 100 : 0.00;
-					double descP = venda.getComEcfVendaBruto() > 0 ? venda.getComEcfVendaDesconto() / venda.getComEcfVendaBruto() * 100 : 0.00;
-
-					// salva a venda
-					venda.setId(0);
-					venda.setComEcf(ecf);
-					venda.setComEcfZ(ecfZ);
-					venda.setFinReceber(receber);
-					venda.setComTroca(troca);
-					venda.setComEcfVendaAcrescimo(acresP);
-					venda.setComEcfVendaDesconto(descP);
-					venda.setComEcfVendaProdutos(null);
-					venda.setComEcfVendaFechada(true);
-					if (venda.getComEcfVendaCancelada() == false) {
-						venda.setComEcfVendaCancelada(vps.isEmpty());
-					}
-					venda = (ComEcfVenda) service.salvar(venda);
-
-					// salva os produtos
-					for (ComEcfVendaProduto vp : vps) {
-						double acresV = vp.getComEcfVendaProdutoBruto() * acresP / 100;
-						double descV = vp.getComEcfVendaProdutoBruto() * descP / 100;
-
-						vp.setId(0);
-						vp.setComEcfVenda(venda);
-						vp.setComEcfVendaProdutoAcrescimo(acresP);
-						vp.setComEcfVendaProdutoDesconto(descP);
-						vp.setComEcfVendaProdutoLiquido(vp.getComEcfVendaProdutoBruto() - descV + acresV);
-						vp.setComEcfVendaProdutoTotal(vp.getComEcfVendaProdutoLiquido() * vp.getComEcfVendaProdutoQuantidade());
-						if (!venda.getComEcfVendaCancelada() && !vp.getComEcfVendaProdutoCancelado()) {
-							getEstoque(sqls, vp.getComEcfVendaProdutoQuantidade(), vp.getProdEmbalagem(), vp.getProdProduto(), vp.getComEcfVendaProdutoBarra());
-							sqls.add(getAtualizaProduto(vp.getProdProduto()));
-						}
-					}
-					service.salvar(vps);
-				}
-
 				// salva os documentos
 				for (ComEcfDocumento doc : docs) {
 					doc.setId(0);
 					doc.setComEcf(ecf);
+					doc.setComEcfZ(ecfZ);
 				}
 				service.salvar(docs);
 
-				// atualiza com as instrucoes SQL.
-				if (!sqls.isEmpty()) {
-					service.executar(sqls.toArray(new Sql[] {}));
-				}
-			} else {
-				log.debug("reduzao Z ja existente.");
+				// atualiza as vendas do ecf
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(ecfZ.getComEcfZMovimento());
+				cal.add(Calendar.DAY_OF_MONTH, 1);
+				Date fim = cal.getTime();
+
+				FiltroData fd = new FiltroData("comEcfVendaData", ECompara.MAIOR_IGUAL, ecfZ.getComEcfZMovimento());
+				FiltroData fd1 = new FiltroData("comEcfVendaData", ECompara.MENOR, fim);
+				GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fd, fd1 });
+				ParametroObjeto po = new ParametroObjeto("comEcfZ", ecfZ);
+
+				Sql sql = new Sql(new ComEcfVenda(), EComando.ATUALIZAR, gf1, po);
+				service.executar(new Sql[] { sql });
 			}
 		} catch (Exception ex) {
 			log.error("Erro ao salvar reduzao Z.", ex);
@@ -732,19 +782,14 @@ public class RestServidor extends ARest {
 
 		// remove estoque da grade caso o produto tenha
 		if (prod.getProdGrades() != null) {
-			for (ProdGrade grade : prod.getProdGrades()) {
-				if (grade.getProdGradeBarra().equals(barra)) {
-					// formando os parametros
-					ParametroFormula pn2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
-					// formando o filtro
-					FiltroObjeto fo3 = new FiltroObjeto("prodGrade", ECompara.IGUAL, grade);
-					GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo2, fo3 });
-					// busca o item
-					Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pn2);
-					sqls.add(sql1);
-					break;
-				}
-			}
+			// formando os parametros
+			ParametroFormula pf2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
+			// formando o filtro
+			FiltroTexto ft = new FiltroTexto("prodGrade.prodGradeBarra", ECompara.IGUAL, barra);
+			GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo2, ft });
+			// busca o item
+			Sql sql1 = new Sql(new ProdEstoqueGrade(), EComando.ATUALIZAR, gf1, pf2);
+			sqls.add(sql1);
 		}
 	}
 

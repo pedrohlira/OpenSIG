@@ -588,7 +588,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		cmbOrigem.setValueField("prodOrigemId");
 		cmbOrigem.setTpl("<div class=\"x-combo-list-item\"><b>{prodOrigemValor}</b> - <i>[{prodOrigemDescricao}]</i></div>");
 		cmbOrigem.setForceSelection(true);
-		cmbOrigem.setListWidth(500);
+		cmbOrigem.setListWidth(600);
 		cmbOrigem.setEditable(false);
 
 		return cmbOrigem;
@@ -622,10 +622,10 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 		cmbIcms.setMode(ComboBox.LOCAL);
 		cmbIcms.setDisplayField("prodIcmsNome");
 		cmbIcms.setValueField("prodIcmsId");
-		cmbIcms.setTpl("<div class=\"x-combo-list-item\"><b>{prodIcmsNome}</b> - <i>" + OpenSigCore.i18n.txtCfop() + " [{prodIcmsCfop}], " + OpenSigCore.i18n.txtCst()
-				+ " [{prodIcmsCst}], " + OpenSigCore.i18n.txtCson() + " [{prodIcmsCson}]</i></div>");
+		cmbIcms.setTpl("<div class=\"x-combo-list-item\"><b>" + OpenSigCore.i18n.txtCfop() + " [{prodIcmsCfop}], " + OpenSigCore.i18n.txtCst()
+				+ " [{prodIcmsCst}], " + OpenSigCore.i18n.txtCson() + " [{prodIcmsCson}]</b> - <i>{prodIcmsNome}</i></div>");
 		cmbIcms.setForceSelection(true);
-		cmbIcms.setListWidth(500);
+		cmbIcms.setListWidth(600);
 		cmbIcms.setEditable(false);
 
 		return cmbIcms;

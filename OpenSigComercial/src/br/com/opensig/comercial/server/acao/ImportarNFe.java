@@ -77,9 +77,12 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 			ft3.setCampoPrefixo("t3.");
 			filtro.add(ft3);
 		} else {
+			// barra
+			FiltroTexto ft1 = new FiltroTexto("prodProdutoBarra", ECompara.NULO, null);
+			filtro.add(ft1, EJuncao.E);
 			// referencia
-			FiltroTexto ft1 = new FiltroTexto("prodProdutoReferencia", ECompara.IGUAL, ref);
-			filtro.add(ft1);
+			FiltroTexto ft2 = new FiltroTexto("prodProdutoReferencia", ECompara.IGUAL, ref);
+			filtro.add(ft2);
 		}
 
 		// busca
@@ -146,7 +149,7 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 
 		// percorre as origens
 		for (ProdOrigem ori : origens) {
-			if (ori.getProdOrigemValor() == Integer.valueOf(origem)) {
+			if (ori.getProdOrigemValor() == Integer.valueOf(origem) && ori.getProdOrigemValor() < 3) {
 				resp = ori;
 				break;
 			} else if (ori.getProdOrigemValor() == 0) {

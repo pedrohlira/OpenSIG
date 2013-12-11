@@ -11,17 +11,15 @@ import br.com.opensig.comercial.shared.modelo.ComNatureza;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
 import br.com.opensig.comercial.shared.modelo.ComVendaProduto;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
-import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
 import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
-import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
-import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.padroes.Chain;
 import br.com.opensig.core.client.servico.OpenSigException;
 import br.com.opensig.core.server.CoreServiceImpl;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Autenticacao;
+import br.com.opensig.core.shared.modelo.Lista;
 import br.com.opensig.empresa.shared.modelo.EmpCliente;
 import br.com.opensig.permissao.shared.modelo.SisUsuario;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
@@ -51,21 +49,10 @@ public class GerarVenda extends Chain {
 			// objetos
 			FiltroNumero fn = new FiltroNumero("sisUsuarioId", ECompara.IGUAL, auth.getUsuario()[0]);
 			SisUsuario usuario = (SisUsuario) servico.selecionar(new SisUsuario(), fn, false);
-			
-			FiltroTexto ft = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.IGUAL, compra.getEmpEmpresa().getEmpEntidade().getEmpEntidadeDocumento1());
-			EmpCliente cliente = (EmpCliente) servico.selecionar(new EmpCliente(), ft, false);
-			if (cliente == null) {
-				throw new Exception("Cadastre um cliente com os mesmos dados do fornecedor. Deixe somente um cliente com o mesmo cnpj do fornecedor");
-			}
 
-			FiltroNumero fn1 = new FiltroNumero("comNaturezaCfopTrib", ECompara.IGUAL, 5102);
 			FiltroObjeto fo = new FiltroObjeto("empEmpresa", ECompara.IGUAL, compra.getEmpEmpresa());
-			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fn1, fo });
-			ComNatureza natureza = (ComNatureza) servico.selecionar(new ComNatureza(), gf, false);
-			if (natureza == null) {
-				throw new Exception("Cadastre uma natureza de operação com cfop 5102.");
-			}
-			
+			Lista<ComNatureza> natureza = servico.selecionar(new ComNatureza(), 0, 1, fo, false);
+
 			// variaveis
 			double bruto = 0.00;
 			double liquido = 0.00;
@@ -107,9 +94,9 @@ public class GerarVenda extends Chain {
 			// cria o objeto da venda
 			venda.setSisUsuario(usuario);
 			venda.setSisVendedor(usuario);
-			venda.setEmpCliente(cliente);
+			venda.setEmpCliente(new EmpCliente(Integer.valueOf(auth.getConf().get("cliente.padrao"))));
 			venda.setEmpEmpresa(compra.getEmpEmpresa());
-			venda.setComNatureza(natureza);
+			venda.setComNatureza(natureza.getLista().get(0));
 			venda.setFinReceber(null);
 			venda.setFisNotaSaida(null);
 			venda.setComVendaProdutos(produtos);

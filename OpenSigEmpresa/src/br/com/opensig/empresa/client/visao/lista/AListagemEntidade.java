@@ -48,9 +48,9 @@ public abstract class AListagemEntidade<E extends Dados> extends AListagem<E> {
 		ccEntidade = new ColumnConfig(OpenSigCore.i18n.txtCod() + " - " + OpenSigCore.i18n.txtEntidade(), "empEntidade.empEntidadeId", 100, true);
 		ccEntidade.setHidden(true);
 		listaColunas.add(ccEntidade);
-		ColumnConfig ccNome1 = new ColumnConfig(OpenSigCore.i18n.txtEntidadeNome1(), "empEntidade.empEntidadeNome1", 250, true);
+		ColumnConfig ccNome1 = new ColumnConfig(OpenSigCore.i18n.txtEntidadeNome1(), "empEntidade.empEntidadeNome1", 200, true);
 		listaColunas.add(ccNome1);
-		ColumnConfig ccNome2 = new ColumnConfig(OpenSigCore.i18n.txtEntidadeNome2(), "empEntidade.empEntidadeNome2", 250, true);
+		ColumnConfig ccNome2 = new ColumnConfig(OpenSigCore.i18n.txtEntidadeNome2(), "empEntidade.empEntidadeNome2", 200, true);
 		listaColunas.add(ccNome2);
 		ColumnConfig ccPessoa = new ColumnConfig(OpenSigCore.i18n.txtPessoa(), "empEntidade.empEntidadePessoa", 75, true);
 		listaColunas.add(ccPessoa);

@@ -41,6 +41,7 @@ public class SalvarEcfZ extends Chain {
 			// salva
 			z.setComEcfZTotais(null);
 			z.setComEcfVendas(null);
+			z.setComEcfDocumentos(null);
 			servico.salvar(em, z);
 
 			// deleta

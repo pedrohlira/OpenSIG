@@ -262,6 +262,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 			String xml = "";
 			String cancelada = "";
 			String carta = "";
+			String nome = "";
 
 			for (Dados d : lista.getLista()) {
 				if (d instanceof FisNotaSaida) {
@@ -270,12 +271,14 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 					xml = nota.getFisNotaSaidaXml();
 					cancelada = nota.getFisNotaSaidaXmlCancelado();
 					carta = nota.getFisNotaSaidaXmlCarta();
+					nome = "backup_saidas.zip";
 				} else {
 					FisNotaEntrada nota = (FisNotaEntrada) d;
 					chave = nota.getFisNotaEntradaChave();
 					xml = nota.getFisNotaEntradaXml();
 					cancelada = nota.getFisNotaEntradaXmlCancelado();
 					carta = nota.getFisNotaEntradaXmlCarta();
+					nome = "backup_entradas.zip";
 				}
 				// zipa o xml principal
 				arquivos.put(chave + ".xml", xml.getBytes());
@@ -294,7 +297,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 				HttpSession sessao = getThreadLocalRequest().getSession();
 				String retorno = sessao.getId() + new Date().getTime();
 				sessao.setAttribute(retorno, obj);
-				sessao.setAttribute(retorno + "arquivo", "backup_notas.zip");
+				sessao.setAttribute(retorno + "arquivo", nome);
 				return retorno;
 			} else {
 				UtilServer.LOG.debug("Sem registros.");

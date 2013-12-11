@@ -186,6 +186,7 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		ColumnConfig ccEmbalagem = new ColumnConfig(OpenSigCore.i18n.txtEmbalagem(), "prodEmbalagem.prodEmbalagemNome", 75, false);
 
 		ColumnConfig ccBruto = new ColumnConfig(OpenSigCore.i18n.txtBruto(), "comVendaProdutoBruto", 75, false, IListagem.DINHEIRO);
+		ccBruto.setHidden(true);
 
 		ColumnConfig ccDesconto = new ColumnConfig(OpenSigCore.i18n.txtDesconto(), "comVendaProdutoDesconto", 50, false, IListagem.PORCENTAGEM);
 		ccDesconto.setEditor(new GridEditor(txtDesconto));
@@ -242,6 +243,7 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 
 		// sumarios
 		ColumnConfig ccTotalBruto = new ColumnConfig(OpenSigCore.i18n.txtTotal() + " " + OpenSigCore.i18n.txtBruto(), "comVendaProdutoTotalBruto", 75, false, IListagem.DINHEIRO);
+		ccTotalBruto.setHidden(true);
 		SummaryColumnConfig sumBruto = new SummaryColumnConfig(SummaryColumnConfig.SUM, ccTotalBruto, IListagem.DINHEIRO);
 
 		ColumnConfig ccTatalLiquido = new ColumnConfig(OpenSigCore.i18n.txtTotal(), "comVendaProdutoTotalLiquido", 75, false, IListagem.DINHEIRO);

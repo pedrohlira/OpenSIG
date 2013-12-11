@@ -84,6 +84,10 @@ public class ComTroca extends Dados implements Serializable {
 	@XmlElement(name = "ecfTrocaProdutos")
 	private List<ComTrocaProduto> comTrocaProdutos;
 
+	@ManyToOne
+	@JoinColumn(name = "com_ecf_venda_id")
+	private ComEcfVenda comEcfVenda;
+
 	public ComTroca() {
 		this(0);
 	}
@@ -165,12 +169,24 @@ public class ComTroca extends Dados implements Serializable {
 		this.comCompra = comCompra;
 	}
 
+	public ComEcfVenda getComEcfVenda() {
+		return comEcfVenda;
+	}
+
+	public void setComEcfVenda(ComEcfVenda comEcfVenda) {
+		this.comEcfVenda = comEcfVenda;
+	}
+
 	public List<ComTrocaProduto> getComTrocaProdutos() {
 		return comTrocaProdutos;
 	}
 
 	public void setComTrocaProdutos(List<ComTrocaProduto> comTrocaProdutos) {
 		this.comTrocaProdutos = comTrocaProdutos;
+	}
+
+	public void setComTrocaAtivo(int comTrocaAtivo) {
+		this.comTrocaAtivo = comTrocaAtivo;
 	}
 
 	public Number getId() {
@@ -183,9 +199,10 @@ public class ComTroca extends Dados implements Serializable {
 
 	public String[] toArray() {
 		int compraId = comCompra == null ? 0 : comCompra.getComCompraId();
+		int vendaId = comEcfVenda == null ? 0 : comEcfVenda.getComEcfVendaId();
 
-		return new String[] { comTrocaId + "", empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), compraId + "", UtilClient.getDataHoraGrid(comTrocaData),
-				comTrocaCliente, comTrocaValor.toString(), comTrocaEcf + "", comTrocaCoo + "", getComTrocaAtivo() + "" };
+		return new String[] { comTrocaId + "", empEmpresa.getEmpEmpresaId() + "", empEmpresa.getEmpEntidade().getEmpEntidadeNome1(), compraId + "", vendaId + "",
+				UtilClient.getDataHoraGrid(comTrocaData), comTrocaCliente, comTrocaValor.toString(), comTrocaEcf + "", comTrocaCoo + "", getComTrocaAtivo() + "" };
 	}
 
 	public Dados getObjeto(String campo) {
@@ -202,5 +219,6 @@ public class ComTroca extends Dados implements Serializable {
 		empEmpresa = null;
 		comCompra = null;
 		comTrocaProdutos = null;
+		comEcfVenda = null;
 	}
 }
