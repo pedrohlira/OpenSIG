@@ -69,7 +69,7 @@ public class EnviarNfeCanceladaSaida extends Chain {
 				Document doc1 = UtilServer.getXml(saida.getFisNotaSaidaXml());
 				para = UtilServer.getValorTag(doc1.getDocumentElement(), "email", false);
 				if (para != null) {
-					EnviarEmail email = new EnviarEmail(servico, saida, auth);
+					EnviarEmail email = new EnviarEmail(servico, saida);
 					Thread enviar = new Thread(email);
 					enviar.start();
 				}

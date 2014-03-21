@@ -8,6 +8,9 @@ import org.eclipse.persistence.jaxb.JAXBContextFactory;
 import org.eclipse.persistence.jaxb.rs.MOXyJsonProvider;
 
 import br.com.opensig.comercial.shared.modelo.ComEcf;
+import br.com.opensig.comercial.shared.rest.SisCliente;
+import br.com.opensig.comercial.shared.rest.SisEstado;
+import br.com.opensig.comercial.shared.rest.SisMunicipio;
 import br.com.opensig.empresa.shared.modelo.EmpEstado;
 import br.com.opensig.empresa.shared.modelo.EmpMunicipio;
 import br.com.opensig.financeiro.shared.modelo.FinForma;
@@ -29,8 +32,8 @@ import br.com.opensig.produto.shared.modelo.ProdProduto;
 public class RestContexto extends MOXyJsonProvider implements ContextResolver<JAXBContext> {
 
 	private JAXBContext context;
-	private Class[] types = { EmpEstado.class, EmpMunicipio.class, SisUsuario.class, ProdEmbalagem.class, ProdProduto.class, ProdPreco.class, ProdComposicao.class, ProdGrade.class,
-			ProdGradeTipo.class, ComEcf.class, FinForma.class, String.class };
+	private Class[] types = { EmpEstado.class, EmpMunicipio.class, SisUsuario.class, SisCliente.class, SisEstado.class, SisMunicipio.class, ProdEmbalagem.class, ProdProduto.class, ProdPreco.class,
+			ProdComposicao.class, ProdGrade.class, ProdGradeTipo.class, ComEcf.class, FinForma.class, String.class };
 
 	/**
 	 * Construtor padrao.

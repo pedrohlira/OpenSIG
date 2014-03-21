@@ -458,14 +458,9 @@ public class GerarNfeEntrada extends Chain {
 			// setando o item
 			Det det = new Det();
 			det.setNItem((i++) + "");
-			// cod produto
+			// cod produto e barra
 			Prod prod = new Prod();
-			if (pp.getProdProdutoBarra() == null) {
-				prod.setCProd(UtilServer.formataNumero(pp.getProdProdutoId(), 6, 0, false));
-			} else {
-				prod.setCProd(pp.getProdProdutoBarra());
-			}
-			// barra
+			prod.setCProd(cp.getComCompraProdutoBarra() == null ? UtilServer.formataNumero(pp.getProdProdutoId(), 6, 0, false) : cp.getComCompraProdutoBarra());
 			prod.setCEAN(pp.getProdProdutoBarra() == null ? "" : pp.getProdProdutoBarra());
 			// descricao
 			prod.setXProd(pp.getProdProdutoDescricao().trim());
@@ -538,10 +533,8 @@ public class GerarNfeEntrada extends Chain {
 
 	public Imposto getImposto(ComCompraProduto cp) {
 		Imposto imposto = new Imposto();
-		String cst = cp.getComCompraProdutoIcmsCst();
-
 		// icms
-		if ((auth.getConf().get("nfe.crt").equals("1") && cst.equals("")) || cst.length() == 3) {
+		if (auth.getConf().get("nfe.crt").equals("1")) {
 			imposto.setICMS(getSimples(cp));
 		} else {
 			imposto.setICMS(getNormal(cp));
@@ -565,11 +558,23 @@ public class GerarNfeEntrada extends Chain {
 			ICMSSN101 icmssn101 = new ICMSSN101();
 			icmssn101.setOrig(origem);
 			icmssn101.setCSOSN(cson);
-			double porcento = cp.getComCompraProdutoIcms() == 0.00 ? Double.valueOf(auth.getConf().get("nfe.cson")) : cp.getComCompraProdutoIcms();
+			// porcentagem icms
+			double porcento = 0.00;
+			if (comNatureza.getComNaturezaIcms()) {
+				porcento = cp.getComCompraProdutoIcms() == 0.00 ? Double.valueOf(auth.getConf().get("nfe.cson")) : cp.getComCompraProdutoIcms();
+			}
 			icmssn101.setPCredSN(getValorNfe(porcento));
-			double valor = cp.getComCompraProdutoTotal() * porcento / 100;
-			icmssn101.setVCredICMSSN(getValorNfe(valor));
+			// valor da base de calculo
+			String strBase = porcento == 0.00 ? "0.00" : getValorNfe(cp.getComCompraProdutoTotal());
+			double base = Double.valueOf(strBase);
+			// valor icms
+			String strValor = getValorNfe(base * porcento / 100);
+			double valor = Double.valueOf(strValor);
+			icmssn101.setVCredICMSSN(strValor);
 			icms.setICMSSN101(icmssn101);
+			// executa a soma dos impostos
+			baseICMS += base;
+			valorICMS += valor;
 		} else if (cson.equals("102")) {
 			ICMSSN102 icmssn102 = new ICMSSN102();
 			icmssn102.setOrig(origem);
@@ -816,8 +821,16 @@ public class GerarNfeEntrada extends Chain {
 	public Total getTotais() {
 		Total total = new Total();
 		ICMSTot icmstot = new ICMSTot();
-		icmstot.setVBC(getValorNfe(baseICMS));
-		icmstot.setVICMS(getValorNfe(valorICMS));
+		if (auth.getConf().get("nfe.crt").equals("1")) {
+			icmstot.setVBC("0.00");
+			icmstot.setVICMS("0.00");
+			if (baseICMS > 0) {
+				infos.put("icms", "Base de Calculo do ICMS = " + UtilServer.formataNumero(baseICMS, 1, 2, true) + " com valor de ICMS = " + UtilServer.formataNumero(valorICMS, 1, 2, true));
+			}
+		} else {
+			icmstot.setVBC(getValorNfe(baseICMS));
+			icmstot.setVICMS(getValorNfe(valorICMS));
+		}
 		icmstot.setVBCST(getValorNfe(baseST));
 		icmstot.setVST(getValorNfe(valorST));
 		icmstot.setVProd(getValorNfe(valorProd));
@@ -928,14 +941,14 @@ public class GerarNfeEntrada extends Chain {
 			sb.append("#" + auth.getConf().get("nfe.info"));
 		}
 		// adiciona o pedido da venda
-		sb.append("Compra " + UtilServer.formataNumero(compra.getComCompraId(), 6, 0, false) + " ");
+		sb.append("#Compra " + UtilServer.formataNumero(compra.getComCompraId(), 6, 0, false));
 		// case tenha alguma observacao
 		if (compra.getComCompraObservacao() != null) {
-			sb.append("#" + compra.getComCompraObservacao());
+			sb.append(" " + compra.getComCompraObservacao());
 		}
-		
+
 		InfAdic inf = new InfAdic();
-		inf.setInfCpl(sb.toString());
+		inf.setInfCpl(sb.toString().trim());
 		return inf;
 	}
 

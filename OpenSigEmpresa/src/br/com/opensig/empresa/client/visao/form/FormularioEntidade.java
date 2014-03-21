@@ -144,11 +144,11 @@ public abstract class FormularioEntidade<E extends Dados> extends AFormulario<E>
 		coluna2.add(txtNome2);
 
 		txtDoc2 = new TextField(OpenSigCore.i18n.txtEntidadeDoc2(), prefixo + ".empEntidadeDocumento2", 130);
-		txtDoc2.setMaxLength(20);
+		txtDoc2.setMaxLength(14);
 		txtDoc2.setAllowBlank(false);
 		
 		txtDoc3 = new TextField(OpenSigCore.i18n.txtEntidadeDoc3(), prefixo + ".empEntidadeDocumento3", 130);
-		txtDoc3.setMaxLength(20);
+		txtDoc3.setMaxLength(15);
 		txtDoc3.setAllowBlank(false);
 		
 		chkAtivo = new Checkbox(OpenSigCore.i18n.txtAtivo(), prefixo + ".empEntidadeAtivo");

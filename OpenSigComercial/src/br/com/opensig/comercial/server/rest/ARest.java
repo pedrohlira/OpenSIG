@@ -8,11 +8,7 @@ import org.apache.log4j.Logger;
 
 import br.com.opensig.comercial.shared.modelo.ComEcf;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
-import br.com.opensig.core.client.controlador.filtro.EJuncao;
-import br.com.opensig.core.client.controlador.filtro.FiltroBinario;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
-import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
-import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.server.CoreServiceImpl;
 import br.com.opensig.core.server.UtilServer;
 
@@ -89,9 +85,7 @@ public abstract class ARest {
 	protected ComEcf getImp(String serie) throws RestException {
 		try {
 			FiltroTexto ft = new FiltroTexto("comEcfSerie", ECompara.IGUAL, serie);
-			FiltroBinario fb = new FiltroBinario("comEcfAtivo", ECompara.IGUAL, 1);
-			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { ft, fb });
-			return (ComEcf) service.selecionar(new ComEcf(), gf, false);
+			return (ComEcf) service.selecionar(new ComEcf(), ft, false);
 		} catch (Exception ex) {
 			log.error(ex);
 			throw new RestException(ex);

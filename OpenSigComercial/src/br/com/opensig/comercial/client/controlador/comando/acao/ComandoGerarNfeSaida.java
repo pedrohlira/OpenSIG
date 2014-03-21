@@ -49,6 +49,9 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 	private NumberField txtVolume;
 	private NumberField txtLiquido;
 	private NumberField txtBruto;
+	private TextField txtPlaca;
+	private TextField txtUF;
+	private TextField txtRNTC;
 	private TextField txtNfe;
 	private NumberField txtEcf;
 	private NumberField txtCoo;
@@ -108,7 +111,7 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 
 	private void abrirFrete() {
 		// janela
-		wndNFe = new Window(OpenSigCore.i18n.txtNfe() + " -> " + OpenSigCore.i18n.txtFrete(), 350, 400, true, false);
+		wndNFe = new Window(OpenSigCore.i18n.txtNfe() + " -> " + OpenSigCore.i18n.txtFrete(), 350, 450, true, false);
 		wndNFe.setLayout(new FitLayout());
 		wndNFe.setIconCls("icon-nfe");
 		wndNFe.setClosable(false);
@@ -177,6 +180,10 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 						if (txtLiquido.getValue() != null) {
 							frete.setComFreteCubagem(txtLiquido.getValue().doubleValue());
 						}
+						// coloca na obs os dados do carro
+						frete.setComFretePlaca(txtPlaca.getValueAsString());
+						frete.setComFreteUF(txtUF.getValueAsString());
+						frete.setComFreteRNTC(txtRNTC.getValueAsString());
 					}
 					// seta info
 					venda.setComVendaObservacao(txtObservacao.getValueAsString());
@@ -247,6 +254,24 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 		linha3.addToRow(txtLiquido, 80);
 		frm.add(linha3);
 
+		txtPlaca = new TextField(OpenSigCore.i18n.txtPlaca(), "comFretePlaca", 80);
+		txtPlaca.setMaxLength(8);
+		txtPlaca.setRegex("^[A-Z0-9]+$");
+		
+		txtUF = new TextField(OpenSigCore.i18n.txtUF(), "comFreteUF", 60);
+		txtUF.setMaxLength(2);
+		txtUF.setRegex("^[A-Z]{2}$");
+		
+		txtRNTC = new TextField(OpenSigCore.i18n.txtRNTC(), "comFreteRNTC", 120);
+		txtRNTC.setMaxLength(20);
+		
+		MultiFieldPanel linha4 = new MultiFieldPanel();
+		linha4.setBorder(false);
+		linha4.addToRow(txtPlaca, 100);
+		linha4.addToRow(txtUF, 80);
+		linha4.addToRow(txtRNTC, 140);
+		frm.add(linha4);
+		
 		txtNfe = new TextField(OpenSigCore.i18n.txtNfe() + " " + OpenSigCore.i18n.txtComplemento(), "comCompraNfe", 300);
 		txtNfe.setRegex("^(\\d{44})$");
 		frm.add(txtNfe);
@@ -261,11 +286,11 @@ public class ComandoGerarNfeSaida extends ComandoAcao {
 		txtCoo.setAllowDecimals(false);
 		txtCoo.setMaxLength(11);
 
-		MultiFieldPanel linha4 = new MultiFieldPanel();
-		linha4.setBorder(false);
-		linha4.addToRow(txtEcf, 160);
-		linha4.addToRow(txtCoo, 160);
-		frm.add(linha4);
+		MultiFieldPanel linha5 = new MultiFieldPanel();
+		linha5.setBorder(false);
+		linha5.addToRow(txtEcf, 160);
+		linha5.addToRow(txtCoo, 160);
+		frm.add(linha5);
 
 		txtObservacao = new TextArea(OpenSigCore.i18n.txtObservacao(), "comVendaObservacao");
 		txtObservacao.setMaxLength(4000);

@@ -173,7 +173,7 @@ public class FormularioProduto extends AFormulario<ProdProduto> {
 
 		txtReferencia = new TextField(OpenSigCore.i18n.txtRef(), "prodProdutoReferencia", 80);
 		txtReferencia.setRegex("^\\w*$");
-		txtReferencia.setMaxLength(20);
+		txtReferencia.setMaxLength(60);
 
 		txtDescricao = new TextField(OpenSigCore.i18n.txtDescricao(), "prodProdutoDescricao", 300);
 		txtDescricao.setAllowBlank(false);

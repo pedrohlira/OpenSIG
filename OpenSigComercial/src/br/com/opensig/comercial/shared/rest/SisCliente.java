@@ -31,6 +31,7 @@ public class SisCliente extends Dados implements Serializable {
 	private String sisClienteTelefone;
 	private String sisClienteEmail;
 	private Date sisClienteData;
+	private String sisClienteObservacao;
 	private SisMunicipio sisMunicipio;
 
 	/**
@@ -65,6 +66,7 @@ public class SisCliente extends Dados implements Serializable {
 		sisClienteDoc1 = ent.getEmpEntidadeDocumento2();
 		sisClienteNome = ent.getEmpEntidadeNome1();
 		sisClienteData = ent.getEmpEntidadeData();
+		sisClienteObservacao = ent.getEmpEntidadeObservacao();
 
 		if (ent.getEmpEnderecos().size() > 0) {
 			EmpEndereco ende = ent.getEmpEnderecos().get(0);
@@ -192,6 +194,14 @@ public class SisCliente extends Dados implements Serializable {
 
 	public void setSisClienteData(Date sisClienteData) {
 		this.sisClienteData = sisClienteData;
+	}
+
+	public String getSisClienteObservacao() {
+		return sisClienteObservacao;
+	}
+
+	public void setSisClienteObservacao(String sisClienteObservacao) {
+		this.sisClienteObservacao = sisClienteObservacao;
 	}
 
 	public SisMunicipio getSisMunicipio() {

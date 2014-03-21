@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="danfe2" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="814" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14" uuid="9d320f91-b794-4f6e-8c32-653236535735">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="480"/>
 	<property name="ireport.y" value="544"/>
 	<style name="campoPequeno" hAlign="Left" vAlign="Top" markup="styled" pattern="" fontName="Verdana" fontSize="4" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Verdana"/>
 	<style name="borda" mode="Transparent" forecolor="#000000" fill="Solid" radius="3" scaleImage="Clip" hAlign="Left" vAlign="Top" markup="none" pattern="" fontName="Verdana" fontSize="5" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="true" pdfFontName="Verdana">
@@ -263,6 +263,12 @@
 	</field>
 	<field name="Prod_CSOSN" class="java.lang.String">
 		<fieldDescription><![CDATA[imposto/ICMS/descendant::CSOSN]]></fieldDescription>
+	</field>
+	<field name="Prod_CSOSN_Valor" class="java.lang.String">
+		<fieldDescription><![CDATA[imposto/ICMS/descendant::vCredICMSSN]]></fieldDescription>
+	</field>
+	<field name="Prod_CSOSN_Aliq" class="java.lang.String">
+		<fieldDescription><![CDATA[imposto/ICMS/descendant::pCredSN]]></fieldDescription>
 	</field>
 	<field name="Prod_CST" class="java.lang.String">
 		<fieldDescription><![CDATA[imposto/ICMS/descendant::CST]]></fieldDescription>
@@ -1635,7 +1641,7 @@ $F{Trans_CNPJ}.substring(12,14)]]></textFieldExpression>
 				<textElement textAlignment="Center">
 					<font size="5" pdfFontName="Verdana"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Prod_AliqICMS} == null ? 0.00 : Double.parseDouble($F{Prod_AliqICMS})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Prod_AliqICMS} != null ? Double.parseDouble($F{Prod_AliqICMS}) : $F{Prod_CSOSN_Aliq} != null ? Double.parseDouble($F{Prod_CSOSN_Aliq}) : 0.00]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.##" isBlankWhenNull="true">
 				<reportElement uuid="992b7f7b-415a-48ad-9e3b-dd090cdab348" style="detail" positionType="Float" stretchType="RelativeToBandHeight" x="785" y="0" width="29" height="12" isPrintWhenDetailOverflows="true"/>
@@ -1664,7 +1670,7 @@ $F{Trans_CNPJ}.substring(12,14)]]></textFieldExpression>
 				<textElement textAlignment="Right">
 					<font size="5" pdfFontName="Verdana"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Prod_BC} == null ? 0.00 : Double.parseDouble($F{Prod_BC})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Prod_BC} != null ? Double.parseDouble($F{Prod_BC}) : $F{Prod_CSOSN}.equals("101") ? Double.parseDouble($F{Prod_Total}) : 0.00]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement uuid="7621721c-08b5-4f90-abee-2c2460461e19" style="detail" positionType="Float" stretchType="RelativeToBandHeight" x="711" y="0" width="44" height="12" isPrintWhenDetailOverflows="true"/>
@@ -1686,7 +1692,7 @@ $F{Trans_CNPJ}.substring(12,14)]]></textFieldExpression>
 				<textElement textAlignment="Right">
 					<font size="5" pdfFontName="Verdana"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Prod_ValorICMS} == null ? 0.00 : Double.parseDouble($F{Prod_ValorICMS})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Prod_ValorICMS} != null ? Double.parseDouble($F{Prod_ValorICMS}) : $F{Prod_CSOSN_Valor} != null ? Double.parseDouble($F{Prod_CSOSN_Valor}) : 0.00]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement uuid="44ab6ef0-435d-4df0-9c52-2e71b1088703" style="detail" positionType="Float" stretchType="RelativeToBandHeight" x="57" y="0" width="321" height="12" isPrintWhenDetailOverflows="true"/>
@@ -1721,7 +1727,7 @@ $F{Trans_CNPJ}.substring(12,14)]]></textFieldExpression>
 				<textElement textAlignment="Right">
 					<font size="4" isBold="true" isItalic="false" isUnderline="false" pdfFontName="Verdana"/>
 				</textElement>
-				<textFieldExpression><![CDATA["DANFE GERADO POR OPENFE.COM.BR"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["VEJA NOSSAS SOLUÇÕES EM PHDSS.COM.BR"]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

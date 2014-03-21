@@ -110,6 +110,12 @@ public class ComFrete extends Dados implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private FinPagar finPagar;
 
+	private transient String comFretePlaca;
+	
+	private transient String comFreteUF;
+	
+	private transient String comFreteRNTC;
+	
 	public ComFrete() {
 		this(0);
 	}
@@ -301,6 +307,30 @@ public class ComFrete extends Dados implements Serializable {
 
 	public void setFinPagar(FinPagar finPagar) {
 		this.finPagar = finPagar;
+	}
+
+	public String getComFretePlaca() {
+		return comFretePlaca;
+	}
+
+	public void setComFretePlaca(String comFretePlaca) {
+		this.comFretePlaca = comFretePlaca;
+	}
+
+	public String getComFreteUF() {
+		return comFreteUF;
+	}
+
+	public void setComFreteUF(String comFreteUF) {
+		this.comFreteUF = comFreteUF;
+	}
+
+	public String getComFreteRNTC() {
+		return comFreteRNTC;
+	}
+
+	public void setComFreteRNTC(String comFreteRNTC) {
+		this.comFreteRNTC = comFreteRNTC;
 	}
 
 	public Number getId() {

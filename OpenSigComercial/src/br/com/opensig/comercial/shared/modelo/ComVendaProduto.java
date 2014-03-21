@@ -281,12 +281,12 @@ public class ComVendaProduto extends Dados implements Serializable {
 
 	public String[] toArray() {
 		return new String[] { comVendaProdutoId + "", comVenda.getComVendaId() + "", comVenda.getEmpEmpresa().getEmpEmpresaId() + "", comVenda.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(),
-				comVenda.getEmpCliente().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getEmpFornecedor().getEmpEntidade().getEmpEntidadeNome1(), prodProduto.getProdProdutoId() + "",
-				comVendaProdutoBarra, prodProduto.getProdProdutoDescricao(), prodProduto.getProdProdutoReferencia(), UtilClient.getDataGrid(comVenda.getComVendaData()),
-				comVendaProdutoQuantidade + "", prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(), comVendaProdutoBruto.toString(), comVendaProdutoDesconto.toString(),
-				comVendaProdutoLiquido.toString(), comVendaProdutoTotalBruto.toString(), comVendaProdutoTotalLiquido.toString(), "0", prodProduto.getProdOrigem().getProdOrigemId() + "",
-				comVendaProdutoCfop + "", comVendaProdutoIcmsCst, comVendaProdutoIcms.toString(), comVendaProdutoIpiCst, comVendaProdutoIpi.toString(), comVendaProdutoPisCst,
-				comVendaProdutoPis.toString(), comVendaProdutoCofinsCst, comVendaProdutoCofins.toString(), comVendaProdutoOrdem + "" };
+				comVenda.getEmpCliente().getEmpEntidade().getEmpEntidadeNome1(), comVenda.getSisVendedor().getSisUsuarioLogin(), prodProduto.getEmpFornecedor().getEmpEntidade().getEmpEntidadeNome1(),
+				prodProduto.getProdProdutoId() + "", comVendaProdutoBarra, prodProduto.getProdProdutoDescricao(), prodProduto.getProdProdutoReferencia(),
+				UtilClient.getDataGrid(comVenda.getComVendaData()), comVendaProdutoQuantidade + "", prodEmbalagem.getProdEmbalagemId() + "", prodEmbalagem.getProdEmbalagemNome(),
+				comVendaProdutoBruto.toString(), comVendaProdutoDesconto.toString(), comVendaProdutoLiquido.toString(), comVendaProdutoTotalBruto.toString(), comVendaProdutoTotalLiquido.toString(),
+				"0", prodProduto.getProdOrigem().getProdOrigemId() + "", comVendaProdutoCfop + "", comVendaProdutoIcmsCst, comVendaProdutoIcms.toString(), comVendaProdutoIpiCst,
+				comVendaProdutoIpi.toString(), comVendaProdutoPisCst, comVendaProdutoPis.toString(), comVendaProdutoCofinsCst, comVendaProdutoCofins.toString(), comVendaProdutoOrdem + "" };
 	}
 
 	public Dados getObjeto(String campo) {

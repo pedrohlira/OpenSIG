@@ -265,7 +265,7 @@ public class PermissaoServiceImpl extends CoreServiceImpl implements PermissaoSe
 			// gera a mensagem e envia o email
 			String msg = getMensagem(usuario.getSisUsuarioLogin(), usuario.getSisUsuarioSenha(), email);
 			MailServiceImpl mail = new MailServiceImpl();
-			mail.enviarEmail(null, email, "Alteração de Senha!", msg);
+			mail.enviarEmail(email, "Alteração de Senha!", msg, null);
 		} catch (Exception e) {
 			throw new PermissaoException(e.getMessage());
 		}

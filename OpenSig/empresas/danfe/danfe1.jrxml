@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="danfe1" pageWidth="595" pageHeight="842" columnWidth="565" leftMargin="14" rightMargin="16" topMargin="14" bottomMargin="14" uuid="48242467-29f5-4826-9c2c-4bed1e3788b3">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="521"/>
 	<style name="campoPequeno" hAlign="Left" vAlign="Top" markup="styled" pattern="" fontName="Verdana" fontSize="4" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" isPdfEmbedded="false"/>
 	<style name="borda" mode="Transparent" forecolor="#000000" fill="Solid" radius="3" scaleImage="Clip" hAlign="Left" vAlign="Top" markup="none" pattern="" fontName="Verdana" fontSize="5" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="true" isPdfEmbedded="false">
 		<pen lineWidth="0.25"/>
@@ -263,6 +263,12 @@
 	</field>
 	<field name="Prod_CSOSN" class="java.lang.String">
 		<fieldDescription><![CDATA[imposto/ICMS/descendant::CSOSN]]></fieldDescription>
+	</field>
+	<field name="Prod_CSOSN_Valor" class="java.lang.String">
+		<fieldDescription><![CDATA[imposto/ICMS/descendant::vCredICMSSN]]></fieldDescription>
+	</field>
+	<field name="Prod_CSOSN_Aliq" class="java.lang.String">
+		<fieldDescription><![CDATA[imposto/ICMS/descendant::pCredSN]]></fieldDescription>
 	</field>
 	<field name="Prod_CST" class="java.lang.String">
 		<fieldDescription><![CDATA[imposto/ICMS/descendant::CST]]></fieldDescription>
@@ -1558,7 +1564,7 @@ $F{Trans_CNPJ}.substring(12,14)]]></textFieldExpression>
 				<textElement textAlignment="Center">
 					<font size="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Prod_AliqICMS} == null ? 0.00 : Double.parseDouble($F{Prod_AliqICMS})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Prod_AliqICMS} != null ? Double.parseDouble($F{Prod_AliqICMS}) : $F{Prod_CSOSN_Aliq} != null ? Double.parseDouble($F{Prod_CSOSN_Aliq}) : 0.00]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.##" isBlankWhenNull="true">
 				<reportElement uuid="3c016430-b96d-4354-8362-a078c77d2815" style="detail" positionType="Float" stretchType="RelativeToBandHeight" x="543" y="0" width="22" height="12" isPrintWhenDetailOverflows="true"/>
@@ -1587,7 +1593,7 @@ $F{Trans_CNPJ}.substring(12,14)]]></textFieldExpression>
 				<textElement textAlignment="Right">
 					<font size="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Prod_BC} == null ? 0.00 : Double.parseDouble($F{Prod_BC})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Prod_BC} != null ? Double.parseDouble($F{Prod_BC}) : $F{Prod_CSOSN}.equals("101") ? Double.parseDouble($F{Prod_Total}) : 0.00]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement uuid="3119a1ed-be7c-4b1b-936e-e89666f486ab" style="detail" positionType="Float" stretchType="RelativeToBandHeight" x="494" y="0" width="27" height="12" isPrintWhenDetailOverflows="true"/>
@@ -1609,7 +1615,7 @@ $F{Trans_CNPJ}.substring(12,14)]]></textFieldExpression>
 				<textElement textAlignment="Right">
 					<font size="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Prod_ValorICMS} == null ? 0.00 : Double.parseDouble($F{Prod_ValorICMS})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Prod_ValorICMS} != null ? Double.parseDouble($F{Prod_ValorICMS}) : $F{Prod_CSOSN_Valor} != null ? Double.parseDouble($F{Prod_CSOSN_Valor}) : 0.00]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement uuid="96ef5f5f-95b2-45a7-a8f0-f447c5c536b5" style="detail" positionType="Float" stretchType="RelativeToBandHeight" x="57" y="0" width="169" height="12" isPrintWhenDetailOverflows="true"/>
@@ -1644,7 +1650,7 @@ $F{Trans_CNPJ}.substring(12,14)]]></textFieldExpression>
 				<textElement textAlignment="Right">
 					<font size="4" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["DANFE GERADO POR OPENFE.COM.BR"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["VEJA NOSSAS SOLUÇÕES EM PHDSS.COM.BR"]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

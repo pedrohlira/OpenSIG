@@ -58,10 +58,11 @@ public class ListagemVendaProduto extends AListagem<ComVendaProduto> {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("comVendaProdutoId"), new IntegerFieldDef("comVenda.comVendaId"), new IntegerFieldDef("comVenda.empEmpresa.empEmpresaId"),
 				new StringFieldDef("comVenda.empEmpresa.empEntidade.empEntidadeNome1"), new StringFieldDef("comVenda.empCliente.empEntidade.empEntidadeNome1"),
-				new StringFieldDef("prodProduto.empFornecedor.empEntidade.empEntidadeNome1"), new IntegerFieldDef("prodProduto.prodProdutoId"), new StringFieldDef("comVendaProdutoBarra"),
-				new StringFieldDef("prodProduto.prodProdutoDescricao"), new StringFieldDef("prodProduto.prodProdutoReferencia"), new DateFieldDef("comVenda.comVendaData"),
-				new FloatFieldDef("comVendaProdutoQuantidade"), new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"),
-				new FloatFieldDef("comVendaProdutoBruto"), new FloatFieldDef("comVendaProdutoDesconto"), new FloatFieldDef("comVendaProdutoLiquido"), new FloatFieldDef("comVendaProdutoTotalBruto"),
+				new StringFieldDef("comVenda.sisVendedor.sisUsuarioLogin"), new StringFieldDef("prodProduto.empFornecedor.empEntidade.empEntidadeNome1"),
+				new IntegerFieldDef("prodProduto.prodProdutoId"), new StringFieldDef("comVendaProdutoBarra"), new StringFieldDef("prodProduto.prodProdutoDescricao"),
+				new StringFieldDef("prodProduto.prodProdutoReferencia"), new DateFieldDef("comVenda.comVendaData"), new FloatFieldDef("comVendaProdutoQuantidade"),
+				new IntegerFieldDef("prodEmbalagem.prodEmbalagemId"), new StringFieldDef("prodEmbalagem.prodEmbalagemNome"), new FloatFieldDef("comVendaProdutoBruto"),
+				new FloatFieldDef("comVendaProdutoDesconto"), new FloatFieldDef("comVendaProdutoLiquido"), new FloatFieldDef("comVendaProdutoTotalBruto"),
 				new FloatFieldDef("comVendaProdutoTotalLiquido"), new IntegerFieldDef("comVendaProdutoEstoque"), new IntegerFieldDef("comVendaProdutoOrigem"),
 				new IntegerFieldDef("comVendaProdutoCfop"), new StringFieldDef("comVendaProdutoIcmsCst"), new FloatFieldDef("comVendaProdutoIcms"), new StringFieldDef("comVendaProdutoIpiCst"),
 				new FloatFieldDef("comVendaProdutoIpi"), new StringFieldDef("comVendaProdutoPisCst"), new FloatFieldDef("comVendaProdutoPis"), new StringFieldDef("comVendaProdutoCofinsCst"),
@@ -79,6 +80,7 @@ public class ListagemVendaProduto extends AListagem<ComVendaProduto> {
 		ColumnConfig ccEmpresa = new ColumnConfig(OpenSigCore.i18n.txtEmpresa(), "comVenda.empEmpresa.empEntidade.empEntidadeNome1", 100, true);
 		ccEmpresa.setHidden(true);
 		ColumnConfig ccCliente = new ColumnConfig(OpenSigCore.i18n.txtCliente(), "comVenda.empCliente.empEntidade.empEntidadeNome1", 200, true);
+		ColumnConfig ccVendedor = new ColumnConfig(OpenSigCore.i18n.txtVendedor(), "comVenda.sisVendedor.sisUsuarioLogin", 100, true);
 		ColumnConfig ccFornecedor = new ColumnConfig(OpenSigCore.i18n.txtFornecedor(), "prodProduto.empFornecedor.empEntidade.empEntidadeNome1", 200, true);
 		ColumnConfig ccBarra = new ColumnConfig(OpenSigCore.i18n.txtBarra(), "comVendaProdutoBarra", 100, true);
 		ColumnConfig ccProduto = new ColumnConfig(OpenSigCore.i18n.txtProduto(), "prodProduto.prodProdutoDescricao", 250, true);
@@ -125,9 +127,9 @@ public class ListagemVendaProduto extends AListagem<ComVendaProduto> {
 		SummaryColumnConfig ccTatalLiquido = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtTotal() + " " + OpenSigCore.i18n.txtLiquido(),
 				"comVendaProdutoTotalLiquido", 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccVendaId, ccEmpresaId, ccEmpresa, ccCliente, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccData, ccQuantidade,
-				ccEmbalagemId, ccEmbalagem, ccBruto, ccDesconto, ccLiquido, ccTotalBruto, ccTatalLiquido, ccEstoque, ccOrigem, ccCfop, ccIcmsCst, ccIcms, ccIpiCst, ccIpi, ccPisCst, ccPis,
-				ccCofinsCst, ccCofins, ccOrdem };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccVendaId, ccEmpresaId, ccEmpresa, ccCliente, ccVendedor, ccFornecedor, ccProdId, ccBarra, ccProduto, ccReferencia, ccData,
+				ccQuantidade, ccEmbalagemId, ccEmbalagem, ccBruto, ccDesconto, ccLiquido, ccTotalBruto, ccTatalLiquido, ccEstoque, ccOrigem, ccCfop, ccIcmsCst, ccIcms, ccIpiCst, ccIpi, ccPisCst,
+				ccPis, ccCofinsCst, ccCofins, ccOrdem };
 		modelos = new ColumnModel(bcc);
 
 		GrupoFiltro gf = new GrupoFiltro();

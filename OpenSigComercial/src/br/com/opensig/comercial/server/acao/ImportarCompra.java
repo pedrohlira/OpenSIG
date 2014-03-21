@@ -189,7 +189,7 @@ public class ImportarCompra extends ImportarNFe<ComCompra> {
 				// data
 				Date dtData = null;
 				try {
-					dtData = new SimpleDateFormat("yyyy-MM-dd").parse(dup.getDVenc());
+					dtData = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dup.getDVenc() + " 10:00:00");
 				} catch (ParseException e) {
 					dtData = new Date();
 				}

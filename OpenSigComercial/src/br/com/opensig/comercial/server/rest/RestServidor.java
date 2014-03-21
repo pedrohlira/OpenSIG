@@ -393,6 +393,29 @@ public class RestServidor extends ARest {
 	}
 
 	/**
+	 * Metodo que cadastra na base do server os clientesclieados pelos sistemas
+	 * em modo client.
+	 * 
+	 * @param cliente
+	 *            um objeto do tipo SisCliente.
+	 * @throws RestException
+	 *             em caso de nao conseguir acessar a informacao.
+	 */
+	@Path("/cliente")
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void setCliente(SisCliente cliente) throws RestException {
+		autorizar();
+
+		try {
+			getCliente(cliente);
+		} catch (Exception ex) {
+			log.error("Erro ao salvar o cliente.", ex);
+			throw new RestException(ex.getMessage());
+		}
+	}
+
+	/**
 	 * Metodo que cadastra na base do server as vendas, produtos vendidos,
 	 * pagamentos emitidos pelos sistemas em modo client.
 	 * 
@@ -421,7 +444,7 @@ public class RestServidor extends ARest {
 			double acresP = ecfVenda.getComEcfVendaBruto() > 0 ? ecfVenda.getComEcfVendaAcrescimo() / ecfVenda.getComEcfVendaBruto() * 100 : 0.00;
 			double descP = ecfVenda.getComEcfVendaBruto() > 0 ? ecfVenda.getComEcfVendaDesconto() / ecfVenda.getComEcfVendaBruto() * 100 : 0.00;
 
-			// salva o receber da venda
+			// salva o receber da venda se nao for cancelada
 			FinReceber receber = null;
 			if (!ecfVenda.getComEcfVendaCancelada()) {
 				// coloca dados de cartao na obs
@@ -462,6 +485,23 @@ public class RestServidor extends ARest {
 						recebimento.setFinRecebimentoParcela(UtilServer.formataNumero(par, 2, 0, false) + "/" + UtilServer.formataNumero(rec.getFinRecebimentos().size(), 2, 0, false));
 						service.salvar(recebimento);
 					}
+				}
+			} else {
+				// filtro pra deletar a venda ja salva antes
+				FiltroObjeto fo = new FiltroObjeto("comEcf", ECompara.IGUAL, ecf);
+				FiltroNumero fn = new FiltroNumero("comEcfVendaCcf", ECompara.IGUAL, ecfVenda.getComEcfVendaCcf());
+				GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fn });
+				ComEcfVenda vendaAux = (ComEcfVenda) service.selecionar(ecfVenda, gf, false);
+				// caso ja exista deleta e remove do estoque
+				if (vendaAux != null) {
+					service.deletar(vendaAux);
+					List<Sql> sqls = new ArrayList<Sql>();
+					for (ComEcfVendaProduto vp : vProdutos) {
+						if (!vp.getComEcfVendaProdutoCancelado()) {
+							getEstoque(sqls, vp.getComEcfVendaProdutoQuantidade() * -1, vp.getProdEmbalagem(), vp.getProdProduto(), vp.getComEcfVendaProdutoBarra());
+						}
+					}
+					service.executar(sqls.toArray(new Sql[] {}));
 				}
 			}
 
@@ -697,51 +737,58 @@ public class RestServidor extends ARest {
 			FiltroTexto ft = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.IGUAL, doc);
 			EmpCliente cli = (EmpCliente) service.selecionar(new EmpCliente(), ft, false);
 
-			if (cli == null) {
-				// entidade
-				EmpEntidade ent = new EmpEntidade();
-				ent.setEmpEntidadeNome1(sisCliente.getSisClienteNome());
-				ent.setEmpEntidadeNome2("CONSUMIDOR");
-				ent.setEmpEntidadeDocumento1(doc);
-				ent.setEmpEntidadeDocumento2(sisCliente.getSisClienteDoc1());
-				ent.setEmpEntidadeDocumento2("ISENTO");
-				ent.setEmpEntidadeDocumento3("ISENTO");
-				ent.setEmpEntidadePessoa(pessoa);
-				ent.setEmpEntidadeAtivo(true);
-				ent.setEmpEntidadeObservacao("Importado do OpenPDV");
-				ent.setEmpEntidadeData(new Date());
-				ent = (EmpEntidade) service.salvar(ent);
-				// endereco
-				EmpEndereco ende = new EmpEndereco();
-				ende.setEmpEntidade(ent);
-				ende.setEmpEnderecoTipo(new EmpEnderecoTipo(Integer.valueOf(conf.get("nfe.tipoenderes"))));
-				ende.setEmpMunicipio(new EmpMunicipio(sisCliente.getSisMunicipio().getSisMunicipioId()));
-				ende.setEmpEnderecoLogradouro(sisCliente.getSisClienteEndereco().equals("") ? "NAO INFORMADO" : sisCliente.getSisClienteEndereco());
-				ende.setEmpEnderecoNumero(sisCliente.getSisClienteNumero() + "");
-				ende.setEmpEnderecoBairro(sisCliente.getSisClienteBairro().equals("") ? "NAO INFORMADO" : sisCliente.getSisClienteBairro());
-				ende.setEmpEnderecoComplemento(sisCliente.getSisClienteComplemento());
-				ende.setEmpEnderecoCep(sisCliente.getSisClienteCep().equals("") ? "00000-000" : sisCliente.getSisClienteCep());
-				ende = (EmpEndereco) service.salvar(ende);
-				// contato 1
-				EmpContato cont1 = new EmpContato();
-				cont1.setEmpEntidade(ent);
-				cont1.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipoconttel"))));
-				cont1.setEmpContatoDescricao(sisCliente.getSisClienteTelefone().equals("") ? "(00) 0000-0000" : sisCliente.getSisClienteTelefone());
-				cont1.setEmpContatoPessoa("");
-				cont1 = (EmpContato) service.salvar(cont1);
-				// contato 2
-				EmpContato cont2 = new EmpContato();
-				cont2.setEmpEntidade(ent);
-				cont2.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipocontemail"))));
-				cont2.setEmpContatoDescricao(sisCliente.getSisClienteEmail().equals("") ? "N@O.TENHO" : sisCliente.getSisClienteEmail());
-				cont2.setEmpContatoPessoa("");
-				cont2 = (EmpContato) service.salvar(cont2);
-
-				// cliente
+			EmpEntidade ent = new EmpEntidade();
+			EmpEndereco ende = new EmpEndereco();
+			EmpContato cont1 = new EmpContato();
+			EmpContato cont2 = new EmpContato();
+			if (cli != null) {
+				ent = cli.getEmpEntidade();
+				ende = ent.getEmpEnderecos().get(0);
+				cont1 = ent.getEmpContatos().get(0);
+				if (ent.getEmpContatos().size() > 1) {
+					cont2 = ent.getEmpContatos().get(1);
+				}
+			} else {
 				cli = new EmpCliente();
-				cli.setEmpEntidade(ent);
-				cli = (EmpCliente) service.salvar(cli);
 			}
+
+			// entidade
+			ent.setEmpEntidadeNome1(sisCliente.getSisClienteNome());
+			ent.setEmpEntidadeNome2("CONSUMIDOR");
+			ent.setEmpEntidadeDocumento1(doc);
+			ent.setEmpEntidadeDocumento2(sisCliente.getSisClienteDoc1());
+			ent.setEmpEntidadeDocumento2("ISENTO");
+			ent.setEmpEntidadeDocumento3("ISENTO");
+			ent.setEmpEntidadePessoa(pessoa);
+			ent.setEmpEntidadeAtivo(true);
+			ent.setEmpEntidadeObservacao(sisCliente.getSisClienteObservacao());
+			ent.setEmpEntidadeData(new Date());
+			ent = (EmpEntidade) service.salvar(ent);
+			// endereco
+			ende.setEmpEntidade(ent);
+			ende.setEmpEnderecoTipo(new EmpEnderecoTipo(Integer.valueOf(conf.get("nfe.tipoenderes"))));
+			ende.setEmpMunicipio(new EmpMunicipio(sisCliente.getSisMunicipio().getSisMunicipioId()));
+			ende.setEmpEnderecoLogradouro(sisCliente.getSisClienteEndereco().equals("") ? "NAO INFORMADO" : sisCliente.getSisClienteEndereco());
+			ende.setEmpEnderecoNumero(sisCliente.getSisClienteNumero() + "");
+			ende.setEmpEnderecoBairro(sisCliente.getSisClienteBairro().equals("") ? "NAO INFORMADO" : sisCliente.getSisClienteBairro());
+			ende.setEmpEnderecoComplemento(sisCliente.getSisClienteComplemento());
+			ende.setEmpEnderecoCep(sisCliente.getSisClienteCep().equals("") ? "00000-000" : sisCliente.getSisClienteCep());
+			ende = (EmpEndereco) service.salvar(ende);
+			// contato 1
+			cont1.setEmpEntidade(ent);
+			cont1.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipoconttel"))));
+			cont1.setEmpContatoDescricao(sisCliente.getSisClienteTelefone().equals("") ? "(00) 0000-0000" : sisCliente.getSisClienteTelefone());
+			cont1.setEmpContatoPessoa("");
+			cont1 = (EmpContato) service.salvar(cont1);
+			// contato 2
+			cont2.setEmpEntidade(ent);
+			cont2.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipocontemail"))));
+			cont2.setEmpContatoDescricao(sisCliente.getSisClienteEmail().equals("") ? "N@O.TENHO" : sisCliente.getSisClienteEmail());
+			cont2.setEmpContatoPessoa("");
+			cont2 = (EmpContato) service.salvar(cont2);
+			// cliente
+			cli.setEmpEntidade(ent);
+			cli = (EmpCliente) service.salvar(cli);
 			return cli;
 		} catch (Exception ex) {
 			return new EmpCliente(1);
@@ -761,7 +808,6 @@ public class RestServidor extends ARest {
 	 *            o produto que foi vendido.
 	 * @param barra
 	 *            o codigo escolhido na hora da venda.
-	 * @return uma instrucao de SQL no formato de objeto para ser executada.
 	 * @throws CoreException
 	 *             dispara caso nao consiga gerar o sql de atualizacao.
 	 */
@@ -782,9 +828,8 @@ public class RestServidor extends ARest {
 
 		// remove estoque da grade caso o produto tenha
 		if (prod.getProdGrades() != null) {
-			// formando os parametros
+			// formando os parametros e fitros
 			ParametroFormula pf2 = new ParametroFormula("prodEstoqueGradeQuantidade", -1 * qtd);
-			// formando o filtro
 			FiltroTexto ft = new FiltroTexto("prodGrade.prodGradeBarra", ECompara.IGUAL, barra);
 			GrupoFiltro gf1 = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo2, ft });
 			// busca o item

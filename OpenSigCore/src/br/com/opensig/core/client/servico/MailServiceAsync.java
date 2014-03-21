@@ -8,28 +8,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * Interface que padroniza o envio de email.
  * 
  * @author Pedro H. Lira
- * @version 1.0
  */
 public interface MailServiceAsync {
 
 	/**
-	 * @see MailService#enviarEmail(String, String, String, String)
+	 * @see MailService#enviarEmail(String, String, String, Anexo[])
 	 * @param asyncCallback
 	 *            retorno assincrono.
 	 */
-	public abstract void enviarEmail(String de, String para, String assunto, String mensagem, AsyncCallback asyncCallback);
-
-	/**
-	 * @see MailService#enviarEmail(String, String, String, String, Anexo[])
-	 * @param asyncCallback
-	 *            retorno assincrono.
-	 */
-	public abstract void enviarEmail(String de, String para, String assunto, String mensagem, Anexo[] anexos, AsyncCallback asyncCallback);
-
-	/**
-	 * @see MailService#enviarEmail(String, String, String, String, String, String, Anexo[])
-	 * @param asyncCallback
-	 *            retorno assincrono.
-	 */
-	public abstract void enviarEmail(String de, String para, String copia, String oculto, String assunto, String mensagem, Anexo[] anexos, AsyncCallback asyncCallback);
+	public abstract void enviarEmail(String para, String assunto, String mensagem, Anexo[] anexos, AsyncCallback asyncCallback);
 }

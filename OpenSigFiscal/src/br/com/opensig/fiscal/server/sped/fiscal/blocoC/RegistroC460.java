@@ -19,7 +19,7 @@ public class RegistroC460 extends ARegistro<DadosC460, ComEcfVenda> {
 
 	private Map<String, List<DadosC470>> analitico = new HashMap<String, List<DadosC470>>();
 	private ComEcfVendaProduto vendaProd = new ComEcfVendaProduto();
-	
+
 	@Override
 	public void executar() {
 		qtdLinhas = 0;
@@ -62,8 +62,11 @@ public class RegistroC460 extends ARegistro<DadosC460, ComEcfVenda> {
 			d.setVl_pis(dados.getComEcfVendaLiquido() * pis / 100);
 			d.setVl_cofins(dados.getComEcfVendaLiquido() * cofins / 100);
 			if (dados.getEmpCliente() != null) {
-				d.setCpf_cnpj(dados.getEmpCliente().getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("\\D", ""));
-				d.setNom_adq(dados.getEmpCliente().getEmpEntidade().getEmpEntidadeNome1());
+				String doc = dados.getEmpCliente().getEmpEntidade().getEmpEntidadeDocumento1().replaceAll("\\D", "");
+				if (!doc.replaceAll("[0]", "").equals("")) {
+					d.setCpf_cnpj(doc);
+					d.setNom_adq(dados.getEmpCliente().getEmpEntidade().getEmpEntidadeNome1());
+				}
 			}
 		} else {
 			d.setDt_doc(null);

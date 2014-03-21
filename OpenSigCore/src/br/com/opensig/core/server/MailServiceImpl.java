@@ -29,7 +29,6 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * Classe que gerencia os emails enviados do sistema.
  * 
  * @author Pedro H. Lira
- * @version 1.0
  */
 public class MailServiceImpl extends RemoteServiceServlet implements MailService {
 
@@ -46,9 +45,9 @@ public class MailServiceImpl extends RemoteServiceServlet implements MailService
 	}
 
 	/**
-	 * @see MailService#enviarEmail(String, String, String, String, String, String, Anexo[])
+	 * @see MailService#enviarEmail(String, String, String, Anexo[])
 	 */
-	public synchronized static void enviar(String de, String para, String copia, String oculta, String assunto, String mensagem, Anexo[] anexos) throws MailException {
+	public synchronized void enviarEmail(String para, String assunto, String mensagem, Anexo[] anexos) throws MailException {
 		// configurando o servidor de envio
 		Authenticator auth = new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
@@ -56,10 +55,6 @@ public class MailServiceImpl extends RemoteServiceServlet implements MailService
 			}
 		};
 		Session mailSession = Session.getDefaultInstance(conf, auth);
-
-		if (de == null) {
-			de = conf.getProperty("mail.user");
-		}
 
 		// configurando e enviando a mensagem
 		try {
@@ -89,14 +84,8 @@ public class MailServiceImpl extends RemoteServiceServlet implements MailService
 
 			// mensagem
 			Message message = new MimeMessage(mailSession);
-			message.setFrom(new InternetAddress(de));
+			message.setFrom(new InternetAddress(conf.getProperty("mail.user")));
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(para));
-			if (copia != null) {
-				message.setRecipient(Message.RecipientType.CC, new InternetAddress(copia));
-			}
-			if (oculta != null) {
-				message.setRecipient(Message.RecipientType.BCC, new InternetAddress(oculta));
-			}
 			message.setSentDate(new Date());
 			message.setSubject(assunto);
 			message.setContent(mpRoot);
@@ -106,20 +95,5 @@ public class MailServiceImpl extends RemoteServiceServlet implements MailService
 		} catch (Exception e) {
 			throw new MailException(e.getMessage());
 		}
-	}
-
-	@Override
-	public void enviarEmail(String de, String para, String assunto, String mensagem) throws MailException {
-		enviarEmail(de, para, assunto, mensagem, null);
-	}
-
-	@Override
-	public void enviarEmail(String de, String para, String assunto, String mensagem, Anexo[] anexos) throws MailException {
-		enviarEmail(de, para, null, null, assunto, mensagem, anexos);
-	}
-
-	@Override
-	public void enviarEmail(String de, String para, String copia, String oculta, String assunto, String mensagem, Anexo[] anexos) throws MailException {
-		enviar(de, para, copia, oculta, assunto, mensagem, anexos);
 	}
 }

@@ -127,7 +127,7 @@ public class ListagemProduto extends AListagem<ProdProduto> {
 					ccAlterado, ccAtivo, ccObservacao };
 			modelos = new ColumnModel(bcc);
 		} else {
-			BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccBarra, ccDescricao, ccRef, ccEmbalagem, ccVolume, ccPreco, ccEstoque, ccFornecedor, ccObservacao };
+			BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccBarra, ccDescricao, ccRef, ccEmbalagem, ccVolume, ccCusto, ccPreco, ccEstoque, ccFornecedor, ccObservacao };
 			modelos = new ColumnModel(bcc);
 			barraTarefa = false;
 			agrupar = false;

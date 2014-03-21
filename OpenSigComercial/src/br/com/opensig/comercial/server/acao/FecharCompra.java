@@ -101,7 +101,7 @@ public class FecharCompra extends Chain {
 					Sql sql = new Sql(new ProdEstoque(), EComando.ATUALIZAR, gf, pf);
 					servico.executar(em, sql);
 					
-					// remove estoque da grade caso o produto tenha
+					// adiciona estoque da grade caso o produto tenha
 					if (cp.getProdProduto().getProdGrades() != null) {
 						for (ProdGrade grade : cp.getProdProduto().getProdGrades()) {
 							if (grade.getProdGradeBarra().equals(cp.getComCompraProdutoBarra())) {

@@ -2788,6 +2788,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtPizza();
 
   /**
+   * Translated "Placa".
+   * 
+   * @return translated "Placa"
+   */
+  @DefaultMessage("Placa")
+  @Key("txtPlaca")
+  String txtPlaca();
+
+  /**
    * Translated "Plano".
    * 
    * @return translated "Plano"
@@ -2858,6 +2867,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Quitar")
   @Key("txtQuitar")
   String txtQuitar();
+
+  /**
+   * Translated "RNTC".
+   * 
+   * @return translated "RNTC"
+   */
+  @DefaultMessage("RNTC")
+  @Key("txtRNTC")
+  String txtRNTC();
 
   /**
    * Translated "Realizado".
@@ -3290,6 +3308,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Tudo")
   @Key("txtTudo")
   String txtTudo();
+
+  /**
+   * Translated "UF".
+   * 
+   * @return translated "UF"
+   */
+  @DefaultMessage("UF")
+  @Key("txtUF")
+  String txtUF();
 
   /**
    * Translated "Unidade".

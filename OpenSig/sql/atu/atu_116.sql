@@ -20,11 +20,13 @@ UPDATE `com_troca` AS t SET t.com_ecf_venda_id = (SELECT v.com_ecf_venda_id FROM
 ALTER TABLE `com_ecf_venda` 
 DROP FOREIGN KEY `FK_com_ecf_venda_8`,
 DROP COLUMN `com_troca_id`,
-DROP INDEX `FK_com_ecf_venda_8_idx` ;
+DROP INDEX `FK_com_ecf_venda_8_idx`,
+CHANGE COLUMN `com_ecf_z_id` `com_ecf_z_id` INT(11) NULL DEFAULT NULL ;
 
 # Adicionando o campo de ecf_z nos documentos
 ALTER TABLE `com_ecf_documento` ADD COLUMN `com_ecf_z_id` INT NOT NULL AFTER `com_ecf_id`;
-UPDATE com_ecf_documento AS d SET d.com_ecf_z_id = (SELECT z.com_ecf_z_id FROM com_ecf_z AS z WHERE d.com_ecf_id = z.com_ecf_id AND d.com_ecf_documento_data = z.com_ecf_z_movimento);
+# Fazer para cada ecfID separados pois tem um grande volume e pode dar timeout e verificar se tem algum registro na ecf_documento com data errada.
+UPDATE com_ecf_documento AS d SET d.com_ecf_z_id = (SELECT z.com_ecf_z_id FROM com_ecf_z AS z WHERE z.com_ecf_id = 7 AND DATE(d.com_ecf_documento_data) = z.com_ecf_z_movimento) where d.com_ecf_id = 7;
 ALTER TABLE `com_ecf_documento` ADD INDEX `FK_com_ecf_documento_2_idx` USING BTREE (`com_ecf_z_id` ASC);
 ALTER TABLE `com_ecf_documento` ADD CONSTRAINT `FK_com_ecf_documento_2` FOREIGN KEY (`com_ecf_z_id`) REFERENCES `com_ecf_z` (`com_ecf_z_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 

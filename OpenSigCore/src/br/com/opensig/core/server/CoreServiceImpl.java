@@ -454,14 +454,12 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 	 *             dispara uma excecao em caso de erro.
 	 */
 	public E salvar(EntityManager em, E unidade) throws CoreException {
+		padronizaCampos(unidade, unidade.getTipoLetra(), unidade.isLimpaBranco());
 		if (unidade.getId().intValue() == 0) {
-			padronizaLetras(unidade, unidade.getTipoLetra(), unidade.isLimpaBranco());
 			em.persist(unidade);
 		} else {
-			padronizaLetras(unidade, unidade.getTipoLetra(), unidade.isLimpaBranco());
 			em.merge(unidade);
 		}
-
 		return unidade;
 	}
 
@@ -947,7 +945,7 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 	}
 
 	/**
-	 * Metodo que padrozina os tamanhos da letras ao salvar os dados.
+	 * Metodo que padrozina alguns valores ao salvar os dados.
 	 * 
 	 * @param unidade
 	 *            o objeto a ser salvo.
@@ -956,7 +954,7 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 	 * @param limpar
 	 *            se deve remover os espacos em branco do comeco e fim.
 	 */
-	protected void padronizaLetras(Object unidade, ELetra tipo, boolean limpar) {
+	protected void padronizaCampos(Object unidade, ELetra tipo, boolean limpar) {
 		for (Method metodo : unidade.getClass().getMethods()) {
 			try {
 				if (UtilServer.isGetter(metodo)) {
@@ -975,7 +973,7 @@ public class CoreServiceImpl<E extends Dados> extends RemoteServiceServlet imple
 
 							set.invoke(unidade, new Object[] { limpar ? valor.trim() : valor });
 						} else if (metodo.getReturnType().getSuperclass() == Dados.class && valorMetodo != null) {
-							padronizaLetras(valorMetodo, tipo, limpar);
+							padronizaCampos(valorMetodo, tipo, limpar);
 						}
 					}
 				}

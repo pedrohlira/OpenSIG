@@ -44,7 +44,9 @@ public class MyIcms {
 				cst = icms.getICMSSN500().getCSOSN();
 				baseSt = Double.valueOf(icms.getICMSSN500().getVBCSTRet());
 				valorSt = Double.valueOf(icms.getICMSSN500().getVICMSSTRet());
-				aliquotaSt = valorSt * 100 / baseSt;
+				if (baseSt > 0) {
+					aliquotaSt = valorSt * 100 / baseSt;
+				}
 			} else if (icms.getICMSSN900() != null) {
 				origem = icms.getICMSSN900().getOrig();
 				cst = icms.getICMSSN900().getCSOSN();
@@ -100,7 +102,9 @@ public class MyIcms {
 				cst = icms.getICMS60().getCST();
 				baseSt = Double.valueOf(icms.getICMS60().getVBCSTRet());
 				valor = Double.valueOf(icms.getICMS60().getVICMSSTRet());
-				aliquotaSt = valorSt * 100 / baseSt;
+				if (baseSt > 0) {
+					aliquotaSt = valorSt * 100 / baseSt;
+				}
 			} else if (icms.getICMS70() != null) {
 				origem = icms.getICMS70().getOrig();
 				cst = icms.getICMS70().getCST();

@@ -498,7 +498,7 @@ public class FiscalServiceImpl<E extends Dados> extends CoreServiceImpl<E> imple
 			try {
 				salvar((E) saida, false);
 				if (para != null) {
-					EnviarEmail email = new EnviarEmail(this, saida, getAuth());
+					EnviarEmail email = new EnviarEmail(this, saida);
 					Thread enviar = new Thread(email);
 					enviar.start();
 				}

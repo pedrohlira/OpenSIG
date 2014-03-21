@@ -10,6 +10,7 @@ import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.UtilClient;
 import br.com.opensig.core.client.controlador.comando.ComandoAcao;
 import br.com.opensig.core.client.visao.ComboEntidade;
+import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.empresa.shared.modelo.EmpFornecedor;
 import br.com.opensig.empresa.shared.modelo.EmpTransportadora;
@@ -62,7 +63,8 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 			public void onSuccess(Object result) {
 				Record rec = LISTA.getPanel().getSelectionModel().getSelected();
 
-				if (rec != null && rec.getAsBoolean("comCompraFechada") && !rec.getAsBoolean("comCompraNfe") && !rec.getAsBoolean("comCompraCancelada")) {
+				if (rec != null && rec.getAsBoolean("comCompraFechada") && !rec.getAsBoolean("comCompraNfe") && !rec.getAsBoolean("comCompraCancelada")
+						&& rec.getAsInteger("empEmpresa.empEmpresaId") == Ponte.getLogin().getEmpresaId()) {
 					compra = new ComCompra();
 					compra.setEmpEmpresa(new EmpEmpresa(rec.getAsInteger("empEmpresa.empEmpresaId")));
 					compra.setEmpFornecedor(new EmpFornecedor(rec.getAsInteger("empFornecedor.empFornecedor")));
@@ -172,10 +174,10 @@ public class ComandoGerarNfeEntrada extends ComandoAcao {
 						if (txtLiquido.getValue() != null) {
 							frete.setComFreteCubagem(txtLiquido.getValue().doubleValue());
 						}
-						// seta info
-						compra.setComCompraObservacao(txtObservacao.getValueAsString());
 					}
-
+					// seta info
+					compra.setComCompraObservacao(txtObservacao.getValueAsString());
+					
 					MessageBox.wait(OpenSigCore.i18n.txtAguarde(), OpenSigCore.i18n.txtNfe());
 					ComercialProxy proxy = new ComercialProxy();
 					proxy.gerarNfe(compra, frete, txtNfe.getValueAsString(), salvar);

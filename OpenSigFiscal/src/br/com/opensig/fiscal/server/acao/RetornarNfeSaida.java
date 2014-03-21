@@ -65,7 +65,7 @@ public class RetornarNfeSaida implements Runnable {
 				saida.setEmpEmpresa(empresa);
 				servico.salvar(saida, false);
 				if (para != null) {
-					EnviarEmail email = new EnviarEmail(servico, saida, auth);
+					EnviarEmail email = new EnviarEmail(servico, saida);
 					Thread enviar = new Thread(email);
 					enviar.start();
 				}

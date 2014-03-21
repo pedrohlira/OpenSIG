@@ -10,7 +10,6 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
  * Classe que padroniza o envio de email de forma assincrona.
  * 
  * @author Pedro H. Lira
- * @version 1.0
  */
 public class MailProxy implements MailServiceAsync {
 
@@ -22,18 +21,8 @@ public class MailProxy implements MailServiceAsync {
 	}
 
 	@Override
-	public void enviarEmail(String de, String para, String assunto, String mensagem, AsyncCallback asyncCallback) {
-		async.enviarEmail(de, para, assunto, mensagem, asyncCallback);
-	}
-
-	@Override
-	public void enviarEmail(String de, String para, String assunto, String mensagem, Anexo[] anexos, AsyncCallback asyncCallback) {
-		async.enviarEmail(de, para, assunto, mensagem, anexos, asyncCallback);
-	}
-
-	@Override
-	public void enviarEmail(String de, String para, String copia, String oculto, String assunto, String mensagem, Anexo[] anexos, AsyncCallback asyncCallback) {
-		async.enviarEmail(de, para, copia, oculto, assunto, mensagem, anexos, asyncCallback);
+	public void enviarEmail(String para, String assunto, String mensagem, Anexo[] anexos, AsyncCallback asyncCallback) {
+		async.enviarEmail(para, assunto, mensagem, anexos, asyncCallback);
 	}
 
 }

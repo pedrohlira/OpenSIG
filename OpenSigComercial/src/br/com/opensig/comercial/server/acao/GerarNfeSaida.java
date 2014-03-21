@@ -91,6 +91,7 @@ import br.com.opensig.nfe.TNFe.InfNFe.Transp.Transporta;
 import br.com.opensig.nfe.TNFe.InfNFe.Transp.Vol;
 import br.com.opensig.nfe.TUf;
 import br.com.opensig.nfe.TUfEmi;
+import br.com.opensig.nfe.TVeiculo;
 import br.com.opensig.produto.shared.modelo.Ibpt;
 import br.com.opensig.produto.shared.modelo.ProdComposicao;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
@@ -517,14 +518,9 @@ public class GerarNfeSaida extends Chain {
 			// setando o item
 			Det det = new Det();
 			det.setNItem((i++) + "");
-			// cod produto
+			// cod produto e barra
 			Prod prod = new Prod();
-			if (vp.getComVendaProdutoBarra() == null) {
-				prod.setCProd(UtilServer.formataNumero(pp.getProdProdutoId(), 6, 0, false));
-			} else {
-				prod.setCProd(vp.getComVendaProdutoBarra());
-			}
-			// barra
+			prod.setCProd(vp.getComVendaProdutoBarra() == null ? UtilServer.formataNumero(pp.getProdProdutoId(), 6, 0, false) : vp.getComVendaProdutoBarra());
 			prod.setCEAN(pp.getProdProdutoBarra() == null ? "" : pp.getProdProdutoBarra());
 			// descricao
 			prod.setXProd(pp.getProdProdutoDescricao().trim());
@@ -597,10 +593,9 @@ public class GerarNfeSaida extends Chain {
 
 	public Imposto getImposto(ComVendaProduto vp) {
 		Imposto imposto = new Imposto();
-		String cst = vp.getComVendaProdutoIcmsCst();
 
 		// icms
-		if ((auth.getConf().get("nfe.crt").equals("1") && cst.equals("")) || cst.length() == 3) {
+		if (auth.getConf().get("nfe.crt").equals("1")) {
 			imposto.setICMS(getSimples(vp));
 		} else {
 			imposto.setICMS(getNormal(vp));
@@ -624,11 +619,23 @@ public class GerarNfeSaida extends Chain {
 			ICMSSN101 icmssn101 = new ICMSSN101();
 			icmssn101.setOrig(origem);
 			icmssn101.setCSOSN(cson);
-			double porcento = vp.getComVendaProdutoIcms() == 0.00 ? Double.valueOf(auth.getConf().get("nfe.cson")) : vp.getComVendaProdutoIcms();
+			// porcentagem icms
+			double porcento = 0.00;
+			if (comNatureza.getComNaturezaIcms()) {
+				porcento = vp.getComVendaProdutoIcms() == 0.00 ? Double.valueOf(auth.getConf().get("nfe.cson")) : vp.getComVendaProdutoIcms();
+			}
 			icmssn101.setPCredSN(getValorNfe(porcento));
-			double valor = vp.getComVendaProdutoTotalLiquido() * porcento / 100;
-			icmssn101.setVCredICMSSN(getValorNfe(valor));
+			// valor da base de calculo
+			String strBase = porcento == 0.00 ? "0.00" : getValorNfe(vp.getComVendaProdutoTotalLiquido());
+			double base = Double.valueOf(strBase);
+			// valor icms
+			String strValor = getValorNfe(base * porcento / 100);
+			double valor = Double.valueOf(strValor);
+			icmssn101.setVCredICMSSN(strValor);
 			icms.setICMSSN101(icmssn101);
+			// executa a soma dos impostos
+			baseICMS += base;
+			valorICMS += valor;
 		} else if (cson.equals("102")) {
 			ICMSSN102 icmssn102 = new ICMSSN102();
 			icmssn102.setOrig(origem);
@@ -875,8 +882,16 @@ public class GerarNfeSaida extends Chain {
 	public Total getTotais() {
 		Total total = new Total();
 		ICMSTot icmstot = new ICMSTot();
-		icmstot.setVBC(getValorNfe(baseICMS));
-		icmstot.setVICMS(getValorNfe(valorICMS));
+		if (auth.getConf().get("nfe.crt").equals("1")) {
+			icmstot.setVBC("0.00");
+			icmstot.setVICMS("0.00");
+			if (baseICMS > 0) {
+				infos.put("icms", "Base de Calculo do ICMS = " + UtilServer.formataNumero(baseICMS, 1, 2, true) + " com valor de ICMS = " + UtilServer.formataNumero(valorICMS, 1, 2, true));
+			}
+		} else {
+			icmstot.setVBC(getValorNfe(baseICMS));
+			icmstot.setVICMS(getValorNfe(valorICMS));
+		}
 		icmstot.setVBCST(getValorNfe(baseST));
 		icmstot.setVST(getValorNfe(valorST));
 		icmstot.setVProd(getValorNfe(valorProd));
@@ -941,6 +956,15 @@ public class GerarNfeSaida extends Chain {
 				vol.setPesoB(UtilServer.formataNumero(frete.getComFretePeso(), 1, 3, false).replace(",", "."));
 			}
 			transp.getVol().add(vol);
+
+			// dados do veiculo
+			if (frete.getComFretePlaca() != null && frete.getComFreteUF() != null) {
+				TVeiculo veiculo = new TVeiculo();
+				veiculo.setPlaca(frete.getComFretePlaca());
+				veiculo.setUF(TUf.valueOf(frete.getComFreteUF()));
+				veiculo.setRNTC(frete.getComFreteRNTC());
+				transp.setVeicTransp(veiculo);
+			}
 		}
 
 		return transp;
@@ -1008,14 +1032,14 @@ public class GerarNfeSaida extends Chain {
 			sb.append(UtilServer.formataNumero(porcentagem, 1, 2, false)).append(" porcentos] Fonte: IBPT");
 		}
 		// adiciona o pedido da venda
-		sb.append("Venda " + UtilServer.formataNumero(venda.getComVendaId(), 6, 0, false) + " ");
+		sb.append("#Venda " + UtilServer.formataNumero(venda.getComVendaId(), 6, 0, false));
 		// case tenha alguma observacao
 		if (venda.getComVendaObservacao() != null) {
-			sb.append("#" + venda.getComVendaObservacao());
+			sb.append(" " + venda.getComVendaObservacao());
 		}
 
 		InfAdic inf = new InfAdic();
-		inf.setInfCpl(sb.toString());
+		inf.setInfCpl(sb.toString().trim());
 		return inf;
 	}
 

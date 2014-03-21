@@ -7,8 +7,6 @@ import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
 import br.com.opensig.core.server.MailServiceImpl;
 import br.com.opensig.core.server.UtilServer;
 import br.com.opensig.core.shared.modelo.Anexo;
-import br.com.opensig.core.shared.modelo.Autenticacao;
-import br.com.opensig.empresa.shared.modelo.EmpContato;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
 import br.com.opensig.fiscal.server.FiscalServiceImpl;
 import br.com.opensig.fiscal.shared.modelo.ENotaStatus;
@@ -18,12 +16,10 @@ public class EnviarEmail implements Runnable {
 
 	private FiscalServiceImpl servico;
 	private FisNotaSaida saida;
-	private Autenticacao auth;
 
-	public EnviarEmail(FiscalServiceImpl servico, FisNotaSaida saida, Autenticacao auth) {
+	public EnviarEmail(FiscalServiceImpl servico, FisNotaSaida saida) {
 		this.servico = servico;
 		this.saida = saida;
-		this.auth = auth;
 	}
 
 	@Override
@@ -33,14 +29,6 @@ public class EnviarEmail implements Runnable {
 			FiltroNumero fn = new FiltroNumero("empEmpresaId", ECompara.IGUAL, saida.getEmpEmpresa().getEmpEmpresaId());
 			EmpEmpresa empresa = (EmpEmpresa) servico.selecionar(new EmpEmpresa(), fn, false);
 			
-			// de
-			String de = null;
-			for (EmpContato cont : empresa.getEmpEntidade().getEmpContatos()) {
-				if (auth.getConf().get("nfe.tipocontemail").equals(cont.getEmpContatoTipo().getEmpContatoTipoId() + "")) {
-					de = cont.getEmpContatoDescricao();
-					break;
-				}
-			}
 			// para
 			Document doc = UtilServer.getXml(saida.getFisNotaSaidaXml());
 			String para = UtilServer.getValorTag(doc.getDocumentElement(), "email", false);
@@ -79,7 +67,8 @@ public class EnviarEmail implements Runnable {
 			msg = msg.replace("#chave#", saida.getFisNotaSaidaChave());
 
 			// enviando
-			MailServiceImpl.enviar(de, para, null, null, assunto, msg, anexos);
+			MailServiceImpl mail = new MailServiceImpl();
+			mail.enviarEmail(para, assunto, msg, anexos);
 		} catch (Exception e) {
 			UtilServer.LOG.error("Erro no envio do email com NFe - " + saida.getFisNotaSaidaChave(), e);
 		}

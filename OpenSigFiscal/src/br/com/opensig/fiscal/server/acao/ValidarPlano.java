@@ -79,7 +79,7 @@ public class ValidarPlano extends Chain {
 				total += getTotalEntrada(plano.getEmpPlanoLimite(), inicio, fim);
 				int usado = total / plano.getEmpPlanoLimite() * 100;
 				int aviso = auth.getConf().get("nfe.aviso") == null ? 90 : Integer.valueOf(auth.getConf().get("nfe.aviso"));
-				
+
 				if (usado >= 100) {
 					throw new FiscalException("Aumente o limite do seu plano, pois ja usou a quantidade maxima deste mes.");
 				} else if (usado == aviso) {
@@ -95,7 +95,8 @@ public class ValidarPlano extends Chain {
 						String msg = UtilServer.getTextoArquivo(UtilServer.getRealPath("/WEB-INF/modelos/limite.html"));
 						msg.replace("#uso#", usado + "");
 						msg.replace("#limite#", plano.getEmpPlanoLimite() + "");
-						MailServiceImpl.enviar(null, para, null, null, "Limite das NFe", msg, null);
+						MailServiceImpl mail = new MailServiceImpl();
+						mail.enviarEmail(para, "Limite das NFe", msg, null);
 					} catch (Exception e) {
 						UtilServer.LOG.error("Nao enviou o email avisando o cliente dos limites.", e);
 					}
