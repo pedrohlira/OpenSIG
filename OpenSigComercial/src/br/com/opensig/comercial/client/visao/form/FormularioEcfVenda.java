@@ -115,11 +115,9 @@ public class FormularioEcfVenda extends AFormulario<ComEcfVenda> {
 
 		txtCcf = new NumberField(OpenSigCore.i18n.txtCcf(), "comEcfVendaCcf", 60);
 		txtCcf.setDecimalPrecision(0);
-		txtCcf.setReadOnly(true);
 
 		txtCoo = new NumberField(OpenSigCore.i18n.txtCoo(), "comEcfVendaCoo", 60);
 		txtCoo.setDecimalPrecision(0);
-		txtCoo.setReadOnly(true);
 
 		txtBruto = new NumberField(OpenSigCore.i18n.txtBruto(), "comEcfVendaBruto", 100, 0);
 		txtBruto.setReadOnly(true);

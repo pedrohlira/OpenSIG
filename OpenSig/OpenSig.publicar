@@ -22,10 +22,10 @@
 	<inherits name="br.com.opensig.comercial.OpenSigComercial" />
 	<inherits name="br.com.opensig.fiscal.OpenSigFiscal" />
 	<inherits name="br.com.opensig.financeiro.OpenSigFinanceiro" />
+	<inherits name="br.com.opensig.poker.OpenSigPoker" />
 
 	<!-- Propriedades de localidade (idiomas) -->
 	<extend-property name="locale" values="pt_BR" />
-	<extend-property name="locale" values="en" />
 
 	<!-- Classe de entrada -->
 	<entry-point class="br.com.opensig.client.OpenSig" />

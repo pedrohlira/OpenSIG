@@ -45,6 +45,9 @@ public abstract class Dados implements Serializable {
 	@XmlTransient
 	private int empresa;
 
+	public Dados() {
+	}
+	
 	/**
 	 * Construtor que define as valores padrões de cada classe POJO.
 	 * 

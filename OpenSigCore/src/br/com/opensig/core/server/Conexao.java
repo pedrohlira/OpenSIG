@@ -36,6 +36,7 @@ public class Conexao extends HttpServlet {
 		EMFS.put("pu_fiscal", Persistence.createEntityManagerFactory("pu_fiscal", dados));
 		EMFS.put("pu_permissao", Persistence.createEntityManagerFactory("pu_permissao", dados));
 		EMFS.put("pu_produto", Persistence.createEntityManagerFactory("pu_produto", dados));
+		EMFS.put("pu_poker", Persistence.createEntityManagerFactory("pu_poker", dados));
 	}
 	
 	/**

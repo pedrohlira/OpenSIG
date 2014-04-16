@@ -16,5 +16,8 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GWT-EXT"/>
 	<classpathentry kind="lib" path="jars/simplecaptcha.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OpenSigPoker"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/REST"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JPA"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

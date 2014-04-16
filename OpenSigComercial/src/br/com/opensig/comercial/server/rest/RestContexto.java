@@ -11,6 +11,7 @@ import br.com.opensig.comercial.shared.modelo.ComEcf;
 import br.com.opensig.comercial.shared.rest.SisCliente;
 import br.com.opensig.comercial.shared.rest.SisEstado;
 import br.com.opensig.comercial.shared.rest.SisMunicipio;
+import br.com.opensig.core.shared.modelo.Lista;
 import br.com.opensig.empresa.shared.modelo.EmpEstado;
 import br.com.opensig.empresa.shared.modelo.EmpMunicipio;
 import br.com.opensig.financeiro.shared.modelo.FinForma;
@@ -33,7 +34,7 @@ public class RestContexto extends MOXyJsonProvider implements ContextResolver<JA
 
 	private JAXBContext context;
 	private Class[] types = { EmpEstado.class, EmpMunicipio.class, SisUsuario.class, SisCliente.class, SisEstado.class, SisMunicipio.class, ProdEmbalagem.class, ProdProduto.class, ProdPreco.class,
-			ProdComposicao.class, ProdGrade.class, ProdGradeTipo.class, ComEcf.class, FinForma.class, String.class };
+			ProdComposicao.class, ProdGrade.class, ProdGradeTipo.class, ComEcf.class, FinForma.class, Lista.class, String.class };
 
 	/**
 	 * Construtor padrao.

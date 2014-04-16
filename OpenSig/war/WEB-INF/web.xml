@@ -226,6 +226,24 @@
 		<load-on-startup>6</load-on-startup>
 	</servlet>
 	<servlet>
+		<description>OpenPoker - RESTful</description>
+		<servlet-name>OpenPoker</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>br.com.opensig.poker.server.rest</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+			<param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+			<param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
+		</init-param>
+		<load-on-startup>7</load-on-startup>
+	</servlet>
+	<servlet>
 		<description>Servico base da aplicacao</description>
 		<servlet-name>CoreService</servlet-name>
 		<servlet-class>br.com.opensig.core.server.CoreServiceImpl</servlet-class>
@@ -275,6 +293,11 @@
 		<servlet-name>ProdutoService</servlet-name>
 		<servlet-class>br.com.opensig.produto.server.ProdutoServiceImpl</servlet-class>
 	</servlet>
+	<servlet>
+		<description>Servico de poker</description>
+		<servlet-name>PokerService</servlet-name>
+		<servlet-class>br.com.opensig.poker.server.PokerServiceImpl</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>OpenPDV</servlet-name>
 		<url-pattern>/openpdv/*</url-pattern>
@@ -282,6 +305,10 @@
 	<servlet-mapping>
 		<servlet-name>OpeNFE</servlet-name>
 		<url-pattern>/openfe/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>OpenPoker</servlet-name>
+		<url-pattern>/openpoker/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>CoreService</servlet-name>
@@ -327,6 +354,10 @@
 		<servlet-name>ProdutoService</servlet-name>
 		<url-pattern>/ProdutoService</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PokerService</servlet-name>
+		<url-pattern>/PokerService</url-pattern>
+	</servlet-mapping>
 	<!-- Config Login -->
 	<context-param>
 		<description>Idioma padrão - ver /lang/</description>
@@ -341,12 +372,12 @@
 	<context-param>
 		<description>Segurança no login</description>
 		<param-name>login.captcha</param-name>
-		<param-value>true</param-value>
+		<param-value>false</param-value>
 	</context-param>
 	<context-param>
 		<description>Esqueceu a senha</description>
 		<param-name>login.esqueceu</param-name>
-		<param-value>true</param-value>
+		<param-value>false</param-value>
 	</context-param>
 	<context-param>
 		<description>Layout dos módulos [menu | lateral]</description>

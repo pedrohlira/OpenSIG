@@ -11,6 +11,7 @@ import br.com.opensig.core.client.controlador.filtro.ECompara;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
 import br.com.opensig.core.server.CoreServiceImpl;
 import br.com.opensig.core.server.UtilServer;
+import br.com.opensig.core.server.rest.RestException;
 
 import com.sun.jersey.core.util.Base64;
 

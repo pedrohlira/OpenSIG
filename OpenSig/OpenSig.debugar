@@ -22,6 +22,7 @@
 	<inherits name="br.com.opensig.comercial.OpenSigComercial" />
 	<inherits name="br.com.opensig.fiscal.OpenSigFiscal" />
 	<inherits name="br.com.opensig.financeiro.OpenSigFinanceiro" />
+	<inherits name="br.com.opensig.poker.OpenSigPoker" />
 
 	<!-- Propriedades de localidade (idiomas) -->
 	<extend-property name="locale" values="pt_BR" />

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="pu_poker"
+		transaction-type="RESOURCE_LOCAL">
+		<class>br.com.opensig.poker.shared.modelo.PokerCliente</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerMesa</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerNivel</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerParticipante</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerTorneio</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerPremiacao</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerTorneioTipo</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerCash</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerForma</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerJogador</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerPagar</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerReceber</class>
+		<class>br.com.opensig.poker.shared.modelo.PokerJackpot</class>
+	</persistence-unit>
+</persistence>

@@ -76,7 +76,6 @@ public class SisUsuario extends Dados implements Serializable {
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "sis_grupo_usuario", joinColumns = { @JoinColumn(name = "sis_usuario_id", referencedColumnName = "sis_usuario_id") }, inverseJoinColumns = { @JoinColumn(name = "sis_grupo_id", referencedColumnName = "sis_grupo_id") })
-	@XmlTransient
 	private List<SisGrupo> sisGrupos;
 
 	@OneToMany(mappedBy = "sisUsuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
 import br.com.opensig.comercial.server.rest.ARest;
-import br.com.opensig.comercial.server.rest.RestException;
 import br.com.opensig.conscad.TConsCad;
 import br.com.opensig.conssitnfe.TConsSitNFe;
 import br.com.opensig.consstatserv.TConsStatServ;
@@ -31,6 +30,7 @@ import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.server.SessionManager;
 import br.com.opensig.core.server.UtilServer;
+import br.com.opensig.core.server.rest.RestException;
 import br.com.opensig.core.shared.modelo.Autenticacao;
 import br.com.opensig.core.shared.modelo.sistema.SisAcao;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;

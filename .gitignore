@@ -1,3 +1,4 @@
 /.metadata
 /OpenSig/war/opensig
 *.class
+/nbproject/private/

@@ -1,0 +1,24 @@
+html {
+	overflow: hidden
+}
+
+.home {
+	text-align: center;
+}
+
+.home h1 {
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+.home p {
+	color: #666;
+	font-size: 0.8em;
+	line-height: 1.5em;
+	margin: 10px 20px 12px 20px;
+}
+
+.home h2 {
+	color: #999;
+	font-size: 0.7em;
+}

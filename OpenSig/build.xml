@@ -5,7 +5,7 @@
 	<property name="lib" location="war/WEB-INF/lib" />
 	<property name="classes" location="war/WEB-INF/classes" />
 	<property name="pacote" value="br.com.opensig.client" />
-	<property name="versao" value="1.1.6" />
+	<property name="versao" value="1.1.8" />
 	<property name="empresa" value="PhD - Systems Solutions" />
 	<property name="autor" value="Pedro H. Lira" />
 	<property name="url" value="http://phdss.com.br" />
@@ -55,6 +55,7 @@
 			<fileset file="../OpenSigFiscal/src/META-INF/OpenSigFiscal.MF" />
 			<fileset file="../OpenSigComercial/src/META-INF/OpenSigComercial.MF" />
 			<fileset file="../OpenSigProduto/src/META-INF/OpenSigProduto.MF" />
+			<fileset file="../OpenSigPoker/src/META-INF/OpenSigPoker.MF" />
 		</copy>
 
 		<copy todir="${lib}" flatten="true">
@@ -66,6 +67,7 @@
 			<fileset dir="../OpenSigFiscal/dist/" />
 			<fileset dir="../OpenSigComercial/dist/" />
 			<fileset dir="../OpenSigProduto/dist/" />
+			<fileset dir="../OpenSigPoker/dist/" />
 		</copy>
 
 		<copy todir="war/lang">

@@ -23,9 +23,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import br.com.opensig.comercial.server.rest.BooleanToInteger;
 import br.com.opensig.comercial.shared.rest.SisCliente;
 import br.com.opensig.core.client.UtilClient;
+import br.com.opensig.core.server.rest.BooleanToInteger;
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.core.shared.modelo.EDirecao;
 import br.com.opensig.empresa.shared.modelo.EmpCliente;

@@ -52,6 +52,14 @@
 			performed in the company.</descricao>
 		<imagem>icon-financeiro</imagem>
 	</modulo>
+	<modulo>
+		<classe>br.com.opensig.poker.client.OpenSigPoker</classe>
+		<nome>Poker</nome>
+		<descricao>Módulo que permite gerenciar torneios, clientes e
+			participantes.
+		</descricao>
+		<imagem>icon-poker</imagem>
+	</modulo>
 	<!-- Funções -->
 	<funcao>
 		<classe>br.com.opensig.core.client.controlador.comando.ComandoExpImp
@@ -475,6 +483,86 @@
 		<descricao>Public System of Digital Bookkeeping</descricao>
 		<imagem>icon-sped</imagem>
 	</funcao>
+	<funcao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoTorneio
+		</classe>
+		<nome>Torneio</nome>
+		<descricao>Administrar os torneios.
+		</descricao>
+		<imagem>icon-torneio</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoParticipante
+		</classe>
+		<nome>Participantes</nome>
+		<descricao>Administrar os participantes dos torneios.
+		</descricao>
+		<imagem>icon-participante</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoCliente
+		</classe>
+		<nome>Clientes</nome>
+		<descricao>Administrar os clientes.
+		</descricao>
+		<imagem>icon-cliente</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoTorneioTipo
+		</classe>
+		<nome>Tipo Torneio</nome>
+		<descricao>Administrar os tipos de torneios.
+		</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoCash
+		</classe>
+		<nome>Cash</nome>
+		<descricao>Administrar os cashs.
+		</descricao>
+		<imagem>icon-cash</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoJogador
+		</classe>
+		<nome>Jogadores</nome>
+		<descricao>Administrar os jogadores do cash.
+		</descricao>
+		<imagem>icon-participante</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoJackpot
+		</classe>
+		<nome>Jackpot</nome>
+		<descricao>Administrar os jackpots do cash.
+		</descricao>
+		<imagem>icon-jackpot</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoPagar
+		</classe>
+		<nome>Pagar</nome>
+		<descricao>Administrar os pagamentos do cash.
+		</descricao>
+		<imagem>icon-dinheiro</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoReceber
+		</classe>
+		<nome>Receber</nome>
+		<descricao>Administrar os recebimentos do cash.
+		</descricao>
+		<imagem>icon-dinheiro</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoForma
+		</classe>
+		<nome>Forma</nome>
+		<descricao>Administrar as formas de pagamento e recebimento do cash.
+		</descricao>
+		<imagem>icon-padrao</imagem>
+	</funcao>
 	<!-- Ações -->
 	<acao>
 		<classe>br.com.opensig.core.client.controlador.comando.lista.ComandoVisualizar
@@ -819,5 +907,47 @@
 		<nome>Sale</nome>
 		<descricao>Make sale of purchase.</descricao>
 		<imagem>icon-venda</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoReBuy
+		</classe>
+		<nome>ReBuy</nome>
+		<descricao>Realizar um Re-Buy nos participantes.</descricao>
+		<imagem>icon-selecionar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoAddOn
+		</classe>
+		<nome>AddOn</nome>
+		<descricao>Realizar o Add-On nos participantes.</descricao>
+		<imagem>icon-selecionar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoTorneioFechar
+		</classe>
+		<nome>Fechar</nome>
+		<descricao>Fechar torneio.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoTorneioPlay
+		</classe>
+		<nome>Play</nome>
+		<descricao>Abrir painel do torneio.</descricao>
+		<imagem>icon-play</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoCashFechar
+		</classe>
+		<nome>Fechar</nome>
+		<descricao>Fechar cash.</descricao>
+		<imagem>icon-fechar</imagem>
+	</acao>
+	<acao>
+		<classe>br.com.opensig.poker.client.controlador.comando.ComandoJackpotPlay
+		</classe>
+		<nome>Play</nome>
+		<descricao>Abrir painel do jackpot.</descricao>
+		<imagem>icon-play</imagem>
 	</acao>
 </opensig>

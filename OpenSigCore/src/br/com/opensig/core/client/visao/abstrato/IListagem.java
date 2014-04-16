@@ -70,7 +70,7 @@ public interface IListagem<E extends Dados> {
 	public Renderer BOLEANO = new Renderer() {
 		public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
 			cellMetadata.setCssClass("colCentro");
-			return value != null && Boolean.valueOf(value.toString()) ? OpenSigCore.i18n.txtSim() : OpenSigCore.i18n.txtNao();
+			return value != null && (value.toString().equals("1") || Boolean.valueOf(value.toString())) ? OpenSigCore.i18n.txtSim() : OpenSigCore.i18n.txtNao();
 		}
 	};
 	/**

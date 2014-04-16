@@ -68,4 +68,18 @@ public class OpenSigCoreJS {
 	public static final native String base64decode(String texto)/*-{
 																return $wnd.base64.decode(texto);
 																}-*/;
+
+	/**
+	 * Metodo que abre uma nova janela do navegador.
+	 * 
+	 * @param url
+	 *            qual url deve ser carregada.
+	 * @param name
+	 *            o nome da janela.
+	 * @param features
+	 *            algumas propriedades.
+	 */
+	public static final native void abrirJanela(String url, String name, String features)/*-{
+																							$wnd.open(url, name, features);
+																							}-*/;
 }

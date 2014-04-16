@@ -17,6 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import br.com.opensig.core.shared.modelo.Dados;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
@@ -30,6 +32,7 @@ import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
  */
 @Entity
 @Table(name = "sis_grupo")
+@XmlRootElement
 public class SisGrupo extends Dados implements Serializable {
 
 	@Id
@@ -54,13 +57,16 @@ public class SisGrupo extends Dados implements Serializable {
 
 	@JoinColumn(name = "emp_empresa_id")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@XmlTransient
 	private EmpEmpresa empEmpresa;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "sis_grupo_usuario", joinColumns = { @JoinColumn(name = "sis_grupo_id", referencedColumnName = "sis_grupo_id") }, inverseJoinColumns = { @JoinColumn(name = "sis_usuario_id", referencedColumnName = "sis_usuario_id") })
+	@XmlTransient
 	private List<SisUsuario> sisUsuarios;
 
 	@OneToMany(mappedBy = "sisGrupo", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@XmlTransient
 	private List<SisPermissao> sisPermissoes;
 
 	public SisGrupo() {

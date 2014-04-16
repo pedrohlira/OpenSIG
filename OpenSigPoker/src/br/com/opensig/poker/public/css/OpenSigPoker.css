@@ -1,0 +1,49 @@
+@CHARSET "UTF-8";
+
+.icon-poker {
+	background: url(../img/poker.png) no-repeat center left !important;
+}
+
+.icon-torneio {
+	background: url(../img/torneio.png) no-repeat center left !important;
+}
+
+.icon-cliente {
+	background: url(../img/cliente.png) no-repeat center left !important;
+}
+
+.icon-nivel {
+	background: url(../img/nivel.png) no-repeat center left !important;
+}
+
+.icon-premio {
+	background: url(../img/premio.png) no-repeat center left !important;
+}
+
+.icon-mesa {
+	background: url(../img/mesa.png) no-repeat center left !important;
+}
+
+.icon-participante {
+	background: url(../img/participante.png) no-repeat center left !important;
+}
+
+.icon-fechar {
+	background: url(../img/fechar.png) no-repeat center left !important;
+}
+
+.icon-play {
+	background: url(../img/play.png) no-repeat center left !important;
+}
+
+.icon-cash {
+	background: url(../img/cash.png) no-repeat center left !important;
+}
+
+.icon-jackpot {
+	background: url(../img/jackpot.png) no-repeat center left !important;
+}
+
+.icon-dinheiro {
+	background: url(../img/dinheiro.png) no-repeat center left !important;
+}

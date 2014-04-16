@@ -781,6 +781,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtAcrescimo();
 
   /**
+   * Translated "Add-On".
+   * 
+   * @return translated "Add-On"
+   */
+  @DefaultMessage("Add-On")
+  @Key("txtAddon")
+  String txtAddon();
+
+  /**
    * Translated "Adicionar".
    * 
    * @return translated "Adicionar"
@@ -853,6 +862,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtAno();
 
   /**
+   * Translated "Ante".
+   * 
+   * @return translated "Ante"
+   */
+  @DefaultMessage("Ante")
+  @Key("txtAnte")
+  String txtAnte();
+
+  /**
    * Translated "Antes".
    * 
    * @return translated "Antes"
@@ -871,6 +889,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtArquivo();
 
   /**
+   * Translated "Arrecadado".
+   * 
+   * @return translated "Arrecadado"
+   */
+  @DefaultMessage("Arrecadado")
+  @Key("txtArrecadado")
+  String txtArrecadado();
+
+  /**
    * Translated "Arredondamento".
    * 
    * @return translated "Arredondamento"
@@ -878,6 +905,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Arredondamento")
   @Key("txtArredondamento")
   String txtArredondamento();
+
+  /**
+   * Translated "Associado".
+   * 
+   * @return translated "Associado"
+   */
+  @DefaultMessage("Associado")
+  @Key("txtAssociado")
+  String txtAssociado();
 
   /**
    * Translated "Atenção".
@@ -952,6 +988,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtAutor();
 
   /**
+   * Translated "Auxiliar".
+   * 
+   * @return translated "Auxiliar"
+   */
+  @DefaultMessage("Auxiliar")
+  @Key("txtAuxiliar")
+  String txtAuxiliar();
+
+  /**
    * Translated "Avançar".
    * 
    * @return translated "Avançar"
@@ -1006,6 +1051,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtBarra();
 
   /**
+   * Translated "Big".
+   * 
+   * @return translated "Big"
+   */
+  @DefaultMessage("Big")
+  @Key("txtBig")
+  String txtBig();
+
+  /**
    * Translated "Bloco".
    * 
    * @return translated "Bloco"
@@ -1051,6 +1105,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtBoleto();
 
   /**
+   * Translated "Bônus".
+   * 
+   * @return translated "Bônus"
+   */
+  @DefaultMessage("Bônus")
+  @Key("txtBonus")
+  String txtBonus();
+
+  /**
    * Translated "Bruto".
    * 
    * @return translated "Bruto"
@@ -1058,6 +1121,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Bruto")
   @Key("txtBruto")
   String txtBruto();
+
+  /**
+   * Translated "Buy-In".
+   * 
+   * @return translated "Buy-In"
+   */
+  @DefaultMessage("Buy-In")
+  @Key("txtBuyin")
+  String txtBuyin();
 
   /**
    * Translated "Cadastrado".
@@ -1157,6 +1229,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Carteira")
   @Key("txtCarteira")
   String txtCarteira();
+
+  /**
+   * Translated "Cash".
+   * 
+   * @return translated "Cash"
+   */
+  @DefaultMessage("Cash")
+  @Key("txtCash")
+  String txtCash();
 
   /**
    * Translated "Categoria".
@@ -1283,6 +1364,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("COFINS")
   @Key("txtCofins")
   String txtCofins();
+
+  /**
+   * Translated "Comissão".
+   * 
+   * @return translated "Comissão"
+   */
+  @DefaultMessage("Comissão")
+  @Key("txtComissao")
+  String txtComissao();
 
   /**
    * Translated "Complemento".
@@ -1481,6 +1571,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Data")
   @Key("txtData")
   String txtData();
+
+  /**
+   * Translated "Dealer Chip".
+   * 
+   * @return translated "Dealer Chip"
+   */
+  @DefaultMessage("Dealer Chip")
+  @Key("txtDealer")
+  String txtDealer();
 
   /**
    * Translated "Débito".
@@ -1798,6 +1897,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtEspecie();
 
   /**
+   * Translated "Espera".
+   * 
+   * @return translated "Espera"
+   */
+  @DefaultMessage("Espera")
+  @Key("txtEspera")
+  String txtEspera();
+
+  /**
    * Translated "Esqueceu".
    * 
    * @return translated "Esqueceu"
@@ -1976,6 +2084,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Fechar Todas")
   @Key("txtFecharTodas")
   String txtFecharTodas();
+
+  /**
+   * Translated "Fichas".
+   * 
+   * @return translated "Fichas"
+   */
+  @DefaultMessage("Fichas")
+  @Key("txtFichas")
+  String txtFichas();
 
   /**
    * Translated "Filtrar".
@@ -2356,6 +2473,24 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtItens();
 
   /**
+   * Translated "Jackpot".
+   * 
+   * @return translated "Jackpot"
+   */
+  @DefaultMessage("Jackpot")
+  @Key("txtJackpot")
+  String txtJackpot();
+
+  /**
+   * Translated "Jogador".
+   * 
+   * @return translated "Jogador"
+   */
+  @DefaultMessage("Jogador")
+  @Key("txtJogador")
+  String txtJogador();
+
+  /**
    * Translated "Jurídica".
    * 
    * @return translated "Jurídica"
@@ -2437,6 +2572,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtLucro();
 
   /**
+   * Translated "Lugares".
+   * 
+   * @return translated "Lugares"
+   */
+  @DefaultMessage("Lugares")
+  @Key("txtLugares")
+  String txtLugares();
+
+  /**
    * Translated "Marca".
    * 
    * @return translated "Marca"
@@ -2480,6 +2624,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Mês")
   @Key("txtMes")
   String txtMes();
+
+  /**
+   * Translated "Mesa".
+   * 
+   * @return translated "Mesa"
+   */
+  @DefaultMessage("Mesa")
+  @Key("txtMesa")
+  String txtMesa();
 
   /**
    * Translated "MfAdicional".
@@ -2561,6 +2714,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("NFe")
   @Key("txtNfe")
   String txtNfe();
+
+  /**
+   * Translated "Nível".
+   * 
+   * @return translated "Nível"
+   */
+  @DefaultMessage("Nível")
+  @Key("txtNivel")
+  String txtNivel();
 
   /**
    * Translated "Nome".
@@ -2698,6 +2860,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtPagar();
 
   /**
+   * Translated "Pago".
+   * 
+   * @return translated "Pago"
+   */
+  @DefaultMessage("Pago")
+  @Key("txtPago")
+  String txtPago();
+
+  /**
    * Translated "Pais".
    * 
    * @return translated "Pais"
@@ -2723,6 +2894,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Parcial")
   @Key("txtParcial")
   String txtParcial();
+
+  /**
+   * Translated "Participantes".
+   * 
+   * @return translated "Participantes"
+   */
+  @DefaultMessage("Participantes")
+  @Key("txtParticipantes")
+  String txtParticipantes();
 
   /**
    * Translated "Passo".
@@ -2806,6 +2986,24 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtPlano();
 
   /**
+   * Translated "Pontos".
+   * 
+   * @return translated "Pontos"
+   */
+  @DefaultMessage("Pontos")
+  @Key("txtPontos")
+  String txtPontos();
+
+  /**
+   * Translated "Posição".
+   * 
+   * @return translated "Posição"
+   */
+  @DefaultMessage("Posição")
+  @Key("txtPosicao")
+  String txtPosicao();
+
+  /**
    * Translated "Preço".
    * 
    * @return translated "Preço"
@@ -2813,6 +3011,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Preço")
   @Key("txtPreco")
   String txtPreco();
+
+  /**
+   * Translated "Prêmio".
+   * 
+   * @return translated "Prêmio"
+   */
+  @DefaultMessage("Prêmio")
+  @Key("txtPremio")
+  String txtPremio();
 
   /**
    * Translated "Principal".
@@ -2887,6 +3094,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtRealizado();
 
   /**
+   * Translated "Re-Buy".
+   * 
+   * @return translated "Re-Buy"
+   */
+  @DefaultMessage("Re-Buy")
+  @Key("txtRebuy")
+  String txtRebuy();
+
+  /**
    * Translated "Receber".
    * 
    * @return translated "Receber"
@@ -2903,6 +3119,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Recebida")
   @Key("txtRecebida")
   String txtRecebida();
+
+  /**
+   * Translated "Recebido".
+   * 
+   * @return translated "Recebido"
+   */
+  @DefaultMessage("Recebido")
+  @Key("txtRecebido")
+  String txtRecebido();
 
   /**
    * Translated "Recebimento".
@@ -3130,6 +3355,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtSkype();
 
   /**
+   * Translated "Small".
+   * 
+   * @return translated "Small"
+   */
+  @DefaultMessage("Small")
+  @Key("txtSmall")
+  String txtSmall();
+
+  /**
    * Translated "Sobre".
    * 
    * @return translated "Sobre"
@@ -3229,6 +3463,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtTamanho();
 
   /**
+   * Translated "Taxa".
+   * 
+   * @return translated "Taxa"
+   */
+  @DefaultMessage("Taxa")
+  @Key("txtTaxa")
+  String txtTaxa();
+
+  /**
    * Translated "TEF".
    * 
    * @return translated "TEF"
@@ -3247,6 +3490,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   String txtTelefone();
 
   /**
+   * Translated "Tempo".
+   * 
+   * @return translated "Tempo"
+   */
+  @DefaultMessage("Tempo")
+  @Key("txtTempo")
+  String txtTempo();
+
+  /**
    * Translated "Terceiro".
    * 
    * @return translated "Terceiro"
@@ -3263,6 +3515,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Tipo")
   @Key("txtTipo")
   String txtTipo();
+
+  /**
+   * Translated "Torneio".
+   * 
+   * @return translated "Torneio"
+   */
+  @DefaultMessage("Torneio")
+  @Key("txtTorneio")
+  String txtTorneio();
 
   /**
    * Translated "Total".
@@ -3317,6 +3578,15 @@ public interface I18N extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("UF")
   @Key("txtUF")
   String txtUF();
+
+  /**
+   * Translated "Último".
+   * 
+   * @return translated "Último"
+   */
+  @DefaultMessage("Último")
+  @Key("txtUltimo")
+  String txtUltimo();
 
   /**
    * Translated "Unidade".

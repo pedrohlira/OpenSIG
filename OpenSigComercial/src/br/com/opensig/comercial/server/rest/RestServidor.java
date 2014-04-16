@@ -47,10 +47,12 @@ import br.com.opensig.core.client.controlador.parametro.ParametroObjeto;
 import br.com.opensig.core.client.servico.CoreException;
 import br.com.opensig.core.client.servico.OpenSigException;
 import br.com.opensig.core.server.UtilServer;
+import br.com.opensig.core.server.rest.RestException;
 import br.com.opensig.core.shared.modelo.EComando;
 import br.com.opensig.core.shared.modelo.EDirecao;
 import br.com.opensig.core.shared.modelo.Lista;
 import br.com.opensig.core.shared.modelo.Sql;
+import br.com.opensig.empresa.server.acao.SalvarEntidade;
 import br.com.opensig.empresa.shared.modelo.EmpCliente;
 import br.com.opensig.empresa.shared.modelo.EmpContato;
 import br.com.opensig.empresa.shared.modelo.EmpContatoTipo;
@@ -406,8 +408,9 @@ public class RestServidor extends ARest {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void setCliente(SisCliente cliente) throws RestException {
 		autorizar();
-
 		try {
+			// pega o config e um cliente padrao
+			conf = getConfig();
 			getCliente(cliente);
 		} catch (Exception ex) {
 			log.error("Erro ao salvar o cliente.", ex);
@@ -429,7 +432,6 @@ public class RestServidor extends ARest {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void setVenda(ComEcfVenda ecfVenda) throws RestException {
 		autorizar();
-
 		try {
 			// pega o config e um cliente padrao
 			conf = getConfig();
@@ -591,7 +593,6 @@ public class RestServidor extends ARest {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void setReducaoZ(ComEcfZ ecfZ) throws RestException {
 		autorizar();
-
 		try {
 			// valida se ja existe
 			FiltroObjeto fo = new FiltroObjeto("comEcf", ECompara.IGUAL, ecf);
@@ -719,80 +720,79 @@ public class RestServidor extends ARest {
 	 *            o obejto de cliente do OpenPDV.
 	 * @return o cliente encontrado nesta base de dados do OpenSIG.
 	 */
-	private EmpCliente getCliente(SisCliente sisCliente) {
-		try {
-			// acha o cliente ou seta os dados
-			String doc = sisCliente.getSisClienteDoc().replaceAll("\\D", "");
-			String mask;
-			String pessoa;
+	private EmpCliente getCliente(SisCliente sisCliente) throws Exception {
+		// acha o cliente ou seta os dados
+		String doc = sisCliente.getSisClienteDoc().replaceAll("\\D", "");
+		String mask;
+		String pessoa;
 
-			if (doc.length() == 11) {
-				mask = "###.###.###-##";
-				pessoa = "FÍSICA";
-			} else {
-				mask = "##.###.###/####-##";
-				pessoa = "JURÍDICA";
-			}
-			doc = UtilServer.formataTexto(doc, mask);
-			FiltroTexto ft = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.IGUAL, doc);
-			EmpCliente cli = (EmpCliente) service.selecionar(new EmpCliente(), ft, false);
-
-			EmpEntidade ent = new EmpEntidade();
-			EmpEndereco ende = new EmpEndereco();
-			EmpContato cont1 = new EmpContato();
-			EmpContato cont2 = new EmpContato();
-			if (cli != null) {
-				ent = cli.getEmpEntidade();
-				ende = ent.getEmpEnderecos().get(0);
-				cont1 = ent.getEmpContatos().get(0);
-				if (ent.getEmpContatos().size() > 1) {
-					cont2 = ent.getEmpContatos().get(1);
-				}
-			} else {
-				cli = new EmpCliente();
-			}
-
-			// entidade
-			ent.setEmpEntidadeNome1(sisCliente.getSisClienteNome());
-			ent.setEmpEntidadeNome2("CONSUMIDOR");
-			ent.setEmpEntidadeDocumento1(doc);
-			ent.setEmpEntidadeDocumento2(sisCliente.getSisClienteDoc1());
-			ent.setEmpEntidadeDocumento2("ISENTO");
-			ent.setEmpEntidadeDocumento3("ISENTO");
-			ent.setEmpEntidadePessoa(pessoa);
-			ent.setEmpEntidadeAtivo(true);
-			ent.setEmpEntidadeObservacao(sisCliente.getSisClienteObservacao());
-			ent.setEmpEntidadeData(new Date());
-			ent = (EmpEntidade) service.salvar(ent);
-			// endereco
-			ende.setEmpEntidade(ent);
-			ende.setEmpEnderecoTipo(new EmpEnderecoTipo(Integer.valueOf(conf.get("nfe.tipoenderes"))));
-			ende.setEmpMunicipio(new EmpMunicipio(sisCliente.getSisMunicipio().getSisMunicipioId()));
-			ende.setEmpEnderecoLogradouro(sisCliente.getSisClienteEndereco().equals("") ? "NAO INFORMADO" : sisCliente.getSisClienteEndereco());
-			ende.setEmpEnderecoNumero(sisCliente.getSisClienteNumero() + "");
-			ende.setEmpEnderecoBairro(sisCliente.getSisClienteBairro().equals("") ? "NAO INFORMADO" : sisCliente.getSisClienteBairro());
-			ende.setEmpEnderecoComplemento(sisCliente.getSisClienteComplemento());
-			ende.setEmpEnderecoCep(sisCliente.getSisClienteCep().equals("") ? "00000-000" : sisCliente.getSisClienteCep());
-			ende = (EmpEndereco) service.salvar(ende);
-			// contato 1
-			cont1.setEmpEntidade(ent);
-			cont1.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipoconttel"))));
-			cont1.setEmpContatoDescricao(sisCliente.getSisClienteTelefone().equals("") ? "(00) 0000-0000" : sisCliente.getSisClienteTelefone());
-			cont1.setEmpContatoPessoa("");
-			cont1 = (EmpContato) service.salvar(cont1);
-			// contato 2
-			cont2.setEmpEntidade(ent);
-			cont2.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipocontemail"))));
-			cont2.setEmpContatoDescricao(sisCliente.getSisClienteEmail().equals("") ? "N@O.TENHO" : sisCliente.getSisClienteEmail());
-			cont2.setEmpContatoPessoa("");
-			cont2 = (EmpContato) service.salvar(cont2);
-			// cliente
-			cli.setEmpEntidade(ent);
-			cli = (EmpCliente) service.salvar(cli);
-			return cli;
-		} catch (Exception ex) {
-			return new EmpCliente(1);
+		if (doc.length() == 11) {
+			mask = "###.###.###-##";
+			pessoa = "FÍSICA";
+		} else {
+			mask = "##.###.###/####-##";
+			pessoa = "JURÍDICA";
 		}
+		doc = UtilServer.formataTexto(doc, mask);
+		FiltroTexto ft = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.IGUAL, doc);
+		EmpCliente cli = (EmpCliente) service.selecionar(new EmpCliente(), ft, false);
+
+		EmpEntidade ent = new EmpEntidade();
+		EmpEndereco ende = new EmpEndereco();
+		EmpContato cont1 = new EmpContato();
+		EmpContato cont2 = new EmpContato();
+		if (cli != null) {
+			ent = cli.getEmpEntidade();
+			ende = ent.getEmpEnderecos().get(0);
+			cont1 = ent.getEmpContatos().get(0);
+			if (ent.getEmpContatos().size() > 1) {
+				cont2 = ent.getEmpContatos().get(1);
+			}
+		} else {
+			cli = new EmpCliente();
+		}
+
+		// entidade
+		ent.setEmpEntidadeNome1(sisCliente.getSisClienteNome());
+		ent.setEmpEntidadeNome2("CONSUMIDOR");
+		ent.setEmpEntidadeDocumento1(doc);
+		ent.setEmpEntidadeDocumento2(sisCliente.getSisClienteDoc1().equals("") ? "ISENTO" : sisCliente.getSisClienteDoc1());
+		ent.setEmpEntidadeDocumento3("ISENTO");
+		ent.setEmpEntidadePessoa(pessoa);
+		ent.setEmpEntidadeAtivo(!sisCliente.getSisClienteNome().equalsIgnoreCase("NAO INFORMADO"));
+		ent.setEmpEntidadeObservacao(sisCliente.getSisClienteObservacao());
+		ent.setEmpEntidadeData(new Date());
+		// endereco
+		List<EmpEndereco> ends = new ArrayList<EmpEndereco>();
+		ende.setEmpEnderecoTipo(new EmpEnderecoTipo(Integer.valueOf(conf.get("nfe.tipoenderes"))));
+		ende.setEmpMunicipio(new EmpMunicipio(sisCliente.getSisMunicipio().getSisMunicipioId()));
+		ende.setEmpEnderecoLogradouro(sisCliente.getSisClienteEndereco().equals("") ? "NAO INFORMADO" : sisCliente.getSisClienteEndereco());
+		ende.setEmpEnderecoNumero(sisCliente.getSisClienteNumero() + "");
+		ende.setEmpEnderecoBairro(sisCliente.getSisClienteBairro().equals("") ? "NAO INFORMADO" : sisCliente.getSisClienteBairro());
+		ende.setEmpEnderecoComplemento(sisCliente.getSisClienteComplemento());
+		ende.setEmpEnderecoCep(sisCliente.getSisClienteCep().equals("") ? "00000-000" : sisCliente.getSisClienteCep());
+		ends.add(ende);
+		ent.setEmpEnderecos(ends);
+		// contato 1
+		List<EmpContato> conts = new ArrayList<EmpContato>();
+		cont1.setEmpEntidade(ent);
+		cont1.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipoconttel"))));
+		cont1.setEmpContatoDescricao(sisCliente.getSisClienteTelefone().equals("") ? "(00) 0000-0000" : sisCliente.getSisClienteTelefone());
+		cont1.setEmpContatoPessoa("");
+		conts.add(cont1);
+		// contato 2
+		cont2.setEmpEntidade(ent);
+		cont2.setEmpContatoTipo(new EmpContatoTipo(Integer.valueOf(conf.get("nfe.tipocontemail"))));
+		cont2.setEmpContatoDescricao(sisCliente.getSisClienteEmail().equals("") ? "N@O.TENHO" : sisCliente.getSisClienteEmail());
+		cont2.setEmpContatoPessoa("");
+		conts.add(cont2);
+		ent.setEmpContatos(conts);
+		// cliente
+		SalvarEntidade se = new SalvarEntidade(null, service, ent);
+		se.execute();
+		cli.setEmpEntidade(se.getEntidade());
+		cli = (EmpCliente) service.salvar(cli, false);
+		return cli;
 	}
 
 	/**

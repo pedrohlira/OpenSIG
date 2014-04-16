@@ -25,6 +25,7 @@ import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.servico.CoreException;
 import br.com.opensig.core.server.UtilServer;
+import br.com.opensig.core.server.rest.RestException;
 import br.com.opensig.core.shared.modelo.EBusca;
 import br.com.opensig.empresa.shared.modelo.EmpCliente;
 import br.com.opensig.empresa.shared.modelo.EmpEmpresa;
