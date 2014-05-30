@@ -1,6 +1,7 @@
 package br.com.opensig.poker.shared.modelo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import br.com.opensig.core.client.UtilClient;
@@ -30,6 +33,14 @@ public class PokerJogador extends Dados implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "poker_jogador_id")
 	private int pokerJogadorId;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "poker_jogador_entrada")
+	private Date pokerJogadorEntrada;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "poker_jogador_saida")
+	private Date pokerJogadorSaida;
 
 	@Column(name = "poker_jogador_ativo")
 	private int pokerJogadorAtivo;
@@ -57,6 +68,22 @@ public class PokerJogador extends Dados implements Serializable {
 
 	public void setPokerJogadorId(int pokerJogadorId) {
 		this.pokerJogadorId = pokerJogadorId;
+	}
+
+	public Date getPokerJogadorEntrada() {
+		return pokerJogadorEntrada;
+	}
+
+	public void setPokerJogadorEntrada(Date pokerJogadorEntrada) {
+		this.pokerJogadorEntrada = pokerJogadorEntrada;
+	}
+
+	public Date getPokerJogadorSaida() {
+		return pokerJogadorSaida;
+	}
+
+	public void setPokerJogadorSaida(Date pokerJogadorSaida) {
+		this.pokerJogadorSaida = pokerJogadorSaida;
 	}
 
 	public boolean getPokerJogadorAtivo() {
@@ -93,11 +120,12 @@ public class PokerJogador extends Dados implements Serializable {
 
 	public String[] toArray() {
 		return new String[] { pokerJogadorId + "", pokerCliente.getPokerClienteId() + "", pokerCliente.getPokerClienteCodigo() + "", pokerCliente.getPokerClienteNome(),
-				pokerCash.getPokerCashId() + "", pokerCash.getPokerCashCodigo(), UtilClient.getDataGrid(pokerCash.getPokerCashData()), pokerCash.getPokerCashFechado() + "",
-				getPokerJogadorAtivo() + "" };
+				pokerCash.getPokerCashId() + "", pokerCash.getPokerCashMesa(), pokerCash.getPokerCashFechado() + "", UtilClient.getDataHoraGrid(pokerJogadorEntrada),
+				UtilClient.getDataHoraGrid(pokerJogadorSaida), getPokerJogadorAtivo() + "" };
 	}
 
 	public void anularDependencia() {
 		pokerCliente = null;
+		pokerCash = null;
 	}
 }

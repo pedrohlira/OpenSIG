@@ -14,7 +14,7 @@ Ext.define('SIG.model.PokerCash', {
 			name : 'pokerCashId',
 			type : 'int'
 		}, {
-			name : 'pokerCashCodigo',
+			name : 'pokerCashMesa',
 			type : 'string'
 		}, {
 			name : 'pokerCashPago',
@@ -26,11 +26,14 @@ Ext.define('SIG.model.PokerCash', {
 			name : 'pokerCashSaldo',
 			type : 'float'
 		}, {
+			name : 'pokerCashInicio',
+			type : 'date'
+		}, {
+			name : 'pokerCashFim',
+			type : 'date'
+		}, {
 			name : 'pokerCashFechado',
 			type : 'boolean'
-		}, {
-			name : 'pokerCashData',
-			type : 'date'
 		} ]
 	}
 });

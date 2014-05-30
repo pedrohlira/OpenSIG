@@ -24,8 +24,11 @@ import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
 import br.com.opensig.core.client.controlador.filtro.FiltroTexto;
 import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
 import br.com.opensig.core.client.controlador.filtro.IFiltro;
+import br.com.opensig.core.client.controlador.parametro.GrupoParametro;
+import br.com.opensig.core.client.controlador.parametro.IParametro;
 import br.com.opensig.core.client.controlador.parametro.ParametroBinario;
 import br.com.opensig.core.client.controlador.parametro.ParametroFormula;
+import br.com.opensig.core.client.controlador.parametro.ParametroObjeto;
 import br.com.opensig.core.client.servico.CoreException;
 import br.com.opensig.core.server.CoreServiceImpl;
 import br.com.opensig.core.server.rest.RestException;
@@ -38,6 +41,7 @@ import br.com.opensig.poker.client.servico.PokerException;
 import br.com.opensig.poker.shared.modelo.PokerCash;
 import br.com.opensig.poker.shared.modelo.PokerCliente;
 import br.com.opensig.poker.shared.modelo.PokerForma;
+import br.com.opensig.poker.shared.modelo.PokerJackpot;
 import br.com.opensig.poker.shared.modelo.PokerJogador;
 import br.com.opensig.poker.shared.modelo.PokerMesa;
 import br.com.opensig.poker.shared.modelo.PokerPagar;
@@ -65,7 +69,7 @@ public class RestPoker {
 	 * O objeto de persistencia dos dados.
 	 */
 	protected CoreServiceImpl service;
-	
+
 	/**
 	 * Construtor padrao.
 	 */
@@ -83,7 +87,7 @@ public class RestPoker {
 		sb.append("</html>");
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Metodo que autoriza o acesso do cliente ao servidor REST.
 	 * 
@@ -98,7 +102,7 @@ public class RestPoker {
 			throw new RestException(Status.UNAUTHORIZED);
 		}
 	}
-	
+
 	/**
 	 * Metodo que valida o usuario e coloca na sessao.
 	 * 
@@ -410,9 +414,7 @@ public class RestPoker {
 	public List<PokerForma> getForma() throws RestException {
 		autorizar();
 		try {
-			FiltroBinario fb = new FiltroBinario("pokerFormaJackpot", ECompara.IGUAL, 0);
-			PokerForma forma = new PokerForma();
-			Lista<PokerForma> lista = service.selecionar(forma, 0, 0, fb, false);
+			Lista<PokerForma> lista = service.selecionar(new PokerForma(), 0, 0, null, false);
 			return lista.getLista();
 		} catch (Exception ex) {
 			throw new RestException(ex);
@@ -506,7 +508,18 @@ public class RestPoker {
 					receber.setPokerReceberRealizado(new Date());
 					receber.setPokerReceberAtivo(true);
 				}
-				service.salvar(receber);
+				receber = (PokerReceber) service.salvar(receber);
+				
+				// verifica se a forma foi jackpot, se sim da entrada
+				if (forma.getPokerFormaJackpot()) {
+					FiltroObjeto fo = new FiltroObjeto("pokerForma", ECompara.IGUAL, forma);
+					ParametroFormula pf = new ParametroFormula("pokerJackpotTotal", valor);
+					ParametroObjeto po = new ParametroObjeto("pokerReceber", receber);
+					GrupoParametro gp = new GrupoParametro(new IParametro[] { pf, po });
+					Sql sql = new Sql(new PokerJackpot(), EComando.ATUALIZAR, fo, gp);
+					service.executar(new Sql[] { sql });
+				}
+				
 				return jogador;
 			} else {
 				throw new PokerException("Informe um valor maior que zero!");
@@ -555,7 +568,17 @@ public class RestPoker {
 					pagar.setPokerPagarRealizado(new Date());
 					pagar.setPokerPagarAtivo(true);
 				}
-				service.salvar(pagar);
+				pagar = (PokerPagar) service.salvar(pagar);
+
+				// verifica se a forma foi jackpot, se sim da baixa
+				if (forma.getPokerFormaJackpot()) {
+					FiltroObjeto fo = new FiltroObjeto("pokerForma", ECompara.IGUAL, forma);
+					ParametroFormula pf = new ParametroFormula("pokerJackpotTotal", valor * -1);
+					ParametroObjeto po = new ParametroObjeto("pokerPagar", pagar);
+					GrupoParametro gp = new GrupoParametro(new IParametro[] { pf, po });
+					Sql sql = new Sql(new PokerJackpot(), EComando.ATUALIZAR, fo, gp);
+					service.executar(new Sql[] { sql });
+				}
 				return jogador;
 			} else {
 				throw new PokerException("Informe um valor maior que zero!");
@@ -585,6 +608,7 @@ public class RestPoker {
 			PokerJogador jogador = new PokerJogador();
 			jogador.setPokerCash(new PokerCash(idCash));
 			jogador.setPokerCliente(new PokerCliente(idCliente));
+			jogador.setPokerJogadorEntrada(new Date());
 			jogador.setPokerJogadorAtivo(true);
 			return (PokerJogador) service.salvar(jogador);
 		} catch (Exception ex) {
@@ -612,6 +636,7 @@ public class RestPoker {
 			// acha e atualiza o jogador
 			FiltroNumero fn = new FiltroNumero("pokerJogadorId", ECompara.IGUAL, idJogador);
 			PokerJogador jogador = (PokerJogador) service.selecionar(new PokerJogador(), fn, false);
+			jogador.setPokerJogadorSaida(new Date());
 			jogador.setPokerJogadorAtivo(false);
 
 			if (quitar) {

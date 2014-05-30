@@ -1,5 +1,6 @@
 package br.com.opensig.poker.server;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -178,6 +179,7 @@ public class PokerServiceImpl extends CoreServiceImpl implements PokerService {
 				double recebidoValor = recebido == null ? 0.00 : recebido.doubleValue();
 
 				// atualiza o cash
+				cash.setPokerCashFim(new Date());
 				cash.setPokerCashFechado(true);
 				cash.setPokerCashPago(pagoValor);
 				cash.setPokerCashRecebido(recebidoValor);

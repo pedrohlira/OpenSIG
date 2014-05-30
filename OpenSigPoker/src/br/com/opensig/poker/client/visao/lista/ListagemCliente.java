@@ -37,7 +37,7 @@ public class ListagemCliente extends AListagem<PokerCliente> {
 
 		// colunas
 		ColumnConfig ccId = new ColumnConfig(OpenSigCore.i18n.txtCod(), "pokerClienteId", 50, true);
-		ColumnConfig ccCodigo = new ColumnConfig(OpenSigCore.i18n.txtCod(), "pokerClienteCodigo", 75, true);
+		ColumnConfig ccNumero = new ColumnConfig(OpenSigCore.i18n.txtNumero(), "pokerClienteCodigo", 75, true);
 		ColumnConfig ccNome = new ColumnConfig(OpenSigCore.i18n.txtNome(), "pokerClienteNome", 150, true);
 		ColumnConfig ccAux = new ColumnConfig(OpenSigCore.i18n.txtAuxiliar(), "pokerClienteAuxiliar", 75, true);
 		ColumnConfig ccDocumento = new ColumnConfig(OpenSigCore.i18n.txtDocumento(), "pokerClienteDocumento", 100, true);
@@ -47,7 +47,7 @@ public class ListagemCliente extends AListagem<PokerCliente> {
 		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), "pokerClienteData", 75, true, DATA);
 		ColumnConfig ccAtivo = new ColumnConfig(OpenSigCore.i18n.txtAtivo(), "pokerClienteAtivo", 50, true, BOLEANO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccCodigo, ccNome, ccAux, ccDocumento, ccContato, ccEmail, ccData, ccAssociado, ccAtivo };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccNumero, ccNome, ccAux, ccDocumento, ccContato, ccEmail, ccData, ccAssociado, ccAtivo };
 		modelos = new ColumnModel(bcc);
 		super.inicializar();
 	}

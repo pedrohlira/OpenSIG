@@ -39,7 +39,7 @@ public class ListagemReceber extends AListagem<PokerReceber> {
 	public void inicializar() {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("pokerReceberId"), new IntegerFieldDef("pokerForma.pokerFormaId"), new StringFieldDef("pokerForma.pokerFormaNome"),
-				new IntegerFieldDef("pokerCash.pokerCashId"), new StringFieldDef("pokerCash.pokerCashCodigo"), new StringFieldDef("pokerReceberDescricao"), new FloatFieldDef("pokerReceberValor"),
+				new IntegerFieldDef("pokerCash.pokerCashId"), new StringFieldDef("pokerCash.pokerCashMesa"), new StringFieldDef("pokerReceberDescricao"), new FloatFieldDef("pokerReceberValor"),
 				new DateFieldDef("pokerReceberCadastrado"), new DateFieldDef("pokerReceberRealizado"), new BooleanFieldDef("pokerReceberAtivo") };
 		campos = new RecordDef(fd);
 
@@ -49,17 +49,16 @@ public class ListagemReceber extends AListagem<PokerReceber> {
 		ccTipoId.setHidden(true);
 		ColumnConfig ccTipo = new ColumnConfig(OpenSigCore.i18n.txtTipo(), "pokerForma.pokerFormaNome", 100, true);
 		ColumnConfig ccCashId = new ColumnConfig(OpenSigCore.i18n.txtCod() + "-" + OpenSigCore.i18n.txtCash(), "pokerCash.pokerCashId", 100, true);
-		ccCashId.setHidden(true);
-		ColumnConfig ccCashCodigo = new ColumnConfig(OpenSigCore.i18n.txtCod(), "pokerCash.pokerCashCodigo", 100, true);
+		ColumnConfig ccCashMesa = new ColumnConfig(OpenSigCore.i18n.txtMesa(), "pokerCash.pokerCashMesa", 100, true);
 		ColumnConfig ccDescricao = new ColumnConfig(OpenSigCore.i18n.txtDescricao(), "pokerReceberDescricao", 200, true);
-		ColumnConfig ccCadastro = new ColumnConfig(OpenSigCore.i18n.txtCadastrado(), "pokerReceberCadastrado", 75, true, DATA);
-		ColumnConfig ccRealizado = new ColumnConfig(OpenSigCore.i18n.txtRealizado(), "pokerReceberRealizado", 75, true, DATA);
+		ColumnConfig ccCadastro = new ColumnConfig(OpenSigCore.i18n.txtCadastrado(), "pokerReceberCadastrado", 120, true, DATAHORA);
+		ColumnConfig ccRealizado = new ColumnConfig(OpenSigCore.i18n.txtRealizado(), "pokerReceberRealizado", 120, true, DATAHORA);
 		ColumnConfig ccAtivo = new ColumnConfig(OpenSigCore.i18n.txtRecebido(), "pokerReceberAtivo", 75, true, BOLEANO);
 
 		// sumarios
 		SummaryColumnConfig ccValor = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtValor(), "pokerReceberValor", 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccTipoId, ccTipo, ccCashId, ccCashCodigo, ccDescricao, ccValor, ccCadastro, ccRealizado, ccAtivo };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccTipoId, ccTipo, ccCashId, ccCashMesa, ccDescricao, ccValor, ccCadastro, ccRealizado, ccAtivo };
 		modelos = new ColumnModel(bcc);
 		super.inicializar();
 	}

@@ -37,7 +37,7 @@ public class FormularioCliente extends AFormulario<PokerCliente> {
 		hdnCod = new Hidden("pokerClienteId", "0");
 		add(hdnCod);
 
-		txtCodigo = new NumberField(OpenSigCore.i18n.txtCod(), "pokerClienteCodigo", 100);
+		txtCodigo = new NumberField(OpenSigCore.i18n.txtNumero(), "pokerClienteCodigo", 100);
 		txtCodigo.setAllowBlank(false);
 		txtCodigo.setAllowNegative(false);
 		txtCodigo.setAllowDecimals(false);

@@ -28,14 +28,14 @@ public class PokerReceber extends Dados implements Serializable {
 	@Column(name = "poker_receber_ativo")
 	private int pokerReceberAtivo;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "poker_receber_cadastrado")
 	private Date pokerReceberCadastrado;
 
 	@Column(name = "poker_receber_descricao")
 	private String pokerReceberDescricao;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "poker_receber_realizado")
 	private Date pokerReceberRealizado;
 
@@ -132,8 +132,8 @@ public class PokerReceber extends Dados implements Serializable {
 	}
 
 	public String[] toArray() {
-		return new String[] { pokerReceberId + "", pokerForma.getPokerFormaId() + "", pokerForma.getPokerFormaNome(), pokerCash.getPokerCashId() + "", pokerCash.getPokerCashCodigo(),
-				pokerReceberDescricao, pokerReceberValor + "", UtilClient.getDataGrid(pokerReceberCadastrado), UtilClient.getDataGrid(pokerReceberRealizado), getPokerReceberAtivo() + "" };
+		return new String[] { pokerReceberId + "", pokerForma.getPokerFormaId() + "", pokerForma.getPokerFormaNome(), pokerCash.getPokerCashId() + "", pokerCash.getPokerCashMesa(),
+				pokerReceberDescricao, pokerReceberValor + "", UtilClient.getDataHoraGrid(pokerReceberCadastrado), UtilClient.getDataHoraGrid(pokerReceberRealizado), getPokerReceberAtivo() + "" };
 	}
 
 	public void anularDependencia() {

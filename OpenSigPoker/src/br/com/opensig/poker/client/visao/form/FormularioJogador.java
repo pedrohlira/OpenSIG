@@ -1,13 +1,10 @@
 package br.com.opensig.poker.client.visao.form;
 
+import java.util.Date;
+
 import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
-import br.com.opensig.core.client.controlador.filtro.EJuncao;
 import br.com.opensig.core.client.controlador.filtro.FiltroBinario;
-import br.com.opensig.core.client.controlador.filtro.FiltroNumero;
-import br.com.opensig.core.client.controlador.filtro.FiltroObjeto;
-import br.com.opensig.core.client.controlador.filtro.GrupoFiltro;
-import br.com.opensig.core.client.controlador.filtro.IFiltro;
 import br.com.opensig.core.client.servico.CoreProxy;
 import br.com.opensig.core.client.visao.abstrato.AFormulario;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
@@ -36,6 +33,8 @@ public class FormularioJogador extends AFormulario<PokerJogador> {
 	private Hidden hdnCash;
 	private ComboBox cmbCliente;
 	private ComboBox cmbCash;
+	private Date dtEntrada;
+	private Date dtSaida;
 	private Checkbox chkAtivo;
 
 	public FormularioJogador(SisFuncao funcao) {
@@ -76,6 +75,10 @@ public class FormularioJogador extends AFormulario<PokerJogador> {
 			PokerCash cash = new PokerCash(Integer.valueOf(hdnCash.getValueAsString()));
 			classe.setPokerCash(cash);
 		}
+		classe.setPokerJogadorEntrada(dtEntrada);
+		if (chkAtivo.getValue() == false) {
+			classe.setPokerJogadorSaida(new Date());
+		}
 		classe.setPokerJogadorAtivo(chkAtivo.getValue());
 
 		return true;
@@ -89,6 +92,10 @@ public class FormularioJogador extends AFormulario<PokerJogador> {
 		Record rec = lista.getPanel().getSelectionModel().getSelected();
 		if (rec != null) {
 			getForm().loadRecord(rec);
+			dtEntrada = rec.getAsDate("pokerJogadorEntrada");
+			dtSaida = rec.getAsDate("pokerJogadorSaida");
+		} else {
+			dtEntrada = new Date();
 		}
 		cmbCash.focus(true);
 
@@ -104,36 +111,25 @@ public class FormularioJogador extends AFormulario<PokerJogador> {
 	}
 
 	private ComboBox getCash() {
-		FieldDef[] campos = new FieldDef[] { new IntegerFieldDef("pokerCashId"), new StringFieldDef("pokerCashCodigo") };
+		FieldDef[] campos = new FieldDef[] { new IntegerFieldDef("pokerCashId"), new StringFieldDef("pokerCashMesa") };
 		FiltroBinario fb = new FiltroBinario("pokerCashFechado", ECompara.IGUAL, 0);
 		CoreProxy<PokerCash> proxy = new CoreProxy<PokerCash>(new PokerCash(), fb);
 		Store store = new Store(proxy, new ArrayReader(new RecordDef(campos)), false);
 
-		cmbCash = new ComboBox(OpenSigCore.i18n.txtCash(), "pokerCash.pokerCashCodigo", 130);
+		cmbCash = new ComboBox(OpenSigCore.i18n.txtCash(), "pokerCash.pokerCashMesa", 130);
 		cmbCash.setAllowBlank(false);
 		cmbCash.setStore(store);
 		cmbCash.setTriggerAction(ComboBox.ALL);
 		cmbCash.setMode(ComboBox.REMOTE);
-		cmbCash.setDisplayField("pokerCashCodigo");
+		cmbCash.setDisplayField("pokerCashMesa");
 		cmbCash.setValueField("pokerCashId");
+		cmbCash.setTpl("<div class=\"x-combo-list-item\"><b>" + OpenSigCore.i18n.txtCod() + " {pokerCashId}</b> - <i>" + OpenSigCore.i18n.txtMesa() + " {pokerCashMesa}</i></div>");
 		cmbCash.setForceSelection(true);
 		cmbCash.setEditable(false);
 		cmbCash.setListWidth(200);
 		cmbCash.addListener(new ComboBoxListenerAdapter() {
 			public void onSelect(ComboBox comboBox, Record record, int index) {
 				hdnCash.setValue(comboBox.getValue());
-				PokerCash cash = new PokerCash(Integer.valueOf(hdnCash.getValueAsString()));
-				// filtra os clientes
-				FiltroObjeto fo1 = new FiltroObjeto("pokerCash", ECompara.NULO, null);
-				fo1.setCampoPrefixo("t2.");
-				FiltroNumero fn1 = new FiltroNumero("pokerCash.pokerCashId", ECompara.DIFERENTE, cash.getId());
-				fn1.setCampoPrefixo("t2.");
-				GrupoFiltro gf1 = new GrupoFiltro(EJuncao.OU, new IFiltro[] { fo1, fn1 });
-				FiltroBinario fb1 = new FiltroBinario("pokerClienteAtivo", ECompara.IGUAL, 1);
-				GrupoFiltro gf2 = new GrupoFiltro(EJuncao.E, new IFiltro[] { gf1, fb1 });
-				CoreProxy<PokerCliente> proxy1 = new CoreProxy<PokerCliente>(new PokerCliente(), gf2);
-				cmbCliente.getStore().setDataProxy(proxy1);
-				cmbCliente.getStore().reload();
 			}
 
 			public void onBlur(Field field) {
@@ -148,7 +144,9 @@ public class FormularioJogador extends AFormulario<PokerJogador> {
 
 	private ComboBox getCliente() {
 		FieldDef[] campos = new FieldDef[] { new IntegerFieldDef("pokerClienteId"), new IntegerFieldDef("pokerClienteCodigo"), new StringFieldDef("pokerClienteNome") };
-		Store store = new Store(new ArrayReader(new RecordDef(campos)));
+		FiltroBinario fb = new FiltroBinario("pokerClienteAtivo", ECompara.IGUAL, 1);
+		CoreProxy<PokerCliente> proxy = new CoreProxy<PokerCliente>(new PokerCliente(), fb);
+		Store store = new Store(proxy, new ArrayReader(new RecordDef(campos)));
 
 		cmbCliente = new ComboBox(OpenSigCore.i18n.txtCliente(), "pokerCliente.pokerClienteNome", 180);
 		cmbCliente.setAllowBlank(false);
@@ -215,6 +213,22 @@ public class FormularioJogador extends AFormulario<PokerJogador> {
 
 	public void setCmbCash(ComboBox cmbCash) {
 		this.cmbCash = cmbCash;
+	}
+
+	public Date getDtEntrada() {
+		return dtEntrada;
+	}
+
+	public void setDtEntrada(Date dtEntrada) {
+		this.dtEntrada = dtEntrada;
+	}
+
+	public Date getDtSaida() {
+		return dtSaida;
+	}
+
+	public void setDtSaida(Date dtSaida) {
+		this.dtSaida = dtSaida;
 	}
 
 	public Checkbox getChkAtivo() {

@@ -14,6 +14,12 @@ Ext.define('SIG.model.PokerJogador', {
 			name : 'pokerJogadorId',
 			type : 'int'
 		}, {
+			name : 'pokerJogadorEntrada',
+			type : 'date'
+		}, {
+			name : 'pokerJogadorSaida',
+			type : 'date'
+		}, {
 			name : 'pokerJogadorAtivo',
 			type : 'boolean'
 		}, {

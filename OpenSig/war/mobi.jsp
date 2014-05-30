@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
 
 <link rel="shortcut icon" href="img/favicon.ico" />
-<link rel="stylesheet" href="js/touch/resources/css/sencha-touch.css" type="text/css">
+<link rel="stylesheet" href="js/touch/resources/css/cupertino.css" type="text/css">
 <link rel="stylesheet" href="css/mob.css" type="text/css">
 
 <script type="text/javascript" src="js/util.js" charset="utf-8"></script>

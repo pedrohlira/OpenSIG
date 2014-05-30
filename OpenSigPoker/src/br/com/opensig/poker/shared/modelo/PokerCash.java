@@ -36,12 +36,16 @@ public class PokerCash extends Dados implements Serializable {
 	@Column(name = "poker_cash_id")
 	private int pokerCashId;
 
-	@Column(name = "poker_cash_codigo")
-	private String pokerCashCodigo;
+	@Column(name = "poker_cash_mesa")
+	private String pokerCashMesa;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "poker_cash_data")
-	private Date pokerCashData;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "poker_cash_inicio")
+	private Date pokerCashInicio;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "poker_cash_fim")
+	private Date pokerCashFim;
 
 	@Column(name = "poker_cash_fechado")
 	private int pokerCashFechado;
@@ -64,7 +68,7 @@ public class PokerCash extends Dados implements Serializable {
 	}
 
 	public PokerCash(int pokerCashId) {
-		super("pu_poker", "PokerCash", "pokerCashId", "pokerCashData", EDirecao.DESC);
+		super("pu_poker", "PokerCash", "pokerCashId", "pokerCashInicio", EDirecao.DESC);
 		this.pokerCashId = pokerCashId;
 	}
 
@@ -76,20 +80,28 @@ public class PokerCash extends Dados implements Serializable {
 		this.pokerCashId = pokerCashId;
 	}
 
-	public String getPokerCashCodigo() {
-		return pokerCashCodigo;
+	public String getPokerCashMesa() {
+		return pokerCashMesa;
 	}
 
-	public void setPokerCashCodigo(String pokerCashCodigo) {
-		this.pokerCashCodigo = pokerCashCodigo;
+	public void setPokerCashMesa(String pokerCashMesa) {
+		this.pokerCashMesa = pokerCashMesa;
 	}
 
-	public Date getPokerCashData() {
-		return this.pokerCashData;
+	public Date getPokerCashInicio() {
+		return pokerCashInicio;
 	}
 
-	public void setPokerCashData(Date pokerCashData) {
-		this.pokerCashData = pokerCashData;
+	public void setPokerCashInicio(Date pokerCashInicio) {
+		this.pokerCashInicio = pokerCashInicio;
+	}
+
+	public Date getPokerCashFim() {
+		return pokerCashFim;
+	}
+
+	public void setPokerCashFim(Date pokerCashFim) {
+		this.pokerCashFim = pokerCashFim;
 	}
 
 	public boolean getPokerCashFechado() {
@@ -141,7 +153,8 @@ public class PokerCash extends Dados implements Serializable {
 	}
 
 	public String[] toArray() {
-		return new String[] { pokerCashId + "", pokerCashCodigo, UtilClient.getDataGrid(pokerCashData), pokerCashPago + "", pokerCashRecebido + "", pokerCashSaldo + "", getPokerCashFechado() + "" };
+		return new String[] { pokerCashId + "", pokerCashMesa, UtilClient.getDataHoraGrid(pokerCashInicio), UtilClient.getDataHoraGrid(pokerCashFim), pokerCashPago + "", pokerCashRecebido + "",
+				pokerCashSaldo + "", getPokerCashFechado() + "" };
 	}
 
 	public void anularDependencia() {

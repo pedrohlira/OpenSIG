@@ -2,8 +2,6 @@ package br.com.opensig.poker.client.visao.lista;
 
 import br.com.opensig.core.client.OpenSigCore;
 import br.com.opensig.core.client.UtilClient;
-import br.com.opensig.core.client.controlador.comando.IComando;
-import br.com.opensig.core.client.controlador.comando.lista.ComandoExcluir;
 import br.com.opensig.core.client.visao.abstrato.AListagem;
 import br.com.opensig.core.client.visao.abstrato.IFormulario;
 import br.com.opensig.core.shared.modelo.sistema.SisFuncao;
@@ -15,10 +13,8 @@ import com.gwtext.client.data.BooleanFieldDef;
 import com.gwtext.client.data.DateFieldDef;
 import com.gwtext.client.data.FieldDef;
 import com.gwtext.client.data.IntegerFieldDef;
-import com.gwtext.client.data.Record;
 import com.gwtext.client.data.RecordDef;
 import com.gwtext.client.data.StringFieldDef;
-import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.grid.BaseColumnConfig;
 import com.gwtext.client.widgets.grid.ColumnConfig;
 import com.gwtext.client.widgets.grid.ColumnModel;
@@ -35,41 +31,28 @@ public class ListagemJogador extends AListagem<PokerJogador> {
 	public void inicializar() {
 		// campos
 		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("pokerJogadorId"), new IntegerFieldDef("pokerCliente.pokerClienteId"), new StringFieldDef("pokerCliente.pokerClienteCodigo"),
-				new StringFieldDef("pokerCliente.pokerClienteNome"), new IntegerFieldDef("pokerCash.pokerCashId"), new StringFieldDef("pokerCash.pokerCashCodigo"),
-				new DateFieldDef("pokerCash.pokerCashData"), new BooleanFieldDef("pokerCash.pokerCashFechado"), new BooleanFieldDef("pokerJogadorAtivo") };
+				new StringFieldDef("pokerCliente.pokerClienteNome"), new IntegerFieldDef("pokerCash.pokerCashId"), new StringFieldDef("pokerCash.pokerCashMesa"),
+				new BooleanFieldDef("pokerCash.pokerCashFechado"), new DateFieldDef("pokerJogadorEntrada"), new DateFieldDef("pokerJogadorSaida"), new BooleanFieldDef("pokerJogadorAtivo") };
 		campos = new RecordDef(fd);
 
 		// colunas
 		ColumnConfig ccId = new ColumnConfig(OpenSigCore.i18n.txtCod(), "pokerJogadorId", 50, true);
-		ColumnConfig ccClienteId = new ColumnConfig(OpenSigCore.i18n.txtCod() + "-" + OpenSigCore.i18n.txtCliente(), "pokerCliente.pokerClienteId", 50, true);
+		ColumnConfig ccClienteId = new ColumnConfig(OpenSigCore.i18n.txtCod() + "-" + OpenSigCore.i18n.txtCliente(), "pokerCliente.pokerClienteId", 100, true);
 		ccClienteId.setHidden(true);
-		ColumnConfig ccCodigo = new ColumnConfig(OpenSigCore.i18n.txtCod(), "pokerCliente.pokerClienteCodigo", 75, true);
+		ColumnConfig ccClienteNumero = new ColumnConfig(OpenSigCore.i18n.txtNumero() + "-" + OpenSigCore.i18n.txtCliente(), "pokerCliente.pokerClienteCodigo", 150, true);
 		ColumnConfig ccCliente = new ColumnConfig(OpenSigCore.i18n.txtCliente(), "pokerCliente.pokerClienteNome", 150, true);
-		ColumnConfig ccCashId = new ColumnConfig(OpenSigCore.i18n.txtCod() + "-" + OpenSigCore.i18n.txtCash(), "pokerCash.pokerCashId", 50, true);
-		ccCashId.setHidden(true);
-		ColumnConfig ccCash = new ColumnConfig(OpenSigCore.i18n.txtCash(), "pokerCash.pokerCashCodigo", 100, true);
-		ColumnConfig ccCashData = new ColumnConfig(OpenSigCore.i18n.txtData(), "pokerCash.pokerCashData", 75, true, DATA);
-		ColumnConfig ccFechado = new ColumnConfig(OpenSigCore.i18n.txtFechada(), "pokerCash.pokerCashFechado", 75, true, BOLEANO);
-		ccFechado.setHidden(true);
-		ccFechado.setFixed(true);
+		ColumnConfig ccCashId = new ColumnConfig(OpenSigCore.i18n.txtCod() + "-" + OpenSigCore.i18n.txtCash(), "pokerCash.pokerCashId", 100, true);
+		ColumnConfig ccCashMesa = new ColumnConfig(OpenSigCore.i18n.txtMesa(), "pokerCash.pokerCashMesa", 100, true);
+		ColumnConfig ccCashFechado = new ColumnConfig("", "pokerCash.pokerCashFechado", 50, false, BOLEANO);
+		ccCashFechado.setHidden(true);
+		ccCashFechado.setFixed(true);
+		ColumnConfig ccEntrada = new ColumnConfig(OpenSigCore.i18n.txtEntrada(), "pokerJogadorEntrada", 120, true, DATAHORA);
+		ColumnConfig ccSaida = new ColumnConfig(OpenSigCore.i18n.txtSaida(), "pokerJogadorSaida", 120, true, DATAHORA);
 		ColumnConfig ccAtivo = new ColumnConfig(OpenSigCore.i18n.txtAtivo(), "pokerJogadorAtivo", 50, true, BOLEANO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccClienteId, ccCodigo, ccCliente, ccCashId, ccCash, ccCashData, ccFechado, ccAtivo };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccClienteId, ccClienteNumero, ccCliente, ccCashId, ccCashMesa, ccCashFechado, ccEntrada, ccSaida, ccAtivo };
 		modelos = new ColumnModel(bcc);
 		super.inicializar();
-	}
-
-	public IComando AntesDaAcao(IComando comando) {
-		Record rec = getSelectionModel().getSelected();
-
-		// valida se pode excluir
-		if (comando instanceof ComandoExcluir) {
-			if (rec != null && rec.getAsBoolean("pokerCash.pokerCashFechado")) {
-				MessageBox.alert(OpenSigCore.i18n.txtExcluir(), OpenSigCore.i18n.txtAcessoNegado());
-				comando = null;
-			}
-		}
-		return comando;
 	}
 
 	public void irPara() {

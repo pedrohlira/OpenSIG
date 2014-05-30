@@ -66,7 +66,7 @@ public class ListagemParticipante extends AListagem<PokerParticipante> {
 		ccFechado.setFixed(true);
 		ColumnConfig ccClienteId = new ColumnConfig(OpenSigCore.i18n.txtCod() + "-" + OpenSigCore.i18n.txtCliente(), "pokerCliente.pokerClienteId", 50, true);
 		ccClienteId.setHidden(true);
-		ColumnConfig ccCodigo = new ColumnConfig(OpenSigCore.i18n.txtCod(), "pokerCliente.pokerClienteCodigo", 75, true);
+		ColumnConfig ccNumero = new ColumnConfig(OpenSigCore.i18n.txtNumero() + "-" + OpenSigCore.i18n.txtCliente(), "pokerCliente.pokerClienteCodigo", 100, true);
 		ColumnConfig ccCliente = new ColumnConfig(OpenSigCore.i18n.txtCliente(), "pokerCliente.pokerClienteNome", 150, true);
 		ColumnConfig ccMesaId = new ColumnConfig(OpenSigCore.i18n.txtCod() + "-" + OpenSigCore.i18n.txtMesa(), "pokerMesa.pokerMesaId", 50, true);
 		ccMesaId.setHidden(true);
@@ -82,7 +82,7 @@ public class ListagemParticipante extends AListagem<PokerParticipante> {
 		SummaryColumnConfig ccPonto = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtPontos(), "pokerParticipantePonto", 50, true, NUMERO), NUMERO);
 		SummaryColumnConfig ccPremio = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtPremio(), "pokerParticipantePremio", 75, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { check, ccId, ccTorneioId, ccTipo, ccTorneio, ccTorneioData, ccFechado, ccClienteId, ccCodigo, ccCliente, ccMesaId, ccMesa, ccBonus,
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { check, ccId, ccTorneioId, ccTipo, ccTorneio, ccTorneioData, ccFechado, ccClienteId, ccNumero, ccCliente, ccMesaId, ccMesa, ccBonus,
 				ccReentrada, ccAdicional, ccDealer, ccPosicao, ccPonto, ccPremio, ccAtivo };
 		modelos = new ColumnModel(bcc);
 		super.inicializar();

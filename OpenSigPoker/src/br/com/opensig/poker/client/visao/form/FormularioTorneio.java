@@ -175,7 +175,7 @@ public class FormularioTorneio extends AFormulario<PokerTorneio> {
 		txtDealer.setAllowBlank(false);
 		txtDealer.setAllowNegative(false);
 
-		txtDealerFicha = new NumberField(OpenSigCore.i18n.txtFichas(), "pokerTorneioAdicionalFicha", 50);
+		txtDealerFicha = new NumberField(OpenSigCore.i18n.txtFichas(), "pokerTorneioDealerFicha", 50);
 		txtDealerFicha.setAllowBlank(false);
 		txtDealerFicha.setAllowNegative(false);
 		txtDealerFicha.setAllowDecimals(false);

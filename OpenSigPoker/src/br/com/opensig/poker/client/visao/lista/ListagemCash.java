@@ -26,6 +26,7 @@ import com.gwtext.client.data.Record;
 import com.gwtext.client.data.RecordDef;
 import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.widgets.MessageBox;
+import com.gwtext.client.widgets.MessageBox.PromptCallback;
 import com.gwtext.client.widgets.grid.BaseColumnConfig;
 import com.gwtext.client.widgets.grid.ColumnConfig;
 import com.gwtext.client.widgets.grid.ColumnModel;
@@ -45,14 +46,15 @@ public class ListagemCash extends AListagem<PokerCash> {
 
 	public void inicializar() {
 		// campos
-		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("pokerCashId"), new StringFieldDef("pokerCashCodigo"), new DateFieldDef("pokerCashData"), new FloatFieldDef("pokerCashPago"),
-				new FloatFieldDef("pokerCashRecebido"), new FloatFieldDef("pokerCashSaldo"), new BooleanFieldDef("pokerCashFechado") };
+		FieldDef[] fd = new FieldDef[] { new IntegerFieldDef("pokerCashId"), new StringFieldDef("pokerCashMesa"), new DateFieldDef("pokerCashInicio"), new DateFieldDef("pokerCashFim"),
+				new FloatFieldDef("pokerCashPago"), new FloatFieldDef("pokerCashRecebido"), new FloatFieldDef("pokerCashSaldo"), new BooleanFieldDef("pokerCashFechado") };
 		campos = new RecordDef(fd);
 
 		// colunas
 		ColumnConfig ccId = new ColumnConfig(OpenSigCore.i18n.txtCod(), "pokerCashId", 50, true);
-		ColumnConfig ccCodigo = new ColumnConfig(OpenSigCore.i18n.txtCod(), "pokerCashCodigo", 100, true);
-		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), "pokerCashData", 100, true, DATA);
+		ColumnConfig ccMesa = new ColumnConfig(OpenSigCore.i18n.txtMesa(), "pokerCashMesa", 100, true);
+		ColumnConfig ccInicio = new ColumnConfig(OpenSigCore.i18n.txtInicio(), "pokerCashInicio", 120, true, DATAHORA);
+		ColumnConfig ccFim = new ColumnConfig(OpenSigCore.i18n.txtFim(), "pokerCashFim", 120, true, DATAHORA);
 		ColumnConfig ccFechado = new ColumnConfig(OpenSigCore.i18n.txtFechada(), "pokerCashFechado", 100, true, BOLEANO);
 
 		// sumarios
@@ -60,7 +62,7 @@ public class ListagemCash extends AListagem<PokerCash> {
 		SummaryColumnConfig ccRecebido = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtRecebido(), "pokerCashRecebido", 100, true, DINHEIRO), DINHEIRO);
 		SummaryColumnConfig ccSaldo = new SummaryColumnConfig(SummaryColumnConfig.SUM, new ColumnConfig(OpenSigCore.i18n.txtSaldo(), "pokerCashSaldo", 100, true, DINHEIRO), DINHEIRO);
 
-		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccCodigo, ccData, ccPago, ccRecebido, ccSaldo, ccFechado };
+		BaseColumnConfig[] bcc = new BaseColumnConfig[] { ccId, ccMesa, ccInicio, ccFim, ccPago, ccRecebido, ccSaldo, ccFechado };
 		modelos = new ColumnModel(bcc);
 		super.inicializar();
 	}
@@ -70,20 +72,25 @@ public class ListagemCash extends AListagem<PokerCash> {
 
 		// adiciona um novo
 		if (comando instanceof ComandoNovo) {
-			Date data = new Date();
-			PokerCash cash = new PokerCash();
-			cash.setPokerCashCodigo("C" + data.getTime());
-			cash.setPokerCashData(data);
+			MessageBox.prompt(OpenSigCore.i18n.txtMesa(), "", new PromptCallback() {
+				public void execute(String btnID, String text) {
+					if (btnID.equalsIgnoreCase("ok") && text != null && !text.equals("")) {
+						PokerCash cash = new PokerCash();
+						cash.setPokerCashMesa(text);
+						cash.setPokerCashInicio(new Date());
 
-			PokerProxy proxy = new PokerProxy();
-			proxy.salvar(cash, new AsyncCallback<PokerCash>() {
-				public void onSuccess(PokerCash result) {
-					getStore().reload();
-					new ToastWindow(OpenSigCore.i18n.txtSalvar(), OpenSigCore.i18n.msgSalvarOK()).show();
-				}
+						PokerProxy proxy = new PokerProxy();
+						proxy.salvar(cash, new AsyncCallback<PokerCash>() {
+							public void onSuccess(PokerCash result) {
+								getStore().reload();
+								new ToastWindow(OpenSigCore.i18n.txtSalvar(), OpenSigCore.i18n.msgSalvarOK()).show();
+							}
 
-				public void onFailure(Throwable caught) {
-					MessageBox.alert(OpenSigCore.i18n.txtSalvar(), OpenSigCore.i18n.errSalvar());
+							public void onFailure(Throwable caught) {
+								MessageBox.alert(OpenSigCore.i18n.txtSalvar(), OpenSigCore.i18n.errSalvar());
+							}
+						});
+					}
 				}
 			});
 			comando = null;
