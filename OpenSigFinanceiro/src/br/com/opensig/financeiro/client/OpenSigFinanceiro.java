@@ -13,6 +13,8 @@ import br.com.opensig.core.client.controlador.comando.lista.ComandoNovo;
 import br.com.opensig.core.client.controlador.comando.lista.ComandoNovoDuplicar;
 import br.com.opensig.core.client.visao.Ponte;
 import br.com.opensig.financeiro.client.controlador.comando.ComandoBanco;
+import br.com.opensig.financeiro.client.controlador.comando.ComandoCartaoAuditoria;
+import br.com.opensig.financeiro.client.controlador.comando.ComandoCartaoPresente;
 import br.com.opensig.financeiro.client.controlador.comando.ComandoConta;
 import br.com.opensig.financeiro.client.controlador.comando.ComandoForma;
 import br.com.opensig.financeiro.client.controlador.comando.ComandoPagamento;
@@ -60,6 +62,8 @@ public class OpenSigFinanceiro implements EntryPoint {
         fc.addComando(ComandoBanco.class.getName(), (IComando) GWT.create(ComandoBanco.class));
         fc.addComando(ComandoConta.class.getName(), (IComando) GWT.create(ComandoConta.class));
         fc.addComando(ComandoForma.class.getName(), (IComando) GWT.create(ComandoForma.class));
+        fc.addComando(ComandoCartaoPresente.class.getName(), (IComando) GWT.create(ComandoCartaoPresente.class));
+        fc.addComando(ComandoCartaoAuditoria.class.getName(), (IComando) GWT.create(ComandoCartaoAuditoria.class));
         // gerar boleto
         fc.addComando(ComandoGerar.class.getName(), (IComando) GWT.create(ComandoGerarImprimir.class));
         fc.addComando(ComandoGerarImprimir.class.getName(), (IComando) GWT.create(ComandoGerarImprimir.class));
@@ -86,13 +90,12 @@ public class OpenSigFinanceiro implements EntryPoint {
 		acoes.add(ComandoExcluir.class);
 		acoes.add(ComandoExcluirFiltrados.class);
 		
-		// acoes proibidas do remessa e retorno
-		Collection<Class> acoes2 = new ArrayList<Class>();
-		acoes2.add(ComandoNovoDuplicar.class);
+		// acoes proibidas do cartao auditoria
+		Collection<Class> acoes2 = new ArrayList<Class>(acoes);
 		acoes2.add(ComandoEditar.class);
-		acoes2.add(ComandoEditarFiltrados.class);
 
 		Ponte.setAcoesProibidas(ComandoPagamento.class.getName(), acoes);
 		Ponte.setAcoesProibidas(ComandoRecebimento.class.getName(), acoes);
+		Ponte.setAcoesProibidas(ComandoCartaoAuditoria.class.getName(), acoes2);
      }
 }

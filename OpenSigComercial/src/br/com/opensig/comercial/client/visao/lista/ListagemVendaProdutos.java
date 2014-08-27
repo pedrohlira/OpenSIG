@@ -162,9 +162,8 @@ public class ListagemVendaProdutos extends AListagemEditor<ComVendaProduto> {
 		ccVendedor.setHidden(true);
 		ccVendedor.setFixed(true);
 
-		ColumnConfig ccFornecedor = new ColumnConfig("", "empFornecedor", 10, false);
+		ColumnConfig ccFornecedor = new ColumnConfig(OpenSigCore.i18n.txtFornecedor(), "empFornecedor", 200, false);
 		ccFornecedor.setHidden(true);
-		ccFornecedor.setFixed(true);
 
 		ColumnConfig ccProdId = new ColumnConfig("", "prodProdutoId", 10, false);
 		ccProdId.setHidden(true);

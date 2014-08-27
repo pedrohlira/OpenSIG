@@ -12,11 +12,14 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import br.com.opensig.comercial.server.MyIcms;
 import br.com.opensig.comercial.shared.modelo.ComEcfDocumento;
@@ -60,6 +63,8 @@ import br.com.opensig.empresa.shared.modelo.EmpEndereco;
 import br.com.opensig.empresa.shared.modelo.EmpEnderecoTipo;
 import br.com.opensig.empresa.shared.modelo.EmpEntidade;
 import br.com.opensig.empresa.shared.modelo.EmpMunicipio;
+import br.com.opensig.financeiro.shared.modelo.FinCartaoAuditoria;
+import br.com.opensig.financeiro.shared.modelo.FinCartaoPresente;
 import br.com.opensig.financeiro.shared.modelo.FinForma;
 import br.com.opensig.financeiro.shared.modelo.FinReceber;
 import br.com.opensig.financeiro.shared.modelo.FinRecebimento;
@@ -69,6 +74,7 @@ import br.com.opensig.fiscal.shared.modelo.FisNotaStatus;
 import br.com.opensig.nfe.TNFe;
 import br.com.opensig.nfe.TNFe.InfNFe.Det.Prod;
 import br.com.opensig.permissao.shared.modelo.SisConfiguracao;
+import br.com.opensig.permissao.shared.modelo.SisUsuario;
 import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
 import br.com.opensig.produto.shared.modelo.ProdEstoqueGrade;
@@ -710,6 +716,112 @@ public class RestServidor extends ARest {
 			log.error("Erro ao validar o PDV.", ex);
 			throw new RestException(ex.getMessage());
 		}
+	}
+
+	/**
+	 * Metodo que ativa o cartao presente de forma sincrona.
+	 * 
+	 * @param numero
+	 *            o numero do cartao presente.
+	 * @return um objeto com os dados do cartao presente.
+	 */
+	@Path("/ativarCartao/{idUsuario}")
+	@PUT
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.TEXT_PLAIN)
+	public synchronized String ativarCartao(String numero, @PathParam("idUsuario") int idUsuario) {
+		autorizar();
+		JSONObject json = new JSONObject();
+		try {
+			// filtra para achar o cartao
+			FiltroTexto ft = new FiltroTexto("finCartaoPresenteNumero", ECompara.IGUAL, numero);
+			FinCartaoPresente cartao = (FinCartaoPresente) service.selecionar(new FinCartaoPresente(), ft, false);
+			// se achou salva a auditoria e retorna, caso contrario dispara o
+			// erro.
+			if (cartao != null) {
+				if (!cartao.getFinCartaoPresenteAtivo()) {
+					// mudando o status
+					cartao.setFinCartaoPresenteAtivo(true);
+					service.salvar(cartao);
+					// salvando a auditoria
+					FinCartaoAuditoria auditoria = new FinCartaoAuditoria();
+					auditoria.setFinCartaoPresente(cartao);
+					auditoria.setSisUsuario(new SisUsuario(idUsuario));
+					auditoria.setFinCartaoAuditoriaData(new Date());
+					auditoria.setFinCartaoAuditoriaAcao("ATIVADO");
+					service.salvar(auditoria);
+					json.put("status", "OK");
+					json.put("valor", cartao.getFinCartaoPresenteValor());
+				} else {
+					json.put("status", "ERRO");
+					json.put("msg", "Cartão presente já está ativo!");
+				}
+			} else {
+				json.put("status", "ERRO");
+				json.put("msg", "Número do cartão presente inexistente!");
+			}
+		} catch (Exception ex) {
+			try {
+				json.put("status", "ERRO");
+				json.put("msg", "Erro ao ativar o cartao presente.");
+			} catch (JSONException jex) {
+			}
+			log.error(json.toString(), ex);
+		}
+		return json.toString();
+	}
+
+	/**
+	 * Metodo que desativa o cartao presente de forma sincrona.
+	 * 
+	 * @param o
+	 *            numero do cartao presente.
+	 * @return um objeto com os dados do cartao presente.
+	 */
+	@Path("/desativarCartao/{idUsuario}")
+	@PUT
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.TEXT_PLAIN)
+	public synchronized String desativarCartao(String numero, @PathParam("idUsuario") int idUsuario) {
+		autorizar();
+		JSONObject json = new JSONObject();
+		try {
+			// filtra para achar o cartao
+			FiltroTexto ft = new FiltroTexto("finCartaoPresenteNumero", ECompara.IGUAL, numero);
+			FinCartaoPresente cartao = (FinCartaoPresente) service.selecionar(new FinCartaoPresente(), ft, false);
+			// se achou salva a auditoria e retorna, caso contrario dispara o
+			// erro.
+			if (cartao != null) {
+				if (cartao.getFinCartaoPresenteAtivo()) {
+					// mudando o status
+					cartao.setFinCartaoPresenteAtivo(false);
+					service.salvar(cartao);
+					// salvando a auditoria
+					FinCartaoAuditoria auditoria = new FinCartaoAuditoria();
+					auditoria.setFinCartaoPresente(cartao);
+					auditoria.setSisUsuario(new SisUsuario(idUsuario));
+					auditoria.setFinCartaoAuditoriaData(new Date());
+					auditoria.setFinCartaoAuditoriaAcao("DESATIVADO");
+					service.salvar(auditoria);
+					json.put("status", "OK");
+					json.put("valor", cartao.getFinCartaoPresenteValor());
+				} else {
+					json.put("status", "ERRO");
+					json.put("msg", "Cartão presente está desativado!");
+				}
+			} else {
+				json.put("status", "ERRO");
+				json.put("msg", "Número do cartão presente inexistente!");
+			}
+		} catch (Exception ex) {
+			try {
+				json.put("status", "ERRO");
+				json.put("msg", "Erro ao desativar o cartao presente.");
+			} catch (JSONException jex) {
+			}
+			log.error(json.toString(), ex);
+		}
+		return json.toString();
 	}
 
 	/**

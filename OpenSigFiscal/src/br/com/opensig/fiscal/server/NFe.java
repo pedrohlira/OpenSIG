@@ -89,6 +89,7 @@ public class NFe {
 
 			// parse no xml e pega o id
 			Element ele = (Element) doc.getElementsByTagName(tag).item(0);
+			ele.setIdAttribute("Id", true);
 			String id = ele.getAttribute("Id");
 			// adiciona a referencia
 			Reference ref = fac.newReference("#" + id, fac.newDigestMethod(DigestMethod.SHA1, null), transformList, null, null);

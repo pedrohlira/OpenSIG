@@ -439,6 +439,22 @@
 		<imagem>icon-padrao</imagem>
 	</funcao>
 	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoCartaoPresente
+		</classe>
+		<nome>Cartão Presente</nome>
+		<descricao>Administrar os cartões presentes no sistema.
+		</descricao>
+		<imagem>icon-cartao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoCartaoAuditoria
+		</classe>
+		<nome>Cartão Auditoria</nome>
+		<descricao>Administrar o uso dos cartões presentes no sistema.
+		</descricao>
+		<imagem>icon-analisar</imagem>
+	</funcao>
+	<funcao>
 		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSaida
 		</classe>
 		<nome>NFe Saida</nome>

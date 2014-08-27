@@ -2,11 +2,11 @@
 <project name="OpenSigEmpresa" basedir="." default="publicar">
 
 	<property name="pacote" value="br.com.opensig.empresa.client" />
-	<property name="versao" value="1.2.0" />
+	<property name="versao" value="1.2.1" />
 	<property name="empresa" value="PhD - Systems Solutions" />
 	<property name="autor" value="Pedro H. Lira" />
 	<property name="url" value="http://phdss.com.br" />
-	<property name="email" value="opensig@phdss.com.br" />
+	<property name="email" value="suporte@phdss.com.br" />
 
 	<target name="limpar">
 		<delete file="src/META-INF/${ant.project.name}.MF" />

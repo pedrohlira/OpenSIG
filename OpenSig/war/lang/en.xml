@@ -426,6 +426,22 @@
 		<descricao>Administer payment methods in the system.</descricao>
 		<imagem>icon-padrao</imagem>
 	</funcao>
+		<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoCartaoPresente
+		</classe>
+		<nome>Gift Card</nome>
+		<descricao>Administer the gift cards in the system.
+		</descricao>
+		<imagem>icon-cartao</imagem>
+	</funcao>
+	<funcao>
+		<classe>br.com.opensig.financeiro.client.controlador.comando.ComandoCartaoAuditoria
+		</classe>
+		<nome>Audit Card</nome>
+		<descricao>Administer the use of gift cards in the system.
+		</descricao>
+		<imagem>icon-analisar</imagem>
+	</funcao>
 	<funcao>
 		<classe>br.com.opensig.fiscal.client.controlador.comando.ComandoSaida
 		</classe>

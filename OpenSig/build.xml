@@ -5,11 +5,11 @@
 	<property name="lib" location="war/WEB-INF/lib" />
 	<property name="classes" location="war/WEB-INF/classes" />
 	<property name="pacote" value="br.com.opensig.client" />
-	<property name="versao" value="1.2.0" />
+	<property name="versao" value="1.2.1" />
 	<property name="empresa" value="PhD - Systems Solutions" />
 	<property name="autor" value="Pedro H. Lira" />
 	<property name="url" value="http://phdss.com.br" />
-	<property name="email" value="opensig@phdss.com.br" />
+	<property name="email" value="suporte@phdss.com.br" />
 
 	<target name="manifesto">
 		<buildnumber file="compilacao" />
@@ -30,7 +30,7 @@
 
 	<target name="limparLibs">
 		<delete>
-			<fileset dir="${lib}" excludes="**/OpenSig*.jar, **/gwt-servlet.jar, **/beanio.jar" />
+			<fileset dir="${lib}" excludes="**/OpenSig*.jar, **/gwt-servlet*.jar, **/beanio.jar" />
 		</delete>
 	</target>
 				
@@ -78,7 +78,7 @@
 
 	<target name="javac" depends="limpar, copiar">
 
-		<javac srcdir="src" includes="**" encoding="utf-8" destdir="${classes}" source="1.6" target="1.6" nowarn="true" debug="true" debuglevel="lines,vars,source">
+		<javac srcdir="src" includes="**" encoding="utf-8" destdir="${classes}" includeantruntime="false" source="1.8" target="1.8" nowarn="true" debug="true" debuglevel="lines,vars,source">
 			<classpath>
 				<fileset dir="${lib}" includes="*.jar" />
 			</classpath>

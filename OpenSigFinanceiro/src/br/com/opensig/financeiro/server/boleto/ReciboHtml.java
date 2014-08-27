@@ -1,6 +1,5 @@
 package br.com.opensig.financeiro.server.boleto;
 
-import java.io.IOException;
 import java.text.DateFormat;
 
 import br.com.opensig.core.server.UtilServer;

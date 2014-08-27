@@ -2,25 +2,25 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GWT-EXT"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JPA">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 			<attribute name="owner.project.facets" value="jpt.jpa"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/POI"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/NFE"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/REST"/>
+	<classpathentry kind="lib" path="/OpenSig/jars/beanio.jar"/>
+	<classpathentry kind="lib" path="/OpenSig/jars/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="/OpenSig/jars/simplecaptcha.jar"/>
+	<classpathentry kind="lib" path="/OpenSig/jars/jasypt-1.9.0.jar"/>
+	<classpathentry kind="lib" path="/OpenSig/jars/Json.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GWT-EXT"/>
-	<classpathentry kind="lib" path="/OpenSig/jars/beanio.jar"/>
-	<classpathentry kind="lib" path="/OpenSig/jars/log4j-1.2.14.jar"/>
-	<classpathentry kind="lib" path="/OpenSig/jars/simplecaptcha.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/NFE"/>
-	<classpathentry kind="lib" path="/OpenSig/jars/jasypt-1.9.0.jar"/>
-	<classpathentry kind="lib" path="/OpenSig/jars/Json.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/POI"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/REST"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

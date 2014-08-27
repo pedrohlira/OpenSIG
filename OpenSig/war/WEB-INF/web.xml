@@ -16,7 +16,7 @@
 		<init-param>
 			<description>url</description>
 			<param-name>eclipselink.jdbc.url</param-name>
-			<param-value>jdbc:mysql://localhost/opensig</param-value>
+			<param-value>jdbc:mysql://127.0.0.1/opensig</param-value>
 		</init-param>
 		<init-param>
 			<description>driver</description>
@@ -392,7 +392,7 @@
 	<context-param>
 		<description>Path padrao das empresas e suas configuracoes e arquivos.</description>
 		<param-name>sistema.empresas</param-name>
-		<param-value>/Users/pedrohenriquelira/Documents/Projetos/Git/OpenSIG/OpenSig/empresas/</param-value>
+		<param-value>C:\Users\PHD\Documents\Projetos\OpenSIG\OpenSig\empresas\</param-value>
 	</context-param>
 	<context-param>
 		<description>Url para validar a validade do sistema</description>
