@@ -108,20 +108,15 @@ public class OpenSigComercial implements EntryPoint {
 		acoes.add(ComandoNovoDuplicar.class);
 		acoes.add(ComandoEditarFiltrados.class);
 		acoes.add(ComandoExcluirFiltrados.class);
+		acoes.add(ComandoExcluir.class);
+		acoes.add(ComandoEditar.class);
 
-		// acoes proibidas para os produtos do comercial
-		Collection<Class> acoes2 = new ArrayList<Class>(acoes);
-		acoes2.add(ComandoExcluir.class);
-		acoes2.add(ComandoEditar.class);
-
-		Ponte.setAcoesProibidas(ComandoEcfVenda.class.getName(), acoes);
-		Ponte.setAcoesProibidas(ComandoEcfZ.class.getName(), acoes2);
-		Ponte.setAcoesProibidas(ComandoEcfDocumento.class.getName(), acoes2);
-		Ponte.setAcoesProibidas(ComandoEcfNota.class.getName(), acoes2);
-		Ponte.setAcoesProibidas(ComandoCompraProduto.class.getName(), acoes2);
-		Ponte.setAcoesProibidas(ComandoVendaProduto.class.getName(), acoes2);
-		Ponte.setAcoesProibidas(ComandoEcfVendaProduto.class.getName(), acoes2);
-		Ponte.setAcoesProibidas(ComandoEcfNotaProduto.class.getName(), acoes2);
-		Ponte.setAcoesProibidas(ComandoTrocaProduto.class.getName(), acoes2);
+		Ponte.setAcoesProibidas(ComandoEcfDocumento.class.getName(), acoes);
+		Ponte.setAcoesProibidas(ComandoEcfNota.class.getName(), acoes);
+		Ponte.setAcoesProibidas(ComandoCompraProduto.class.getName(), acoes);
+		Ponte.setAcoesProibidas(ComandoVendaProduto.class.getName(), acoes);
+		Ponte.setAcoesProibidas(ComandoEcfVendaProduto.class.getName(), acoes);
+		Ponte.setAcoesProibidas(ComandoEcfNotaProduto.class.getName(), acoes);
+		Ponte.setAcoesProibidas(ComandoTrocaProduto.class.getName(), acoes);
 	}
 }

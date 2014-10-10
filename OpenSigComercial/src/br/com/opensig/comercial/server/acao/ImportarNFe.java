@@ -3,6 +3,8 @@ package br.com.opensig.comercial.server.acao;
 import java.util.Date;
 import java.util.List;
 
+import org.w3c.dom.Document;
+
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.server.MyIcms;
 import br.com.opensig.core.client.controlador.filtro.ECompara;
@@ -41,6 +43,7 @@ public abstract class ImportarNFe<E extends Dados> implements IImportacao<E> {
 	protected List<ProdCofins> cofinss;
 	protected List<ProdEmbalagem> embalagem;
 	protected TNFe nfe;
+	protected Document doc;
 
 	protected void validarEmpresa(String cnpj) throws OpenSigException {
 		if (cnpj.equals(auth.getEmpresa()[5].replaceAll("\\D", ""))) {

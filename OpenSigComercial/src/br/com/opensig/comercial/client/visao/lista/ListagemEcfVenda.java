@@ -113,7 +113,7 @@ public class ListagemEcfVenda extends AListagem<ComEcfVenda> {
 		ColumnConfig ccEcf = new ColumnConfig(OpenSigCore.i18n.txtEcf(), "comEcf.comEcfSerie", 200, true);
 		ColumnConfig ccCcf = new ColumnConfig(OpenSigCore.i18n.txtCcf(), "comEcfVendaCcf", 75, true);
 		ColumnConfig ccCoo = new ColumnConfig(OpenSigCore.i18n.txtCoo(), "comEcfVendaCoo", 75, true);
-		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), "comEcfVendaData", 75, true, DATA);
+		ColumnConfig ccData = new ColumnConfig(OpenSigCore.i18n.txtData(), "comEcfVendaData", 100, true, DATAHORA);
 		ColumnConfig ccDesconto = new ColumnConfig(OpenSigCore.i18n.txtDesconto(), "comEcfVendaDesconto", 75, true, PORCENTAGEM);
 		ColumnConfig ccAcrescimo = new ColumnConfig(OpenSigCore.i18n.txtAcrescimo(), "comEcfVendaAcrescimo", 75, true, PORCENTAGEM);
 		ColumnConfig ccFechada = new ColumnConfig(OpenSigCore.i18n.txtFechada(), "comEcfVendaFechada", 75, true, BOLEANO);

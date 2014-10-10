@@ -53,7 +53,11 @@ public class FiltroData extends AFiltro<Date> {
 	@Override
 	public void setValorString(String valor) {
 		if (valor != null) {
-			super.setValor(DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM).parse(valor));
+			if (valor.contains(":")) {
+				super.setValor(DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM).parse(valor));
+			} else {
+				super.setValor(DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM).parse(valor));
+			}
 		}
 	}
 }

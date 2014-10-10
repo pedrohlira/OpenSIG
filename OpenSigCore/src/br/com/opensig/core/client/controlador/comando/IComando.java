@@ -11,12 +11,12 @@ import java.util.Map;
 public interface IComando {
 
 	/**
-	 * Metodo que executa a açao.
+	 * Metodo que executa a acao.
 	 * 
 	 * @param contexto
-	 *            o contexto da açao.
+	 *            o contexto da acao.
 	 */
-	
+
 	public void execute(Map contexto);
 
 	/**
@@ -33,4 +33,5 @@ public interface IComando {
 	 *            próximo comando.
 	 */
 	public void setProximo(IComando comando);
+
 }

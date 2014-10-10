@@ -37,7 +37,7 @@ public class ParametroNumero extends AParametro<Number> {
 	public void setValorString(String valor) {
 		if (valor == null) {
 			super.setValor(0);
-		} else if (valor.indexOf(".") > 0) {
+		} else if (valor.contains(".")) {
 			super.setValor(Float.valueOf(valor));
 		} else {
 			super.setValor(Integer.valueOf(valor));

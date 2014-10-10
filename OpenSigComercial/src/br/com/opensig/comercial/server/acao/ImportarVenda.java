@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.w3c.dom.Document;
-
 import br.com.opensig.comercial.client.servico.ComercialException;
 import br.com.opensig.comercial.server.ComercialServiceImpl;
 import br.com.opensig.comercial.server.MyIcms;
@@ -88,7 +86,7 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 
 		// valida se tem protocolo
 		try {
-			Document doc = UtilServer.getXml(xml);
+			this.doc = UtilServer.getXml(xml);
 			UtilServer.getValorTag(doc.getDocumentElement(), "nProt", true);
 		} catch (Exception e) {
 			throw new ComercialException("Não tem o protocolo da Sefaz!");
@@ -135,7 +133,12 @@ public class ImportarVenda extends ImportarNFe<ComVenda> {
 			// recupera os demais campos do xml
 			Date dtData = null;
 			try {
-				dtData = new SimpleDateFormat("yyyy-MM-dd").parse(ide.getDEmi());
+				if (ide.getDEmi() == null) {
+					String data = UtilServer.getValorTag(doc.getDocumentElement(), "dhEmi", false);
+					dtData = new SimpleDateFormat("yyyy-MM-dd").parse(data);
+				} else {
+					dtData = new SimpleDateFormat("yyyy-MM-dd").parse(ide.getDEmi());
+				}
 			} catch (ParseException e) {
 				UtilServer.LOG.debug("Data invalida.");
 				throw new ComercialException(auth.getConf().get("errInvalido") + " -> dEmi");

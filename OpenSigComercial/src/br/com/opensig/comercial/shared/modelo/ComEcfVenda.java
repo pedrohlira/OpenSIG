@@ -372,7 +372,7 @@ public class ComEcfVenda extends Dados implements Serializable {
 
 		return new String[] { comEcfVendaId + "", zId + "", comEcf.getEmpEmpresa().getEmpEmpresaId() + "", comEcf.getEmpEmpresa().getEmpEntidade().getEmpEntidadeNome1(),
 				sisUsuario.getSisUsuarioId() + "", sisUsuario.getSisUsuarioLogin(), vendedorId + "", vendedorNome, gerenteId + "", gerenteNome, clienteId + "", clienteNome, comEcf.getComEcfId() + "",
-				comEcf.getComEcfSerie(), comEcfVendaCcf + "", comEcfVendaCoo + "", UtilClient.getDataGrid(comEcfVendaData), comEcfVendaBruto.toString(), comEcfVendaDesconto.toString(),
+				comEcf.getComEcfSerie(), comEcfVendaCcf + "", comEcfVendaCoo + "", UtilClient.getDataHoraGrid(comEcfVendaData), comEcfVendaBruto.toString(), comEcfVendaDesconto.toString(),
 				comEcfVendaAcrescimo.toString(), comEcfVendaLiquido.toString(), getComEcfVendaFechada() + "", receberId + "", getComEcfVendaCancelada() + "", comEcfVendaObservacao };
 	}
 

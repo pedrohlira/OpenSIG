@@ -455,44 +455,48 @@ public class RestServidor extends ARest {
 			// salva o receber da venda se nao for cancelada
 			FinReceber receber = null;
 			if (!ecfVenda.getComEcfVendaCancelada()) {
-				// coloca dados de cartao na obs
-				StringBuilder sb = new StringBuilder("CUPOM FISCAL:: ");
-				for (FinReceber rec : ecfVenda.getEcfPagamentos()) {
-					if (rec.getFinReceberNfe() > 0) {
-						sb.append("GNF: ").append(rec.getFinReceberNfe()).append(" - ").append("NSU: ").append(rec.getFinReceberCategoria()).append("\n");
-					}
-				}
-
-				// salva o receber da venda
-				receber = new FinReceber();
-				receber.setEmpEmpresa(ecf.getEmpEmpresa());
-				receber.setEmpEntidade(cliente.getEmpEntidade());
-				receber.setFinReceberCadastro(ecfVenda.getComEcfVendaData());
-				receber.setFinReceberCategoria(conf.get("categoria.ecf"));
-				receber.setFinReceberNfe(ecfVenda.getComEcfVendaCcf());
-				receber.setFinReceberValor(ecfVenda.getComEcfVendaLiquido());
-				receber.setFinReceberObservacao(sb.toString());
-				receber = (FinReceber) service.salvar(receber);
-
-				// salva os recebimentos
-				for (FinReceber rec : ecfVenda.getEcfPagamentos()) {
-					int par = 0;
-					for (FinRecebimento recebimento : rec.getFinRecebimentos()) {
-						recebimento.setFinRecebimentoId(0);
-						recebimento.setFinReceber(receber);
-						recebimento.setFinForma(rec.getFinForma());
-						recebimento.setFinConta(null);
-						recebimento.setFinRecebimentoCadastro(rec.getFinReceberCadastro());
-						recebimento.setFinRecebimentoRealizado(rec.getFinReceberCadastro());
-						recebimento.setFinRecebimentoStatus("REALIZADO");
-						if ("".equals(recebimento.getFinRecebimentoDocumento())) {
-							recebimento.setFinRecebimentoDocumento("CCF: " + ecfVenda.getComEcfVendaCcf());
+				try {
+					// coloca dados de cartao na obs
+					StringBuilder sb = new StringBuilder("CUPOM FISCAL:: ");
+					for (FinReceber rec : ecfVenda.getEcfPagamentos()) {
+						if (rec.getFinReceberNfe() > 0) {
+							sb.append("GNF: ").append(rec.getFinReceberNfe()).append(" - ").append("NSU: ").append(rec.getFinReceberCategoria()).append("\n");
 						}
-						recebimento.setFinRecebimentoObservacao("CUPOM FISCAL");
-						par++;
-						recebimento.setFinRecebimentoParcela(UtilServer.formataNumero(par, 2, 0, false) + "/" + UtilServer.formataNumero(rec.getFinRecebimentos().size(), 2, 0, false));
-						service.salvar(recebimento);
 					}
+
+					// salva o receber da venda
+					receber = new FinReceber();
+					receber.setEmpEmpresa(ecf.getEmpEmpresa());
+					receber.setEmpEntidade(cliente.getEmpEntidade());
+					receber.setFinReceberCadastro(ecfVenda.getComEcfVendaData());
+					receber.setFinReceberCategoria(conf.get("categoria.ecf"));
+					receber.setFinReceberNfe(ecfVenda.getComEcfVendaCcf());
+					receber.setFinReceberValor(ecfVenda.getComEcfVendaLiquido());
+					receber.setFinReceberObservacao(sb.toString());
+					receber = (FinReceber) service.salvar(receber);
+
+					// salva os recebimentos
+					for (FinReceber rec : ecfVenda.getEcfPagamentos()) {
+						int par = 0;
+						for (FinRecebimento recebimento : rec.getFinRecebimentos()) {
+							recebimento.setFinRecebimentoId(0);
+							recebimento.setFinReceber(receber);
+							recebimento.setFinForma(rec.getFinForma());
+							recebimento.setFinConta(null);
+							recebimento.setFinRecebimentoCadastro(rec.getFinReceberCadastro());
+							recebimento.setFinRecebimentoRealizado(rec.getFinReceberCadastro());
+							recebimento.setFinRecebimentoStatus("REALIZADO");
+							if ("".equals(recebimento.getFinRecebimentoDocumento())) {
+								recebimento.setFinRecebimentoDocumento("CCF: " + ecfVenda.getComEcfVendaCcf());
+							}
+							recebimento.setFinRecebimentoObservacao("CUPOM FISCAL");
+							par++;
+							recebimento.setFinRecebimentoParcela(UtilServer.formataNumero(par, 2, 0, false) + "/" + UtilServer.formataNumero(rec.getFinRecebimentos().size(), 2, 0, false));
+							service.salvar(recebimento);
+						}
+					}
+				} catch (Exception ex) {
+					log.error("Erro ao salvar o financeiro da venda do ecf.", ex);
 				}
 			} else {
 				// filtro pra deletar a venda ja salva antes
@@ -558,28 +562,32 @@ public class RestServidor extends ARest {
 
 			// salva as trocas
 			if (trocas != null) {
-				for (ComTroca troca : trocas) {
-					// guarda os produtos da troca
-					List<ComTrocaProduto> tps = troca.getComTrocaProdutos();
+				try {
+					for (ComTroca troca : trocas) {
+						// guarda os produtos da troca
+						List<ComTrocaProduto> tps = troca.getComTrocaProdutos();
 
-					// salva a troca
-					troca.setComTrocaId(0);
-					troca.setEmpEmpresa(ecf.getEmpEmpresa());
-					troca.setComCompra(null);
-					troca.setComEcfVenda(ecfVenda);
-					troca.setComTrocaProdutos(null);
-					troca = (ComTroca) service.salvar(troca);
+						// salva a troca
+						troca.setComTrocaId(0);
+						troca.setEmpEmpresa(ecf.getEmpEmpresa());
+						troca.setComCompra(null);
+						troca.setComEcfVenda(ecfVenda);
+						troca.setComTrocaProdutos(null);
+						troca = (ComTroca) service.salvar(troca);
 
-					// salva os produtos
-					for (ComTrocaProduto tp : tps) {
-						tp.setId(0);
-						tp.setComTroca(troca);
+						// salva os produtos
+						for (ComTrocaProduto tp : tps) {
+							tp.setId(0);
+							tp.setComTroca(troca);
+						}
+						service.salvar(tps);
 					}
-					service.salvar(tps);
+				} catch (Exception ex) {
+					log.error("Erro ao salvar as trocas da venda do ecf.", ex);
 				}
 			}
 		} catch (Exception ex) {
-			log.error("Erro ao salvar a venda.", ex);
+			log.error("Erro ao salvar a venda do ecf.", ex);
 			throw new RestException(ex.getMessage());
 		}
 	}

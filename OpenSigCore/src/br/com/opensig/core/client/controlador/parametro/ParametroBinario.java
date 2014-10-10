@@ -35,10 +35,6 @@ public class ParametroBinario extends AParametro<Integer> {
 
 	@Override
 	public void setValorString(String valor) {
-		if (valor == null || valor.equals("0")) {
-			super.setValor(0);
-		} else {
-			super.setValor(1);
-		}
+		super.setValor(valor == null || valor.equals("0") ? 0 : 1);
 	}
 }

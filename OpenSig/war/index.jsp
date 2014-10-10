@@ -44,7 +44,7 @@
 		<div class="loading-indicator">
 			<img src="img/loading.gif" width="32" height="32"
 				style="margin-right: 8px; float: left; vertical-align: top;" />
-			OpenSIG<br /> <font style="font-size: 8px; color: gray">BETA</font><br />
+			OpenSIG
 		</div>
 	</div>
 

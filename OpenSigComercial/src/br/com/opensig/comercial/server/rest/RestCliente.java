@@ -144,45 +144,6 @@ public class RestCliente extends ARest {
 	}
 
 	/**
-	 * Metodo que retorna a lista de cliente do sistema.
-	 * 
-	 * @param data
-	 *            data usada como corte para considerar novo cliente.
-	 * @return uma lista de objetos cliente em formato JSON.
-	 * @throws RestException
-	 *             em caso de nao conseguir acessar a informacao.
-	 */
-	@Path("/cliente")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<SisCliente> getClientes(@QueryParam("data") String data) throws RestException {
-		autorizar();
-		try {
-			Date dt = UtilServer.formataData(data, "dd/MM/yyyy");
-			GrupoFiltro gf = new GrupoFiltro();
-			if (dt != null) {
-				FiltroData fd = new FiltroData("empEntidade.empEntidadeData", ECompara.MAIOR_IGUAL, dt);
-				gf.add(fd, EJuncao.E);
-			}
-			FiltroTexto ft1 = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.DIFERENTE, "00.000.000/0000-00");
-			gf.add(ft1, EJuncao.E);
-			FiltroTexto ft2 = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.DIFERENTE, "000.000.000-00");
-			gf.add(ft2);
-
-			List<EmpCliente> clis = service.selecionar(new EmpCliente(), 0, 0, gf, false).getLista();
-			List<SisCliente> clientes = new ArrayList<SisCliente>();
-			for (EmpCliente cli : clis) {
-				SisCliente sisCli = new SisCliente(cli);
-				clientes.add(sisCli);
-			}
-			return clientes;
-		} catch (Exception ex) {
-			log.error(ex);
-			throw new RestException(ex);
-		}
-	}
-
-	/**
 	 * Metodo que retorna a lista de tipos de pagamento cadastrados no sistema.
 	 * 
 	 * @return uma lista de objetos tipos de pagamento em formato JSON.
@@ -311,6 +272,49 @@ public class RestCliente extends ARest {
 			List<ProdProduto> produtos = service.selecionar(prod, pagina * limite, limite, filtro, false).getLista();
 			setValoresProduto(produtos);
 			return produtos;
+		} catch (Exception ex) {
+			log.error(ex);
+			throw new RestException(ex);
+		}
+	}
+	
+	/**
+	 * Metodo que retorna a lista de cliente do sistema.
+	 * 
+	 * @param data
+	 *            data usada como corte para considerar novo cliente.
+	 * @param pagina
+	 *            numero da pagina de retorno dos dados comecando pelo ZERO.
+	 * @param limite
+	 *            limite de registros a serem retornados.
+	 * @return uma lista de objetos cliente em formato JSON.
+	 * @throws RestException
+	 *             em caso de nao conseguir acessar a informacao.
+	 */
+	@Path("/cliente")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SisCliente> getClientes(@QueryParam("data") String data, @QueryParam("pagina") int pagina, @QueryParam("limite") int limite) throws RestException {
+		autorizar();
+		try {
+			Date dt = UtilServer.formataData(data, "dd/MM/yyyy");
+			GrupoFiltro gf = new GrupoFiltro();
+			if (dt != null) {
+				FiltroData fd = new FiltroData("empEntidade.empEntidadeData", ECompara.MAIOR_IGUAL, dt);
+				gf.add(fd, EJuncao.E);
+			}
+			FiltroTexto ft1 = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.DIFERENTE, "00.000.000/0000-00");
+			gf.add(ft1, EJuncao.E);
+			FiltroTexto ft2 = new FiltroTexto("empEntidade.empEntidadeDocumento1", ECompara.DIFERENTE, "000.000.000-00");
+			gf.add(ft2);
+
+			List<EmpCliente> clis = service.selecionar(new EmpCliente(), pagina * limite, limite, gf, false).getLista();
+			List<SisCliente> clientes = new ArrayList<SisCliente>();
+			for (EmpCliente cli : clis) {
+				SisCliente sisCli = new SisCliente(cli);
+				clientes.add(sisCli);
+			}
+			return clientes;
 		} catch (Exception ex) {
 			log.error(ex);
 			throw new RestException(ex);

@@ -139,7 +139,10 @@ public class SalvarEntrada extends Chain {
 			// recupera o numero
 			String numero = UtilServer.getValorTag(doc.getDocumentElement(), "nNF", true);
 			// recupera a data
-			String data = UtilServer.getValorTag(doc.getDocumentElement(), "dEmi", true);
+			String data = UtilServer.getValorTag(doc.getDocumentElement(), "dEmi", false);
+			if(data == null){
+				data = UtilServer.getValorTag(doc.getDocumentElement(), "dhEmi", false);
+			}
 			Date dtData = null;
 			try {
 				dtData = new SimpleDateFormat("yyyy-MM-dd").parse(data);

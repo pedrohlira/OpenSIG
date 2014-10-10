@@ -89,33 +89,29 @@ public class GerarPreco {
 		// variaveis
 		Record recProd;
 		String valor, despesa, markup, cst;
-		double dentro, icms, ipi;
 
 		// faz o loop em todos os registros
 		for (ComCompraProduto cp : compra.getComCompraProdutos()) {
 			if (cp.getComCompraProdutoPreco() == 0.00) {
 				try {
-					recProd = getValorProduto(cp.getComCompraProdutoId(), compra.getEmpFornecedor().getEmpFornecedorId());
+					recProd = getValorProduto(cp.getProdProduto().getProdProdutoId(), compra.getEmpFornecedor().getEmpFornecedorId());
 
 					// recupera os valores individuais de cada produto
 					valor = cp.getComCompraProdutoValor() + "";
-					dentro = cp.getProdProduto().getProdIcms().getProdIcmsDentro();
-					cst = cp.getProdProduto().getProdIcms().getProdIcmsCst();
-					icms = cp.getComCompraProdutoIcms();
-					ipi = cp.getComCompraProdutoIpi();
+					cst = cp.getComCompraProdutoIcmsCst();
 					despesa = recProd.getAsString("comValorProdutoDespesa");
 					markup = recProd.getAsString("comValorProdutoMarkup");
 
 					vars.put("BRUTO", valor);
-					vars.put("IPI", ipi >= 10 ? String.valueOf(ipi).replace(".", "") : "0" + String.valueOf(ipi).replace(".", ""));
+					vars.put("IPI", cp.getComCompraProdutoIpi() >= 10 ? String.valueOf(cp.getComCompraProdutoIpi()).replace(".", "") : "0" + String.valueOf(cp.getComCompraProdutoIpi()).replace(".", ""));
 					vars.put("DESPESA", despesa.length() == 1 ? "0" + despesa.replace(".", "") : despesa.replace(".", ""));
 					vars.put("MARKUP", markup.length() == 1 ? "0" + markup.replace(".", "") : markup.replace(".", ""));
 
 					// verifica o icms pelo cst
-					if (cst.equals("00")) { // tributado integral
-						vars.put("ICMS", (dentro - icms) >= 10 ? "" + (dentro - icms) : "0" + (dentro - icms));
-					} else if (cst.equals("10") || cst.equals("30") || cst.equals("40") || cst.equals("41") || cst.equals("60")) { // isento-substituicao
-						vars.put("ICMS", icms >= 10 ? String.valueOf(icms) : "0" + String.valueOf(icms));
+					if (cst.equals("10") || cst.equals("60")) { // substituicao
+						vars.put("ICMS", cp.getComCompraProdutoIcms() >= 10 ? String.valueOf(cp.getComCompraProdutoIcms()) : "0" + String.valueOf(cp.getComCompraProdutoIcms()));
+					} else {
+						vars.put("ICMS", "0.00");
 					}
 					vars.put("ICMS", vars.get("ICMS").replace(".", ""));
 					// utiliza a formula

@@ -1,6 +1,5 @@
 package br.com.opensig.core.client.controlador.parametro;
 
-import br.com.opensig.core.client.OpenSigCore;
 
 /**
  * Classe que define um parametro do tipo enum.
@@ -27,6 +26,6 @@ public class ParametroEnum extends AParametro<Enum> {
 
     @Override
     public void setValorString(String valor) {
-    	throw new NullPointerException(OpenSigCore.i18n.errFiltro());
+    	super.setValor(Enum.valueOf(Enum.class, valor));
     }
 }

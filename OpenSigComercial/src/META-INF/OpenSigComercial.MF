@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.9.2
 Created-By: 1.8.0_11-b12 (Oracle Corporation)
 Implementation-Title: OpenSigComercial
-Implementation-Version: 1.2.1-b426
+Implementation-Version: 1.2.2-b434
 Implementation-Vendor: PhD - Systems Solutions
 Implementation-Url: http://phdss.com.br
 Built-By: Pedro H. Lira - suporte@phdss.com.br
-Built-Date: 26-08-2014 15:08:24
+Built-Date: 02-10-2014 12:00:05
 Main-Class: br.com.opensig.comercial.client.OpenSigComercial
 

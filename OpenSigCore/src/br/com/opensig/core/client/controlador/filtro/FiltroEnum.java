@@ -36,6 +36,6 @@ public class FiltroEnum extends AFiltro<Enum> {
 
 	@Override
 	public void setValorString(String valor) {
-		throw new NullPointerException(OpenSigCore.i18n.errFiltro());
+		super.setValor(Enum.valueOf(Enum.class, valor));
 	}
 }

@@ -162,9 +162,10 @@ public class Portatil extends Portlet {
 				contexto.put("portal", "sim");
 				comando.execute(contexto);
 				lista = (IListagem) contexto.get("lista");
-
+				lista.getProxy().setFiltroPadrao(null);
+				lista.setFavorito(result);
+				
 				if (result.getSisFavoritoGrafico().isEmpty()) {
-					lista.setFavorito(result);
 					lista.getPanel().getTopToolbar().hide();
 					lista.getPanel().getBottomToolbar().hide();
 					lista.getPanel().purgeListeners();

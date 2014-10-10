@@ -39,10 +39,12 @@ public class ParametroData extends AParametro<Date> {
 
 	@Override
 	public void setValorString(String valor) {
-		try {
-			super.setValor(DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM).parse(valor));
-		} catch (Exception ex) {
-			super.setValor(null);
+		if (valor != null) {
+			if (valor.contains(":")) {
+				super.setValor(DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM).parse(valor));
+			} else {
+				super.setValor(DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM).parse(valor));
+			}
 		}
 	}
 }
