@@ -2,7 +2,7 @@
 <project name="OpenSigFiscal" basedir="." default="publicar">
 
 	<property name="pacote" value="br.com.opensig.fiscal.client" />
-	<property name="versao" value="1.2.1" />
+	<property name="versao" value="1.2.3" />
 	<property name="empresa" value="PhD - Systems Solutions" />
 	<property name="autor" value="Pedro H. Lira" />
 	<property name="url" value="http://phdss.com.br" />

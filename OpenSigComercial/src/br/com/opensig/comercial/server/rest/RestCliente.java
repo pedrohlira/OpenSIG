@@ -38,7 +38,6 @@ import br.com.opensig.produto.shared.modelo.ProdEmbalagem;
 import br.com.opensig.produto.shared.modelo.ProdEstoque;
 import br.com.opensig.produto.shared.modelo.ProdEstoqueGrade;
 import br.com.opensig.produto.shared.modelo.ProdGrade;
-import br.com.opensig.produto.shared.modelo.ProdGradeTipo;
 import br.com.opensig.produto.shared.modelo.ProdProduto;
 
 /**
@@ -181,29 +180,6 @@ public class RestCliente extends ARest {
 		try {
 			FiltroNumero fn = new FiltroNumero("prodEmbalagemId", ECompara.MAIOR, id);
 			return service.selecionar(new ProdEmbalagem(), 0, 0, fn, false).getLista();
-		} catch (Exception ex) {
-			log.error(ex);
-			throw new RestException(ex);
-		}
-	}
-
-	/**
-	 * Metodo que retorna a lista de tipos de grades cadastradas no sistema.
-	 * 
-	 * @param id
-	 *            o ultimo id cadastro no banco do pdv.
-	 * @return uma lista de objetos tipo grade em formato JSON.
-	 * @throws RestException
-	 *             em caso de nao conseguir acessar a informacao.
-	 */
-	@Path("/tipo_grade")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<ProdGradeTipo> getGradeTipo(@QueryParam("id") int id) throws RestException {
-		autorizar();
-		try {
-			FiltroNumero fn = new FiltroNumero("prodGradeTipoId", ECompara.MAIOR, id);
-			return service.selecionar(new ProdGradeTipo(), 0, 0, fn, false).getLista();
 		} catch (Exception ex) {
 			log.error(ex);
 			throw new RestException(ex);

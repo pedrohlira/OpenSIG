@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import org.beanio.BeanWriter;
 import org.beanio.StreamFactory;
+import org.w3c.dom.Document;
 
 import br.com.opensig.comercial.shared.modelo.ComCompra;
 import br.com.opensig.comercial.shared.modelo.ComVenda;
@@ -26,7 +27,8 @@ import br.com.opensig.nfe.TNFe.InfNFe.Transp;
 public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 
 	private Map<String, List<DadosC170>> analitico = new HashMap<String, List<DadosC170>>();
-
+	private Document doc;
+	
 	@Override
 	public void executar() {
 		try {
@@ -44,6 +46,7 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 				int F = xml.indexOf("</NFe>") + 6;
 				String texto = "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
 				nfe = UtilServer.xmlToObj(texto, "br.com.opensig.nfe");
+				this.doc = UtilServer.getXml(xml);
 				DadosC100 obj = getDados(nfe, "00", compra.getComCompraRecebimento());
 
 				// seta os dados padrao
@@ -82,6 +85,7 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 					int F = xml.indexOf("</NFe>") + 6;
 					String texto = "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
 					nfe = UtilServer.xmlToObj(texto, "br.com.opensig.nfe");
+					this.doc = UtilServer.getXml(xml);
 					obj = getDados(nfe, cod_sit, venda.getFisNotaSaida().getFisNotaSaidaData());
 				} catch (Exception e) {
 					// inutilizadas sao tratadas abaixo
@@ -121,7 +125,7 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 				int F = xml.indexOf("</inutNFe>") + 10;
 				String texto = "<inutNFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" + xml.substring(I, F);
 				inut = UtilServer.xmlToObj(texto, "br.com.opensig.inutnfe");
-
+				
 				DadosC100 obj = new DadosC100();
 				obj.setInd_oper(inut.getInfInut().getSerie().equals("0") ? "0" : "1");
 				obj.setInd_emit("0");
@@ -160,7 +164,13 @@ public class RegistroC100 extends ARegistro<DadosC100, Dados> {
 
 		if (cod_sit.equals("00")) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			d.setDt_doc(sdf.parse(ide.getDEmi()));
+			if (ide.getDEmi() == null) {
+				String dt = UtilServer.getValorTag(this.doc.getDocumentElement(), "dhEmi", false);
+				d.setDt_doc(sdf.parse(dt));
+			} else {
+				d.setDt_doc(sdf.parse(ide.getDEmi()));
+			}
+			
 			// data de saida/entrada
 			if (ide.getDSaiEnt() != null) {
 				Date e_s = sdf.parse(ide.getDSaiEnt());

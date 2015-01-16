@@ -439,151 +439,169 @@ public class RestServidor extends ARest {
 	public void setVenda(ComEcfVenda ecfVenda) throws RestException {
 		autorizar();
 		try {
-			// pega o config e um cliente padrao
-			conf = getConfig();
-			FiltroNumero fn2 = new FiltroNumero("empClienteId", ECompara.IGUAL, conf.get("cliente.padrao"));
-			EmpCliente cliente = ecfVenda.getSisCliente() != null ? getCliente(ecfVenda.getSisCliente()) : (EmpCliente) service.selecionar(new EmpCliente(), fn2, false);
-
-			// guarda as listas
-			List<ComEcfVendaProduto> vProdutos = ecfVenda.getComEcfVendaProdutos();
-			List<ComTroca> trocas = ecfVenda.getComTrocas();
-
-			// transforma os acrescimos e descontos em porcentagens
-			double acresP = ecfVenda.getComEcfVendaBruto() > 0 ? ecfVenda.getComEcfVendaAcrescimo() / ecfVenda.getComEcfVendaBruto() * 100 : 0.00;
-			double descP = ecfVenda.getComEcfVendaBruto() > 0 ? ecfVenda.getComEcfVendaDesconto() / ecfVenda.getComEcfVendaBruto() * 100 : 0.00;
-
-			// salva o receber da venda se nao for cancelada
-			FinReceber receber = null;
-			if (!ecfVenda.getComEcfVendaCancelada()) {
-				try {
-					// coloca dados de cartao na obs
-					StringBuilder sb = new StringBuilder("CUPOM FISCAL:: ");
-					for (FinReceber rec : ecfVenda.getEcfPagamentos()) {
-						if (rec.getFinReceberNfe() > 0) {
-							sb.append("GNF: ").append(rec.getFinReceberNfe()).append(" - ").append("NSU: ").append(rec.getFinReceberCategoria()).append("\n");
-						}
-					}
-
-					// salva o receber da venda
-					receber = new FinReceber();
-					receber.setEmpEmpresa(ecf.getEmpEmpresa());
-					receber.setEmpEntidade(cliente.getEmpEntidade());
-					receber.setFinReceberCadastro(ecfVenda.getComEcfVendaData());
-					receber.setFinReceberCategoria(conf.get("categoria.ecf"));
-					receber.setFinReceberNfe(ecfVenda.getComEcfVendaCcf());
-					receber.setFinReceberValor(ecfVenda.getComEcfVendaLiquido());
-					receber.setFinReceberObservacao(sb.toString());
-					receber = (FinReceber) service.salvar(receber);
-
-					// salva os recebimentos
-					for (FinReceber rec : ecfVenda.getEcfPagamentos()) {
-						int par = 0;
-						for (FinRecebimento recebimento : rec.getFinRecebimentos()) {
-							recebimento.setFinRecebimentoId(0);
-							recebimento.setFinReceber(receber);
-							recebimento.setFinForma(rec.getFinForma());
-							recebimento.setFinConta(null);
-							recebimento.setFinRecebimentoCadastro(rec.getFinReceberCadastro());
-							recebimento.setFinRecebimentoRealizado(rec.getFinReceberCadastro());
-							recebimento.setFinRecebimentoStatus("REALIZADO");
-							if ("".equals(recebimento.getFinRecebimentoDocumento())) {
-								recebimento.setFinRecebimentoDocumento("CCF: " + ecfVenda.getComEcfVendaCcf());
+			// valida se ja existe
+			FiltroObjeto fo = new FiltroObjeto("comEcf", ECompara.IGUAL, ecf);
+			FiltroNumero fn = new FiltroNumero("comEcfVendaCcf", ECompara.IGUAL, ecfVenda.getComEcfVendaCcf());
+			GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fn });
+			ComEcfVenda aux = (ComEcfVenda) service.selecionar(ecfVenda, gf, false);
+			
+			if(aux == null){
+				// pega o config e um cliente padrao
+				conf = getConfig();
+				FiltroNumero fn2 = new FiltroNumero("empClienteId", ECompara.IGUAL, conf.get("cliente.padrao"));
+				EmpCliente cliente = ecfVenda.getSisCliente() != null ? getCliente(ecfVenda.getSisCliente()) : (EmpCliente) service.selecionar(new EmpCliente(), fn2, false);
+	
+				// guarda as listas
+				List<ComEcfVendaProduto> vProdutos = ecfVenda.getComEcfVendaProdutos();
+				List<ComTroca> trocas = ecfVenda.getComTrocas();
+	
+				// transforma os acrescimos e descontos em porcentagens
+				double acresP = ecfVenda.getComEcfVendaBruto() > 0 ? ecfVenda.getComEcfVendaAcrescimo() / ecfVenda.getComEcfVendaBruto() * 100 : 0.00;
+				double descP = ecfVenda.getComEcfVendaBruto() > 0 ? ecfVenda.getComEcfVendaDesconto() / ecfVenda.getComEcfVendaBruto() * 100 : 0.00;
+	
+				// salva o receber da venda se nao for cancelada
+				FinReceber receber = null;
+				if (!ecfVenda.getComEcfVendaCancelada()) {
+					try {
+						// coloca dados de cartao na obs
+						StringBuilder sb = new StringBuilder("CUPOM FISCAL:: ");
+						for (FinReceber rec : ecfVenda.getEcfPagamentos()) {
+							if (rec.getFinReceberNfe() > 0) {
+								sb.append("GNF: ").append(rec.getFinReceberNfe()).append(" - ").append("NSU: ").append(rec.getFinReceberCategoria()).append("\n");
 							}
-							recebimento.setFinRecebimentoObservacao("CUPOM FISCAL");
-							par++;
-							recebimento.setFinRecebimentoParcela(UtilServer.formataNumero(par, 2, 0, false) + "/" + UtilServer.formataNumero(rec.getFinRecebimentos().size(), 2, 0, false));
-							service.salvar(recebimento);
 						}
+		
+						// salva o receber da venda
+						receber = new FinReceber();
+						receber.setEmpEmpresa(ecf.getEmpEmpresa());
+						receber.setEmpEntidade(cliente.getEmpEntidade());
+						receber.setFinReceberCadastro(ecfVenda.getComEcfVendaData());
+						receber.setFinReceberCategoria(conf.get("categoria.ecf"));
+						receber.setFinReceberNfe(ecfVenda.getComEcfVendaCcf());
+						receber.setFinReceberValor(ecfVenda.getComEcfVendaLiquido());
+						receber.setFinReceberObservacao(sb.toString());
+						receber = (FinReceber) service.salvar(receber);
+		
+						// salva os recebimentos
+						for (FinReceber rec : ecfVenda.getEcfPagamentos()) {
+							int par = 0;
+							for (FinRecebimento recebimento : rec.getFinRecebimentos()) {
+								recebimento.setFinRecebimentoId(0);
+								recebimento.setFinReceber(receber);
+								recebimento.setFinForma(rec.getFinForma());
+								recebimento.setFinConta(null);
+								recebimento.setFinRecebimentoCadastro(rec.getFinReceberCadastro());
+								recebimento.setFinRecebimentoRealizado(rec.getFinReceberCadastro());
+								recebimento.setFinRecebimentoStatus("REALIZADO");
+								if ("".equals(recebimento.getFinRecebimentoDocumento())) {
+									recebimento.setFinRecebimentoDocumento("CCF: " + ecfVenda.getComEcfVendaCcf());
+								}
+								recebimento.setFinRecebimentoObservacao("CUPOM FISCAL");
+								par++;
+								recebimento.setFinRecebimentoParcela(UtilServer.formataNumero(par, 2, 0, false) + "/" + UtilServer.formataNumero(rec.getFinRecebimentos().size(), 2, 0, false));
+								service.salvar(recebimento);
+							}
+						}
+					} catch (Exception ex) {
+						log.error("Erro ao salvar o financeiro da venda do ecf.", ex);
 					}
-				} catch (Exception ex) {
-					log.error("Erro ao salvar o financeiro da venda do ecf.", ex);
 				}
-			} else {
-				// filtro pra deletar a venda ja salva antes
-				FiltroObjeto fo = new FiltroObjeto("comEcf", ECompara.IGUAL, ecf);
-				FiltroNumero fn = new FiltroNumero("comEcfVendaCcf", ECompara.IGUAL, ecfVenda.getComEcfVendaCcf());
-				GrupoFiltro gf = new GrupoFiltro(EJuncao.E, new IFiltro[] { fo, fn });
-				ComEcfVenda vendaAux = (ComEcfVenda) service.selecionar(ecfVenda, gf, false);
-				// caso ja exista deleta e remove do estoque
-				if (vendaAux != null) {
-					service.deletar(vendaAux);
+					
+				// salva a venda
+				ecfVenda.setId(0);
+				ecfVenda.setComEcf(ecf);
+				ecfVenda.setComEcfZ(null);
+				ecfVenda.setEmpCliente(cliente);
+				ecfVenda.setFinReceber(receber);
+				ecfVenda.setComEcfVendaProdutos(null);
+				ecfVenda.setComTrocas(null);
+				ecfVenda.setComEcfVendaAcrescimo(acresP);
+				ecfVenda.setComEcfVendaDesconto(descP);
+				ecfVenda.setComEcfVendaProdutos(null);
+				ecfVenda.setComEcfVendaFechada(true);
+				if (!ecfVenda.getComEcfVendaCancelada()) {
+					ecfVenda.setComEcfVendaCancelada(vProdutos.isEmpty());
+				}
+				ecfVenda = (ComEcfVenda) service.salvar(ecfVenda);
+
+				// salva os produtos
+				if (vProdutos != null) {
 					List<Sql> sqls = new ArrayList<Sql>();
 					for (ComEcfVendaProduto vp : vProdutos) {
-						if (!vp.getComEcfVendaProdutoCancelado()) {
-							getEstoque(sqls, vp.getComEcfVendaProdutoQuantidade() * -1, vp.getProdEmbalagem(), vp.getProdProduto(), vp.getComEcfVendaProdutoBarra());
+						double acresV = vp.getComEcfVendaProdutoBruto() * acresP / 100;
+						double descV = vp.getComEcfVendaProdutoBruto() * descP / 100;
+
+						vp.setId(0);
+						vp.setComEcfVenda(ecfVenda);
+						vp.setComEcfVendaProdutoAcrescimo(acresP);
+						vp.setComEcfVendaProdutoDesconto(descP);
+						vp.setComEcfVendaProdutoLiquido(vp.getComEcfVendaProdutoBruto() - descV + acresV);
+						vp.setComEcfVendaProdutoTotal(vp.getComEcfVendaProdutoLiquido() * vp.getComEcfVendaProdutoQuantidade());
+						if (!ecfVenda.getComEcfVendaCancelada() && !vp.getComEcfVendaProdutoCancelado()) {
+							getEstoque(sqls, vp.getComEcfVendaProdutoQuantidade(), vp.getProdEmbalagem(), vp.getProdProduto(), vp.getComEcfVendaProdutoBarra());
+							sqls.add(getAtualizaProduto(vp.getProdProduto()));
 						}
 					}
-					service.executar(sqls.toArray(new Sql[] {}));
+					service.salvar(vProdutos);
+
+					// atualiza com as instrucoes SQL.
+					if (!sqls.isEmpty()) {
+						service.executar(sqls.toArray(new Sql[] {}));
+					}
 				}
-			}
 
-			// salva a venda
-			ecfVenda.setId(0);
-			ecfVenda.setComEcf(ecf);
-			ecfVenda.setComEcfZ(null);
-			ecfVenda.setEmpCliente(cliente);
-			ecfVenda.setFinReceber(receber);
-			ecfVenda.setComEcfVendaProdutos(null);
-			ecfVenda.setComTrocas(null);
-			ecfVenda.setComEcfVendaAcrescimo(acresP);
-			ecfVenda.setComEcfVendaDesconto(descP);
-			ecfVenda.setComEcfVendaProdutos(null);
-			ecfVenda.setComEcfVendaFechada(true);
-			if (ecfVenda.getComEcfVendaCancelada() == false) {
-				ecfVenda.setComEcfVendaCancelada(vProdutos.isEmpty());
-			}
-			ecfVenda = (ComEcfVenda) service.salvar(ecfVenda);
+				// salva as trocas
+				if (trocas != null) {
+					try {
+						for (ComTroca troca : trocas) {
+							// guarda os produtos da troca
+							List<ComTrocaProduto> tps = troca.getComTrocaProdutos();
 
-			// salva os produtos
-			if (vProdutos != null) {
+							// salva a troca
+							troca.setComTrocaId(0);
+							troca.setEmpEmpresa(ecf.getEmpEmpresa());
+							troca.setComCompra(null);
+							troca.setComEcfVenda(ecfVenda);
+							troca.setComTrocaProdutos(null);
+							troca = (ComTroca) service.salvar(troca);
+
+							// salva os produtos
+							for (ComTrocaProduto tp : tps) {
+								tp.setId(0);
+								tp.setComTroca(troca);
+							}
+							service.salvar(tps);
+						}
+					} catch (Exception ex) {
+						log.error("Erro ao salvar as trocas da venda do ecf.", ex);
+					}
+				}
+			} else if(!aux.getComEcfVendaCancelada() && ecfVenda.getComEcfVendaCancelada()) {
+				// atualiza o estoque
 				List<Sql> sqls = new ArrayList<Sql>();
-				for (ComEcfVendaProduto vp : vProdutos) {
-					double acresV = vp.getComEcfVendaProdutoBruto() * acresP / 100;
-					double descV = vp.getComEcfVendaProdutoBruto() * descP / 100;
-
-					vp.setId(0);
-					vp.setComEcfVenda(ecfVenda);
-					vp.setComEcfVendaProdutoAcrescimo(acresP);
-					vp.setComEcfVendaProdutoDesconto(descP);
-					vp.setComEcfVendaProdutoLiquido(vp.getComEcfVendaProdutoBruto() - descV + acresV);
-					vp.setComEcfVendaProdutoTotal(vp.getComEcfVendaProdutoLiquido() * vp.getComEcfVendaProdutoQuantidade());
-					if (!ecfVenda.getComEcfVendaCancelada() && !vp.getComEcfVendaProdutoCancelado()) {
-						getEstoque(sqls, vp.getComEcfVendaProdutoQuantidade(), vp.getProdEmbalagem(), vp.getProdProduto(), vp.getComEcfVendaProdutoBarra());
+				for (ComEcfVendaProduto vp : aux.getComEcfVendaProdutos()) {
+					if (!vp.getComEcfVendaProdutoCancelado()) {
+						getEstoque(sqls, vp.getComEcfVendaProdutoQuantidade() * -1, vp.getProdEmbalagem(), vp.getProdProduto(), vp.getComEcfVendaProdutoBarra());
 						sqls.add(getAtualizaProduto(vp.getProdProduto()));
 					}
 				}
-				service.salvar(vProdutos);
-
-				// atualiza com as instrucoes SQL.
-				if (!sqls.isEmpty()) {
-					service.executar(sqls.toArray(new Sql[] {}));
+				service.executar(sqls.toArray(new Sql[] {}));
+				// guarda o receber e troca para deletar
+				FinReceber receber = aux.getFinReceber();
+				List<ComTroca> trocas = aux.getComTrocas();
+				// seta como cancelada a venda e seu gerente e salva
+				aux.setComEcfVendaCancelada(true);
+				aux.setSisGerente(ecfVenda.getSisGerente());
+				aux.setFinReceber(null);
+				aux.setComTrocas(null);
+				service.salvar(aux);
+				// caso exista deleta o recebe
+				if(receber != null){
+					service.deletar(receber);
 				}
-			}
-
-			// salva as trocas
-			if (trocas != null) {
-				try {
-					for (ComTroca troca : trocas) {
-						// guarda os produtos da troca
-						List<ComTrocaProduto> tps = troca.getComTrocaProdutos();
-
-						// salva a troca
-						troca.setComTrocaId(0);
-						troca.setEmpEmpresa(ecf.getEmpEmpresa());
-						troca.setComCompra(null);
-						troca.setComEcfVenda(ecfVenda);
-						troca.setComTrocaProdutos(null);
-						troca = (ComTroca) service.salvar(troca);
-
-						// salva os produtos
-						for (ComTrocaProduto tp : tps) {
-							tp.setId(0);
-							tp.setComTroca(troca);
-						}
-						service.salvar(tps);
-					}
-				} catch (Exception ex) {
-					log.error("Erro ao salvar as trocas da venda do ecf.", ex);
+				// caso exista deleta as trocas
+				if(trocas != null){
+					service.deletar(trocas);
 				}
 			}
 		} catch (Exception ex) {
