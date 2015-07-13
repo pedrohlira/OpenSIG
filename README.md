@@ -13,6 +13,8 @@ Este sistema foi descontinuado em 03/2015, sendo substituido pelo sistema MySIG 
 
 Abaixo estão os links para baixar a VM de desenvolvimento do sistema OpenSIG e OpenPDV.
 
+usuario = PHD, senha = phdss
+
 DevPHD.ova.7z.001 https://mega.nz/#!MBpCUZ4R!1FSp3D-RMGheMIPDtmnT1Vh30ouBGOMnJ1lKNrVrcAs
 
 DevPHD.ova.7z.002 https://mega.nz/#!5IRx0b6a!qDHC23vlT3h6UmQ2od1EISDVTakOhN2pnjn_SaRThcI
